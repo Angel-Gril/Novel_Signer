@@ -1,5 +1,29 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：FrameSign 完整 JSON 源串与原生减长 10 字节
+
+此前 252 字节输入的候选格式比较失败，原因已定位到原生复制边界。实际完整源串是
+`frametype`、`lid`、`signinfo`、`signversion` 四个字符串字段依次组成的 compact JSON，
+当前固定 49 字符/frame type 0 下长 262 字节，字段分别与已知构造来源相同。
+在 `+0x248238` 观察到调用返回地址 `+0x28428c`，源对象声明长度和 C-string 长度
+均为 262，显式复制长度为 252；源/目标 frame 槽与观察到的对象及指针对应。
+Pinned ELF 的 `+0x284284: sub w2,w8,#0xa` 和下一条构造调用明确给出减长规则。
+
+在后续 signvalue 构造处回读原始完整源串、实际 SHA-256 输入和结果，两轮全新 rootfs
+共 8 次调用均验证 `source_bytes[:-10]` 与输入逐字节相同，其小写十六进制 SHA-256
+与 signvalue 相同。252 字节的声明长度和终止符位置一致，末尾停在最后一个键名中，
+因此不能作为完整 JSON 解析，也不能对完整 262 字节 JSON 求摘要来替代。
+
+56 项变体比较为宿主侧计算：改变键顺序、空白、字段类型、键名或 signinfo 字节均失配；
+仅改变被截掉的版本值保持前缀和摘要相同。未向原生运行注入变体或修改 guest 页面。
+8 次完整字段、构造来源、最后写入和 JNI 管线记录与既有 A-B-A-B 基线相同。
+这恢复了当前固定输入的组成关系，尚未验证其他输入或 Android 上同样的关系；
+signinfo 生成、交替原因、独立 signer 和线上验签仍未闭合。下一步回溯 `+0x26732c`
+及其 signinfo 输入来源。未保留原始源串、原始签名或实际输入的摘要。
+
+证据：[preimage composition](evidence/vm9_framesign_preimage_composition_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_preimage_composition_20261103.py)。
+
 ## 2026-11-03：FrameSign signvalue 的 SHA-256 输入关系
 
 在 `+0x248238` 已命中的构造写入处确认调用返回地址为 `+0x284d3c` 后，从调用者

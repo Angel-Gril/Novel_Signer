@@ -1,5 +1,25 @@
 {
   "platform": "bytedance.tomato",
+  "vm9_framesign_preimage_composition_20261103": {
+    "evidence_file": "evidence/vm9_framesign_preimage_composition_20261103.json",
+    "verifier": "python/verify_vm9_framesign_preimage_composition_20261103.py",
+    "schema": "vm9-framesign-preimage-composition-20261103-v1",
+    "independent_read_only_runs": 2,
+    "calls": 8,
+    "source_length": 262,
+    "hash_input_length": 252,
+    "native_length_subtraction": 10,
+    "host_side_variant_comparisons": 56,
+    "full_source_template_verified_for_fixed_profile": true,
+    "source_minus_ten_matches_hash_input": true,
+    "baseline_abab_preserved": true,
+    "general_input_composition_verified": false,
+    "signinfo_generation_identified": false,
+    "alternation_cause_identified": false,
+    "android_relation_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_framesign_sha256_edge_20261103": {
     "evidence_file": "evidence/vm9_framesign_sha256_edge_20261103.json",
     "verifier": "python/verify_vm9_framesign_sha256_edge_20261103.py",

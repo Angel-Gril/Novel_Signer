@@ -1,10 +1,20 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 已恢复固定 49 字符/frame type 0 的 FrameSign SHA-256 输入组成：
+[组成证据](evidence/vm9_framesign_preimage_composition_20261103.json)与
+[校验器](python/verify_vm9_framesign_preimage_composition_20261103.py)。原生完整源串是按
+`frametype/lid/signinfo/signversion` 排列的四个字符串字段组成的 compact JSON；
+`+0x284284` 明确将长度减去 10，再复制并计算 SHA-256。本次是 262 → 252 字节。
+两轮 8 次调用逐字节闭合该来源关系，并保持原五字段及 JNI 管线的 A-B-A-B 控制。
+56 项宿主侧变体比较区分参与摘要的字节与被忽略的末尾版本值；未修改原生输入。
+其他输入、signinfo 生成、交替来源、Android 等价、独立 signer 和线上验签仍未验证。
+
 2026-11-03 已把 SHA-256 组件接回 FrameSign 的实际构造输入：[关系证据](evidence/vm9_framesign_sha256_edge_20261103.json)
 与[校验器](python/verify_vm9_framesign_sha256_edge_20261103.py)。固定 49 字符输入、frame type 0
 的两轮只读运行共 8 次调用，都满足 `signvalue = lowercase_hex(SHA256(252 字节输入))`，
 原五字段 A-B-A-B 保持不变。该输入不等于 signinfo，也不是 URL、frametype、lid、signinfo
-四段的任意直接拼接；完整输入组成、signinfo 生成及交替原因仍未闭合。未保留输入或其摘要。
+四段的任意直接拼接；该批次尚未闭合输入组成，后续固定输入结果见上节。signinfo 生成及
+交替原因仍未闭合。未保留输入或其摘要。
 
 2026-11-03 已在现有 `construct_digest_reference` 中补入 `+0x258a48` 的 SHA-256
 包装语义，支持原始 32 字节和 ELF 字母表十六进制输出。[新鲜差分证据](evidence/vm9_sha256_digest_reference_fresh_20261103.json)

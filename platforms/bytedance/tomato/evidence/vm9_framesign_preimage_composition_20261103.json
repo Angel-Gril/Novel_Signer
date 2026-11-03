@@ -1,0 +1,1557 @@
+{
+  "schema": "vm9-framesign-preimage-composition-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_sha256_edge_20261103.json",
+  "source_template": "{\"frametype\":\"0\",\"lid\":\"<lid>\",\"signinfo\":\"<signinfo>\",\"signversion\":\"1.0\"}",
+  "probe": {
+    "source_relative_path": "preimage_composition_probe/HookMain.java",
+    "source_sha256": "6507ce3e089218a7238043aed287dc706f8ad48073e84d59cf01d45694897d46",
+    "entry_class_sha256": "508553efae7939371ecfb4c5e357e0a1b995e0a6baa14e91de2115c4b555c71d",
+    "runner_sha256": "a3a7f522f57ee9598bbcddd0f6e885ab3480a3a06704052c106dec7d0baa2d2f",
+    "read_only_guest_observation": true,
+    "synthetic_jni_provider_used": true,
+    "fresh_rootfs_per_run": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false
+  },
+  "runs": [
+    {
+      "local_run_name": "preimage_composition_probe/run1",
+      "source_sha256": "6507ce3e089218a7238043aed287dc706f8ad48073e84d59cf01d45694897d46",
+      "entry_class_sha256": "508553efae7939371ecfb4c5e357e0a1b995e0a6baa14e91de2115c4b555c71d",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "bc7fe8007943513dea7fb7f359e829ad29daeeda092903c5998631442df5deee",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "sha256_edges": [
+        {
+          "ordinal": 1,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 2,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        },
+        {
+          "ordinal": 3,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 4,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        }
+      ],
+      "composition_observations": [
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 1,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 1,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 1,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 1,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 1,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 2,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 2,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 2,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 2,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 2,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 3,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 3,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 3,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 3,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 3,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 4,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 4,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 4,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 4,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 4,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        }
+      ]
+    },
+    {
+      "local_run_name": "preimage_composition_probe/run2",
+      "source_sha256": "6507ce3e089218a7238043aed287dc706f8ad48073e84d59cf01d45694897d46",
+      "entry_class_sha256": "508553efae7939371ecfb4c5e357e0a1b995e0a6baa14e91de2115c4b555c71d",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "bc7fe8007943513dea7fb7f359e829ad29daeeda092903c5998631442df5deee",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "sha256_edges": [
+        {
+          "ordinal": 1,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 2,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        },
+        {
+          "ordinal": 3,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 4,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        }
+      ],
+      "composition_observations": [
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 1,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 1,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 1,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 1,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 1,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 1,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 1,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 2,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 2,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 2,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 2,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 2,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 2,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 2,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 3,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 3,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 3,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 3,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 3,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 3,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 3,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_COPY",
+          "ordinal": 4,
+          "constructor": "metasec+0x248238",
+          "caller": "metasec+0x28428c",
+          "source_length": 262,
+          "source_cstring_length": 262,
+          "copy_length": 252,
+          "source_slot_pointer_equal": true,
+          "destination_slot_object_equal": true
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "frametype",
+          "type": "String",
+          "scalar_length": 1,
+          "equals_frametype": true,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "lid",
+          "type": "String",
+          "scalar_length": 10,
+          "equals_frametype": false,
+          "equals_lid": true,
+          "equals_signinfo": false,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "signinfo",
+          "type": "String",
+          "scalar_length": 192,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": true,
+          "equals_version": false
+        },
+        {
+          "event": "PREIMAGE_SOURCE_MEMBER",
+          "ordinal": 4,
+          "key": "signversion",
+          "type": "String",
+          "scalar_length": 3,
+          "equals_frametype": false,
+          "equals_lid": false,
+          "equals_signinfo": false,
+          "equals_version": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE",
+          "ordinal": 4,
+          "logical_length": 252,
+          "cstring_length": 252,
+          "logical_equals_cstring": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_PARSE",
+          "ordinal": 4,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "PREIMAGE_LINK",
+          "ordinal": 4,
+          "source_observed": true,
+          "source_length": 262,
+          "source_equals_candidate": true,
+          "minus_ten_equals_hash_input": true
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "field_order",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "whitespace",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "numeric_frametype",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "numeric_lid",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "short_version_key",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "signinfo_byte",
+          "prefix_bytes_equal": false,
+          "sha256_hex_equal": false
+        },
+        {
+          "event": "PREIMAGE_VARIANT",
+          "ordinal": 4,
+          "change": "ignored_version_tail",
+          "prefix_bytes_equal": true,
+          "sha256_hex_equal": true
+        },
+        {
+          "event": "PREIMAGE_STORAGE_TEMPLATE",
+          "ordinal": 4,
+          "candidate_length": 262,
+          "prefix_bytes_equal": true,
+          "storage_bytes_equal": false,
+          "prefix_sha256_hex_equal": true,
+          "full_sha256_hex_equal": false
+        }
+      ]
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x284268",
+        "file_offset": "0x284268",
+        "bytes_hex": "a8035bf8",
+        "mnemonic": "ldur",
+        "operands": "x8, [x29, #-0x50]"
+      },
+      {
+        "image_offset": "0x28426c",
+        "file_offset": "0x28426c",
+        "bytes_hex": "080140f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x8]"
+      },
+      {
+        "image_offset": "0x284270",
+        "file_offset": "0x284270",
+        "bytes_hex": "010940f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x8, #0x10]"
+      },
+      {
+        "image_offset": "0x28427c",
+        "file_offset": "0x28427c",
+        "bytes_hex": "080d40b9",
+        "mnemonic": "ldr",
+        "operands": "w8, [x8, #0xc]"
+      },
+      {
+        "image_offset": "0x284284",
+        "file_offset": "0x284284",
+        "bytes_hex": "02290051",
+        "mnemonic": "sub",
+        "operands": "w2, w8, #0xa"
+      },
+      {
+        "image_offset": "0x284288",
+        "file_offset": "0x284288",
+        "bytes_hex": "dd0fff97",
+        "mnemonic": "bl",
+        "operands": "#0x2481fc"
+      },
+      {
+        "image_offset": "0x284cec",
+        "file_offset": "0x284cec",
+        "bytes_hex": "a0835bf8",
+        "mnemonic": "ldur",
+        "operands": "x0, [x29, #-0x48]"
+      },
+      {
+        "image_offset": "0x284cf4",
+        "file_offset": "0x284cf4",
+        "bytes_hex": "554fff97",
+        "mnemonic": "bl",
+        "operands": "#0x258a48"
+      },
+      {
+        "image_offset": "0x258a74",
+        "file_offset": "0x258a74",
+        "bytes_hex": "080840f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x0, #0x10]"
+      },
+      {
+        "image_offset": "0x258a78",
+        "file_offset": "0x258a78",
+        "bytes_hex": "010c40b9",
+        "mnemonic": "ldr",
+        "operands": "w1, [x0, #0xc]"
+      },
+      {
+        "image_offset": "0x258a80",
+        "file_offset": "0x258a80",
+        "bytes_hex": "ecb2ff97",
+        "mnemonic": "bl",
+        "operands": "#0x245630"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "source_length": 262,
+    "hash_input_length": 252,
+    "native_length_subtraction": 10,
+    "full_source_template_verified_for_fixed_profile": true,
+    "source_minus_ten_matches_hash_input": true,
+    "sha256_hex_matches_signvalue": true,
+    "full_json_hash_matches_signvalue": false,
+    "hash_input_is_complete_json": false,
+    "baseline_abab_preserved": true,
+    "general_input_composition_verified": false,
+    "signinfo_generation_identified": false,
+    "alternation_cause_identified": false,
+    "android_relation_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "preimage_digest_retained": false,
+  "interpretation": "For the fixed 49-character, frame-type-0 profile, the native source contains an ordered compact JSON object with four string fields matching frametype, lid, signinfo and signversion. At constructor caller +0x28428c, source length/C-string length is 262 and explicit copy length is 252. Source/destination frame slots match the observed objects. Pinned +0x284284 subtracts ten from the source length before the constructor. At the later signvalue constructor the complete original source matches the redacted template and its length-minus-ten prefix matches the actual 252-byte SHA-256 input byte for byte. Lowercase hexadecimal SHA-256 of that prefix equals signvalue, whereas hashing the complete JSON does not. The prefix ends within the last key and is not complete JSON. Six changes to hashed material fail comparison; changing only the ignored version-value tail preserves both the prefix and its hash. Variant comparisons are host-side computations over the observed span, not modified native/Android request runs. All eight calls preserve the prior complete native field/constructor/writer/JNI pipeline. No raw preimage, raw signature or preimage digest is retained. General-input composition, signinfo generation, alternation cause, Android equality, independent signing and online acceptance remain unverified."
+}
