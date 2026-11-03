@@ -1,0 +1,1960 @@
+{
+  "schema": "vm9-framesign-aes-material-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_preblock_20261103.json",
+  "owners": {
+    "vm9_protobuf.py": "cb0d6fb0050a0d4f28a271b96695dacbf24442eadb32b2265a54a9f2c30068c2",
+    "vm9_configuration_init.py": "0b58ac2fa9196f3da60c42bd3a03ee1a4d86ead9e824052cbdcbaaebed9533a8",
+    "vm9_objects.py": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "verify_vm9_signer_objects.py": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f",
+    "verify_vm9_strings.py": "fb1eaee419940309f59311c426ad9c5ab6a89923fb3206b44536017fc0af4d62"
+  },
+  "owner_hash_format": "sha256_bytes_CRLF_normalized_to_LF",
+  "probe": {
+    "source_relative_path": "aes_protobuf_material_probe/HookMain.java",
+    "source_sha256": "450aa0d73056d23d4d7ad80b12d160cdd784e3f310a2ae6bc19867b5e04c2997",
+    "entry_class_sha256": "8a98e96eaab806a4525761e54018b7ebcc03566f7f6fc7dd20fcd68eac9fa582",
+    "runner_sha256": "b02f4df785e2bde44136106eb49a575e968d21ecab38dc114ad945a3a9d91d3b",
+    "python_bridge_sha256": "0011e923d2427fdabb95a30270dd752d1b34423c6b7f1d80e2c0a13ffb8595b2",
+    "decoder_bridge_sha256": "6afda0c390135c8839177368cc97b66579401c785ed81172db5063f14f0585a2",
+    "plaintext_bridge_sha256": "fdef137a2a90b4e4be47eca1679d4a3f54a9be01d0830a24a2de3e280f877939",
+    "constructor_bridge_sha256": "72e919faa8346e00e0d1841ca401c557299edc78cb5195c1e57868bfc8a022b0",
+    "read_only_guest_observation": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "python_operand_transport": "private_in_memory_stdin_stdout_pipe",
+    "model_inputs": [
+      "observed_protobuf_263_bytes",
+      "observed_lookup_key_10_bytes",
+      "fresh_relocated_ELF_descriptors_and_lookup_table",
+      "explicit_fixture_allocation_services"
+    ],
+    "AES_encrypts_using_model_derived_material": true
+  },
+  "runs": [
+    {
+      "local_run_name": "aes_protobuf_material_probe/run1",
+      "source_sha256": "450aa0d73056d23d4d7ad80b12d160cdd784e3f310a2ae6bc19867b5e04c2997",
+      "entry_class_sha256": "8a98e96eaab806a4525761e54018b7ebcc03566f7f6fc7dd20fcd68eac9fa582",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "f85f3a3138e840213b793ea4182a2466aa6f3d750ac6fd11e9e0a65eeb3402e8",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "material_observations": [
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 1,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 2,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 3,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 4,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 1,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 2,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 3,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 4,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 1,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 2,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 3,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 4,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 1,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/1:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 1,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/1:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 2,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/2:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 2,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/2:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 3,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/3:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 3,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/3:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 4,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/4:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 4,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/4:44"
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 1,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 2,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 3,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 4,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 1,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 2,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 3,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 4,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 1,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/1:6,metasec+0x2459bc/metasec+0x258ed0/1:5,metasec+0x2459cc/metasec+0x258ed0/1:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 2,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/2:6,metasec+0x2459bc/metasec+0x258ed0/2:5,metasec+0x2459cc/metasec+0x258ed0/2:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 3,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/3:6,metasec+0x2459bc/metasec+0x258ed0/3:5,metasec+0x2459cc/metasec+0x258ed0/3:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 4,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/4:6,metasec+0x2459bc/metasec+0x258ed0/4:5,metasec+0x2459cc/metasec+0x258ed0/4:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 1,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/1:5,metasec+0x2459bc/metasec+0x258ed0/1:6,metasec+0x2459cc/metasec+0x258ed0/1:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 2,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/2:5,metasec+0x2459bc/metasec+0x258ed0/2:6,metasec+0x2459cc/metasec+0x258ed0/2:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 3,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/3:5,metasec+0x2459bc/metasec+0x258ed0/3:6,metasec+0x2459cc/metasec+0x258ed0/3:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 4,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/4:5,metasec+0x2459bc/metasec+0x258ed0/4:6,metasec+0x2459cc/metasec+0x258ed0/4:5"
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 1,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 2,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 3,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 4,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 1,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 2,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 3,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 4,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 1,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 2,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 3,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 4,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 1,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/1:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 2,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/2:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 3,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/3:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 4,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/4:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 1,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 2,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 3,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 4,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 1,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 2,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 3,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 4,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 1,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 2,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 3,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 4,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 1,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 2,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 3,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 4,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 1,
+          "length": 10
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 2,
+          "length": 10
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 3,
+          "length": 10
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 4,
+          "length": 10
+        }
+      ],
+      "prior_relation_ledger_sha256": "97a1ed0287e520f9c2ed24481769c73c21f1c9c60fca6c643d8db93106681647"
+    },
+    {
+      "local_run_name": "aes_protobuf_material_probe/run2",
+      "source_sha256": "450aa0d73056d23d4d7ad80b12d160cdd784e3f310a2ae6bc19867b5e04c2997",
+      "entry_class_sha256": "8a98e96eaab806a4525761e54018b7ebcc03566f7f6fc7dd20fcd68eac9fa582",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "f85f3a3138e840213b793ea4182a2466aa6f3d750ac6fd11e9e0a65eeb3402e8",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "material_observations": [
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 1,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 2,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 3,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "PROTO_MATERIAL_JOIN",
+          "ordinal": 4,
+          "actual_44_equals_Python_selected_field": true,
+          "decoder_equals_Python_unpacked_material": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 1,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 2,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 3,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 4,
+          "field_copy": 2,
+          "length": 44,
+          "source_origin_equals_field_destination": false,
+          "bytes_equal_copied_field": false
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 1,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 2,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 3,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_MATERIAL_JOIN",
+          "ordinal": 4,
+          "field_copy": 1,
+          "length": 44,
+          "source_origin_equals_field_destination": true,
+          "bytes_equal_copied_field": true
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 1,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/1:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 1,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/1:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 2,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/2:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 2,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/2:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 3,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/3:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 3,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/3:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 4,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/4:44"
+        },
+        {
+          "event": "CONFIG_FIELD_COPY",
+          "ordinal": 4,
+          "length": 44,
+          "tag": 2,
+          "kind": 14,
+          "wire": 2,
+          "length_prefix_bytes": 1,
+          "source_equals_original_plus_offset": true,
+          "source_inside_config_decode": false,
+          "source_buffer_lineage_present": false,
+          "resolved_source_inside_config_decode": false,
+          "config_slice_matches": 0,
+          "config_first_match_offset": -1,
+          "source_writers": "metasec+0x171c18/outside_modules/4:44"
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 1,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 2,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 3,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "MATERIAL_SPLIT",
+          "ordinal": 4,
+          "decode_calls": 1,
+          "key_equals_decoded_first16": true,
+          "iv_equals_decoded_last16": true,
+          "swapped_key_matches": false,
+          "swapped_iv_matches": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "PROTO_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "entries": 2,
+          "matched_index": 0,
+          "key_matches": 1,
+          "selected_length": 44,
+          "decoded_length": 32,
+          "peer_equals_selected": false
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 1,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 2,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 3,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_PARENT",
+          "ordinal": 4,
+          "role": "key",
+          "length": 32,
+          "depth": 0,
+          "origin_location": "outside_modules",
+          "writer": "metasec+0x248238"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 1,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/1:6,metasec+0x2459bc/metasec+0x258ed0/1:5,metasec+0x2459cc/metasec+0x258ed0/1:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 2,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/2:6,metasec+0x2459bc/metasec+0x258ed0/2:5,metasec+0x2459cc/metasec+0x258ed0/2:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 3,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/3:6,metasec+0x2459bc/metasec+0x258ed0/3:5,metasec+0x2459cc/metasec+0x258ed0/3:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 4,
+          "role": "key",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 0,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/4:6,metasec+0x2459bc/metasec+0x258ed0/4:5,metasec+0x2459cc/metasec+0x258ed0/4:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 1,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/1:5,metasec+0x2459bc/metasec+0x258ed0/1:6,metasec+0x2459cc/metasec+0x258ed0/1:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 2,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/2:5,metasec+0x2459bc/metasec+0x258ed0/2:6,metasec+0x2459cc/metasec+0x258ed0/2:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 3,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/3:5,metasec+0x2459bc/metasec+0x258ed0/3:6,metasec+0x2459cc/metasec+0x258ed0/3:5"
+        },
+        {
+          "event": "MATERIAL_LINEAGE",
+          "ordinal": 4,
+          "role": "iv",
+          "record_present": true,
+          "length": 16,
+          "recorded_length": 16,
+          "writer": "metasec+0x24848c",
+          "depth": 1,
+          "offset": 16,
+          "parent_location": "outside_modules",
+          "origin_location": "outside_modules",
+          "material_equals_origin_bytes": true,
+          "origin_writers": "metasec+0x24599c/metasec+0x258ed0/4:5,metasec+0x2459bc/metasec+0x258ed0/4:6,metasec+0x2459cc/metasec+0x258ed0/4:5"
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 1,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 2,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 3,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "MATERIAL_AES_JOIN",
+          "ordinal": 4,
+          "derived_material_ciphertext_equals_native": true
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 1,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 2,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 3,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_INPUT",
+          "ordinal": 4,
+          "length": 368,
+          "input_location": "outside_modules",
+          "input_writers": "unobserved:368"
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 1,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 2,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 3,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "CONFIG_DECODE_RETURN",
+          "ordinal": 4,
+          "status": 0,
+          "length": 276,
+          "same_stack_pointer": true
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 1,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/1:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 2,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/2:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 3,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/3:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_INPUT",
+          "ordinal": 4,
+          "length": 44,
+          "source_record_present": true,
+          "source_origin": "outside_modules",
+          "source_origin_equals_input": true,
+          "source_constructor": "metasec+0x248388",
+          "source_depth": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x255800/4:44"
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 1,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 2,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 3,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "MATERIAL_DECODE_RETURN",
+          "ordinal": 4,
+          "length": 32,
+          "native_status": 0,
+          "process_exit_code": 0,
+          "existing_Python_decoder_equals_native": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 1,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 2,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 3,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 4,
+          "field_copy": 2,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": false
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 1,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 2,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 3,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_FIELD_JOIN",
+          "ordinal": 4,
+          "field_copy": 1,
+          "length": 44,
+          "source_inside_protobuf_input": true,
+          "source_equals_protobuf_slice": true,
+          "existing_Python_selected_field_equals_copy": true
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 1,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 2,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 3,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_INPUT",
+          "ordinal": 4,
+          "length": 263,
+          "writers": "metasec+0x171c18/metasec+0x9b234:263"
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 1,
+          "length": 10
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 2,
+          "length": 10
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 3,
+          "length": 10
+        },
+        {
+          "event": "PROTO_QUERY",
+          "ordinal": 4,
+          "length": 10
+        }
+      ],
+      "prior_relation_ledger_sha256": "97a1ed0287e520f9c2ed24481769c73c21f1c9c60fca6c643d8db93106681647"
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x256088",
+        "file_offset": "0x256088",
+        "bytes_hex": "e80300aa",
+        "mnemonic": "mov",
+        "operands": "x8, x0"
+      },
+      {
+        "image_offset": "0x256090",
+        "file_offset": "0x256090",
+        "bytes_hex": "e30302aa",
+        "mnemonic": "mov",
+        "operands": "x3, x2"
+      },
+      {
+        "image_offset": "0x256094",
+        "file_offset": "0x256094",
+        "bytes_hex": "e20301aa",
+        "mnemonic": "mov",
+        "operands": "x2, x1"
+      },
+      {
+        "image_offset": "0x256098",
+        "file_offset": "0x256098",
+        "bytes_hex": "00a03591",
+        "mnemonic": "add",
+        "operands": "x0, x0, #0xd68"
+      },
+      {
+        "image_offset": "0x25609c",
+        "file_offset": "0x25609c",
+        "bytes_hex": "e10308aa",
+        "mnemonic": "mov",
+        "operands": "x1, x8"
+      },
+      {
+        "image_offset": "0x2560a0",
+        "file_offset": "0x2560a0",
+        "bytes_hex": "a4f8ff17",
+        "mnemonic": "b",
+        "operands": "#0x254330"
+      },
+      {
+        "image_offset": "0x2556b4",
+        "file_offset": "0x2556b4",
+        "bytes_hex": "091140b9",
+        "mnemonic": "ldr",
+        "operands": "w9, [x8, #0x10]"
+      },
+      {
+        "image_offset": "0x2556c4",
+        "file_offset": "0x2556c4",
+        "bytes_hex": "0a104039",
+        "mnemonic": "ldrb",
+        "operands": "w10, [x0, #4]"
+      },
+      {
+        "image_offset": "0x2556c8",
+        "file_offset": "0x2556c8",
+        "bytes_hex": "165041a9",
+        "mnemonic": "ldp",
+        "operands": "x22, x20, [x0, #0x10]"
+      },
+      {
+        "image_offset": "0x2557ac",
+        "file_offset": "0x2557ac",
+        "bytes_hex": "5f090071",
+        "mnemonic": "cmp",
+        "operands": "w10, #2"
+      },
+      {
+        "image_offset": "0x2557b4",
+        "file_offset": "0x2557b4",
+        "bytes_hex": "18144039",
+        "mnemonic": "ldrb",
+        "operands": "w24, [x0, #5]"
+      },
+      {
+        "image_offset": "0x2557d8",
+        "file_offset": "0x2557d8",
+        "bytes_hex": "d602184b",
+        "mnemonic": "sub",
+        "operands": "w22, w22, w24"
+      },
+      {
+        "image_offset": "0x2557f4",
+        "file_offset": "0x2557f4",
+        "bytes_hex": "8142388b",
+        "mnemonic": "add",
+        "operands": "x1, x20, w24, uxtw"
+      },
+      {
+        "image_offset": "0x2557f8",
+        "file_offset": "0x2557f8",
+        "bytes_hex": "e20316aa",
+        "mnemonic": "mov",
+        "operands": "x2, x22"
+      },
+      {
+        "image_offset": "0x2557fc",
+        "file_offset": "0x2557fc",
+        "bytes_hex": "d9c90394",
+        "mnemonic": "bl",
+        "operands": "#0x347f60"
+      },
+      {
+        "image_offset": "0x255808",
+        "file_offset": "0x255808",
+        "bytes_hex": "1f493638",
+        "mnemonic": "strb",
+        "operands": "wzr, [x8, w22, uxtw]"
+      },
+      {
+        "image_offset": "0x258ecc",
+        "file_offset": "0x258ecc",
+        "bytes_hex": "52b2ff97",
+        "mnemonic": "bl",
+        "operands": "#0x245814"
+      },
+      {
+        "image_offset": "0x258ef4",
+        "file_offset": "0x258ef4",
+        "bytes_hex": "c2bcff97",
+        "mnemonic": "bl",
+        "operands": "#0x2481fc"
+      },
+      {
+        "image_offset": "0x248d88",
+        "file_offset": "0x248d88",
+        "bytes_hex": "290940f9",
+        "mnemonic": "ldr",
+        "operands": "x9, [x9, #0x10]"
+      },
+      {
+        "image_offset": "0x248d90",
+        "file_offset": "0x248d90",
+        "bytes_hex": "29412a8b",
+        "mnemonic": "add",
+        "operands": "x9, x9, w10, uxtw"
+      },
+      {
+        "image_offset": "0x248da0",
+        "file_offset": "0x248da0",
+        "bytes_hex": "aafdff97",
+        "mnemonic": "bl",
+        "operands": "#0x248448"
+      },
+      {
+        "image_offset": "0x248494",
+        "file_offset": "0x248494",
+        "bytes_hex": "810640f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x20, #8]"
+      },
+      {
+        "image_offset": "0x248498",
+        "file_offset": "0x248498",
+        "bytes_hex": "e20313aa",
+        "mnemonic": "mov",
+        "operands": "x2, x19"
+      },
+      {
+        "image_offset": "0x2484a0",
+        "file_offset": "0x2484a0",
+        "bytes_hex": "b0fe0394",
+        "mnemonic": "bl",
+        "operands": "#0x347f60"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "protobuf_input_length": 263,
+    "lookup_key_length": 10,
+    "configuration_entries": 2,
+    "matched_entry_index": 0,
+    "matching_keys": 1,
+    "selected_field_length": 44,
+    "decoded_material_length": 32,
+    "existing_Python_unpack_and_key_selection_equal_actual_field": true,
+    "actual_field_copy_source_inside_protobuf_input": true,
+    "other_same_length_field_rejected": true,
+    "Python_decodes_its_own_selected_field": true,
+    "AES_key_is_decoded_first16": true,
+    "AES_IV_is_decoded_last16": true,
+    "swapped_halves_rejected": true,
+    "AES_using_Python_derived_material_equals_native": true,
+    "earlier_base64_input_length": 368,
+    "earlier_base64_output_length": 276,
+    "direct_earlier_decode_slice_candidate_rejected": true,
+    "complete_prior_ledger_preserved": true,
+    "protobuf_input_and_lookup_key_independently_generated": false,
+    "earlier_configuration_decryption_identified": false,
+    "old_object_constructor_row_proves_current_AES_material_source": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "Sample verified: two fresh-rootfs read-only unidbg runs and eight fixed-input calls. Existing Python ELF-descriptor-driven Protobuf unpacking and string comparison select exactly one 44-byte value from two configuration entries using the observed ten-byte lookup key. The other 44-byte field differs. The actual +0x2557fc memcpy source lies inside the observed 263-byte unpack input. Its first copied field is joined through the sized string constructor to the material decoder. Python decodes its own selected field using the existing native-table Base64 model: all 32 bytes equal the native decoder output. Substring construction supplies bytes [0,16) to the AES key and [16,32) to the IV. Both swapped-role candidates fail. Independent Java AES/CBC/PKCS5Padding using the Python-derived material reproduces actual native ciphertext. The complete previous field/constructor/writer/JNI, preimage/SHA-256, AES, seed, plaintext layout, pre-block, XTEA and ELF-constructor-input ledger is unchanged. An earlier 368-byte Base64 input returns status zero and 276 output bytes, but neither 44-byte field is a direct slice of that output. The 263-byte input is written at VM STORE8 +0x171c18 with recorded cursor +0x9b234; this is a writer observation, not recovery of the preceding decryption. The earlier C-string record at a reused object address is stale and does not identify the current AES source. Configuration bytes and lookup key remain explicit private observations. No encoded material, decoded material, keys, IVs, pointers, scalar operands or operand digests are published. Earlier configuration decryption, general-input and Android equivalence, a complete independent signer and ordinary Cronet six-header online acceptance remain unverified."
+}

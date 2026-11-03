@@ -1,5 +1,16 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03：**Sample verified**，固定输入的 AES key/IV 已接回配置字段选择与解码：
+[材料来源证据](evidence/vm9_framesign_aes_material_20261103.json)与
+[校验器](python/verify_vm9_framesign_aes_material_20261103.py)。两轮全新 rootfs、8 次调用中，
+已有 Python Protobuf 模型从 263 字节消息的两个配置项中按实际查询键选出唯一的
+44 字节字段，再用已有 Base64 模型解出 32 字节；前后各 16 字节分别成为 key/IV。
+独立 Java AES 使用这些 Python 派生材料逐字节复现原生密文，全部旧有对照保持。
+另一同长度字段、交换 key/IV 和直接切取更早 276 字节解码结果的候选均被排除。
+263 字节消息及查询键仍来自运行时观察；消息上游转换、76 字节组件生成、剩余 seed
+操作数、Android 等价、完整独立 signer 与普通 Cronet 六头线上验签仍未闭合。
+未公开编码材料、解码材料、key/IV 或其摘要。下列早期检查点的未闭合项按当时证据保留。
+
 2026-11-03 已闭合当前 unidbg 固定输入下变化首字节的分配地址依赖：
 [来源证据](evidence/vm9_framesign_seed_allocation_20261103.json)与
 [校验器](python/verify_vm9_framesign_seed_allocation_20261103.py)。`calloc(1,95)` 返回指针

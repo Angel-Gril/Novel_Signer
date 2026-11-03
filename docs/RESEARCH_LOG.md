@@ -1,5 +1,19 @@
 # Checkpoint log
 
+2026-11-03：**Sample verified**，两轮全新 rootfs 共 8 次调用闭合 FrameSign AES 材料的
+配置选择、Base64 解码、substring 拆分和实际加密关系。已有 Python Protobuf 模型
+使用 fresh ELF 描述符及实际查询键，从 263 字节消息的两个配置项中选出唯一匹配的
+44 字节字段；另一同长度字段不同。已有解码器把自行选择的字段解为 32 字节，
+前后各 16 字节对应实际 key/IV，交换角色均失败；独立 Java AES 使用 Python 派生材料
+复现全部原生密文。152 项新关系、24 条 ELF 指令和之前完整对照通过；115 项错误证据、
+实际畸形 CLI 与 3 项畸形日志被拒绝。更早的 368 字节输入解码为 276 字节，但两条
+44 字节字段均不是该结果的直接切片；263 字节消息的 VM 写入位置已观察，上游转换
+尚未闭合。旧对象地址上的 C-string 构造记录已经过期，不能据此归因当前 AES 材料。
+未公开任何编码/解码材料、key/IV 或其摘要。配置消息及查询键仍为观察输入；
+76 字节组件、剩余 seed 操作数、Android 等价、完整 signer 和普通 Cronet 六头线上验签
+仍未完成。见[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_aes_material_20261103.json)
+及[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_aes_material_20261103.py)。
+
 2026-11-03：**Sample verified**，另两轮全新 rootfs、8 次调用把 FrameSign 块密钥
 及反馈尾部接到已有 Python ELF 配置构造器。`+0x3dec74` 的 20 字节 BSS 与
 fresh ELF 构造结果相等；前 16 字节逐字反转成为 XTEA 密钥，后 4 字节成为反馈
