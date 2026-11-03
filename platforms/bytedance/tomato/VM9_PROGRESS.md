@@ -1,5 +1,31 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：块处理前首字节的 calloc 返回地址依赖
+
+在固定输入的两轮全新 rootfs、共 8 次调用中，已正面闭合此前变化首字节的来源。
+实际 dispatcher `+0x16aa48` 经 `+0x268504` 调用 libc 的 `calloc(1,95)`。目标地址
+`libc.so+0x1baa0` 与本次加载模块的 `calloc` 符号一致，其 32 字节运行代码指纹也与
+固定 `unidbg-android-0.9.9.jar` 中 sdk23/lib64/libc.so 的符号及代码一致。相同
+dispatcher SP 返回后，X0 与 descriptor `+0x18` 返回槽相同，95 字节分配区全零；
+该指针就是随后构造 93 字节明文的缓冲区。
+
+bytecode `+0xa0614` 的 LOAD64 正好读取上述返回槽，结果等于分配指针；
+`+0xa064c` 的 AND16 生成 `+0xa0654` OR64 的左输入，右输入在每轮中稳定。
+用实际返回指针、观察到的掩码和右输入重算，结果等于原生 OR 寄存器，其低字节
+等于 `+0xa0658` 写入的 `buffer[0]`。每轮全部 6 对比较显示返回指针、掩码后的
+变化输入和首字节都呈 A-B-A-B。由此闭合当前仿真配置中分配地址对首字节的直接
+数据依赖及该交替来源；尚未解释 allocator 的地址复用策略，也未验证 Android。
+
+本轮 184 项新关系观测、17 条 ELF 指令和固定 libc artifact 校验全部通过；
+此前完整字段、构造、writer、JNI、明文布局、JSON 前缀/SHA-256、AES 对照保持。
+54 项错误证据、畸形 CLI、替换 libc 的实际 CLI 和 2 项畸形日志均被拒绝。
+未公开原始分配指针、首字节、标量操作数、掩码、明文、密钥、IV 或操作数摘要。
+块变换算法、4 字节后缀、密钥/IV 生成、其他输入、Android、独立 signer 与
+普通 Cronet 六头/线上验签仍未闭合。下一步恢复 bytecode 块处理及后缀生成。
+
+证据：[seed allocation](evidence/vm9_framesign_seed_allocation_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_seed_allocation_20261103.py)。
+
 ## 2026-11-03：93 字节明文布局与块处理前的单字节差异
 
 两轮全新 rootfs、固定 49 字符/frame type 0、一次 setup 的只读捕获共 8 次调用，

@@ -1,0 +1,2085 @@
+{
+  "schema": "vm9-framesign-seed-allocation-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_plaintext_layout_20261103.json",
+  "libc_provider": {
+    "artifact": "unidbg-android-0.9.9.jar",
+    "resource": "android/sdk23/lib64/libc.so",
+    "jar_sha256": "ce52ddda7772ac79adb4606dbaf0a65c53c41af96e73299a98eadec608f270fc",
+    "library_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "symbol": "calloc",
+    "image_offset": "0x1baa0",
+    "symbol_size": 32,
+    "symbol_code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+  },
+  "probe": {
+    "source_relative_path": "preblock_seed_calloc_relation_probe/HookMain.java",
+    "source_sha256": "b71a7405efb77cb57e33b105a6ca31f921e05c312ce0d7d8108c452e6418b7f3",
+    "entry_class_sha256": "965fa4584184c65a3b21ba62bd2f9848bce50523d58044934bdc216ea5cad5d0",
+    "runner_sha256": "5259b7a5dc0198035ba175fa08f1d78360197d99a1b91c25ccf1a3d24bd05752",
+    "read_only_guest_observation": true,
+    "synthetic_jni_provider_used": true,
+    "fresh_rootfs_per_run": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "comparison_scope": "within_each_four_call_run",
+    "return_observation_scope": "same_dispatcher_stack_pointer_after_callback"
+  },
+  "runs": [
+    {
+      "local_run_name": "preblock_seed_calloc_relation_probe/run1",
+      "source_sha256": "b71a7405efb77cb57e33b105a6ca31f921e05c312ce0d7d8108c452e6418b7f3",
+      "entry_class_sha256": "965fa4584184c65a3b21ba62bd2f9848bce50523d58044934bdc216ea5cad5d0",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "bcc95cf4650c2f0dd95f2cdbbc4751bf9c77740dda6a24dddf3e4b413af271e8",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "seed_observations": [
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 3,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 1,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 2,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 3,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 4,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 1,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 2,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 3,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 4,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": true
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 1,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 2,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 3,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 4,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 1,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 2,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 3,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 4,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 1,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 1,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 1,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 1,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 1,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 1,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 2,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 2,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 2,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 2,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 2,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 3,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 3,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 3,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 3,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 3,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 4,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 4,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 4,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 4,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 4,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 2,
+          "previous_ordinal": 1,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 1,
+          "return_pointer_equal": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 2,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 1,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 2,
+          "return_pointer_equal": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 3,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 1,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/1:8"
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/2:8"
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/3:8"
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/4:8"
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.0.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0",
+          "previous_ordinal": 2,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0",
+          "previous_ordinal": 3,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 3,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.1",
+          "previous_ordinal": 3,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.1",
+          "previous_ordinal": 3,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 1,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 1,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 2,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 2,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 3,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 3,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 4,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 4,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 1,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 1,
+          "source_register_still_equal": false
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 2,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 2,
+          "source_register_still_equal": false
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 3,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 3,
+          "source_register_still_equal": false
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 4,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 4,
+          "source_register_still_equal": false
+        }
+      ]
+    },
+    {
+      "local_run_name": "preblock_seed_calloc_relation_probe/run2",
+      "source_sha256": "b71a7405efb77cb57e33b105a6ca31f921e05c312ce0d7d8108c452e6418b7f3",
+      "entry_class_sha256": "965fa4584184c65a3b21ba62bd2f9848bce50523d58044934bdc216ea5cad5d0",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "bcc95cf4650c2f0dd95f2cdbbc4751bf9c77740dda6a24dddf3e4b413af271e8",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "seed_observations": [
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_LOAD_ADDRESS_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 3,
+          "address_equal": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 1,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 2,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 3,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_RETURN",
+          "ordinal": 4,
+          "return_register_equals_slot": true,
+          "allocation_zero_filled": true,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 1,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 2,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 3,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CALL",
+          "ordinal": 4,
+          "wrapper": "metasec+0x268504",
+          "target": "libc.so+0x1baa0",
+          "symbol": "calloc",
+          "count": 1,
+          "element_size": 95,
+          "allocation_size": 95
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root.1",
+          "operation": "AND16",
+          "bcp": "metasec+0xa05d4",
+          "destination_slot": 20,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "operation": "LOAD64",
+          "bcp": "metasec+0xa0614",
+          "destination_slot": 3,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": true,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root.0",
+          "operation": "AND16",
+          "bcp": "metasec+0xa064c",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 1,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 2,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": true
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 3,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": false
+        },
+        {
+          "event": "PREBLOCK_OR",
+          "ordinal": 4,
+          "path": "root",
+          "operation": "OR64",
+          "bcp": "metasec+0xa0654",
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "operand_values_equal": false,
+          "result_equals_left": false,
+          "result_equals_right": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 1,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 2,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 3,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_LINK",
+          "ordinal": 4,
+          "calls": 1,
+          "returns": 1,
+          "buffer_equals_return_pointer": true,
+          "buffer_93_inside_allocation": true,
+          "load_source_equals_return_slot": true,
+          "loaded_value_equals_return_pointer": true,
+          "masked_return_equals_OR_left": true,
+          "callback_expression_equals_OR_result": true,
+          "callback_expression_low_byte_equals_buffer": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 1,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 2,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 3,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_CALLOC_CODE",
+          "ordinal": 4,
+          "code_length": 32,
+          "code_sha256": "c5751722fc5f760d134dbf636051fe3bdd94bc91ce5e20d4fa2668260079f9d6"
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 1,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 1,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 1,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 1,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 1,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 1,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 2,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 2,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 2,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 2,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 2,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 3,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 3,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 3,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 3,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 3,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 4,
+          "path": "root.0",
+          "source_slot": 2,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa064c",
+          "writer_ordinal": 4,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "source_slot": 3,
+          "writer": "metasec+0x16f974",
+          "writer_bcp": "metasec+0xa0614",
+          "writer_ordinal": 4,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND",
+          "ordinal": 4,
+          "path": "root.1",
+          "source_slot": 20,
+          "writer": "metasec+0x16e118",
+          "writer_bcp": "metasec+0xa05d4",
+          "writer_ordinal": 4,
+          "definition_present": true,
+          "depth_limit": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 2,
+          "previous_ordinal": 1,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 1,
+          "return_pointer_equal": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 2,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 1,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 2,
+          "return_pointer_equal": true
+        },
+        {
+          "event": "PREBLOCK_CALLOC_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 3,
+          "return_pointer_equal": false
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 1,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/1:8"
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/2:8"
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/3:8"
+        },
+        {
+          "event": "PREBLOCK_LOAD_SOURCE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "source_location": "outside_modules",
+          "source_writers": "metasec+0x268518/metasec+0x268518/4:8"
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.0.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 2,
+          "path": "root.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0",
+          "previous_ordinal": 2,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.0.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 3,
+          "path": "root.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0",
+          "previous_ordinal": 3,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 1,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.0",
+          "previous_ordinal": 3,
+          "value_equal": false
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.0.1",
+          "previous_ordinal": 3,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.1",
+          "previous_ordinal": 1,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.1",
+          "previous_ordinal": 2,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_OPERAND_COMPARE",
+          "ordinal": 4,
+          "path": "root.1",
+          "previous_ordinal": 3,
+          "value_equal": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 1,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 1,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 2,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 2,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 3,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 3,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_ORIGIN",
+          "ordinal": 4,
+          "writer": "metasec+0x171c18",
+          "writer_bcp": "metasec+0xa0658",
+          "writer_ordinal": 4,
+          "strb_record_present": true
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 1,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 1,
+          "source_register_still_equal": false
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 2,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 2,
+          "source_register_still_equal": false
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 3,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 3,
+          "source_register_still_equal": false
+        },
+        {
+          "event": "PREBLOCK_VREG",
+          "ordinal": 4,
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_buffer": true,
+          "source_writer": "metasec+0x16a5d8",
+          "source_writer_bcp": "metasec+0xa0654",
+          "source_writer_ordinal": 4,
+          "source_register_still_equal": false
+        }
+      ]
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x268504",
+        "file_offset": "0x268504",
+        "bytes_hex": "fe4fbfa9",
+        "mnemonic": "stp",
+        "operands": "x30, x19, [sp, #-0x10]!"
+      },
+      {
+        "image_offset": "0x268508",
+        "file_offset": "0x268508",
+        "bytes_hex": "f30300aa",
+        "mnemonic": "mov",
+        "operands": "x19, x0"
+      },
+      {
+        "image_offset": "0x26850c",
+        "file_offset": "0x26850c",
+        "bytes_hex": "080040a9",
+        "mnemonic": "ldp",
+        "operands": "x8, x0, [x0]"
+      },
+      {
+        "image_offset": "0x268510",
+        "file_offset": "0x268510",
+        "bytes_hex": "610a40f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x19, #0x10]"
+      },
+      {
+        "image_offset": "0x268514",
+        "file_offset": "0x268514",
+        "bytes_hex": "00013fd6",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "image_offset": "0x268518",
+        "file_offset": "0x268518",
+        "bytes_hex": "600e00f9",
+        "mnemonic": "str",
+        "operands": "x0, [x19, #0x18]"
+      },
+      {
+        "image_offset": "0x16f96c",
+        "file_offset": "0x16f96c",
+        "bytes_hex": "89696df8",
+        "mnemonic": "ldr",
+        "operands": "x9, [x12, x13]"
+      },
+      {
+        "image_offset": "0x16f974",
+        "file_offset": "0x16f974",
+        "bytes_hex": "897b2ef8",
+        "mnemonic": "str",
+        "operands": "x9, [x28, x14, lsl #3]"
+      },
+      {
+        "image_offset": "0x16e108",
+        "file_offset": "0x16e108",
+        "bytes_hex": "69010e0a",
+        "mnemonic": "and",
+        "operands": "w9, w11, w14"
+      },
+      {
+        "image_offset": "0x16e110",
+        "file_offset": "0x16e110",
+        "bytes_hex": "293d4092",
+        "mnemonic": "and",
+        "operands": "x9, x9, #0xffff"
+      },
+      {
+        "image_offset": "0x16e118",
+        "file_offset": "0x16e118",
+        "bytes_hex": "897b2cf8",
+        "mnemonic": "str",
+        "operands": "x9, [x28, x12, lsl #3]"
+      },
+      {
+        "image_offset": "0x16a5b8",
+        "file_offset": "0x16a5b8",
+        "bytes_hex": "8a5b68f8",
+        "mnemonic": "ldr",
+        "operands": "x10, [x28, w8, uxtw #3]"
+      },
+      {
+        "image_offset": "0x16a5c0",
+        "file_offset": "0x16a5c0",
+        "bytes_hex": "8b5b69f8",
+        "mnemonic": "ldr",
+        "operands": "x11, [x28, w9, uxtw #3]"
+      },
+      {
+        "image_offset": "0x16a5cc",
+        "file_offset": "0x16a5cc",
+        "bytes_hex": "6a010aaa",
+        "mnemonic": "orr",
+        "operands": "x10, x11, x10"
+      },
+      {
+        "image_offset": "0x16a5d8",
+        "file_offset": "0x16a5d8",
+        "bytes_hex": "8a5b2cf8",
+        "mnemonic": "str",
+        "operands": "x10, [x28, w12, uxtw #3]"
+      },
+      {
+        "image_offset": "0x171c04",
+        "file_offset": "0x171c04",
+        "bytes_hex": "8a6b6ab8",
+        "mnemonic": "ldr",
+        "operands": "w10, [x28, x10]"
+      },
+      {
+        "image_offset": "0x171c18",
+        "file_offset": "0x171c18",
+        "bytes_hex": "6a692938",
+        "mnemonic": "strb",
+        "operands": "w10, [x11, x9]"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "calloc_count_per_call": 1,
+    "allocation_size": 95,
+    "allocation_is_plaintext_buffer": true,
+    "pre_block_first_byte_calloc_dependency_verified": true,
+    "allocation_pointer_abab_within_each_run": true,
+    "varying_OR_input_is_masked_allocation_pointer": true,
+    "other_OR_input_stable_within_each_run": true,
+    "libc_symbol_and_runtime_code_matched": true,
+    "complete_baseline_layout_and_aes_preserved": true,
+    "allocator_reuse_policy_identified": false,
+    "block_transform_algorithm_identified": false,
+    "suffix_generation_identified": false,
+    "key_or_iv_generation_identified": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "android_alternation_cause_identified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "For this fixed-input unidbg profile, the varying pre-block buffer byte has a positive data dependency on the address returned by calloc(1,95). At +0x16aa48, wrapper +0x268504 targets the loaded libc calloc symbol at +0x1baa0. Its 32 live code bytes have the same fingerprint as the pinned sdk23/lib64/libc.so resource and dynsym entry in unidbg-android-0.9.9.jar. At the matching dispatcher-SP return, X0 equals the descriptor word at +0x18 and the 95-byte allocation is zero-filled. That returned pointer equals the pre-block buffer address. The LOAD64 at bytecode +0xa0614 reads the exact descriptor return slot; its result equals the pointer, then AND16 at +0xa064c feeds the left OR64 operand at +0xa0654. The other OR operand is stable within each run. The reconstructed expression from the observed callback pointer, mask and other operand equals the architectural OR result; its low byte equals buffer[0], written at +0xa0658. Within each of two independent four-call runs, all six pointer comparisons are A-B-A-B, as are the masked varying operand and pre-block byte. This explains the observed fixed emulator profile dependency without proving why the allocator reuses those addresses or how Android behaves. No guest intervention was performed. The complete prior field/constructor/writer/JNI, JSON-prefix/SHA-256, layout and AES controls are preserved. Only relationships, lengths, module offsets, code fingerprints and final-field fingerprints are published; raw allocation pointers, seed values, scalar operands, masks, plaintext, keys, IVs, signatures and operand digests are omitted. Block transform, suffix generation, key/IV generation, other inputs, Android relation, complete signer and online acceptance remain unverified."
+}

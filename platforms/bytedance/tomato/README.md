@@ -1,5 +1,14 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 已闭合当前 unidbg 固定输入下变化首字节的分配地址依赖：
+[来源证据](evidence/vm9_framesign_seed_allocation_20261103.json)与
+[校验器](python/verify_vm9_framesign_seed_allocation_20261103.py)。`calloc(1,95)` 返回指针
+经过实际 LOAD64、AND16、OR64 和字节写入形成块处理前的 `buffer[0]`，该分配区就是
+明文缓冲区。两轮 8 次调用均核对返回槽、运算和最终字节；每轮返回指针及变化输入
+呈 A-B-A-B，另一 OR 输入稳定。固定 libc 的符号和运行代码指纹一致，全部旧对照保持。
+这解释了当前仿真配置的首字节交替来源；allocator 地址复用策略、Android 关系、
+块变换、后缀生成、独立 signer 和线上验签仍未验证。
+
 2026-11-03 已恢复固定输入下 93 字节 AES 明文的 `1 + 88 + 4` 布局：
 [布局证据](evidence/vm9_framesign_plaintext_layout_20261103.json)与
 [校验器](python/verify_vm9_framesign_plaintext_layout_20261103.py)。实际 callback 将缓冲区

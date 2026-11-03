@@ -1,5 +1,26 @@
 {
   "platform": "bytedance.tomato",
+  "vm9_framesign_seed_allocation_20261103": {
+    "evidence_file": "evidence/vm9_framesign_seed_allocation_20261103.json",
+    "verifier": "python/verify_vm9_framesign_seed_allocation_20261103.py",
+    "schema": "vm9-framesign-seed-allocation-20261103-v1",
+    "independent_read_only_runs": 2,
+    "calls": 8,
+    "seed_observations": 184,
+    "allocation_size": 95,
+    "allocation_is_plaintext_buffer": true,
+    "pre_block_first_byte_calloc_dependency_verified": true,
+    "allocation_pointer_abab_within_each_run": true,
+    "libc_symbol_and_runtime_code_matched": true,
+    "complete_baseline_layout_and_aes_preserved": true,
+    "allocator_reuse_policy_identified": false,
+    "block_transform_algorithm_identified": false,
+    "suffix_generation_identified": false,
+    "android_equivalence_verified": false,
+    "android_alternation_cause_identified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_framesign_plaintext_layout_20261103": {
     "evidence_file": "evidence/vm9_framesign_plaintext_layout_20261103.json",
     "verifier": "python/verify_vm9_framesign_plaintext_layout_20261103.py",
