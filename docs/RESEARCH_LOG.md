@@ -1,5 +1,18 @@
 # Checkpoint log
 
+2026-11-04：**Sample verified**，Python 从初始化 JSON 的第 0 项（应用 ID）实际
+生成四字节共享字，捕获摘要输入及共享字仅作比较。未过滤的观察器确认实际 VM
+目标是 descriptor wrapper `+0x17d2e0`，接到 C 字符串构造器 `+0x248344`；
+对象和源指针、包含终止零的五字节复制、四次 JSON 解析器字节读取均通过实际
+writer 身份、快照和时间顺序连接。字段相等尚未证明原始 JNI provider 输入
+内存归属。两轮全新 rootfs、8 次调用保留全部旧有生成链和最终原生密文对照；
+200 项新关系、18 条 ELF 指令、固定 libc 工件及真实 CLI 通过；59 项错误证据、
+6 项畸形日志、畸形 CLI 和 15 项非法私有桥输入被拒绝。其他应用 ID/长度、
+编码配置更早来源、剩余输入、Android 等价、完整 signer 与六头线上验签仍开放。
+未公开初始化内容、操作数、材料、指针或操作数摘要。见
+[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_initializer_word_20261104.json)和
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_initializer_word_20261104.py)。
+
 2026-11-04：**Sample verified**，两轮全新 rootfs、8 次调用将共享四字节值追到
 初始化 tag `0x4000001` 的实际写入；低四字节操作数与三处摘要消费者快照一致。
 通过 `+0x24841c` header store、逐字节 writer 身份、源快照和时间顺序接通四字节

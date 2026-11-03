@@ -1,0 +1,2845 @@
+{
+  "schema": "vm9-framesign-configuration-initializer-word-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_configuration_setup_word_20261104.json",
+  "parent_evidence_sha256": "6621c0f721c7e37a9fc4554765d5f71073040b1fb8f157fdbe13f210d557b262",
+  "owner_hash_format": "sha256_bytes_CRLF_normalized_to_LF",
+  "owners": {
+    "vm9_protobuf.py": "cb0d6fb0050a0d4f28a271b96695dacbf24442eadb32b2265a54a9f2c30068c2",
+    "vm9_configuration_init.py": "0b58ac2fa9196f3da60c42bd3a03ee1a4d86ead9e824052cbdcbaaebed9533a8",
+    "vm9_objects.py": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "verify_vm9_signer_objects.py": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f",
+    "verify_vm9_strings.py": "fb1eaee419940309f59311c426ad9c5ab6a89923fb3206b44536017fc0af4d62",
+    "vm9_stream_cipher.py": "02e1a13cebc2809f3025300336af959f665806acc03b24ef50ed9f3a7f5b649a",
+    "vm9_framesign_configuration.py": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+    "vm9_cipher.py": "7b628664ddcb6f982bbaf346bfdf316ba4939a0a932f79e0f4e5a8c56510c36d",
+    "vm9_cipher_callback.py": "54ff35872c233f579e043a27d67eb34ae17ceba854f23faf096daabff25df181",
+    "vm9_registry.py": "97cde5b8cb688b27bb7a5238134fbe79806814ed319cfb2e7bce8f98fedc73eb"
+  },
+  "probe": {
+    "source_relative_path": "configuration_initializer_word_model_probe/HookMain.java",
+    "source_sha256": "47bf6ab0d63d6e215d2d670fd358346d3280e6d39b2a316718e175c1acfeee1c",
+    "entry_class_sha256": "b418dd139959729f300c64fc8af7d47f8eacd0b0e2700a5d5fcc33d32e95fe0f",
+    "runner_sha256": "a0434758598899c8599400aadfa35cd2a497027c1dc4229462d5719dce4e7c35",
+    "python_bridge_sha256": "d432cf1082950ca967734a630ce4fceb7775f0a9eebebfdf6883a02750b16835",
+    "decoder_bridge_sha256": "6afda0c390135c8839177368cc97b66579401c785ed81172db5063f14f0585a2",
+    "plaintext_bridge_sha256": "fdef137a2a90b4e4be47eca1679d4a3f54a9be01d0830a24a2de3e280f877939",
+    "constructor_bridge_sha256": "72e919faa8346e00e0d1841ca401c557299edc78cb5195c1e57868bfc8a022b0",
+    "materials_bridge_sha256": "884727e378a09251340768c889473ced1e2fd819bf736dd3253ec1608c01d491",
+    "read_only_guest_observation": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "run_deadline_seconds": 1200,
+    "python_operand_transport": "private_in_memory_stdin_stdout_pipe",
+    "model_inputs": [
+      "observed_encoded_configuration_368_bytes",
+      "initializer_JSON_application_id_field_zero",
+      "observed_empty_IV_and_mode_zero",
+      "observed_twelve_reduction_leaf_bytes",
+      "observed_lookup_key_10_bytes",
+      "fresh_relocated_ELF_tables_and_descriptors",
+      "explicit_fixture_allocation_and_warm_singleton_services"
+    ],
+    "comparison_only_inputs": [
+      "observed_decoded_configuration_276_bytes",
+      "observed_MD5_input_12_bytes",
+      "observed_SHA1_input_12_bytes",
+      "observed_configuration_ciphertext_272_bytes",
+      "observed_configuration_AES_key_16_bytes",
+      "observed_native_MD5_output_16_bytes",
+      "observed_configuration_plaintext_271_bytes",
+      "observed_RC4_input_263_bytes",
+      "observed_RC4_key_20_bytes",
+      "observed_decoder_prefix_4_bytes_for_counterexample_only",
+      "observed_shared_word_4_bytes_comparison_only"
+    ],
+    "RC4_uses_model_generated_data_and_key": true,
+    "warm_singleton_and_allocator_are_explicit_fixtures": true,
+    "configuration_decrypt_uses_generated_MD5_key": true,
+    "digest_inputs_and_ciphertext_use_generated_configuration": true,
+    "existing_Python_bridges_identical_to_parent": false,
+    "only_changed_Python_bridge": "host_proto_material.py",
+    "proto_material_request_lines": 15,
+    "initializer_JSON_input_bound_bytes": 4096,
+    "initializer_word_generated_in_Python": true,
+    "captured_digest_inputs_comparison_only": true,
+    "earlier_JNI_tags_observed_separately_from_existing_per_call_window": true,
+    "setup_clone_capture_anchor": "native_header_store_0x24841c"
+  },
+  "runs": [
+    {
+      "local_run_name": "configuration_initializer_word_model_probe/run1",
+      "source_sha256": "47bf6ab0d63d6e215d2d670fd358346d3280e6d39b2a316718e175c1acfeee1c",
+      "entry_class_sha256": "b418dd139959729f300c64fc8af7d47f8eacd0b0e2700a5d5fcc33d32e95fe0f",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "runner_sha256": "a0434758598899c8599400aadfa35cd2a497027c1dc4229462d5719dce4e7c35",
+      "run_deadline_seconds": 1200,
+      "sanitized_log_sha256": "367830f40ab73f7c090dda05e6a458895a93f47176e3d9d5ab4628670a2e8546",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        }
+      ],
+      "prior_relation_ledger_sha256": "095a8a9ef4ed4fc67bb2f2a552d20bc425ef3a32ccbf190818882c528af24e0e"
+    },
+    {
+      "local_run_name": "configuration_initializer_word_model_probe/run2",
+      "source_sha256": "47bf6ab0d63d6e215d2d670fd358346d3280e6d39b2a316718e175c1acfeee1c",
+      "entry_class_sha256": "b418dd139959729f300c64fc8af7d47f8eacd0b0e2700a5d5fcc33d32e95fe0f",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "runner_sha256": "a0434758598899c8599400aadfa35cd2a497027c1dc4229462d5719dce4e7c35",
+      "run_deadline_seconds": 1200,
+      "sanitized_log_sha256": "367830f40ab73f7c090dda05e6a458895a93f47176e3d9d5ab4628670a2e8546",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDCTOR_JOIN",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "wrapper": "metasec+0x17d2e0",
+          "constructor": "metasec+0x248344",
+          "capture": "metasec+0x248388",
+          "source_tag": "4000001",
+          "copy_length": 5,
+          "string_length": 4,
+          "slice_offset": 0,
+          "descriptor_object_identity": true,
+          "descriptor_source_pointer_identity": true,
+          "actual_write_events_equal": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true,
+          "terminator_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDESC_SOURCE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "call_present": true,
+          "all_writer_events_same_call": true,
+          "wrapper": "metasec+0x17d2e0",
+          "descriptor_readable": true,
+          "native_target": "metasec+0x248344",
+          "native_symbol": "unrecognized",
+          "word_equals_native_argument0": false,
+          "word_equals_native_argument1": false,
+          "argument1_first_four_snapshot_equals_word": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDVMDIAG_COUNTS",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "spill_entries": 1904,
+          "code_entries": 952,
+          "argument_failures": 0
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDINITIALIZER_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "initializer_field_index": 0,
+          "word_length": 4,
+          "word_generated_from_initializer": true,
+          "captured_MD5_preimage_comparison_only": true,
+          "generated_word_equals_MD5_first": true,
+          "generated_word_equals_MD5_last": true,
+          "generated_word_equals_SHA1_middle": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_JSON_SOURCE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "length": 4,
+          "parser_byte_events_joined": 4,
+          "input_bytes_contiguous": true,
+          "earlier_input_writer_coverage": 4,
+          "parser_read_snapshots_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDCTOR_INITIALIZER_COMPARE",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "matching_string_fields": 1,
+          "unique_field_index": 0,
+          "whole_field_byte_equal": true
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "code",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 1,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 2,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 3,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_0_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "md5_piece_8_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        },
+        {
+          "event": "WORDVMDESC_INPUT_WRITERS",
+          "ordinal": 4,
+          "role": "sha1_preimage_offset_4",
+          "observer": "spill",
+          "length": 4,
+          "writers": "metasec+0x24aa40/metasec+0x24a9c0/outside_modules/tag4000001/ordinal0:4"
+        }
+      ],
+      "prior_relation_ledger_sha256": "095a8a9ef4ed4fc67bb2f2a552d20bc425ef3a32ccbf190818882c528af24e0e"
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x16aa3c",
+        "file_offset": "0x16aa3c",
+        "bytes_hex": "a50737a9",
+        "mnemonic": "stp",
+        "operands": "x5, x1, [x29, #-0x90]"
+      },
+      {
+        "image_offset": "0x16aa40",
+        "file_offset": "0x16aa40",
+        "bytes_hex": "080140f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x8]"
+      },
+      {
+        "image_offset": "0x16aa44",
+        "file_offset": "0x16aa44",
+        "bytes_hex": "200140f9",
+        "mnemonic": "ldr",
+        "operands": "x0, [x9]"
+      },
+      {
+        "image_offset": "0x16aa48",
+        "file_offset": "0x16aa48",
+        "bytes_hex": "00013fd6",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "image_offset": "0x17d2e0",
+        "file_offset": "0x17d2e0",
+        "bytes_hex": "088440a9",
+        "mnemonic": "ldp",
+        "operands": "x8, x1, [x0, #8]"
+      },
+      {
+        "image_offset": "0x17d2e4",
+        "file_offset": "0x17d2e4",
+        "bytes_hex": "020040f9",
+        "mnemonic": "ldr",
+        "operands": "x2, [x0]"
+      },
+      {
+        "image_offset": "0x17d2e8",
+        "file_offset": "0x17d2e8",
+        "bytes_hex": "e00308aa",
+        "mnemonic": "mov",
+        "operands": "x0, x8"
+      },
+      {
+        "image_offset": "0x17d2ec",
+        "file_offset": "0x17d2ec",
+        "bytes_hex": "40001fd6",
+        "mnemonic": "br",
+        "operands": "x2"
+      },
+      {
+        "image_offset": "0x24836c",
+        "file_offset": "0x24836c",
+        "bytes_hex": "f40301aa",
+        "mnemonic": "mov",
+        "operands": "x20, x1"
+      },
+      {
+        "image_offset": "0x248370",
+        "file_offset": "0x248370",
+        "bytes_hex": "f4fe0394",
+        "mnemonic": "bl",
+        "operands": "#0x347f40"
+      },
+      {
+        "image_offset": "0x24837c",
+        "file_offset": "0x24837c",
+        "bytes_hex": "68020129",
+        "mnemonic": "stp",
+        "operands": "w8, w0, [x19, #8]"
+      },
+      {
+        "image_offset": "0x248388",
+        "file_offset": "0x248388",
+        "bytes_hex": "600a00f9",
+        "mnemonic": "str",
+        "operands": "x0, [x19, #0x10]"
+      },
+      {
+        "image_offset": "0x248390",
+        "file_offset": "0x248390",
+        "bytes_hex": "e10314aa",
+        "mnemonic": "mov",
+        "operands": "x1, x20"
+      },
+      {
+        "image_offset": "0x248394",
+        "file_offset": "0x248394",
+        "bytes_hex": "e20315aa",
+        "mnemonic": "mov",
+        "operands": "x2, x21"
+      },
+      {
+        "image_offset": "0x2483a4",
+        "file_offset": "0x2483a4",
+        "bytes_hex": "effe0314",
+        "mnemonic": "b",
+        "operands": "#0x347f60"
+      },
+      {
+        "image_offset": "0x24a9e4",
+        "file_offset": "0x24a9e4",
+        "bytes_hex": "e8024039",
+        "mnemonic": "ldrb",
+        "operands": "w8, [x23]"
+      },
+      {
+        "image_offset": "0x24aa3c",
+        "file_offset": "0x24aa3c",
+        "bytes_hex": "f7060091",
+        "mnemonic": "add",
+        "operands": "x23, x23, #1"
+      },
+      {
+        "image_offset": "0x24aa40",
+        "file_offset": "0x24aa40",
+        "bytes_hex": "a8160038",
+        "mnemonic": "strb",
+        "operands": "w8, [x21], #1"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "unfiltered_spill_and_code_observer_coverage_verified": true,
+    "actual_VM_target_is_two_argument_descriptor_wrapper_0x17d2e0": true,
+    "descriptor_target_is_C_string_constructor_0x248344": true,
+    "descriptor_object_and_source_pointers_join_constructor": true,
+    "constructor_five_byte_copy_includes_string_terminator": true,
+    "constructor_copy_actual_write_identity_and_snapshot_verified": true,
+    "four_JSON_parser_byte_reads_join_constructor_input": true,
+    "initializer_field_zero_is_unique_whole_field_byte_match": true,
+    "Python_actually_generates_word_from_initializer_JSON_field_zero": true,
+    "captured_MD5_input_and_shared_word_are_comparison_only": true,
+    "generated_word_drives_MD5_SHA1_decrypt_RC4_and_material_pipeline": true,
+    "all_generated_intermediates_and_native_final_ciphertext_match": true,
+    "only_proto_material_bridge_changed_from_parent": true,
+    "complete_prior_relation_ledger_preserved": true,
+    "initializer_provider_pointer_and_original_JSON_input_memory_joined": false,
+    "other_application_ids_or_lengths_equivalence_verified": false,
+    "earlier_encoded_configuration_source_identified": false,
+    "reduction_leaf_bytes_independently_generated": false,
+    "lookup_key_independently_generated": false,
+    "actual_Android_allocator_or_singleton_equivalence_verified": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "Sample verified: two terminal fresh-rootfs read-only runs and eight fixed-input calls preserve the complete previous relation ledger and final native ciphertext. Unfiltered setup observers record 1904 spill-write callbacks and 952 actual VM-call code callbacks, with no argument-read failures. Their native writer events identify a two-argument descriptor wrapper at +0x17d2e0, whose descriptor target is the C-string constructor +0x248344. Constructor object and source pointers match the descriptor. The native data-pointer store at +0x248388 anchors a five-byte copy, including the zero terminator; actual per-byte write-event identity, source snapshots and temporal order join the four-byte shared-word slice to this copy. Four JSON parser byte reads at +0x24aa40 join the constructor input; their original input addresses are contiguous and have earlier writer coverage. The word equals exactly one whole string field of the initializer JSON, index zero (application ID). This field comparison does not establish identity with original JNI provider memory. Python ACTUALLY parses the bounded initializer JSON and encodes field zero into the four-byte word. It no longer extracts that word from the captured MD5 input. Generated MD5 input W+D+W and SHA-1 input P+W+D drive the existing digest, decrypt, RC4, configuration parse, selection and AES-material models. All intermediate comparisons and final native ciphertext match. Captured digest inputs and word bytes are comparison-only. Only the private proto-material bridge changes; other Python bridges and algorithm owners remain unchanged. Historical fields describing a shared observed word are retained as comparisons with the native observation, without claiming it remains a model input. Original initializer provider pointer ownership, other application IDs/lengths, encoded configuration origin, reduction leaves, lookup key, remaining operands, Android allocator/singleton equivalence, complete standalone signer and ordinary Cronet six-header online acceptance remain unverified. No initializer contents, operand bytes, keys/IVs, plaintext, runtime pointers, reusable material or operand digests are published."
+}

@@ -1,5 +1,29 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04：共享字由初始化 JSON 的应用 ID 字段实际生成
+
+**Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，Python 从有界初始化
+JSON 的第 0 项字符串实际生成四字节 `W`，继续构造 `W || D || W` 的 MD5 输入与
+`P || W || D` 的 SHA-1 输入。原生摘要输入及共享字仅作比较；生成的摘要、配置
+解密、RC4、配置解析、材料选择和最终原生密文均匹配，完整旧有关系账本保持。
+
+未过滤的观察器确认 1904 次 spill 回调、952 次 VM 调用回调且参数读取失败为零。
+实际目标是 `+0x17d2e0` 的双参数 descriptor wrapper，其 descriptor 指向
+`+0x248344` C 字符串构造器。对象及源指针身份接通构造器；`+0x248388` 捕获的
+五字节复制包含终止零，以逐字节 writer 身份、源快照及时间顺序接通共享字。
+四次 JSON 解析器字节读取进一步接通构造输入，其原输入地址连续且有更早 writer；
+共享字与初始化 JSON 中唯一的完整字符串字段相等，该字段索引为 0（应用 ID）。
+这项字段比较尚未证明原始 JNI provider 输入内存的指针归属。
+
+200 项新增关系、18 条原始 ELF 指令、固定 libc 工件和真实 CLI 验证通过；
+59 项错误证据、6 项畸形日志、畸形 CLI 和 15 项非法私有桥输入被拒绝。
+仅私有 proto-material 桥改变，其余桥及算法模型不变。其他应用 ID/长度、编码
+配置更早来源、归约叶字节、查询键、Android allocator/singleton 等价、完整
+signer 与普通 Cronet 六头线上验签仍未验证。未公开初始化内容、操作数或其摘要。
+
+证据：[configuration initializer word](evidence/vm9_framesign_configuration_initializer_word_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_initializer_word_20261104.py)。
+
 ## 2026-11-04：共享四字节值追到初始化写入和四字节 clone
 
 **Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，独立保留更早 JNI
