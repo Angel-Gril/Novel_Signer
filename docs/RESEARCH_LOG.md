@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-04：**Sample verified**，两轮全新 rootfs、8 次调用通过实际 LOAD32、
+标量写入及复制的逐字节 writer 身份、快照和时间顺序，将 MD5 中间段及 SHA-1
+首末段接到解码/解密前缀；MD5 中间段经过更早 BCP `+0x9aabc` 标量写入和
+`+0x9aab8` LOAD32。共享四字节片段来自同一可读写、不可执行映射地址，位于
+所观察原生栈和当前 VM 寄存器区之外，但其初始化、生命周期和分配归属仍未证明。
+232 项新关系、8 条 ELF 指令、完整旧有对照和真实 CLI 通过；244 项错误证据、
+6 项畸形日志及畸形 CLI 被拒绝。既有 Python 私有桥逐字节不变，完整配置生成链
+保持。完整 signer、Android/其他输入等价及普通 Cronet 六头线上验签仍未验证，
+未公开操作数、指针或操作数摘要。见
+[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_prefix_sources_20261104.json)和
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_prefix_sources_20261104.py)。
+
 2026-11-04：**Sample verified**，两轮全新 rootfs、8 次调用将配置链收敛到编码
 配置、一个四字节观察值及原有归约/查询输入。令 `D` 为 Python 解码结果前四字节、
 `W` 为观察值、`P` 为生成明文前四字节，实际构造 MD5 输入 `W || D || W` 和 SHA-1

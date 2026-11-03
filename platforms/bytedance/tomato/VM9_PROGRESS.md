@@ -1,5 +1,26 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04：配置摘要前缀的 LOAD32、标量写入和复制来源闭合
+
+**Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，将 MD5 中间四字节
+以及 SHA-1 首末四字节接到实际解码/解密结果的前缀。检查覆盖有符号 LOAD32
+结果、目标槽位写入身份、低四字节标量写入、复制快照、逐字节 writer 身份和
+时间顺序；MD5 中间段还经过 BCP `+0x9aabc` 的更早标量写入及
+`+0x9aab8` 的 LOAD32。解码和明文终点的实际 writer 指令集合均已保留。
+
+三个共享四字节片段使用同一观察地址且快照相等；该地址位于可读写、不可执行
+映射，处于所观察原生栈和当前 VM 寄存器区之外。对应字节没有被观察到的
+writer，仍不能据此推断其初始化、生命周期、分配对象、TLS/全局归属或常量值。
+
+232 项新增关系、8 条原始 ELF 指令、完整旧有对照及真实 CLI 验证通过。
+244 项错误证据、6 项畸形日志及畸形 CLI 被拒绝。已有 Python 私有桥与父检查点
+逐字节一致，生成的配置、摘要、解密、RC4 和 AES 材料链保持不变。
+共享四字节值与编码配置的更早来源仍开放；完整 signer、Android/其他输入
+等价和普通 Cronet 六头线上验签仍未验证。未公开操作数、指针或操作数摘要。
+
+证据：[configuration prefix sources](evidence/vm9_framesign_configuration_prefix_sources_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_prefix_sources_20261104.py)。
+
 ## 2026-11-04：编码配置和一个四字节观察值实际生成两组摘要输入
 
 **Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，已有 ELF 表解码器将
