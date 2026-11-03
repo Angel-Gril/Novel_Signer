@@ -1,5 +1,32 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04：配置解密结果实际驱动 RC4 与 AES 材料链
+
+**Sample verified**：两轮全新 rootfs、共 8 次固定输入调用中，原生 `+0x259dbc`
+接收 272 字节密文、16 字节密钥、空 IV 和 mode 0。复用已有
+`vm9_cipher_callback.decrypt_configuration_reference`，以 fresh ELF 表、明确分配
+服务及 warm singleton fixture 生成 271 字节明文，与原生和独立 AES ECB 一致。
+Python 下游 RC4 实际使用生成明文的 `[4:267]` 切片；捕获的 263 字节 RC4 输入
+仅用于比较。SHA-1 派生密钥、RC4 输出、Protobuf、字段、AES 材料及最终原生密文
+继续匹配，完整旧有对照保持。
+
+来源检查在复制发生前保存字节和逐字节 writer 身份，再检查复制完成后的实际
+写入事件及先后顺序。272 字节密文经两次构造复制追到早期解码结果 `[4:276]`；
+263 字节数据经 271 字节 clone 和构造复制追到解密输出。未丢弃写入事件。
+SHA-1 的 12 字节输入实际由三段四字节组成；首段等于解密明文前缀，末段等于
+早期解码前缀。末段目前追到 VM 标量写入，仍不能把字节相等认定为直接 decoder
+地址来源；中间四字节的更早 writer 仍未观察到。
+
+352 项新增关系、23 条原始 ELF 指令、完整旧有对照及真实 CLI 验证通过。
+233 项错误证据、4 项畸形日志、畸形 CLI 和 12 项非法私有桥输入均被拒绝。
+保留原探针与构建，公开文件不包含操作数、密钥、明文、运行时指针或操作数摘要。
+配置解密密钥、完整 SHA-1 输入、归约字节及查询键仍为显式运行时输入；fixture
+不代表实际 Android 分配器或 singleton。完整独立 signer、其他输入与 Android
+等价、普通 Cronet 六头线上验签仍未完成。
+
+证据：[configuration decrypt](evidence/vm9_framesign_configuration_decrypt_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_decrypt_20261104.py)。
+
 ## 2026-11-03：十二字节前置数据经 SHA-1 派生配置 RC4 密钥
 
 **Sample verified**：同一原生构建的两轮全新 rootfs、共 8 次固定输入调用中，

@@ -1,5 +1,20 @@
 # Checkpoint log
 
+2026-11-04：**Sample verified**，配置解密推进至实际驱动下游 RC4。两轮全新
+rootfs、8 次调用中，复用已有配置 ECB callback 模型，从显式 272 字节密文和
+16 字节密钥生成原生 271 字节明文，独立 AES 一致；生成结果的 `[4:267]` 实际
+进入 Python RC4，捕获 RC4 输入仅作比较。配置解析、字段选择、AES 材料与原生
+密文及完整旧有对照保持。逐字节实际 writer 身份和时间顺序将密文接到早期解码
+`[4:276]`，将 RC4 来源接到解密输出；避免用复用地址归因。SHA-1 输入确认是
+三段四字节，首末两段分别等于解密和解码前缀；末段仍只追到 VM 标量写入，
+中间段来源未闭合。352 项新增关系、23 条 ELF 指令及真实 CLI 验证通过；
+233 项错误证据、4 项畸形日志、畸形 CLI 和 12 项非法私有桥输入被拒绝。
+配置 AES 密钥与完整 SHA-1 输入仍为观察输入；明确 fixture 不构成 Android
+分配器或 singleton 等价，完整 signer 和普通 Cronet 六头线上验签仍未验证。
+未公开操作数、密钥、明文、运行时指针或操作数摘要。见
+[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_decrypt_20261104.json)和
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_decrypt_20261104.py)。
+
 2026-11-03：**Sample verified**，配置 RC4 密钥推进至实际 12 字节 SHA-1 前置数据。
 两轮全新 rootfs、8 次调用中，复用已有 Python digest-reference 模型生成的 20 字节
 密钥与原生及独立 SHA-1 相等，并实际驱动下游 RC4、配置解析和 AES 材料生成；
