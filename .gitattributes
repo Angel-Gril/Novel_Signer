@@ -27,3 +27,4 @@ platforms/bytedance/tomato/python/vm9_elf_bootstrap.py text eol=lf
 platforms/bytedance/tomato/python/verify_vm9_elf_configuration_constructor_20261011.py text eol=lf
 platforms/bytedance/tomato/python/vm9_registry.py text eol=lf
 platforms/bytedance/tomato/python/vm9_objects.py text eol=lf
+platforms/bytedance/tomato/python/vm9_framesign_preblock.py text eol=lf

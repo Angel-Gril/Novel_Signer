@@ -1,5 +1,36 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：块前 CRC16、地址头部及 88 字节拼装
+
+**Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，callback 3/4/5
+分别向偏移 1/4/80 复制 3/76/8 字节。原始三字节头等于 calloc 返回地址的小端
+低三字节：STORE32 的值等于地址低 32 位，其来源是先前已闭合的同一条
+`+0xa0614` LOAD64。callback 6/7 随后覆盖偏移 1/2，因此偏移 3 保留地址的
+第 3 个字节。尾段为八个零字节；76 字节内容中观察到向偏移 4 追加 72 字节，
+尚未闭合此前四字节及这 72 字节的生成。
+
+实际 `+0x268544 → +0x258b8c` 的输入正好为上述 76 字节；原生 uint16 返回值
+等于独立 CRC16/XMODEM（`0x1021`、初值零、不反射、无最终 XOR），完整
+512 字节原生查表也与该算法一致。callback 6 写高字节，callback 7 写低字节。
+错误 CRC 字节序、保留原始三字节头、初值 `0xffff` 和多项式 `0x8005` 的候选
+在每次调用中均失败。
+
+新增 Python 模型使用显式的 76 字节内容、calloc 地址及已有首字节表达式的
+两个操作数，重建 `seed[1] + CRC16_BE[2] + 地址字节[1] + 内容[76] + 零[8]`。
+实际加密使用重建的 88 字节，以及已有 ELF 构造器独立生成的 XTEA key/feedback；
+捕获的整段块前数据和 key/feedback 仅用于相等断言。8 次完整 93 字节均与原生
+构造和实际 AES 输入相同。新增 224 项关系、19 条 ELF 指令；前批 292 项块关系、
+96 项来源关系及完整旧回归保持。58 项错误证据、17 项无效模型输入、实际畸形
+CLI 与 3 项畸形日志均被拒绝，另与标准库对照 6 组公开合成 CRC 输入。
+
+未公开指针、标量操作数、掩码、明文、密钥、IV、签名或操作数摘要。76 字节
+内容及首字节操作数的更早生成、allocator 策略、AES 自身 key/IV、其他输入、
+Android 等价、完整独立 signer 与普通 Cronet 六头/线上验签仍未完成。
+
+证据：[preblock](evidence/vm9_framesign_preblock_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_preblock_20261103.py)；
+模型：[Python](python/vm9_framesign_preblock.py)。
+
 ## 2026-11-03：XTEA 密钥及反馈尾部接入已有 ELF 构造器
 
 **Sample verified**：在另两轮全新 rootfs、共 8 次固定输入调用中，callback 2
