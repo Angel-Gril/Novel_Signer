@@ -1,5 +1,18 @@
 # Checkpoint log
 
+2026-11-04：**Sample verified**，配置 AES 密钥推进至实际 12 字节 MD5 输入。
+两轮全新 rootfs、8 次调用中，复用已有 digest-reference 模型生成 16 字节原始
+MD5 密钥，并实际驱动配置解密、RC4、Protobuf、字段选择和 AES 材料链；捕获密钥
+仅作比较。原生 MD5 返回值与解密入口的数据指针、写入事件身份、快照及时间顺序
+均匹配。MD5 与 SHA-1 输入三个对应四字节分段均不同；改变/反转输入、十六进制
+摘要、仅对解码前四字节或 SHA-1 输入求 MD5 的候选均失败。56 项新增关系、12 条
+ELF 指令、完整旧有对照及真实 CLI 通过；167 项错误证据、4 项畸形日志、畸形 CLI
+和 16 项非法私有桥输入被拒绝。MD5 的 12 字节输入来源仍开放；四字节 memcpy
+与八字节 memmove 的 writer 形状不构成更早来源证明。完整 signer、Android 等价
+及普通 Cronet 六头线上验签仍未验证。未公开操作数、密钥、明文、指针或操作数摘要。
+见[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_md5_20261104.json)和
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_md5_20261104.py)。
+
 2026-11-04：**Sample verified**，配置解密推进至实际驱动下游 RC4。两轮全新
 rootfs、8 次调用中，复用已有配置 ECB callback 模型，从显式 272 字节密文和
 16 字节密钥生成原生 271 字节明文，独立 AES 一致；生成结果的 `[4:267]` 实际

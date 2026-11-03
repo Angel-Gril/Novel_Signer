@@ -1,0 +1,1070 @@
+{
+  "schema": "vm9-framesign-configuration-md5-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_configuration_decrypt_20261104.json",
+  "parent_evidence_sha256": "a6941fa38cf46ac1ee5f249ccd56be8a0c799268581ee867d9feb0c89a03dc3d",
+  "owner_hash_format": "sha256_bytes_CRLF_normalized_to_LF",
+  "owners": {
+    "vm9_protobuf.py": "cb0d6fb0050a0d4f28a271b96695dacbf24442eadb32b2265a54a9f2c30068c2",
+    "vm9_configuration_init.py": "0b58ac2fa9196f3da60c42bd3a03ee1a4d86ead9e824052cbdcbaaebed9533a8",
+    "vm9_objects.py": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "verify_vm9_signer_objects.py": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f",
+    "verify_vm9_strings.py": "fb1eaee419940309f59311c426ad9c5ab6a89923fb3206b44536017fc0af4d62",
+    "vm9_stream_cipher.py": "02e1a13cebc2809f3025300336af959f665806acc03b24ef50ed9f3a7f5b649a",
+    "vm9_framesign_configuration.py": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+    "vm9_cipher.py": "7b628664ddcb6f982bbaf346bfdf316ba4939a0a932f79e0f4e5a8c56510c36d",
+    "vm9_cipher_callback.py": "54ff35872c233f579e043a27d67eb34ae17ceba854f23faf096daabff25df181",
+    "vm9_registry.py": "97cde5b8cb688b27bb7a5238134fbe79806814ed319cfb2e7bce8f98fedc73eb"
+  },
+  "probe": {
+    "source_relative_path": "configuration_md5_key_model_probe/HookMain.java",
+    "source_sha256": "f3780bcd7fd7922faf4e6ba01fd8fa8a6535ff932bc2a47a0aefb298d35ef482",
+    "entry_class_sha256": "4aecce7632368a45f166eb28f00382e008b3ed997a7a78e2f26096c7bb797113",
+    "runner_sha256": "d05a98a9d175f797a92cf2b4ff667bec36cd49e133e9df29d45b71bc5b799213",
+    "python_bridge_sha256": "a26ef9800e7d2b3a931e83221df5c434e9c618acccec1f0aff112d43bc199410",
+    "decoder_bridge_sha256": "6afda0c390135c8839177368cc97b66579401c785ed81172db5063f14f0585a2",
+    "plaintext_bridge_sha256": "fdef137a2a90b4e4be47eca1679d4a3f54a9be01d0830a24a2de3e280f877939",
+    "constructor_bridge_sha256": "72e919faa8346e00e0d1841ca401c557299edc78cb5195c1e57868bfc8a022b0",
+    "materials_bridge_sha256": "884727e378a09251340768c889473ced1e2fd819bf736dd3253ec1608c01d491",
+    "read_only_guest_observation": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "run_deadline_seconds": 1200,
+    "python_operand_transport": "private_in_memory_stdin_stdout_pipe",
+    "model_inputs": [
+      "observed_MD5_input_12_bytes_and_flag_zero",
+      "observed_configuration_ciphertext_272_bytes",
+      "observed_empty_IV_and_mode_zero",
+      "observed_SHA1_preimage_12_bytes",
+      "observed_twelve_reduction_leaf_bytes",
+      "observed_lookup_key_10_bytes",
+      "fresh_relocated_ELF_tables_and_descriptors",
+      "explicit_fixture_allocation_and_warm_singleton_services"
+    ],
+    "comparison_only_inputs": [
+      "observed_configuration_AES_key_16_bytes",
+      "observed_native_MD5_output_16_bytes",
+      "observed_configuration_plaintext_271_bytes",
+      "observed_RC4_input_263_bytes",
+      "observed_RC4_key_20_bytes",
+      "observed_decoder_prefix_4_bytes_for_counterexample_only"
+    ],
+    "RC4_uses_model_generated_data_and_key": true,
+    "warm_singleton_and_allocator_are_explicit_fixtures": true,
+    "configuration_decrypt_uses_generated_MD5_key": true
+  },
+  "runs": [
+    {
+      "local_run_name": "configuration_md5_key_model_probe/run1",
+      "source_sha256": "f3780bcd7fd7922faf4e6ba01fd8fa8a6535ff932bc2a47a0aefb298d35ef482",
+      "entry_class_sha256": "4aecce7632368a45f166eb28f00382e008b3ed997a7a78e2f26096c7bb797113",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "runner_sha256": "d05a98a9d175f797a92cf2b4ff667bec36cd49e133e9df29d45b71bc5b799213",
+      "run_deadline_seconds": 1200,
+      "sanitized_log_sha256": "6f80b94a665a8995613a9e3ca6e4c846b14e587fc2c6dc833a17e09cef9d3f57",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 1,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 2,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 3,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 4,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/1:4,libc.so+0x1c300/outside_modules/1:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/2:4,libc.so+0x1c300/outside_modules/2:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/3:4,libc.so+0x1c300/outside_modules/3:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/4:4,libc.so+0x1c300/outside_modules/4:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 1,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 2,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 3,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 4,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 1,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 2,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 3,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 4,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 1,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 2,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 3,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 4,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 1,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 2,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 3,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 4,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        }
+      ],
+      "prior_relation_ledger_sha256": "af74e744cf481e0ab6e3032cf4c9f0df0fe7578041da31ee08babd6427b69b25"
+    },
+    {
+      "local_run_name": "configuration_md5_key_model_probe/run2",
+      "source_sha256": "f3780bcd7fd7922faf4e6ba01fd8fa8a6535ff932bc2a47a0aefb298d35ef482",
+      "entry_class_sha256": "4aecce7632368a45f166eb28f00382e008b3ed997a7a78e2f26096c7bb797113",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "runner_sha256": "d05a98a9d175f797a92cf2b4ff667bec36cd49e133e9df29d45b71bc5b799213",
+      "run_deadline_seconds": 1200,
+      "sanitized_log_sha256": "6f80b94a665a8995613a9e3ca6e4c846b14e587fc2c6dc833a17e09cef9d3f57",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 1,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 2,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 3,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_INPUT_RELATION",
+          "ordinal": 4,
+          "MD5_input_length": 12,
+          "SHA1_input_length": 12,
+          "MD5_equals_SHA1_input": false,
+          "same_first_four": false,
+          "same_middle_four": false,
+          "same_last_four": false,
+          "same_last_eight": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYDERIVE_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "flag": 0,
+          "key_length": 16,
+          "existing_Python_MD5_equals_native_output": true,
+          "existing_Python_MD5_equals_native_AES_key": true,
+          "independent_MD5_equals_existing": true,
+          "configuration_decrypt_uses_generated_key": true,
+          "changed_input_matches": false,
+          "reversed_input_matches": false,
+          "hexadecimal_flag_matches": false,
+          "decoder_prefix_candidate_matches": false,
+          "SHA1_preimage_candidate_matches": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/1:4,libc.so+0x1c300/outside_modules/1:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/2:4,libc.so+0x1c300/outside_modules/2:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/3:4,libc.so+0x1c300/outside_modules/3:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "depth": 0,
+          "length": 12,
+          "source_location": "outside_modules",
+          "writers_and_BCP_at_read": "libc.so+0x1c148/outside_modules/4:4,libc.so+0x1c300/outside_modules/4:8",
+          "source_inside_decoder": false,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 1,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 2,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 3,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYORIGIN_CIPHER_JOIN",
+          "ordinal": 4,
+          "index": 1,
+          "input_length": 12,
+          "digest_length": 16,
+          "digest_equals_AES_key": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 1,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 2,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 3,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYDERIVE_LIFETIME",
+          "ordinal": 4,
+          "index": 1,
+          "key_length": 16,
+          "same_data_pointer": true,
+          "same_write_events": true,
+          "snapshot_equal": true,
+          "temporal_order_verified": true
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 1,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 2,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 3,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_INPUT",
+          "ordinal": 4,
+          "index": 1,
+          "length": 12,
+          "raw_output": true,
+          "low_byte_flag": 0,
+          "input_equals_decoder_prefix": false,
+          "input_equals_encoded_configuration": false
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 1,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 2,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 3,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        },
+        {
+          "event": "KEYORIGIN_RETURN",
+          "ordinal": 4,
+          "index": 1,
+          "output_length": 16,
+          "independent_MD5_equals_native": true
+        }
+      ],
+      "prior_relation_ledger_sha256": "af74e744cf481e0ab6e3032cf4c9f0df0fe7578041da31ee08babd6427b69b25"
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x263504",
+        "file_offset": "0x263504",
+        "bytes_hex": "fe0f1ff8",
+        "mnemonic": "str",
+        "operands": "x30, [sp, #-0x10]!"
+      },
+      {
+        "image_offset": "0x263508",
+        "file_offset": "0x263508",
+        "bytes_hex": "090840f9",
+        "mnemonic": "ldr",
+        "operands": "x9, [x0, #0x10]"
+      },
+      {
+        "image_offset": "0x26350c",
+        "file_offset": "0x26350c",
+        "bytes_hex": "0a2040a9",
+        "mnemonic": "ldp",
+        "operands": "x10, x8, [x0]"
+      },
+      {
+        "image_offset": "0x263510",
+        "file_offset": "0x263510",
+        "bytes_hex": "01604039",
+        "mnemonic": "ldrb",
+        "operands": "w1, [x0, #0x18]"
+      },
+      {
+        "image_offset": "0x263514",
+        "file_offset": "0x263514",
+        "bytes_hex": "e00309aa",
+        "mnemonic": "mov",
+        "operands": "x0, x9"
+      },
+      {
+        "image_offset": "0x263518",
+        "file_offset": "0x263518",
+        "bytes_hex": "40013fd6",
+        "mnemonic": "blr",
+        "operands": "x10"
+      },
+      {
+        "image_offset": "0x26351c",
+        "file_offset": "0x26351c",
+        "bytes_hex": "fe0741f8",
+        "mnemonic": "ldr",
+        "operands": "x30, [sp], #0x10"
+      },
+      {
+        "image_offset": "0x25874c",
+        "file_offset": "0x25874c",
+        "bytes_hex": "ff4300d1",
+        "mnemonic": "sub",
+        "operands": "sp, sp, #0x10"
+      },
+      {
+        "image_offset": "0x258750",
+        "file_offset": "0x258750",
+        "bytes_hex": "e97b00a9",
+        "mnemonic": "stp",
+        "operands": "x9, x30, [sp]"
+      },
+      {
+        "image_offset": "0x258754",
+        "file_offset": "0x258754",
+        "bytes_hex": "89000010",
+        "mnemonic": "adr",
+        "operands": "x9, #0x258764"
+      },
+      {
+        "image_offset": "0x258758",
+        "file_offset": "0x258758",
+        "bytes_hex": "fe0309aa",
+        "mnemonic": "mov",
+        "operands": "x30, x9"
+      },
+      {
+        "image_offset": "0x25875c",
+        "file_offset": "0x25875c",
+        "bytes_hex": "c0035fd6",
+        "mnemonic": "ret",
+        "operands": ""
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "MD5_input_length": 12,
+    "MD5_flag": 0,
+    "configuration_AES_key_length": 16,
+    "existing_Python_MD5_equals_native_output_and_AES_key": true,
+    "independent_MD5_equals_existing_model": true,
+    "configuration_decrypt_actually_uses_generated_MD5_key": true,
+    "captured_AES_key_used_only_for_comparisons": true,
+    "MD5_return_and_cipher_input_share_pointer_and_write_event_identity": true,
+    "MD5_and_SHA1_inputs_differ_in_each_four_byte_piece": true,
+    "MD5_of_decoder_prefix_is_actual_counterexample": true,
+    "changed_input_reversed_input_hex_flag_and_SHA1_preimage_rejected": true,
+    "configuration_decrypt_RC4_Protobuf_selection_and_AES_chain_preserved": true,
+    "complete_prior_relation_ledger_preserved": true,
+    "configuration_AES_key_generated_from_observed_MD5_input": true,
+    "MD5_input_independently_generated": false,
+    "SHA1_preimage_independently_generated": false,
+    "MD5_source_copy_lineage_closed": false,
+    "reduction_leaf_bytes_independently_generated": false,
+    "lookup_key_independently_generated": false,
+    "actual_Android_allocator_or_singleton_equivalence_verified": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "Sample verified: two terminal fresh-rootfs read-only runs and eight fixed-input calls. Actual VM call +0x16aa48 invokes wrapper +0x263504 and descriptor target +0x25874c. The descriptor supplies a twelve-byte string and flag zero, selecting raw MD5 output. The returned sixteen bytes equal an independent Java MD5 digest and the configuration AES key. At return and the later cipher entry, the data pointer, per-byte write-event identities and snapshots match with verified temporal order. Fresh relocated ELF pages and explicit fixture allocation services run the existing vm9_objects.construct_digest_reference MD5 owner. Its GENERATED digest ACTUALLY supplies the existing configuration decrypt callback. The captured AES key is comparison-only. Generated plaintext, its RC4 slice, the generated SHA-1 RC4 key, Protobuf message, selected field, decoded AES material and native ciphertext all still match. The complete prior relation ledger is preserved. Changed or reversed MD5 input, hexadecimal output, MD5 of the decoder four-byte prefix, and MD5 of the SHA-1 preimage fail key comparisons. The MD5 and SHA-1 preimages have equal lengths but differ in each aligned four-byte piece. The MD5 input currently shows a four-byte memcpy writer and eight-byte memmove writer; their earlier copy lineage remains OPEN. Outside-module BCP labels and missing copy joins do not establish zeros, constants or absent copies. The twelve MD5 input bytes, complete SHA-1 preimage, reduction leaves, lookup key and earlier ciphertext source remain runtime inputs. Explicit fixture services do not establish Android allocator or singleton equivalence. No operand bytes, keys/IVs, plaintext, reusable material, runtime pointers or operand digests are published. Other inputs, a complete standalone signer and ordinary Cronet six-header online acceptance remain unverified."
+}

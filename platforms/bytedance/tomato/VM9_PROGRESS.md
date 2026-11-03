@@ -1,5 +1,30 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04：实际 MD5 输入派生配置 AES 密钥并驱动解密
+
+**Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，实际 VM 调用
+`+0x16aa48` 经 `+0x263504` wrapper 调用 `+0x25874c`，输入为 12 字节、flag 0。
+返回的 16 字节原始 MD5 摘要与配置 AES 密钥相同；返回时与解密入口的数据指针、
+逐字节写入事件身份及快照一致，时间顺序通过检查。
+
+Python 在 fresh ELF 页面上复用 `vm9_objects.construct_digest_reference` 和明确
+fixture 分配服务，生成密钥并实际传入配置解密 callback。捕获密钥仅用于比较。
+生成的 271 字节明文、RC4 切片、SHA-1 密钥、Protobuf、字段选择、AES 材料及最终
+原生密文继续匹配，完整旧有对照保持。未新增另一套 MD5 实现。
+
+MD5 与 SHA-1 输入均为 12 字节，但三个对应四字节分段均不同。改变输入、反转输入、
+十六进制摘要、`MD5(解码前四字节)` 及 `MD5(SHA-1 输入)` 均不能生成实际密钥。
+56 项新增关系、12 条原始 ELF 指令和真实 CLI 通过；167 项错误证据、4 项畸形
+日志、畸形 CLI 和 16 项非法私有桥请求被拒绝。
+
+MD5 输入可见四字节 memcpy 与八字节 memmove 的 writer；更早复制来源尚未闭合，
+不能据此推断常量、零值或没有复制。MD5 输入、完整 SHA-1 输入、归约字节及查询键
+仍为运行时输入。公开文件没有操作数、密钥、明文、指针或操作数摘要。明确 fixture
+不构成 Android 等价；完整独立 signer 和普通 Cronet 六头线上验签仍未完成。
+
+证据：[configuration MD5](evidence/vm9_framesign_configuration_md5_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_md5_20261104.py)。
+
 ## 2026-11-04：配置解密结果实际驱动 RC4 与 AES 材料链
 
 **Sample verified**：两轮全新 rootfs、共 8 次固定输入调用中，原生 `+0x259dbc`
