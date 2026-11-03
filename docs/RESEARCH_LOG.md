@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-04：**Sample verified**，两轮全新 rootfs、8 次调用将共享四字节值追到
+初始化 tag `0x4000001` 的实际写入；低四字节操作数与三处摘要消费者快照一致。
+通过 `+0x24841c` header store、逐字节 writer 身份、源快照和时间顺序接通四字节
+clone 来源，其 libc writer 返回 `+0x248434`；更早源 writer 返回 VM 调用位置
+`+0x16aa4c`，该次调用的实际目标、复制参数和源值生成仍未恢复。旧的缺失 writer
+观察保留其原业务调用窗口范围，不代表初始化阶段没有写入。96 项新关系、5 条
+ELF 指令、完整旧有对照和真实 CLI 通过；120 项错误证据、6 项畸形日志及畸形 CLI
+被拒绝。已有 Python 私有桥逐字节不变。完整 signer、Android/其他输入等价及
+普通 Cronet 六头线上验签仍未验证，未公开操作数、指针或操作数摘要。见
+[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_setup_word_20261104.json)和
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_setup_word_20261104.py)。
+
 2026-11-04：**Sample verified**，两轮全新 rootfs、8 次调用通过实际 LOAD32、
 标量写入及复制的逐字节 writer 身份、快照和时间顺序，将 MD5 中间段及 SHA-1
 首末段接到解码/解密前缀；MD5 中间段经过更早 BCP `+0x9aabc` 标量写入和

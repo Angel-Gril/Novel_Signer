@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04：共享四字节值追到初始化写入和四字节 clone
+
+**Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，独立保留更早 JNI
+调用的写入历史，确认共享四字节值在初始化 tag `0x4000001` 中已被写入。
+四个字节的最后观察写入操作数均与后续 MD5 首末段及 SHA-1 中间段快照一致。
+通过 `+0x24841c` 原生 header store 捕获四字节 clone，再以实际逐字节 writer
+身份、源快照和时间顺序接到其复制来源；这些 memcpy writer 返回 `+0x248434`。
+
+更早源地址仍有初始化阶段的 libc writer，返回 `+0x16aa4c`，即 VM 间接调用
+返回位置；该调用的实际目标、复制参数及源值生成尚未恢复。类似 memcpy 的写入
+不能证明特定函数名或生成算法。源地址不在当前 TPIDR 页及 manager 前 256 字节内，
+也不能据此排除更广的 TLS 或 heap 关系。旧的“未观察到 writer”只适用于原业务
+调用窗口，本批单独扩展初始化观察，保留旧有证据和比较。
+
+96 项新增关系、5 条原始 ELF 指令、完整旧有对照和真实 CLI 通过；120 项错误
+证据、6 项畸形日志及畸形 CLI 被拒绝。已有 Python 私有桥与父检查点逐字节一致。
+共享值独立生成、编码配置更早来源、完整 signer、Android/其他输入等价及普通
+Cronet 六头线上验签仍未验证。未公开操作数、指针或操作数摘要。
+
+证据：[configuration setup word](evidence/vm9_framesign_configuration_setup_word_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_setup_word_20261104.py)。
+
 ## 2026-11-04：配置摘要前缀的 LOAD32、标量写入和复制来源闭合
 
 **Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，将 MD5 中间四字节
