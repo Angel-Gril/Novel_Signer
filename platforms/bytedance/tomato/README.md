@@ -1,5 +1,13 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 已恢复固定输入下 93 字节 AES 明文的 `1 + 88 + 4` 布局：
+[布局证据](evidence/vm9_framesign_plaintext_layout_20261103.json)与
+[校验器](python/verify_vm9_framesign_plaintext_layout_20261103.py)。实际 callback 将缓冲区
+`[0,88)` 重叠移至 `[1,89)`，追加稳定的 4 字节后缀；构造对象及字节与 AES 输入一致。
+两轮 8 次调用、300 项关系观测保留全部旧对照。块处理前的 88 字节 A/B 状态仅首字节
+不同，最终明文则在前 89 字节不同；176 次 VM 字节写入按块交错执行。首字节来源、
+块算法、后缀生成、交替根因、Android 等价、独立 signer 与线上验签仍未闭合。
+
 2026-11-03 已闭合当前固定输入下的 `signinfo` 加密末段：
 [AES 证据](evidence/vm9_framesign_signinfo_aes_20261103.json)与
 [校验器](python/verify_vm9_framesign_signinfo_aes_20261103.py)。实际 `+0x259324` 将
