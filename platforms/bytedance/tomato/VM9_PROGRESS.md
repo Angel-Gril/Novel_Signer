@@ -1,5 +1,35 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：十二字节前置数据经 SHA-1 派生配置 RC4 密钥
+
+**Sample verified**：同一原生构建的两轮全新 rootfs、共 8 次固定输入调用中，
+实际 `+0x258780` 接收 12 字节并选择原始 SHA-1 摘要。Python 在 fresh ELF
+页面上执行已有 `vm9_objects.construct_digest_reference`，使用明确 fixture
+分配服务生成 20 字节密钥，与原生、独立 Java SHA-1 及 hashlib 结果一致。
+下游 RC4 实际使用这把派生密钥；捕获的原生密钥仅用于比较，不进入加密输入。
+继续生成的配置消息、字段、AES 材料及原生密文均匹配，完整旧有对照保持。
+
+十六进制摘要、反转密钥及改变前置数据一位的候选均失败。SHA-1 前置数据与
+异或归约的 12 个字节在正序、反序、多重集和 XOR 结果上均不同；直接用前置
+数据代替归约材料也不能生成实际消息。构造器复制前的来源快照匹配当次 RC4
+输入，避免用复用地址归因。SHA-1 前置数据可见四字节 memcpy 与八字节 memmove
+的 writer 形状，尚未闭合这两段的更早生成。263 字节 RC4 输入也不是此前
+276 字节解码结果的直接连续切片。
+
+新增 56 项关系和 27 条原始 ELF 指令，原有 48 项流变换关系及完整旧有对照保持。
+126 项错误证据、实际畸形 CLI、4 项畸形日志和 9 项非法私有桥请求均被拒绝。
+成功配对为 `run1` 与 `run3`；`run2` 在 420 秒内仅完成两次调用后超时，未计入。
+原 runner 和校准 runner 均留存身份摘要，仅计时器由 420 秒改为 1200 秒；每轮
+实际采用的 runner 及上限单独记录，原生构建和模型未改动。
+
+复用既有算法及模型，未新增另一套 SHA-1 实现；未公开前置数据、密钥、材料、
+指针或操作数摘要。前置数据、RC4 数据、归约字节及查询键仍为观察输入，更早
+配置解密、76 字节组件、完整独立 signer、Android 等价及普通 Cronet 六头线上
+验签仍未完成。
+
+证据：[configuration key](evidence/vm9_framesign_configuration_key_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_key_20261103.py)。
+
 ## 2026-11-03：配置 RC4、反序及异或接入 AES 材料链
 
 **Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，实际 `+0x243dac`

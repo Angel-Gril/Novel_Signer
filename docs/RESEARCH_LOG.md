@@ -1,5 +1,18 @@
 # Checkpoint log
 
+2026-11-03：**Sample verified**，配置 RC4 密钥推进至实际 12 字节 SHA-1 前置数据。
+两轮全新 rootfs、8 次调用中，复用已有 Python digest-reference 模型生成的 20 字节
+密钥与原生及独立 SHA-1 相等，并实际驱动下游 RC4、配置解析和 AES 材料生成；
+捕获密钥仅用于比较。SHA-1 前置数据与归约字节在正序、反序、多重集及 XOR 上
+均不相等，直接代换不能生成实际消息。56 项新关系、27 条 ELF 指令及完整旧有
+对照通过；126 项错误证据、畸形 CLI、4 项畸形日志及 9 项非法私有桥请求被拒绝。
+成功运行是 `run1` 和 `run3`；420 秒超时的 `run2` 被排除，校准 runner 仅将计时器
+改为 1200 秒，分别记录两轮 runner 身份与上限。前置数据可见四字节复制加八字节
+追加，但更早生成仍未闭合；完整 signer、Android 等价及普通 Cronet 六头线上验签
+仍未验证。未公开前置数据、密钥或操作数摘要。见
+[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_key_20261103.json)和
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_key_20261103.py)。
+
 2026-11-03：**Sample verified**，配置 RC4 到 AES 材料链完成配对验证。两轮全新
 rootfs、8 次调用中，已有 Python RC4 使用实际 263 字节输入、20 字节密钥及零 drop，
 逐字节匹配原生及独立 ARC4 输出；全部 263 次加载按地址连续递减。12 个观察字节
