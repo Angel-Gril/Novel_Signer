@@ -1,5 +1,19 @@
 # Checkpoint log
 
+2026-11-04：**Sample verified**，两轮全新 rootfs、8 次调用将配置链收敛到编码
+配置、一个四字节观察值及原有归约/查询输入。令 `D` 为 Python 解码结果前四字节、
+`W` 为观察值、`P` 为生成明文前四字节，实际构造 MD5 输入 `W || D || W` 和 SHA-1
+输入 `P || W || D`；生成密钥、解码结果 `[4:276]` 和明文 `[4:267]` 实际驱动解密、
+RC4、Protobuf、选择与 AES 材料链，全部原生比较及完整旧有对照保持。除 `W` 片段
+外，捕获摘要输入、配置密文和密钥仅作比较。每个输入环节的独立中间探针均保留。
+MD5 中间段追到 VM 标量写入 `+0x17208c` / BCP `+0x9ab2c`，值相等不证明直接
+decoder 地址来源或共同原生生命周期。176 项新增关系、7 条 ELF 指令及真实 CLI
+通过；183 项错误证据、4 项畸形日志、畸形 CLI 和 17 项非法私有桥输入被拒绝。
+共享四字节值和编码配置的更早来源仍开放。完整 signer、Android/其他输入
+等价及普通 Cronet 六头线上验签仍未验证，未公开操作数、材料、指针或操作数摘要。
+见[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_operands_20261104.json)和
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_operands_20261104.py)。
+
 2026-11-04：**Sample verified**，配置 AES 密钥推进至实际 12 字节 MD5 输入。
 两轮全新 rootfs、8 次调用中，复用已有 digest-reference 模型生成 16 字节原始
 MD5 密钥，并实际驱动配置解密、RC4、Protobuf、字段选择和 AES 材料链；捕获密钥

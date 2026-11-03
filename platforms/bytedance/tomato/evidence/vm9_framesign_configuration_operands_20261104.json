@@ -1,0 +1,2438 @@
+{
+  "schema": "vm9-framesign-configuration-operands-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_configuration_md5_20261104.json",
+  "parent_evidence_sha256": "a97c0ea7a74715156db72edd1b67e86c42372054c5c3bdade9fa709e1e74ed69",
+  "owner_hash_format": "sha256_bytes_CRLF_normalized_to_LF",
+  "owners": {
+    "vm9_protobuf.py": "cb0d6fb0050a0d4f28a271b96695dacbf24442eadb32b2265a54a9f2c30068c2",
+    "vm9_configuration_init.py": "0b58ac2fa9196f3da60c42bd3a03ee1a4d86ead9e824052cbdcbaaebed9533a8",
+    "vm9_objects.py": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "verify_vm9_signer_objects.py": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f",
+    "verify_vm9_strings.py": "fb1eaee419940309f59311c426ad9c5ab6a89923fb3206b44536017fc0af4d62",
+    "vm9_stream_cipher.py": "02e1a13cebc2809f3025300336af959f665806acc03b24ef50ed9f3a7f5b649a",
+    "vm9_framesign_configuration.py": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+    "vm9_cipher.py": "7b628664ddcb6f982bbaf346bfdf316ba4939a0a932f79e0f4e5a8c56510c36d",
+    "vm9_cipher_callback.py": "54ff35872c233f579e043a27d67eb34ae17ceba854f23faf096daabff25df181",
+    "vm9_registry.py": "97cde5b8cb688b27bb7a5238134fbe79806814ed319cfb2e7bce8f98fedc73eb"
+  },
+  "probe": {
+    "source_relative_path": "configuration_encoded_source_model_probe/HookMain.java",
+    "source_sha256": "2181c408d23fbff7a4aeefe7741bd6ea2cbbdc24fdb609c2bbf991cfc0f47ba1",
+    "entry_class_sha256": "16c0e458de1023365dbb43ec0d0284659e230d064a85353f3faf1ec75f27894a",
+    "runner_sha256": "ca852c1d404915320347114b298d456b6c9a1d4ad4ea124c053e89469eda7935",
+    "python_bridge_sha256": "a77359c97119ebf03e2302f8f2710e53d1030ef3bbfd620c1d5ad4fbb38136c7",
+    "decoder_bridge_sha256": "6afda0c390135c8839177368cc97b66579401c785ed81172db5063f14f0585a2",
+    "plaintext_bridge_sha256": "fdef137a2a90b4e4be47eca1679d4a3f54a9be01d0830a24a2de3e280f877939",
+    "constructor_bridge_sha256": "72e919faa8346e00e0d1841ca401c557299edc78cb5195c1e57868bfc8a022b0",
+    "materials_bridge_sha256": "884727e378a09251340768c889473ced1e2fd819bf736dd3253ec1608c01d491",
+    "read_only_guest_observation": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "run_deadline_seconds": 1200,
+    "python_operand_transport": "private_in_memory_stdin_stdout_pipe",
+    "model_inputs": [
+      "observed_encoded_configuration_368_bytes",
+      "one_observed_shared_word_4_bytes",
+      "observed_empty_IV_and_mode_zero",
+      "observed_twelve_reduction_leaf_bytes",
+      "observed_lookup_key_10_bytes",
+      "fresh_relocated_ELF_tables_and_descriptors",
+      "explicit_fixture_allocation_and_warm_singleton_services"
+    ],
+    "comparison_only_inputs": [
+      "observed_decoded_configuration_276_bytes",
+      "observed_MD5_input_12_bytes",
+      "observed_SHA1_input_12_bytes",
+      "observed_configuration_ciphertext_272_bytes",
+      "observed_configuration_AES_key_16_bytes",
+      "observed_native_MD5_output_16_bytes",
+      "observed_configuration_plaintext_271_bytes",
+      "observed_RC4_input_263_bytes",
+      "observed_RC4_key_20_bytes",
+      "observed_decoder_prefix_4_bytes_for_counterexample_only"
+    ],
+    "RC4_uses_model_generated_data_and_key": true,
+    "warm_singleton_and_allocator_are_explicit_fixtures": true,
+    "configuration_decrypt_uses_generated_MD5_key": true,
+    "digest_inputs_and_ciphertext_use_generated_configuration": true
+  },
+  "runs": [
+    {
+      "local_run_name": "configuration_encoded_source_model_probe/run1",
+      "source_sha256": "2181c408d23fbff7a4aeefe7741bd6ea2cbbdc24fdb609c2bbf991cfc0f47ba1",
+      "entry_class_sha256": "16c0e458de1023365dbb43ec0d0284659e230d064a85353f3faf1ec75f27894a",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "runner_sha256": "ca852c1d404915320347114b298d456b6c9a1d4ad4ea124c053e89469eda7935",
+      "run_deadline_seconds": 1200,
+      "sanitized_log_sha256": "8527fa2c61829b79b36bcf28f04f49cba7f660787909aa7817f425ab88543c15",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/1:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/2:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/3:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/4:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/1:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/2:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/3:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/4:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        }
+      ],
+      "prior_relation_ledger_sha256": "b4d8698d90bbf9c7f4421c2b500ab08d94f8c221134007d4cf1808020ac03ee5"
+    },
+    {
+      "local_run_name": "configuration_encoded_source_model_probe/run2",
+      "source_sha256": "2181c408d23fbff7a4aeefe7741bd6ea2cbbdc24fdb609c2bbf991cfc0f47ba1",
+      "entry_class_sha256": "16c0e458de1023365dbb43ec0d0284659e230d064a85353f3faf1ec75f27894a",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "runner_sha256": "ca852c1d404915320347114b298d456b6c9a1d4ad4ea124c053e89469eda7935",
+      "run_deadline_seconds": 1200,
+      "sanitized_log_sha256": "8527fa2c61829b79b36bcf28f04f49cba7f660787909aa7817f425ab88543c15",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHARED_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "observed_word_length": 4,
+          "word_equals_MD5_first": true,
+          "word_equals_MD5_last": true,
+          "word_equals_SHA1_middle": true,
+          "MD5_and_SHA1_actually_use_one_observed_word": true,
+          "changed_word_MD5_key_matches": false,
+          "changed_word_SHA1_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGPREFIX_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "encoded_length": 368,
+          "decoded_length": 276,
+          "existing_decoder_equals_native": true,
+          "independent_base64_equals_existing": true,
+          "generated_MD5_input_equals_native": true,
+          "MD5_middle_uses_generated_decoder_prefix": true,
+          "changed_prefix_key_matches": false,
+          "wrong_decoded_slice_key_matches": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 0,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 0,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 0,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 1,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 1,
+          "SHA1_piece": 1,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 1,
+          "SHA1_piece": 2,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 2,
+          "SHA1_piece": 0,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 2,
+          "SHA1_piece": 1,
+          "bytes_equal": true
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 1,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 2,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 3,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_PIECE_COMPARE",
+          "ordinal": 4,
+          "MD5_piece": 2,
+          "SHA1_piece": 2,
+          "bytes_equal": false
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x2469a0",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 0,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x246c88",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "KEYCOPY_LINK",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 1,
+          "copy_site": "metasec+0x248254",
+          "copy_length": 4,
+          "slice_offset": 0,
+          "length": 4,
+          "actual_write_events_equal": true,
+          "temporal_order_verified": true,
+          "snapshot_equal": true
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_SHA1_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "input_length": 12,
+          "generated_input_equals_native": true,
+          "first_piece_uses_generated_plaintext": true,
+          "last_piece_uses_generated_decoder_prefix": true,
+          "changed_plaintext_prefix_key_matches": false,
+          "wrong_decoder_slice_key_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "CONFIGOPERAND_CIPHER_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "length": 272,
+          "generated_ciphertext_equals_native": true,
+          "cipher_actually_uses_generated_decoder_slice": true,
+          "wrong_decoder_slice_plaintext_matches": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/1:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/2:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/3:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 8,
+          "depth": 0,
+          "length": 8,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "libc.so+0x1c300/metasec+0x246c8c/outside_modules/4:8",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 8,
+          "piece_length": 4,
+          "depth": 1,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 0,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "unobserved:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 0,
+          "decoder_direct_offset": -1,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 1,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/1:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 2,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/2:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 3,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/3:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        },
+        {
+          "event": "KEYCOPY_TERMINAL",
+          "ordinal": 4,
+          "index": 1,
+          "piece_offset": 4,
+          "piece_length": 4,
+          "depth": 2,
+          "length": 4,
+          "source_location": "outside_modules",
+          "writers_caller_BCP_at_read": "metasec+0x17208c/outside_modules/metasec+0x9ab2c/4:4",
+          "source_inside_decoder": false,
+          "decoder_direct_matches": 1,
+          "decoder_direct_offset": 0,
+          "decoder_offset": -1,
+          "decoder_snapshot_equal": false,
+          "decoder_write_events_equal": false
+        }
+      ],
+      "prior_relation_ledger_sha256": "b4d8698d90bbf9c7f4421c2b500ab08d94f8c221134007d4cf1808020ac03ee5"
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x2469a0",
+        "file_offset": "0x2469a0",
+        "bytes_hex": "70050494",
+        "mnemonic": "bl",
+        "operands": "#0x347f60"
+      },
+      {
+        "image_offset": "0x246c88",
+        "file_offset": "0x246c88",
+        "bytes_hex": "e2050494",
+        "mnemonic": "bl",
+        "operands": "#0x348410"
+      },
+      {
+        "image_offset": "0x248254",
+        "file_offset": "0x248254",
+        "bytes_hex": "43ff0394",
+        "mnemonic": "bl",
+        "operands": "#0x347f60"
+      },
+      {
+        "image_offset": "0x17208c",
+        "file_offset": "0x17208c",
+        "bytes_hex": "8b692ab8",
+        "mnemonic": "str",
+        "operands": "w11, [x12, x10]"
+      },
+      {
+        "image_offset": "0x24599c",
+        "file_offset": "0x24599c",
+        "bytes_hex": "11160038",
+        "mnemonic": "strb",
+        "operands": "w17, [x16], #1"
+      },
+      {
+        "image_offset": "0x2459bc",
+        "file_offset": "0x2459bc",
+        "bytes_hex": "cd050039",
+        "mnemonic": "strb",
+        "operands": "w13, [x14, #1]"
+      },
+      {
+        "image_offset": "0x2459cc",
+        "file_offset": "0x2459cc",
+        "bytes_hex": "cf090039",
+        "mnemonic": "strb",
+        "operands": "w15, [x14, #2]"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "encoded_length": 368,
+    "decoded_length": 276,
+    "observed_shared_word_length": 4,
+    "existing_configuration_decoder_equals_native_and_independent_base64": true,
+    "MD5_input_actually_generated_as_word_decoded_prefix_word": true,
+    "SHA1_input_actually_generated_as_plaintext_prefix_word_decoded_prefix": true,
+    "ciphertext_actually_generated_from_decoded_slice_4_to_276": true,
+    "generated_digest_inputs_keys_plaintext_and_materials_equal_native": true,
+    "captured_digest_inputs_ciphertext_and_keys_comparison_only_except_shared_word": true,
+    "copy_slices_checked_with_write_event_identity_and_temporal_order": true,
+    "MD5_middle_reaches_VM_scalar_store_with_BCP_0x9ab2c": true,
+    "MD5_middle_direct_decoder_address_lineage_verified": false,
+    "changed_word_changed_prefix_and_wrong_slices_rejected": true,
+    "complete_prior_relation_ledger_preserved": true,
+    "shared_word_source_generation_identified": false,
+    "earlier_encoded_configuration_source_identified": false,
+    "reduction_leaf_bytes_independently_generated": false,
+    "lookup_key_independently_generated": false,
+    "actual_Android_allocator_or_singleton_equivalence_verified": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "Sample verified: two terminal fresh-rootfs read-only runs and eight fixed-input calls. The existing ELF-table Base64 decoder transforms the observed 368-byte encoded configuration into 276 bytes, equal to native and independent standard Base64. Let D denote its generated first four bytes and W one observed four-byte runtime word. The existing MD5 reference owner ACTUALLY receives W + D + W, generating the configuration AES key. The configuration decrypt callback ACTUALLY receives the generated decoded slice [4:276] as ciphertext and that generated MD5 key. Its generated 271-byte plaintext has first four bytes P. The existing SHA-1 reference owner ACTUALLY receives P + W + D, generating the RC4 key. Generated plaintext [4:267] drives RC4, reverse/XOR, Protobuf, field selection and AES material generation. All generated digest inputs, keys, ciphertext, plaintext, stream results, selected material and native final ciphertext match. Captured whole preimages, keys and configuration ciphertext are comparison-only except for the explicit W input. Cross-piece native comparisons confirm MD5 pieces zero and two equal SHA-1 piece one, while MD5 piece one equals SHA-1 piece two. Per-byte write-event identity and temporal order join the MD5 input pieces through copy/append constructors; its middle piece reaches a VM scalar store at +0x17208c with BCP +0x9ab2c. Byte equality with the decoder prefix does not establish a direct decoder address/lifetime source. The first and last source pieces remain unobserved in the writer window, which does not prove constants, zero values or missing writes. The complete prior ledger is preserved. Changed prefixes, a changed shared word and wrong slices fail independent key or plaintext comparisons. W generation, earlier encoded configuration origin, reduction leaves, lookup key, other inputs, actual Android allocator/singleton equivalence, a complete standalone signer and ordinary Cronet six-header online acceptance remain unverified. All allocation and warm singleton services remain explicit fixtures. No operand bytes, keys/IVs, plaintext, runtime pointers, reusable material or operand digests are published."
+}
