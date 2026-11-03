@@ -1,5 +1,30 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：配置 RC4、反序及异或接入 AES 材料链
+
+**Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，实际 `+0x243dac`
+接收 263 字节数据、20 字节密钥和零 drop。已有 Python RC4 模型使用这些显式输入，
+逐字节复现原生输出，并与独立 ARC4 实现一致。配置 VM 随后按地址连续递减读取全部
+263 字节，使用 12 个观察字节从零开始异或归约；初始零操作数的实际 writer 为
+`+0x16db74`、VM cursor 为 `+0x9af00`。保留的 Python 模型反序并异或 RC4
+结果，生成实际 Protobuf 输入；省略反序、省略异或和错误掩码的候选均失败。
+
+Python 继续解析自行生成的消息、选择唯一匹配字段并解码 AES 材料；独立 Java AES
+使用派生材料复现原生密文。48 项新关系、24 条原始 ELF 指令以及此前 152 项材料
+关系和完整旧有对照通过。93 项错误证据、9 项非法模型输入、实际畸形 CLI 和
+3 项畸形日志均被拒绝。已有全局 clone 观察支持反序源来自 RC4 输出；跨调用复用
+地址不能证明当前归属，本批模型直接对比当次 helper 输入和输出字节。
+
+原 240 秒探索运行在第四次调用末段超时，未计入配对证据；正式两轮使用 420 秒
+有界运行并均正常退出。RC4 输入、密钥、12 个归约字节及查询键仍是显式运行时
+输入，更早的配置解密尚未独立复现。未公开这些操作数、key/IV、指针或其摘要。
+76 字节组件、剩余 seed 操作数、Android/其他输入等价、完整独立 signer 与普通
+Cronet 六头线上验签仍未完成。
+
+证据：[configuration stream](evidence/vm9_framesign_configuration_stream_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_stream_20261103.py)；
+模型：[Python](python/vm9_framesign_configuration.py)。
+
 ## 2026-11-03：块前 CRC16、地址头部及 88 字节拼装
 
 **Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，callback 3/4/5

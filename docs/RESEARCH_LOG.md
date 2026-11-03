@@ -1,5 +1,19 @@
 # Checkpoint log
 
+2026-11-03：**Sample verified**，配置 RC4 到 AES 材料链完成配对验证。两轮全新
+rootfs、8 次调用中，已有 Python RC4 使用实际 263 字节输入、20 字节密钥及零 drop，
+逐字节匹配原生及独立 ARC4 输出；全部 263 次加载按地址连续递减。12 个观察字节
+从实际捕获的零操作数开始异或归约，保留的反序/异或模型生成实际 Protobuf 消息，
+再经已有解析、选择和解码模型派生 AES 材料，独立 Java AES 复现原生密文。
+48 项新关系、24 条 ELF 指令、152 项前批材料关系及完整旧有对照保持；93 项错误
+证据、9 项非法模型输入、实际畸形 CLI 和 3 项畸形日志均被拒绝。正式两轮均在
+420 秒有界运行内正常退出；早期 240 秒超时探索未计入证据。RC4 输入/密钥、归约
+字节及查询键仍是运行时输入，完整独立 signer、Android 等价和普通 Cronet 六头线上
+验签仍未验证。未公开操作数、材料、key/IV 或其摘要。
+见[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_stream_20261103.json)、
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_stream_20261103.py)
+和[模型](../platforms/bytedance/tomato/python/vm9_framesign_configuration.py)。
+
 2026-11-03：**Sample verified**，修正配置比较回归中 `equality_bound` 的过期夹具：
 长度上限负例改用不同 payload，另增加两个基址的同对象/共享 payload 原生对照。
 170 项差分、5 项回滚检查通过；原有 166 项结果与旧证据逐项一致，模型行为未修改。

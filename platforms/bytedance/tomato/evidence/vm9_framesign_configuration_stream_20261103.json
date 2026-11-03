@@ -1,0 +1,940 @@
+{
+  "schema": "vm9-framesign-configuration-stream-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_aes_material_20261103.json",
+  "owner_hash_format": "sha256_bytes_CRLF_normalized_to_LF",
+  "owners": {
+    "vm9_protobuf.py": "cb0d6fb0050a0d4f28a271b96695dacbf24442eadb32b2265a54a9f2c30068c2",
+    "vm9_configuration_init.py": "0b58ac2fa9196f3da60c42bd3a03ee1a4d86ead9e824052cbdcbaaebed9533a8",
+    "vm9_objects.py": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "verify_vm9_signer_objects.py": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f",
+    "verify_vm9_strings.py": "fb1eaee419940309f59311c426ad9c5ab6a89923fb3206b44536017fc0af4d62",
+    "vm9_stream_cipher.py": "02e1a13cebc2809f3025300336af959f665806acc03b24ef50ed9f3a7f5b649a",
+    "vm9_framesign_configuration.py": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c"
+  },
+  "probe": {
+    "source_relative_path": "aes_configuration_stream_verified_probe/HookMain.java",
+    "source_sha256": "a3b33bd0061be78f22e1e1c490f8431cd095f7883673919f4d0a0efc940a9e32",
+    "entry_class_sha256": "b32f78e039aca00d34060b275992c16bec439c19b5005f8ffdd4ec8adf1524f3",
+    "runner_sha256": "8b5c7fff626c1469a8c994fc9a3fabeaa12c9c05563f4a3624e711e616d1104f",
+    "python_bridge_sha256": "1354dc6df05dc0051e85fb728bcf492f87b7ba72c6cccae5bb9b9b996a2976ed",
+    "decoder_bridge_sha256": "6afda0c390135c8839177368cc97b66579401c785ed81172db5063f14f0585a2",
+    "plaintext_bridge_sha256": "fdef137a2a90b4e4be47eca1679d4a3f54a9be01d0830a24a2de3e280f877939",
+    "constructor_bridge_sha256": "72e919faa8346e00e0d1841ca401c557299edc78cb5195c1e57868bfc8a022b0",
+    "read_only_guest_observation": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "run_deadline_seconds": 420,
+    "python_operand_transport": "private_in_memory_stdin_stdout_pipe",
+    "model_inputs": [
+      "observed_RC4_input_263_bytes",
+      "observed_RC4_key_20_bytes",
+      "observed_twelve_reduction_leaf_bytes",
+      "observed_lookup_key_10_bytes",
+      "fresh_relocated_ELF_descriptors_and_lookup_table",
+      "explicit_fixture_allocation_services"
+    ],
+    "Python_unpacks_derived_payload": true,
+    "AES_encrypts_using_model_derived_material": true
+  },
+  "runs": [
+    {
+      "local_run_name": "aes_configuration_stream_verified_probe/run1",
+      "source_sha256": "a3b33bd0061be78f22e1e1c490f8431cd095f7883673919f4d0a0efc940a9e32",
+      "entry_class_sha256": "b32f78e039aca00d34060b275992c16bec439c19b5005f8ffdd4ec8adf1524f3",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "c7130e1cc4a0aa9651bfbd48d81d624187040c2a74ce09431b5a71b67830b6ad",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "stream_observations": [
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 1,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 2,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 3,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 4,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 1,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 2,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 3,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 4,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 1,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/1:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/1:20"
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 2,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/2:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/2:20"
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 3,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/3:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/3:20"
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 4,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/4:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/4:20"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 1,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 2,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 3,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 4,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 1,
+          "leaves": 12,
+          "initial_zero": true
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 2,
+          "leaves": 12,
+          "initial_zero": true
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 3,
+          "leaves": 12,
+          "initial_zero": true
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 4,
+          "leaves": 12,
+          "initial_zero": true
+        }
+      ],
+      "prior_relation_ledger_sha256": "d6a22e5ac130042c1790b725471b9e4c29462a60434d92ead446143e3a3616c5"
+    },
+    {
+      "local_run_name": "aes_configuration_stream_verified_probe/run2",
+      "source_sha256": "a3b33bd0061be78f22e1e1c490f8431cd095f7883673919f4d0a0efc940a9e32",
+      "entry_class_sha256": "b32f78e039aca00d34060b275992c16bec439c19b5005f8ffdd4ec8adf1524f3",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "c7130e1cc4a0aa9651bfbd48d81d624187040c2a74ce09431b5a71b67830b6ad",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "stream_observations": [
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 1,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 2,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 3,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_MODEL",
+          "ordinal": 4,
+          "process_exit_code": 0,
+          "existing_Python_RC4_equals_native": true,
+          "Python_reverse_XOR_equals_protobuf": true,
+          "independent_RC4_equals_existing": true,
+          "no_reverse_matches": false,
+          "no_xor_matches": false,
+          "wrong_mask_matches": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 1,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 2,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 3,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "STREAM_RETURN",
+          "ordinal": 4,
+          "length": 263,
+          "calls": 1,
+          "source_equals_output": false
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 1,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 2,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 3,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "UPSTREAM_ORDER",
+          "ordinal": 4,
+          "length": 263,
+          "descending_reads": 263,
+          "distinct_reads": 263,
+          "source_span": 263
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 1,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/1:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/1:20"
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 2,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/2:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/2:20"
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 3,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/3:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/3:20"
+        },
+        {
+          "event": "STREAM_INPUT",
+          "ordinal": 4,
+          "length": 263,
+          "key_length": 20,
+          "drop": 0,
+          "source_writers": "libc.so+0x1c148/metasec+0x248258/4:263",
+          "key_writers": "libc.so+0x1c148/metasec+0x248258/4:20"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 1,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 2,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 3,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "GLOBAL_KEY_REDUCTION",
+          "ordinal": 4,
+          "leaves": 12,
+          "initial_operand_captured": true,
+          "initial_zero": true,
+          "xor_leaf_bytes_equals_key": true,
+          "initial_and_leaf_xor_equals_key": true,
+          "initial_writer": "metasec+0x16db74",
+          "initial_bcp": "metasec+0x9af00"
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 1,
+          "leaves": 12,
+          "initial_zero": true
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 2,
+          "leaves": 12,
+          "initial_zero": true
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 3,
+          "leaves": 12,
+          "initial_zero": true
+        },
+        {
+          "event": "STREAM_MASK",
+          "ordinal": 4,
+          "leaves": 12,
+          "initial_zero": true
+        }
+      ],
+      "prior_relation_ledger_sha256": "d6a22e5ac130042c1790b725471b9e4c29462a60434d92ead446143e3a3616c5"
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x243cac",
+        "file_offset": "0x243cac",
+        "bytes_hex": "e8031faa",
+        "mnemonic": "mov",
+        "operands": "x8, xzr"
+      },
+      {
+        "image_offset": "0x243d50",
+        "file_offset": "0x243d50",
+        "bytes_hex": "e803032a",
+        "mnemonic": "mov",
+        "operands": "w8, w3"
+      },
+      {
+        "image_offset": "0x243d58",
+        "file_offset": "0x243d58",
+        "bytes_hex": "09284029",
+        "mnemonic": "ldp",
+        "operands": "w9, w10, [x0]"
+      },
+      {
+        "image_offset": "0x243d64",
+        "file_offset": "0x243d64",
+        "bytes_hex": "29050011",
+        "mnemonic": "add",
+        "operands": "w9, w9, #1"
+      },
+      {
+        "image_offset": "0x243d68",
+        "file_offset": "0x243d68",
+        "bytes_hex": "291d0012",
+        "mnemonic": "and",
+        "operands": "w9, w9, #0xff"
+      },
+      {
+        "image_offset": "0x243d6c",
+        "file_offset": "0x243d6c",
+        "bytes_hex": "6c496938",
+        "mnemonic": "ldrb",
+        "operands": "w12, [x11, w9, uxtw]"
+      },
+      {
+        "image_offset": "0x243d74",
+        "file_offset": "0x243d74",
+        "bytes_hex": "4a1d0012",
+        "mnemonic": "and",
+        "operands": "w10, w10, #0xff"
+      },
+      {
+        "image_offset": "0x243d7c",
+        "file_offset": "0x243d7c",
+        "bytes_hex": "09280029",
+        "mnemonic": "stp",
+        "operands": "w9, w10, [x0]"
+      },
+      {
+        "image_offset": "0x243d80",
+        "file_offset": "0x243d80",
+        "bytes_hex": "6d492938",
+        "mnemonic": "strb",
+        "operands": "w13, [x11, w9, uxtw]"
+      },
+      {
+        "image_offset": "0x243d84",
+        "file_offset": "0x243d84",
+        "bytes_hex": "6c492a38",
+        "mnemonic": "strb",
+        "operands": "w12, [x11, w10, uxtw]"
+      },
+      {
+        "image_offset": "0x243d8c",
+        "file_offset": "0x243d8c",
+        "bytes_hex": "2a144038",
+        "mnemonic": "ldrb",
+        "operands": "w10, [x1], #1"
+      },
+      {
+        "image_offset": "0x243d98",
+        "file_offset": "0x243d98",
+        "bytes_hex": "69696c38",
+        "mnemonic": "ldrb",
+        "operands": "w9, [x11, x12]"
+      },
+      {
+        "image_offset": "0x243d9c",
+        "file_offset": "0x243d9c",
+        "bytes_hex": "29010a4a",
+        "mnemonic": "eor",
+        "operands": "w9, w9, w10"
+      },
+      {
+        "image_offset": "0x243da0",
+        "file_offset": "0x243da0",
+        "bytes_hex": "49140038",
+        "mnemonic": "strb",
+        "operands": "w9, [x2], #1"
+      },
+      {
+        "image_offset": "0x243dac",
+        "file_offset": "0x243dac",
+        "bytes_hex": "ff4305d1",
+        "mnemonic": "sub",
+        "operands": "sp, sp, #0x150"
+      },
+      {
+        "image_offset": "0x243dec",
+        "file_offset": "0x243dec",
+        "bytes_hex": "b0ffff97",
+        "mnemonic": "bl",
+        "operands": "#0x243cac"
+      },
+      {
+        "image_offset": "0x243e00",
+        "file_offset": "0x243e00",
+        "bytes_hex": "d4ffff97",
+        "mnemonic": "bl",
+        "operands": "#0x243d50"
+      },
+      {
+        "image_offset": "0x24841c",
+        "file_offset": "0x24841c",
+        "bytes_hex": "a00a00f9",
+        "mnemonic": "str",
+        "operands": "x0, [x21, #0x10]"
+      },
+      {
+        "image_offset": "0x248424",
+        "file_offset": "0x248424",
+        "bytes_hex": "810a40f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x20, #0x10]"
+      },
+      {
+        "image_offset": "0x248430",
+        "file_offset": "0x248430",
+        "bytes_hex": "ccfe0394",
+        "mnemonic": "bl",
+        "operands": "#0x347f60"
+      },
+      {
+        "image_offset": "0x16a7fc",
+        "file_offset": "0x16a7fc",
+        "bytes_hex": "8b010bca",
+        "mnemonic": "eor",
+        "operands": "x11, x12, x11"
+      },
+      {
+        "image_offset": "0x16a810",
+        "file_offset": "0x16a810",
+        "bytes_hex": "8b5b2df8",
+        "mnemonic": "str",
+        "operands": "x11, [x28, w13, uxtw #3]"
+      },
+      {
+        "image_offset": "0x1709cc",
+        "file_offset": "0x1709cc",
+        "bytes_hex": "6b696c38",
+        "mnemonic": "ldrb",
+        "operands": "w11, [x11, x12]"
+      },
+      {
+        "image_offset": "0x171c18",
+        "file_offset": "0x171c18",
+        "bytes_hex": "6a692938",
+        "mnemonic": "strb",
+        "operands": "w10, [x11, x9]"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "stream_input_length": 263,
+    "stream_key_length": 20,
+    "stream_drop": 0,
+    "reduction_bytes": 12,
+    "reduction_initial": 0,
+    "existing_Python_RC4_equals_native": true,
+    "independent_ARC4_equals_existing_model": true,
+    "all_263_input_loads_descend_without_gaps": true,
+    "reduction_starts_at_observed_zero_operand": true,
+    "Python_reverse_XOR_equals_actual_Protobuf_input": true,
+    "Python_unpacks_its_own_generated_configuration": true,
+    "derived_AES_material_encrypts_actual_native_ciphertext": true,
+    "no_reverse_no_XOR_and_wrong_mask_rejected": true,
+    "complete_prior_relation_ledger_preserved": true,
+    "stream_input_and_key_independently_generated": false,
+    "reduction_leaf_bytes_independently_generated": false,
+    "lookup_key_independently_generated": false,
+    "earlier_configuration_decryption_identified": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "Sample verified: two terminal fresh-rootfs read-only unidbg runs, eight fixed-input calls. The +0x243dac helper receives 263 data bytes, a 20-byte key and zero drop. Existing Python vm9_stream_cipher independently transforms those inputs; all output bytes equal native RC4 and independent ARC4. The actual configuration byte stores read all 263 bytes in reverse address order with no gaps. The XOR operand is a reduction of twelve observed leaf bytes, starting with a captured zero operand written at +0x16db74/cursor +0x9af00. The retained reverse_xor_configuration model produces the actual 263-byte Protobuf input. Python then unpacks ITS OWN generated payload with existing ELF descriptors, selects the actual field, decodes the material and supplies its halves to independent Java AES. Actual native ciphertext and the complete prior field/constructor/writer/JNI, preimage/SHA-256, AES, seed, layout, pre-block, XTEA and material provenance ledgers all remain exact. No-reversal, no-XOR and wrong-mask candidates fail per call. Global clone discovery observed that the reverse source is a clone of RC4 output; old matching addresses from prior calls alone are not current ownership proof. The paired stream proof compares bytes from the actual current helper call directly. The first 240-second model run timed out late in call four and is excluded; final paired runs use a bounded 420-second deadline. RC4 input/key, reduction leaves and lookup key remain explicit runtime observations, not independently generated values. No raw or encoded operands, material, keys, IVs, pointers, scalar masks or operand digests are published. Earlier decryption, other inputs, Android equivalence, the full independent signer and ordinary Cronet six-header online acceptance remain unverified."
+}
