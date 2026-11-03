@@ -1,0 +1,436 @@
+{
+  "schema": "vm9-framesign-configuration-initializer-fields-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_configuration_initializer_word_20261104.json",
+  "parent_evidence_sha256": "b22fb2d6b9cd2c5b1a71a0b1f20bfaf2b7dd31d0540b7ee72a2b01a64090cb7d",
+  "owner_hash_format": "sha256_bytes_CRLF_normalized_to_LF",
+  "owners": {
+    "vm9_protobuf.py": "cb0d6fb0050a0d4f28a271b96695dacbf24442eadb32b2265a54a9f2c30068c2",
+    "vm9_configuration_init.py": "0b58ac2fa9196f3da60c42bd3a03ee1a4d86ead9e824052cbdcbaaebed9533a8",
+    "vm9_objects.py": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "verify_vm9_signer_objects.py": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f",
+    "verify_vm9_strings.py": "fb1eaee419940309f59311c426ad9c5ab6a89923fb3206b44536017fc0af4d62",
+    "vm9_stream_cipher.py": "02e1a13cebc2809f3025300336af959f665806acc03b24ef50ed9f3a7f5b649a",
+    "vm9_framesign_configuration.py": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+    "vm9_cipher.py": "7b628664ddcb6f982bbaf346bfdf316ba4939a0a932f79e0f4e5a8c56510c36d",
+    "vm9_cipher_callback.py": "54ff35872c233f579e043a27d67eb34ae17ceba854f23faf096daabff25df181",
+    "vm9_registry.py": "97cde5b8cb688b27bb7a5238134fbe79806814ed319cfb2e7bce8f98fedc73eb"
+  },
+  "probe": {
+    "source_relative_path": "configuration_initializer_fields_model_probe2/HookMain.java",
+    "source_sha256": "ec705c1d4f1ef0ac5965c6561b80c168ebd5dafcb8e85155f55b0b5bbecd67da",
+    "entry_class_sha256": "75405686029e435e35e39e1bd39e4d43ac8befe5a08197de5b283cbc4494e974",
+    "runner_sha256": "8e3f3e146f3bb51f972c491be8905d8ea563faf9113329c48697d03adfe92465",
+    "python_bridge_sha256": "d09a84d906decde8d6028428b96582d3d1f6fc5b025532a16bbf808c4687d803",
+    "decoder_bridge_sha256": "6afda0c390135c8839177368cc97b66579401c785ed81172db5063f14f0585a2",
+    "plaintext_bridge_sha256": "fdef137a2a90b4e4be47eca1679d4a3f54a9be01d0830a24a2de3e280f877939",
+    "constructor_bridge_sha256": "72e919faa8346e00e0d1841ca401c557299edc78cb5195c1e57868bfc8a022b0",
+    "materials_bridge_sha256": "884727e378a09251340768c889473ced1e2fd819bf736dd3253ec1608c01d491",
+    "read_only_guest_observation": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "run_deadline_seconds": 1200,
+    "python_operand_transport": "private_in_memory_stdin_stdout_pipe",
+    "model_inputs": [
+      "initializer_JSON_configuration_field_three",
+      "initializer_JSON_application_id_field_zero",
+      "observed_empty_IV_and_mode_zero",
+      "observed_twelve_reduction_leaf_bytes",
+      "observed_lookup_key_10_bytes",
+      "fresh_relocated_ELF_tables_and_descriptors",
+      "explicit_fixture_allocation_and_warm_singleton_services"
+    ],
+    "comparison_only_inputs": [
+      "observed_decoded_configuration_276_bytes",
+      "observed_MD5_input_12_bytes",
+      "observed_SHA1_input_12_bytes",
+      "observed_configuration_ciphertext_272_bytes",
+      "observed_configuration_AES_key_16_bytes",
+      "observed_native_MD5_output_16_bytes",
+      "observed_configuration_plaintext_271_bytes",
+      "observed_RC4_input_263_bytes",
+      "observed_RC4_key_20_bytes",
+      "observed_decoder_prefix_4_bytes_for_counterexample_only",
+      "observed_shared_word_4_bytes_comparison_only",
+      "observed_encoded_configuration_368_bytes_comparison_only"
+    ],
+    "initializer_word_generated_in_Python": true,
+    "initializer_configuration_generated_in_Python": true,
+    "captured_digest_inputs_and_configuration_comparison_only": true,
+    "configuration_decrypt_uses_generated_MD5_key": true,
+    "digest_inputs_and_ciphertext_use_generated_configuration": true,
+    "RC4_uses_model_generated_data_and_key": true,
+    "warm_singleton_and_allocator_are_explicit_fixtures": true,
+    "existing_Python_bridges_identical_to_parent": false,
+    "only_changed_Python_bridge": "host_proto_material.py",
+    "proto_material_request_lines": 15,
+    "initializer_JSON_input_bound_bytes": 4096
+  },
+  "runs": [
+    {
+      "local_run_name": "configuration_initializer_fields_model_probe2/run1",
+      "source_sha256": "ec705c1d4f1ef0ac5965c6561b80c168ebd5dafcb8e85155f55b0b5bbecd67da",
+      "entry_class_sha256": "75405686029e435e35e39e1bd39e4d43ac8befe5a08197de5b283cbc4494e974",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "6c28858e59c39c3fbac821e22288ef5e31810de3e5bfb8260ccfb71b9a56b423",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "initializer_field_observations": [
+        {
+          "ordinal": 1,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        },
+        {
+          "ordinal": 2,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        },
+        {
+          "ordinal": 3,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        },
+        {
+          "ordinal": 4,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        }
+      ],
+      "parent_relation_ledger_sha256": "095a8a9ef4ed4fc67bb2f2a552d20bc425ef3a32ccbf190818882c528af24e0e",
+      "runner_sha256": "8e3f3e146f3bb51f972c491be8905d8ea563faf9113329c48697d03adfe92465",
+      "run_deadline_seconds": 1200
+    },
+    {
+      "local_run_name": "configuration_initializer_fields_model_probe2/run2",
+      "source_sha256": "ec705c1d4f1ef0ac5965c6561b80c168ebd5dafcb8e85155f55b0b5bbecd67da",
+      "entry_class_sha256": "75405686029e435e35e39e1bd39e4d43ac8befe5a08197de5b283cbc4494e974",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "preblock_model_sha256": "8f1d8d9d88db542cfa21ae756523360a69b246df1e4abbf5f83ec5470a9524c4",
+      "configuration_model_sha256": "279ab36081349926d580fd607caf58c5517f8723662ec3e5c54ae299693ee10c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "6c28858e59c39c3fbac821e22288ef5e31810de3e5bfb8260ccfb71b9a56b423",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "initializer_field_observations": [
+        {
+          "ordinal": 1,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        },
+        {
+          "ordinal": 2,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        },
+        {
+          "ordinal": 3,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        },
+        {
+          "ordinal": 4,
+          "configuration_field_index": 3,
+          "configuration_generated_from_initializer": true,
+          "captured_encoded_configuration_comparison_only": true,
+          "generated_configuration_equals_captured": true
+        }
+      ],
+      "parent_relation_ledger_sha256": "095a8a9ef4ed4fc67bb2f2a552d20bc425ef3a32ccbf190818882c528af24e0e",
+      "runner_sha256": "8e3f3e146f3bb51f972c491be8905d8ea563faf9113329c48697d03adfe92465",
+      "run_deadline_seconds": 1200
+    }
+  ],
+  "parent_static_analysis_sha256": "66064c4952e0dae84b227f8ce575a34f43e2262459fec2382e2fe84fcce03529",
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "initializer_word_field_zero_generated_in_python": true,
+    "initializer_configuration_field_three_generated_in_python": true,
+    "captured_word_and_configuration_are_comparison_only": true,
+    "initializer_encoded_configuration_matches_native_input": true,
+    "generated_configuration_drives_digest_decrypt_RC4_and_material_models": true,
+    "all_generated_intermediates_and_native_final_ciphertext_match": true,
+    "complete_parent_relation_ledger_and_outputs_preserved": true,
+    "only_proto_material_model_bridge_changed_from_parent": true,
+    "original_initializer_JNI_provider_pointer_joined": false,
+    "other_application_ids_or_configuration_values_verified": false,
+    "reduction_leaf_bytes_independently_generated": false,
+    "lookup_key_independently_generated": false,
+    "Android_allocator_or_singleton_equivalence_verified": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "Sample verified in two fresh rootfs, read-only runs and eight fixed-input calls using the current harness synthetic JNI initializer fixture. Python parses its bounded JSON and generates the four-byte first MD5/SHA-1 shared word from complete string field zero plus the 368-byte encoded configuration from complete string field three. The captured configuration and digest inputs are comparison-only; both generated configuration and word equal their captured native counterparts in all calls. Generated decoder output, MD5 key, configuration decryption, SHA-1/RC4 key, RC4 data, parsed selection, material and final native ciphertext retain the parent comparisons and relation ledger. The configuration field is not independently sourced from original Android JNI provider memory: provider pointer/return ownership was not joined, other initializer values and lengths were not varied, and the fixture is synthetic. Android allocator/singleton equivalence, complete standalone signer and ordinary Cronet six-header online acceptance remain unverified. No initializer contents, operands, digest inputs, keys/IVs, plaintext, runtime pointers or operand digests are published."
+}

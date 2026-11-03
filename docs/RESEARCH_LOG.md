@@ -1,5 +1,16 @@
 # Checkpoint log
 
+2026-11-04：**Sample verified**，两轮独立新 rootfs、8 次固定输入调用中，Python
+从当前探针使用的合成 JNI 初始化 JSON 第 0 项生成四字节摘要字、第 3 项生成
+368 字节编码配置；两份捕获值只用于比较，生成配置 8 次均与原生输入相等，且
+完整旧有摘要、解密、RC4、材料、原生密文与关系账本保持。新校验器验证 8 项关系；
+37 项错误证据、6 项畸形日志和畸形 CLI 被拒绝。JNI provider 对象到真实 Android
+输入内存的指针/返回关系仍未接通；本结果不外推至其他应用 ID、配置值或长度。
+查询键、归约叶字节、Android allocator/singleton 等价、完整 signer 和普通
+Cronet 六头线上验签仍未验证。未公开初始化配置、操作数、密钥/IV、明文、指针
+或操作数摘要。见[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_configuration_initializer_fields_20261104.json)
+和[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_configuration_initializer_fields_20261104.py)。
+
 2026-11-04：**Sample verified**，Python 从初始化 JSON 的第 0 项（应用 ID）实际
 生成四字节共享字，捕获摘要输入及共享字仅作比较。未过滤的观察器确认实际 VM
 目标是 descriptor wrapper `+0x17d2e0`，接到 C 字符串构造器 `+0x248344`；

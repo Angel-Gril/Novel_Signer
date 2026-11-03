@@ -1,5 +1,22 @@
 {
   "platform": "bytedance.tomato",
+  "vm9_framesign_configuration_initializer_fields_20261104": {
+    "evidence_file": "evidence/vm9_framesign_configuration_initializer_fields_20261104.json",
+    "verifier": "python/verify_vm9_framesign_configuration_initializer_fields_20261104.py",
+    "schema": "vm9-framesign-configuration-initializer-fields-20261104-v1",
+    "independent_read_only_runs": 2,
+    "calls": 8,
+    "initializer_configuration_field_index": 3,
+    "initializer_word_field_index": 0,
+    "captured_values_comparison_only": true,
+    "generated_configuration_matches_native_input": true,
+    "synthetic_JNI_initializer_fixture": true,
+    "original_Android_JNI_provider_memory_joined": false,
+    "other_values_or_lengths_verified": false,
+    "Android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_framesign_configuration_initializer_word_20261104": {
     "evidence_file": "evidence/vm9_framesign_configuration_initializer_word_20261104.json",
     "verifier": "python/verify_vm9_framesign_configuration_initializer_word_20261104.py",

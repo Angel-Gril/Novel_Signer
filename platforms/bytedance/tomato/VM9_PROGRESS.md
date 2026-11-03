@@ -1,5 +1,22 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04：初始化 JSON 同时生成配置摘要字和编码配置
+
+**Sample verified**：两轮独立新 rootfs、8 次固定输入调用中，Python 从当前探针
+使用的合成 JNI 初始化 JSON 第 0 项生成四字节摘要字，并从第 3 项生成 368 字节
+编码配置。两份捕获值仅用于逐字节比较；生成配置在 8 次调用里都与原生输入相同，
+生成解码结果、MD5 密钥、配置解密、SHA-1/RC4、材料选择及最终原生密文均与前序
+关系账本一致。新校验器复核 8 条字段关系，并保留完整前序运行输出。
+
+该结果只证明当前固定合成初始化样本可由这两项驱动；扩展 JNI 入口观察没有找到
+原始 Android `String` provider 的指针及返回来源，不能据此宣称已还原实际 Android
+输入生成。未测试其他应用 ID、配置值或长度。查询键、归约叶字节、Android
+allocator/singleton 等价、完整 signer 和普通 Cronet 六头线上验签仍未验证。
+未公开初始化配置、摘要输入、密钥、明文、指针或操作数摘要。
+
+证据：[initializer fields](evidence/vm9_framesign_configuration_initializer_fields_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_configuration_initializer_fields_20261104.py)。
+
 ## 2026-11-04：共享字由初始化 JSON 的应用 ID 字段实际生成
 
 **Sample verified**：两轮全新 rootfs、共 8 次固定输入调用，Python 从有界初始化
