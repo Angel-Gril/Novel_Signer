@@ -1,5 +1,42 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：FrameSign 的 XTEA 块阶段、前缀与指针后缀
+
+**Sample verified**：两轮全新 rootfs、固定输入共 8 次调用，88 个原生八字节块全部
+与独立 Java XTEA 的 32 轮 CBC 运算相等。数据字按大端读取，16 字节密钥按小端
+读取四个字，使用标准 delta；初始反馈非零，后续块的反馈等于上一块输出。
+错误数据字节序、错误密钥字节序、去掉反馈和少一轮的候选在每个块上均不匹配。
+整条链从本次块处理前快照独立计算，88 字节结果与最终复制源逐字节相同。
+
+4 字节后缀来自初始反馈缓冲区**地址**的小端低 32 位。运行时 bytecode cursor
+`+0xa0a14` 的 ADD64_IMM16 从虚拟寄存器 29 加偏移得到寄存器 21，结果与原生
+store 操作数、初始反馈指针相等。cursor `+0xa0a40` 观察到八字节 store，随后
+只复制低四字节；callback 9 和 25 使用同一来源。callback 9、10 拼出八字节初始
+反馈，前四字节与后缀相同。反馈后四字节和密钥的完整生成逻辑仍未恢复。
+
+最终前缀由首字节块密文再做立即数 XOR 得到：cursor `+0xa0bc8` 的 LOAD8 结果
+低字节与块密文首字节相等，`+0xa0bcc` XOR64_IMM16 的输入、结果和
+`+0xa0bd0` STRB 写入相符。原始块前首字节、未经 XOR 的块密文首字节这两个
+候选均不匹配最终前缀。上述 cursor 是探针观测时的 VM 游标；某些 handler 会在
+store 前推进游标，不能把所有 cursor 一概当成当前指令的起始地址。
+
+新增 Python 模型显式接收块前 88 字节、密钥、初始反馈、反馈地址和前缀立即数，
+经仅在内存中传参的私有管道运行。8 次重建的完整 `1 + 88 + 4 = 93` 字节均与
+原生构造输入及实际 AES data 相等；此前字段、构造、writer、JNI、JSON 前缀/
+SHA-256、布局、calloc 首字节及 AES 对照全部保持。保留 292 项新关系观测、
+29 条 ELF 指令；63 项错误证据、12 项模型无效输入、畸形 CLI、替换 libc 的
+实际 CLI 与 3 项畸形日志均被拒绝。字符掩码在私有 runner 中丢弃，仅保留统计数。
+
+本结果只闭合使用观察参数的固定配置块阶段。未公开指针、密钥、IV、明文、
+前缀掩码、签名或操作数摘要；密钥/反馈完整生成、allocator 地址复用策略、
+其他输入、Android 等价、完整独立 signer 和普通 Cronet 六头/线上验签仍未完成。
+下一步追踪 callback 10 的反馈后半段和 callback 11 的密钥来源，保留本次块阶段
+作为对照。
+
+证据：[block cipher](evidence/vm9_framesign_block_cipher_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_block_cipher_20261103.py)；
+模型：[Python](python/vm9_framesign_block_cipher.py)。
+
 ## 2026-11-03：块处理前首字节的 calloc 返回地址依赖
 
 在固定输入的两轮全新 rootfs、共 8 次调用中，已正面闭合此前变化首字节的来源。

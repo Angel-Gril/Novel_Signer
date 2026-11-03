@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-03：**Sample verified**，FrameSign 块阶段已恢复为 32 轮 XTEA-CBC，
+数据字大端、密钥字小端；两轮全新 rootfs 共 8 次调用的 88 个块逐字节相等，
+四组错误轮数/字节序/反馈候选均不匹配。最终前缀由块密文首字节经 VM 立即数
+XOR 得到；后缀是初始反馈缓冲区地址的小端低四字节，亦为初始反馈的前四字节。
+显式传入本次观察参数的 Python 模型，经私有内存管道重建全部 93 字节，均与
+原生构造和 AES data 相等。此前完整对照保持；292 项关系、29 条 ELF 指令、
+63 项错误证据、12 项模型无效输入、两个实际 CLI 负例与 3 项畸形日志通过。
+密钥/反馈完整生成、Android、其他输入、独立 signer 和普通 Cronet 六头线上验签
+仍未闭合。见[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_block_cipher_20261103.json)、
+[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_block_cipher_20261103.py)
+与[显式参数模型](../platforms/bytedance/tomato/python/vm9_framesign_block_cipher.py)。
+
 2026-11-03：后续 allocator 回调只读追踪修正恢复实验的对象归因。两轮独立运行、
 共 8 次调用中，`+0x25438c` 每次返回请求长度 `0x70`、位于 `handle+0x70` 的新
 对象；同地址进入 `+0x2550cc` 清理函数。监视区间是新对象的前 16 字节，
