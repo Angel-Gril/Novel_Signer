@@ -1,5 +1,15 @@
 # Checkpoint log
 
+2026-11-03：**Sample verified**，另两轮全新 rootfs、8 次调用把 FrameSign 块密钥
+及反馈尾部接到已有 Python ELF 配置构造器。`+0x3dec74` 的 20 字节 BSS 与
+fresh ELF 构造结果相等；前 16 字节逐字反转成为 XTEA 密钥，后 4 字节成为反馈
+尾部，反馈前半段来自缓冲区指针低四字节。使用独立构造结果实际加密的 Python
+桥仍逐字节复现全部 93 字节原生 AES 输入；旧有对照保持，新增 96 项关系，
+41 项错误证据、畸形 CLI 和 2 项畸形日志被拒绝。原生配置构造器本次未直接追踪，
+块前数据、地址、前缀立即数、AES key/IV、独立 signer 与线上验签仍有边界。
+见[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_block_inputs_20261103.json)
+及[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_block_inputs_20261103.py)。
+
 2026-11-03：**Sample verified**，FrameSign 块阶段已恢复为 32 轮 XTEA-CBC，
 数据字大端、密钥字小端；两轮全新 rootfs 共 8 次调用的 88 个块逐字节相等，
 四组错误轮数/字节序/反馈候选均不匹配。最终前缀由块密文首字节经 VM 立即数

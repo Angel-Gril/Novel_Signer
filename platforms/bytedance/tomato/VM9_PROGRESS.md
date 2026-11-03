@@ -1,5 +1,31 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：XTEA 密钥及反馈尾部接入已有 ELF 构造器
+
+**Sample verified**：在另两轮全新 rootfs、共 8 次固定输入调用中，callback 2
+复制 `metasec+0x3dec74` 的 20 字节。该区域为 ELF `.bss/SHT_NOBITS`，不能
+直接从文件偏移读取为静态常量。已有 `run_configuration_constructor` 使用 fresh
+ELF pages 和明确 fixture 服务独立生成的 20 字节，与每次实际复制源相等。
+本批探针没有直接观察原生配置构造器执行，不能据此声称穷尽了该 BSS 的历史 writer。
+
+callback 11 使用前 16 字节，逐个四字节组反转后与实际 XTEA 密钥相等；保持原始
+字节、每组旋转 8/16/24 位的候选均不匹配。实际四次 STORE32 的源操作数均与
+密钥对应字相等。callback 10 的来源地址正好为同一复制目标加 16，内容与其最后
+四字节相等，因此完整初始反馈为 `LE32(反馈缓冲区地址) + 配置源[16:20]`。
+
+随后 Python 加密桥独立重新执行已有配置构造器，实际加密使用其派生出的密钥和
+反馈；捕获的 key/feedback 只用于相等断言。8 次完整 93 字节仍与原生构造和实际
+AES 输入一致，前一批 292 项块阶段关系及全部旧有对照保持。新增 96 项来源关系；
+41 项错误证据、实际畸形 CLI 和 2 项畸形日志均被拒绝。私有 bridge 和五个相关
+Python 源文件的身份已记录；原始构造器字节、密钥、反馈及操作数摘要均未公开。
+
+当前仍显式依赖观察到的块前 88 字节、反馈缓冲区地址和前缀 XOR 立即数；
+AES 自身 key/IV 的完整生成、普通 Cronet 六头、Android/其他输入及独立 signer
+仍未完成。下一步恢复块前 88 字节构造及 AES key/IV 的来源，并复用现有构造器。
+
+证据：[block inputs](evidence/vm9_framesign_block_inputs_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_block_inputs_20261103.py)。
+
 ## 2026-11-03：FrameSign 的 XTEA 块阶段、前缀与指针后缀
 
 **Sample verified**：两轮全新 rootfs、固定输入共 8 次调用，88 个原生八字节块全部

@@ -1,0 +1,4482 @@
+{
+  "schema": "vm9-framesign-block-inputs-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_block_cipher_20261103.json",
+  "owners": {
+    "vm9_elf_bootstrap.py": "9216acf097f48054407f29385fb3558ed43d71a81da4411ef011d732c5aaa7e9",
+    "verify_vm9_elf_configuration_constructor_20261011.py": "ad1f31a598962d8d52965a953e0e052839a22ba2f1755975cf296085ac00f8a3",
+    "vm9_registry.py": "97cde5b8cb688b27bb7a5238134fbe79806814ed319cfb2e7bce8f98fedc73eb",
+    "vm9_objects.py": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "vm9_framesign_block_cipher.py": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb"
+  },
+  "probe": {
+    "source_relative_path": "block_cipher_constructor_source_probe/HookMain.java",
+    "source_sha256": "776f5295381332a60182499fcc237bd40f9b6a17b7c1456fe727b8b18c011deb",
+    "entry_class_sha256": "91589e1b5114b574615bb9a9a8196454c3cbe9c238a0998ecddf3c6d5c952520",
+    "runner_sha256": "de8cb6b3743e5d61caad15e9366fb7af1e87cb76b6c6e9ff00d7461ae9d34cdc",
+    "python_bridge_sha256": "4ddf6ab256e597d66f5daf5f92dcbbfb53be99396ec1efc0674e0cd1da260fc2",
+    "constructor_bridge_sha256": "72e919faa8346e00e0d1841ca401c557299edc78cb5195c1e57868bfc8a022b0",
+    "read_only_guest_observation": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "python_operand_transport": "private_in_memory_stdin_stdout_pipe",
+    "constructor_model_inputs": "fresh_relocated_ELF_pages_and_explicit_fixture_services",
+    "remaining_observed_algorithm_inputs": [
+      "preblock_88_bytes",
+      "feedback_pointer",
+      "prefix_xor_immediate"
+    ]
+  },
+  "runs": [
+    {
+      "local_run_name": "block_cipher_constructor_source_probe/run1",
+      "source_sha256": "776f5295381332a60182499fcc237bd40f9b6a17b7c1456fe727b8b18c011deb",
+      "entry_class_sha256": "91589e1b5114b574615bb9a9a8196454c3cbe9c238a0998ecddf3c6d5c952520",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "f8db877f8fa4a597d1eb1245629f9a92e6ba2d5860429168a888b23ff7a7d231",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "cipher_observations": [
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 1,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 2,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 3,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 4,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 1,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 2,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 3,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 4,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 1,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 2,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 3,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 4,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/1:4,metasec+0x276e38/metasec+0x268538/1:4"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/2:4,metasec+0x276e38/metasec+0x268538/2:4"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/3:4,metasec+0x276e38/metasec+0x268538/3:4"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/4:4,metasec+0x276e38/metasec+0x268538/4:4"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 1,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 2,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 3,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 4,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 1,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 2,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 3,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 4,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 1,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 2,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 3,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 4,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 1,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 2,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 3,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 4,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 1,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 2,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 3,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 4,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 1,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 2,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 3,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 4,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 1,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 1
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 2,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 2
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 3,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 3
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 4,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 4
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 1,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 2,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 3,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 4,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 2,
+          "previous_ordinal": 1,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 1,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 2,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 1,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 2,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 3,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 1,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 2,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 3,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 4,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 1,
+          "stored_value_equals_feedback_pointer": true
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 2,
+          "stored_value_equals_feedback_pointer": true
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 3,
+          "stored_value_equals_feedback_pointer": true
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 4,
+          "stored_value_equals_feedback_pointer": true
+        }
+      ],
+      "input_observations": [
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 1,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 2,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 3,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 4,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 1,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 2,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 3,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 4,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 1,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 2,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 3,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 4,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 1,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 2,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 3,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 4,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 1,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 2,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 3,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 4,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 1,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 2,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 3,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 4,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 1,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 2,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 3,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 4,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 1,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 2,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 3,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 4,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        }
+      ]
+    },
+    {
+      "local_run_name": "block_cipher_constructor_source_probe/run2",
+      "source_sha256": "776f5295381332a60182499fcc237bd40f9b6a17b7c1456fe727b8b18c011deb",
+      "entry_class_sha256": "91589e1b5114b574615bb9a9a8196454c3cbe9c238a0998ecddf3c6d5c952520",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "python_model_sha256": "ea4064e2da4d8843a2c8aef447bb475a1d14970a5b91a43c9fae6ff94c746dbb",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "f8db877f8fa4a597d1eb1245629f9a92e6ba2d5860429168a888b23ff7a7d231",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "cipher_observations": [
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 1,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 2,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 3,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "BLOCK_JOIN",
+          "ordinal": 4,
+          "length": 88,
+          "all_emitted_equal_copy_source": true
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 1,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 2,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 3,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_PREFIX_XOR",
+          "ordinal": 4,
+          "operation": "XOR64_IMM16",
+          "bcp": "metasec+0xa0bcc",
+          "source_slot": 2,
+          "destination_slot": 2,
+          "architectural_result_matches": true,
+          "input_low_equals_first_ciphertext_byte": true,
+          "result_low_equals_prefix": true,
+          "source_writer": "metasec+0x170a00",
+          "source_bcp": "metasec+0xa0bc8"
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 1,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 2,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 3,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_DEFINITION",
+          "ordinal": 4,
+          "store_bcp": "metasec+0xa0a40",
+          "store_width": 8,
+          "value_slot": 21,
+          "definition_present": true,
+          "operation": "ADD64_IMM16",
+          "definition_bcp": "metasec+0xa0a14",
+          "source_slot": 29,
+          "destination_slot": 21,
+          "architectural_result_matches": true,
+          "result_equals_store_operand": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 0,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": false,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/1:4,metasec+0x276e38/metasec+0x268538/1:4"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/2:4,metasec+0x276e38/metasec+0x268538/2:4"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/3:4,metasec+0x276e38/metasec+0x268538/3:4"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 0,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276e18/metasec+0x268538/4:4,metasec+0x276e38/metasec+0x268538/4:4"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 1,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 1,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 10,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 10,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 2,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 2,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 3,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 3,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 4,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 4,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 5,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 5,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 6,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 6,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 7,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 7,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 8,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 8,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 1,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 2,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 3,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_BLOCK",
+          "ordinal": 4,
+          "block": 9,
+          "length": 8,
+          "rounds": 32,
+          "standard_delta": true,
+          "key_equals_first": true,
+          "feedback_equals_previous_output": true,
+          "xor_feedback_equals_mix": true,
+          "xtea_be_data_le_key_matches": true,
+          "xtea_le_data_matches": false,
+          "xtea_be_key_matches": false,
+          "no_feedback_matches": false,
+          "fewer_rounds_matches": false,
+          "independent_chain_equals_emitted": true
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 1,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/1:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/1:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 2,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/2:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/2:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 3,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/3:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/3:8"
+        },
+        {
+          "event": "XTEA_SOURCE",
+          "ordinal": 4,
+          "block": 9,
+          "key_length": 16,
+          "feedback_length": 8,
+          "key_writers": "metasec+0x17208c/outside_modules/4:16",
+          "feedback_writers": "metasec+0x276c38/metasec+0x276c38/4:8"
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 1,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 2,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 3,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_SUFFIX_LINK",
+          "ordinal": 4,
+          "length": 4,
+          "source_equals_copy9_source": true,
+          "bytes_equal_copy9": true,
+          "feedback_pointer_le32_matches": true,
+          "feedback_pointer_be32_matches": false,
+          "equals_initial_feedback_prefix": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 1,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 2,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 3,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_FEEDBACK_ASSEMBLY",
+          "ordinal": 4,
+          "length": 8,
+          "copy9_length": 4,
+          "copy10_length": 4,
+          "copy9_destination_equals_feedback": true,
+          "copy10_destination_follows_copy9": true,
+          "copy9_equals_feedback_pointer_le32": true,
+          "copies_equal_initial_feedback": true,
+          "suffix_definition_equals_feedback_pointer": true
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 1,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 2,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 3,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PLAINTEXT_LINK",
+          "ordinal": 4,
+          "length": 93,
+          "independent_layout_equals_constructor": true,
+          "independent_layout_equals_aes_data": true,
+          "prefix_equals_first_ciphertext_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 1,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 2,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 3,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_DEFINITION",
+          "ordinal": 4,
+          "source_writer": "metasec+0x16e610",
+          "source_bcp": "metasec+0xa0bcc",
+          "operation": "XOR64_IMM16",
+          "preblock_prefix_equal": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 1,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 2,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 3,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PREFIX_SOURCE",
+          "ordinal": 4,
+          "store_present": true,
+          "store_bcp": "metasec+0xa0bd0",
+          "value_slot": 2,
+          "register_equals_store_operand": true,
+          "stored_byte_equals_prefix": true,
+          "prefix_equals_preblock_byte": false
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 1,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 2,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 3,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "CIPHER_PYTHON_LINK",
+          "ordinal": 4,
+          "length": 93,
+          "process_exit_code": 0,
+          "python_equals_constructor": true,
+          "python_equals_aes_data": true
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 1,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 1
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 2,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 2
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 3,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 3
+        },
+        {
+          "event": "SUFFIX_SOURCE",
+          "ordinal": 4,
+          "length": 4,
+          "store_record_present": true,
+          "store_bcp": "metasec+0xa0a40",
+          "value_slot": 21,
+          "operand_register_matches": true,
+          "source_writer": "metasec+0x16d8a4",
+          "source_bcp": "metasec+0xa0a14",
+          "source_writer_ordinal": 4
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 1,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 2,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 3,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "SUFFIX_STORE_LINK",
+          "ordinal": 4,
+          "source_equals_stored_low_four": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 2,
+          "previous_ordinal": 1,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 1,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 2,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 1,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 2,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 3,
+          "key_equal": true,
+          "initial_feedback_equal": true
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 1,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 2,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 3,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_JOIN",
+          "ordinal": 4,
+          "length": 88,
+          "independent_chain_equals_copy_source": true,
+          "initial_feedback_zero": false
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 1,
+          "stored_value_equals_feedback_pointer": true
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 2,
+          "stored_value_equals_feedback_pointer": true
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 3,
+          "stored_value_equals_feedback_pointer": true
+        },
+        {
+          "event": "XTEA_SUFFIX_RELATION",
+          "ordinal": 4,
+          "stored_value_equals_feedback_pointer": true
+        }
+      ],
+      "input_observations": [
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 1,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 2,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 3,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 4,
+          "bits": 16,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 1,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 2,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 3,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 4,
+          "bits": 24,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 1,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 2,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 3,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_KEY_ROTATE",
+          "ordinal": 4,
+          "bits": 8,
+          "matches": false
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 1,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 2,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 3,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 4,
+          "copy": 10,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 1,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 2,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 3,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY_SLICE",
+          "ordinal": 4,
+          "copy": 11,
+          "source_equals_input_slice": true,
+          "bytes_equal_input_slice": true
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 1,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 2,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 3,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_TWENTY",
+          "ordinal": 4,
+          "length": 20,
+          "source_location": "metasec+0x3dec74",
+          "destination_location": "outside_modules"
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 1,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 2,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 3,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONSTRUCTOR_JOIN",
+          "ordinal": 4,
+          "length": 20,
+          "process_exit_code": 0,
+          "fresh_ELF_configuration_equals_copy2": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 0,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 12,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 4,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 1,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 1,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 2,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 2,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 3,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 3,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_CONVERTED_KEY_WORD",
+          "ordinal": 4,
+          "offset": 8,
+          "record_present": true,
+          "store_ordinal": 4,
+          "store_bcp": "metasec+0xa0b4c",
+          "value_slot": 1,
+          "source_writer": "metasec+0x16900c",
+          "source_bcp": "metasec+0xa0b48",
+          "operation": "unobserved",
+          "value_equals_key_word": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 1,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 2,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 3,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        },
+        {
+          "event": "INPUT_KEY_ORDER",
+          "ordinal": 4,
+          "raw_key_equals_converted": false,
+          "reversed_words_equal_converted": true
+        }
+      ]
+    }
+  ],
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "source_image_offset": "0x3dec74",
+    "source_length": 20,
+    "source_section": ".bss",
+    "source_is_ELF_file_payload": false,
+    "fresh_Python_configuration_equals_runtime_source": true,
+    "key_is_first16_with_each_u32_reversed": true,
+    "feedback_tail_is_last4_of_configuration_source": true,
+    "feedback_prefix_is_pointer_low32_little_endian": true,
+    "Python_encrypts_with_constructor_derived_key_and_feedback": true,
+    "full_93_byte_constructor_and_AES_input_match": true,
+    "complete_prior_ledger_preserved": true,
+    "original_configuration_constructor_observed_in_this_probe": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "allocator_reuse_policy_identified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "Sample verified. Each of eight fixed-profile calls copies twenty bytes from metasec+0x3dec74, which belongs to SHT_NOBITS .bss, so reading this as an ELF file literal would be incorrect. The independently existing Python run_configuration_constructor generates twenty equal bytes from fresh relocated ELF pages and explicit fixture services. Its native constructor was verified in earlier work; this probe does not observe that original constructor execute or establish every historical writer of the BSS bytes. Copy 11 consumes source[0:16], and the actual four written key words equal reversal of each four-byte input group. Unchanged bytes and within-word rotations by 8, 16 or 24 bits fail. Copy 10 takes exactly source[16:20], forming the initial feedback tail. The feedback prefix is the previously verified little-endian low32 of its buffer pointer. A second fresh Python constructor invocation derives the encryption key and feedback. Captured key/feedback are used only for equality assertions; encryption uses independently generated constructor bytes, plus the observed feedback pointer. Its full 93-byte result equals native constructor input and AES data on all eight calls. The observed pre-block buffer, feedback pointer and prefix XOR immediate are still algorithm inputs. Complete prior relational controls, field hashes, seed/layout/JNI/preimage/SHA-256/AES ledgers are preserved. Only relations, code-file identities, lengths and final-field fingerprints are retained. Raw constructor bytes, pointers, keys, feedback, scalar masks, plaintext, signatures and operand digests are omitted. No general-input or Android equivalence, complete signer, allocator policy or online six-header acceptance is claimed."
+}
