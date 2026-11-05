@@ -117,6 +117,28 @@ def _comparison(expected, actual):
                 python_sha256=hashlib.sha256(actual).hexdigest())
 
 
+def _unused_vector_padding_offsets(data, *, vector_count=4, vector_stride=24):
+    """Return unused tail bytes for the observed fixed C-string vector.
+
+    Allocation 308 is a 4-slot, 24-byte temporary vector.  The native
+    formatter leaves bytes after each NUL untouched; those bytes are not part
+    of the semantic strings and must remain outside the graph comparison's
+    production-difference boundary.
+    """
+    expected_size = vector_count * vector_stride
+    if len(data) != expected_size:
+        return set()
+    padding = set()
+    for slot in range(vector_count):
+        start = slot * vector_stride
+        end = start + vector_stride
+        nul = data.find(b"\0", start, end)
+        if nul < 0:
+            return set()
+        padding.update(range(nul + 1, end))
+    return padding
+
+
 def case(library, libc, image, label, value, vm_module, *,
          constructor_counter=None, apply_publication=False):
     snapshots = {}
@@ -190,7 +212,16 @@ def case(library, libc, image, label, value, vm_module, *,
         expected_size, native_data = expected["live"][index]
         assert size == expected_size
         if data != native_data:
-            live_mismatches.append(dict(allocation_index=index, **_comparison(native_data, data)))
+            comparison = _comparison(native_data, data)
+            mismatch_offsets = {int(value, 16) for value in comparison["mismatch_offsets"]}
+            padding_offsets = _unused_vector_padding_offsets(native_data)
+            padding_only = (index == 308 and size == 96 and bool(padding_offsets)
+                            and mismatch_offsets <= padding_offsets)
+            assert padding_only, (index, comparison["mismatch_offsets"])
+            live_mismatches.append(dict(
+                allocation_index=index,
+                unused_short_string_padding_only=True,
+                **comparison))
     wrappers = Counter(offset for run in python_result["python_vm_runs"]
                        if run["entry_offset"] == "0x991c0"
                        for offset in run["callback_wrapper_offsets"])
@@ -233,6 +264,9 @@ def case(library, libc, image, label, value, vm_module, *,
                     for label, data in actual["remaining_globals"].items()},
                 live_allocation_count=len(actual["live"]),
                 live_allocation_mismatches=live_mismatches,
+                live_mismatch_semantic_bytes_equal=all(
+                    item["unused_short_string_padding_only"]
+                    for item in live_mismatches),
                 logger_record_strings=strings,
                 default_logger_record_semantics_equal=True,
                 complete_native_outer_state_equal=False,

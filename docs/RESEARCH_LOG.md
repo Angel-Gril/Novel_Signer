@@ -802,3 +802,9 @@ signer、整请求差分和线上验签仍未完成。
 `addSecurityFactor` 入口和 `CronetUrlRequestContext.o0` 均已安装但事件数为 0。
 证据只保留长度、名称和摘要，未建立 Cronet 对象身份或线上验签；详见
 `platforms/bytedance/tomato/evidence/vm9_networkparams_runtime_window_20261105.json`。
+2026-11-06：重新执行 outer graph fresh differential 四项 controls，并把 allocation
+308 的旧 padding attribution 固化为 verifier 约束。两个 image base、`absent`/
+`sdk_30` 均保持核心对象图和默认 logger 语义一致；四个 96 字节临时向量的全部
+差异都落在四个 24 字节 C-string 槽的 NUL 后未使用尾部。该项只标记语义字节相等，
+不提升为完整 native state、独立 signer、整请求差分或线上验签。详见
+`platforms/bytedance/tomato/evidence/vm9_outer_graph_fresh_20261106.json`。

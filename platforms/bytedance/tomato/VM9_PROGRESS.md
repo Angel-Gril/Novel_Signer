@@ -8038,3 +8038,17 @@ signer 或线上验签，因此相关标志继续保持 `false`。
 
 证据：[官方 r4 多请求窗口](evidence/vm9_networkparams_runtime_window_20261105.json)，
 校验器：[verify_vm9_networkparams_runtime_window_20261105.py](python/verify_vm9_networkparams_runtime_window_20261105.py)。
+## 2026-11-06：outer graph fresh rerun 固化 allocation 308 语义边界
+
+在 pinned `libmetasec_ml.so` 与 matching libc 上重新执行两个 image base、
+`absent`/`sdk_30` 四项 fresh native/Python controls。核心对象图、默认 logger
+记录语义、分配/释放序列和所有已比较全局均通过；唯一 live allocation 差异仍是
+第 309 个、96 字节的 allocation 308。新增 verifier 解析该 96 字节临时向量的四个
+24 字节 C-string 槽，并断言全部差异都位于 NUL 之后的未使用尾部；四项均为
+`allocation_308_padding_only=true`。
+
+这项更新把旧的只读 attribution 变成 fresh graph 运行时回归门：若语义字符串区
+出现新差异，verifier 会直接失败。它没有把 native 残留 padding 当作 Python 输入，
+也没有改变 `complete_native_outer_state_equal=false`、完整 standalone signer、
+整请求差分或线上验签的状态。证据：[outer graph fresh 20261106](evidence/vm9_outer_graph_fresh_20261106.json)，
+校验器：[verify](python/verify_vm9_outer_graph_fresh_20261106.py)。
