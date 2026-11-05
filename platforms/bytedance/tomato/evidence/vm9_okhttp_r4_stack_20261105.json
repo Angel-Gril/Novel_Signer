@@ -1,0 +1,55 @@
+{
+  "schema": "vm9-okhttp-r4-stack-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "source_scope": {
+    "artifact": "official fq_7xz.apk direct OkHttp security-factor callback",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "device_serial": "emulator-5554",
+    "process_id": 1163,
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "raw_business_values_retained": false
+  },
+  "source_artifacts": {
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "bridge_sha256": "749e107feb32c21227fa79a5feda5c4a13bf4d797d51d8c94156d8d4b3e97eb2",
+    "probe_sha256": "68297ca89e1fd4d1cd111004f76d0499b3e93b0409a00eae82874e187490b8b5",
+    "capture_sha256": "3e3c58124e9d6dd78ae30beddf2aa5498091251057c300f7d46cb8bb1ce9dd08"
+  },
+  "observed": {
+    "callback_count": 1,
+    "url_length": 656,
+    "input_key_count": 9,
+    "result_keys": [
+      "X-Argus",
+      "X-Gorgon",
+      "X-Helios",
+      "X-Khronos",
+      "X-Ladon",
+      "X-Medusa"
+    ],
+    "stack_prefix": [
+      {"class_name": "ms.bd.c.r4", "method_name": "onCallToAddSecurityFactor"},
+      {"class_name": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor", "method_name": "intercept"},
+      {"class_name": "okhttp3.internal.http.RealInterceptorChain", "method_name": "proceed"},
+      {"class_name": "okhttp3.RealCall", "method_name": "getResponseWithInterceptorChain"},
+      {"class_name": "okhttp3.RealCall", "method_name": "execute"},
+      {"class_name": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b", "method_name": "p"}
+    ],
+    "entry_return_id_fields_equal": true
+  },
+  "claims": {
+    "okhttp_security_factor_stack_observed": true,
+    "six_header_result_shape_observed": true,
+    "r4_entry_return_id_fields_equal": true,
+    "java_object_identity_verified": false,
+    "cronet_entry_runtime_observed": false,
+    "r4_callback_cronet_identity_joined": false,
+    "ordinary_cronet_six_header_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

@@ -789,3 +789,9 @@ show native `+0x184ad4` execution, populate the `0x13700000` descriptor mapping,
 identify the callback/runtime-table owner. The fresh child continuation therefore still
 stops at `+0x2859dc` with `x3=0`; whole-request differential, standalone signer, and
 online acceptance remain open. See [APK Java loader handoff](../platforms/bytedance/tomato/evidence/vm9_dso_java_loader_provenance_fresh_20261027.json).
+
+2026-11-05：新增官方 OkHttp/r4 运行时栈的脱敏证据。真实回调栈以
+`OkHttp3SecurityFactorInterceptor -> okhttp3.RealCall -> ms.bd.c.r4` 为前段，
+窗口内返回六个七神键。Java bridge 的 identity 字段在冷启动与热进程表现不稳定，
+因此记录为“入口/返回字段配对”，不记录为 Java 对象身份闭合；Cronet、standalone
+signer、整请求差分和线上验签仍未完成。

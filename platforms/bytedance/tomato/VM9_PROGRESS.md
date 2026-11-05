@@ -8007,3 +8007,17 @@ Cronet 请求，也没有证明六头线上验签。
 
 证据：[Cronet runtime selector state](evidence/vm9_cronet_runtime_selector_state_20261105.json)，
 校验器：[verify_vm9_cronet_runtime_selector_state_20261105.py](python/verify_vm9_cronet_runtime_selector_state_20261105.py)。
+
+## 2026-11-05：真实 OkHttp 安全因子调用栈
+
+在同一官方进程的受限回调窗口中，`ms.bd.c.r4.onCallToAddSecurityFactor` 的真实
+入口栈以 `OkHttp3SecurityFactorInterceptor.intercept` 为下一层，随后进入
+`okhttp3.RealCall`；该窗口没有 Cronet 类栈帧。回调输入只保留 656 的 URL 长度和
+9 个 header 名称，返回集合包含六个七神键。探针把入口/返回的 identity 字段原样
+配对，但当前 Java bridge 在不同进程状态下会返回 0 或不稳定值，因此不把这组字段
+升级为 Java 对象身份验证。
+
+证据：[OkHttp r4 stack](evidence/vm9_okhttp_r4_stack_20261105.json)，
+校验器：[verify_vm9_okhttp_r4_stack_20261105.py](python/verify_vm9_okhttp_r4_stack_20261105.py)。
+这一步强化了“当前阅读请求走 OkHttp/r4”的运行时归因，但仍不建立 Cronet 入口、
+跨层对象身份、standalone signer、整请求差分或线上验签；这些结论继续保持 `false`。
