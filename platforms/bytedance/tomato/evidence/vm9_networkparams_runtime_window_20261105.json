@@ -1,0 +1,2870 @@
+{
+  "schema": "vm9-networkparams-runtime-window-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "artifact": {
+    "package": "com.dragon.read",
+    "version_code": 72532,
+    "installed_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "android_version": "9",
+    "android_api_level": 28,
+    "abi": "x86_64",
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "probe_source_sha256": "74beb8771464bfd1f4506c69f79e37af34a2dc4331aea4bf05ae24ae30febe30",
+    "bridge_sha256": "749e107feb32c21227fa79a5feda5c4a13bf4d797d51d8c94156d8d4b3e97eb2"
+  },
+  "trigger": "already-open reader activity; bounded 30-second attach",
+  "capture_count": 1,
+  "captures": [
+    {
+      "label": "official_reader_root_frida_followup",
+      "capture_sha256": "1280b007fe7fadf47fa61b7dde3fc9066512f194d00010a26ac62aa0d8dfcc24",
+      "capture_bytes": 49993,
+      "event_counts": {
+        "script_loaded": 1,
+        "hooked": 5,
+        "probe_ready": 1,
+        "bridge_eval_done": 1,
+        "securityFactor": 19,
+        "session_detached": 1
+      },
+      "hooked_targets": [
+        "CronetUrlRequest.addSecurityFactor",
+        "CronetUrlRequestContext.addSecurityFactor",
+        "CronetUrlRequestContext.o0",
+        "MSManager.frameSign",
+        "ms.bd.c.r4.onCallToAddSecurityFactor"
+      ],
+      "security_factor_calls": [
+        {
+          "url": {
+            "length": 1156,
+            "sha256": "0884ccd39aae6d70c8cfd0e09e5abc22a07071ac21f370ce8f421a5b133edbe3"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "82b7fc2b6629f138189dfd01f7eda9d855ecac525ac9be313892dfe29602d73d"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "62baea3c4bf700cd6919776ae11a22ff0c168f2470289dec65724ad0fe3f3079"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "c543f7e9ed0f03607611dabc377f9966ad09aa17d47783bf19c616ed77b82cdf"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "2f1e861e18feffe925eb0d158f3218507d9a38bbaf6ae96dbe1d419212555abb"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "88ee7c9cbb86b62bc480d4fd30fbaa4d56891e1a8d201e61bd24bfc1b89ec824"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "20a7db578d038a52e975e76c4237095496c6538e4b6fa1d36b6b8af1176ceb8a"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "d84feaab450e00b1b31416182617ceb647850d9700287517ee9e9d6f75421c03"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1272,
+                  "sha256": "c6ef4aaf743c3f9bc42a1e37429bb147099bfbbd41d59c6f857f7f2169d0956f"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 722,
+            "sha256": "da58c157ee25d99041a35e1761e03cb8c077401830b5a1d317ce8bc091f1b18c"
+          },
+          "route": {
+            "length": 43,
+            "sha256": "9ccc33dfdebba5bb142e4a7d9c5af8d28d7c7bfdb6fda096fe5ce6bd76c80a33",
+            "path": {
+              "length": 7,
+              "sha256": "cfdc9e876eaf70466c47634e9878c70cbb3544203e9b5a16bf7155666bf28b11"
+            }
+          },
+          "input": {
+            "count": 9,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "10d93fb8814f886dcfcfcd7feb2a6f7ae802263b72689d99ec7c26ef705b7ac6"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "c543f7e9ed0f03607611dabc377f9966ad09aa17d47783bf19c616ed77b82cdf"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "fcb50e6b6237c64107c5f5a77e5ca41a07447817a06362f7846fb57385bc6ac2"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "d49cf24f39f04fab68fd5d31f7a09c9cdfc22026b826b490ab7ec9fbb9e2f190"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "20a7db578d038a52e975e76c4237095496c6538e4b6fa1d36b6b8af1176ceb8a"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "11b576cfc7fda90d946693aaa97cabff210585e554e9bb25703cff033ad3f67b"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "3e96339c52934b0ebcbc534244933a1d82b907377ad0f15639afd4964cc2d2f9"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 695,
+            "sha256": "2876a65ea826130fdd197b56d99d3c3104044baf098f99e08156a736a4a6d8ba"
+          },
+          "route": {
+            "length": 89,
+            "sha256": "836348c0c343434ab73dd2622853fc1ed91a0d4e3c03cc56205e80b896cb336a",
+            "path": {
+              "length": 46,
+              "sha256": "32ee9922537431009c514739942e5d901e98c4d487921bd9285b5bcf1d219db5"
+            }
+          },
+          "input": {
+            "count": 11,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-type",
+                "value": {
+                  "length": 33,
+                  "sha256": "4b195727c5a2d7d9c6c32152ab046a8f41e989a618b0cd07b0ea67c55f56ab73"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "7e8dd154910c032bef154a3f6f467b66e3ec6fc8f30cdd536a91815912af0ad8"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "39e6ae77e6f38038d8118d7b8de879be64dd598070cb6f5b991787b03e9b85a5"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "8cf481434bf3c271d7893e077aeb7235b12c6b71868037cf1b47fbfcecf83db9"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "a1b82b2f47521131a086640fa636b0e012f424db6191713dfecf05bc9b390187"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "653cb7661f792a881851be4c5886b4b4680dee664ba199026d602f80ce53252e"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "066e37f2988bbf9c9d810fb1f341c2d483a957332b603e115c150ed31d87e3f2"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "8b79f99fba6d49d2cb9621804bec5d106ea9cb2dc687738c1824f99c5707aa79"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 790,
+            "sha256": "23e7f4e9bed0a952b27d8539980c09ff81b87bca2fd3cedf482f0eb66a4daaf5"
+          },
+          "route": {
+            "length": 63,
+            "sha256": "89b8e6cb0089ef0c6c22c44c7da386e28cc65d65c0f8941851c381212b273af6",
+            "path": {
+              "length": 20,
+              "sha256": "8de69228f6f5b618d9ddf7c6757a075d210843074a38219093464c904be261ce"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "276038f5c3e07413daed3ba3502e8690da0e6ef05793b2f8450dfe81081d29fe"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "a6066389ef676d6dea2595d7bbc9dbdb489de7e93ca1f2cc1b8b9c37a832a6c5"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "f536e8fa2e6a67b0882221d85e2aafca79ca913e21b71f1789ba4d3a64e4a5db"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "5e14fe441942aad192ef98021dc96575d7002126d8dd0a935eb4d3f1ab9bc9b2"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "6dfd49b9fd85d7c56feecbea8cf0c7765b66162361365f790cfc93aae45a2000"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "179b1c5d5936967dcbfc9edaf1c0d434db987dcf7b53ab1725814b9493cae130"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "17d34b137b594c91eb4310e4df65c18fd3d2b95b9464afa0e1b7628e45b29670"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "188a39332db33df7c0d3ae206a3c1d48572d4f893b6c4d8bf0e0eec2aa99472e"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 708,
+            "sha256": "664f2b8d167bf7751b9f233749698f1cf32685a4bf1e4b9910291f7b985d9f25"
+          },
+          "route": {
+            "length": 72,
+            "sha256": "8020c71f4e2e349af0fbb5db84501f8dec10a321ee6f9575fd9dd9bc5453ed6b",
+            "path": {
+              "length": 29,
+              "sha256": "477aeb8ff6801abd2ae21faaaceb4c246e87721fefbc93e1026a2f089a956b99"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "520b9b128d99d1a3c0b43521f7cf09ef02bedc3cac19f869326ae3416805cdb5"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "0f3a7db6df0c8dd698c02ffd7b82960dbd0ce31d932c8fd739b8c26105a87f98"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "f536e8fa2e6a67b0882221d85e2aafca79ca913e21b71f1789ba4d3a64e4a5db"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "d25213a30cedd6e7066bf9228fc3d1f5d54bf4933e367018b0d0fdc219375896"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "2cb8afc75e9debe7d0fdc70634c2bffe45641dbeec714dbb19e685f4b8d0affd"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "179b1c5d5936967dcbfc9edaf1c0d434db987dcf7b53ab1725814b9493cae130"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "720c115906dbe7c58e78cc57b9bc771a071a9d667d969672e2de4ca11370e01a"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "a3d75768c046410f70d132fb8ff329737a8448963ef356d41f9223060bb738b4"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 684,
+            "sha256": "02c5235f710a0c10f31a1b57c5314f5ea46cd17f13b9e1ea9cd8784aad4d733c"
+          },
+          "route": {
+            "length": 78,
+            "sha256": "ffdab5d1c02a900a25752e18f81e3e36712f4d654688b8bf15ac66f273e47ddf",
+            "path": {
+              "length": 35,
+              "sha256": "a5edcb0210341e6f6ad20a37585e6b992248ff1ebb0804bff97b0b528adb0c72"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "74dd4df8597b84b5dd639996e63c954f72fd1b406d410a9d7d3a81bc8caba939"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "44541e945e767239fd1f3c4ecdf57927fc9dd3094b15331a5bd9e412b2291130"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "f126a671825d406a30860aca502acd23c00f7fd01455817569751aa9b6dbd786"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "f536e8fa2e6a67b0882221d85e2aafca79ca913e21b71f1789ba4d3a64e4a5db"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "654b986dc00717ad7aebd58ae9df6cdb0921b4268e0c373dfc2e70875b8ec2ac"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "c8d05f855e05d8a82721daad954b5e6d002be89e8ba03b933450a8646353a257"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "179b1c5d5936967dcbfc9edaf1c0d434db987dcf7b53ab1725814b9493cae130"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "aee308d462c25fad506333cbbff77da3989b92f64c5c1c4bd9e4f1ee816e5648"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1272,
+                  "sha256": "d67d46791c708a8ca24ab91c77137314fee874aab1fef381050c32331e819bdb"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 823,
+            "sha256": "043f079a0f408aefaa82098902c39d45313e5c515f7abf7e104eac13aa379d76"
+          },
+          "route": {
+            "length": 80,
+            "sha256": "426a1b8339a73ad3c6a6585554b01e0060545210188b152fe48ab37d2cc58188",
+            "path": {
+              "length": 37,
+              "sha256": "369ef89e0f634ab537c73f0577e1fa3dbf7197613169651f14a06736d1c1d267"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "d263878be830eee7cd9fe724cc44699717a4d665eb52d9bae550bcf0b17fa671"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "b863b4429183046f58fcf55e227d5a391293a391d8c64646bd49e3da950cc5b3"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "ff33a58e5f8a370af8cf4380ea8c58af0ddb9662c723fe3b01fda22236d31b9d"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "be5dfa29b7e0c0274878535c6fd6060fc15d5280fa3dc1c0e393ca5460e2274d"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "7c3a38316b8bcb24958908ffb7a914d66579a1ce8a837df18b27c45fcef790ee"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "150c374b7436ab2eed8c97756b1022c1bcc3725f071e385eb40cf66cf392bf7a"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "4d0e46d0c711ceb66b3db171568b215a319a68d7af646b3d2b1873bbde723532"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "a916b4694807f6d065ae5e22f69173bafc71216a45f54e04f4a672156bd935bd"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 686,
+            "sha256": "53469b8d7cdb5f2fb19a4cc79fe908a6f5c6be924a471e1be4e8f3fd7aa130ed"
+          },
+          "route": {
+            "length": 80,
+            "sha256": "a5aca7a850795785e484a92a3c0e680f4874c3ef669964b16f42f721971fce8c",
+            "path": {
+              "length": 37,
+              "sha256": "0e2d7f4aa2621f33336d4f6e66b7bd742104a4692f6b108d0e0093f4fd5a171e"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "9c5385756b2e7f51e2c8721f8d1058027324b89b9dc87b7831c15a225e664f1a"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "f80b3e0fb5067f9c42664dba56ed01a44cc987fad0bc8fe6aedbaa34134b9e5a"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "4bf1a0efe533e2e162f635167d94873a113d02d5a1d153a986d3046f3dda486d"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "fc9d33490e1a0f64eebc341bc3cd427161c3d38004c247e14ca0247501fe2d79"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "96ea80fa12ba7f1d4a8641a850991095254d08dd8575b2b21186b347df03db47"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "d1363241bab0f1db3239bb6729b205c88f7f31aea713734b286b605c7b8380cf"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "b3a0ae5ac6d0a836dd3cef7108d9b68a51b508ad7632ed7960ed44f80e136a23"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "0fab048598d15d833233ca61e6f92c31a8bc5807bbdeae31a1f327651a83e7bd"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 777,
+            "sha256": "f88f79a2092c78c0033b58073c3417383a7f5dcaa1d6711402f991fde5b0ac28"
+          },
+          "route": {
+            "length": 80,
+            "sha256": "8d8d6728fb6b0fde3b900b395f5d78cc70a77cf20a02aa276a3d58993b5b6d41",
+            "path": {
+              "length": 37,
+              "sha256": "1df1b2a0ff9c4e1320574dd8c1aae38cf257a5e77987e4bcf372e9ea85065ae8"
+            }
+          },
+          "input": {
+            "count": 13,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "authorization",
+                "value": {
+                  "length": 8,
+                  "sha256": "57a7adc8acdd27dbb3a7d33a577fbd9812557ca67e25202e4a789121fbd39bd6"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "47801ecacf8ee581e4e525cfecc2b9a0d84c09f41dd20a2adf126bfb05d0e7d6"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "d7129f439998e3e756d16e04e8e9258be5daa8823b2c7d065cf3a105dba6b6e7"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "4bf1a0efe533e2e162f635167d94873a113d02d5a1d153a986d3046f3dda486d"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "58be87736eaf0c2c5e94f0b5c7b55be33e9877ddcd3b72094cc32d42690e2cc6"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "62289b4c575e0c82a00a1e6d9afac51ebc71751ee783df4cfdc7051a514341ff"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "d1363241bab0f1db3239bb6729b205c88f7f31aea713734b286b605c7b8380cf"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "a83fda1b434d20fbde65e02e0e10f148d697b6f2d52af511f656a139727220db"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "76f76259ae8febfb77966bd8021024ef56e35ccc4db9cb66b768baf6e1ed35ac"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 690,
+            "sha256": "f127a78b29d3d7f427260a8bf4fff34d647e1966fa7ecec5dc40bfbfe52ce878"
+          },
+          "route": {
+            "length": 84,
+            "sha256": "0f5ea1ba9e86aa77205f46db814f0112ab539a560cd69559cca7c51a799722b3",
+            "path": {
+              "length": 41,
+              "sha256": "90ac3ff7fc6f991dcce1b6195e9ac5bb2bc394b1962757eb75da9eb807d8b3ee"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 24,
+                  "sha256": "2ce634276d7845d6542db44c1832e6a462931c0b8f554294f6aa9cfccef80252"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "39fa59be7b0000359dd3de61d3ef9a6ca1ba2d2cf28507e0dd8a381886a5a57c"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "4bf1a0efe533e2e162f635167d94873a113d02d5a1d153a986d3046f3dda486d"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "38e7a22d129bda3e78f9369110bd6f598807e617198260f1e5409bcecd9b36c9"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "67116b2cd0e5885af0fb2ff1a61fd45f3250d7f5785992c7c6f7421b4ffcc0e9"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "d1363241bab0f1db3239bb6729b205c88f7f31aea713734b286b605c7b8380cf"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "7ae1f6516f9369e1c25e48f9201bf693291773066e755ce1e44dda03ecc00468"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "e1e23a32d2597e8053e833657f71e35c059d3d04e5feb1e7c6328ce25fd1c9b6"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 673,
+            "sha256": "12a6d76f863cf3cf955a3df23bc3f7d86c8c4d86d7ccd6ddf1ab8a3d06545fee"
+          },
+          "route": {
+            "length": 67,
+            "sha256": "04d47a955d2abc45278fbe13189a0f1f77133379f4917048bce57e156c64c371",
+            "path": {
+              "length": 24,
+              "sha256": "1ee9d1d761d751fc7620e5c98a0edc473e35181a8691654f7cbf76d7caf3fa99"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "3d3bbe15a29eaa1a4f79c8746eca36af4d66b399f6af1ccf7bbe7d2022f659f6"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "36dfdc2b2c1f41fceca03b7d23e16a7ae97c7c9dfab3c225744888a1a6c2cf52"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "99cae3bd452d11412e91d1ea20e6cd7e9aab2ee2d9e4c3158a2b0e821ff04b9f"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "4bf1a0efe533e2e162f635167d94873a113d02d5a1d153a986d3046f3dda486d"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "bb23f4708bfaba38deb5ed3f7c225a6e9a9248eb34d3b51bf75b24de99caa973"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "136fd397f65d004cb0fb9770b061d5f192a42831e262a17a37c54dec3941cd89"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "d1363241bab0f1db3239bb6729b205c88f7f31aea713734b286b605c7b8380cf"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "974b64825da42190bbe87432771d16edaad03db36e7d6b944c4441a882c87370"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1272,
+                  "sha256": "75c9d8dacca9be23f345e1813bbc4d34ddad294da85c3f28cb3359708ffee897"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 691,
+            "sha256": "edc0de72bf417d8f81cc28eddcd4056ec0e1324122e1a3c699f9f5dde732cbc9"
+          },
+          "route": {
+            "length": 61,
+            "sha256": "7f630a63f12345f30c71e7730b1809d84e01dc882ec0baccfe6485a1ff11a8fb",
+            "path": {
+              "length": 30,
+              "sha256": "284f1fd09668e18a4cf3e4f033d2d93752a76aeb7732e07cf17084b610759576"
+            }
+          },
+          "input": {
+            "count": 8,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "4bf1a0efe533e2e162f635167d94873a113d02d5a1d153a986d3046f3dda486d"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "79d5d74eb6c2e313a60cb8765e76172954233a86094bbe18983c7396962e94fc"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "75474c7e8b91fba3ebbcceb3e19165f44b2a473e864511103ac4816e2655b7f6"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "d1363241bab0f1db3239bb6729b205c88f7f31aea713734b286b605c7b8380cf"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "ecd013f070de6bbc6c1cda7c6875c428b689ffdb9f13073d17a68453a2fd44f4"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "d126077ebebd15b86a9c5ee74b82285c6b7ac108d952b88487f275471a78aebe"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 790,
+            "sha256": "ed431f8e401cfb611153928e465b5dfe6c3b1426d7bae5cdcfeed9135e81aa75"
+          },
+          "route": {
+            "length": 63,
+            "sha256": "89b8e6cb0089ef0c6c22c44c7da386e28cc65d65c0f8941851c381212b273af6",
+            "path": {
+              "length": 20,
+              "sha256": "8de69228f6f5b618d9ddf7c6757a075d210843074a38219093464c904be261ce"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "84cd0ee1bdb445f96e48dd495ecbb7d2bcf180ba2ffa569bfb4cc9e79017c774"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "711f66ae61c73c69206baedd610cae1ea63c39779ad637844cb4096fb53c7e44"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "e9f860ab5f67a4b26adf245eb515927473301bcfb10e9b9a043451d51e47e035"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "8af17bbe960539ee94ff1963db700cacb3f236d4df09650b805cc26d8ac4aaa8"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "73e8729ff21165d609e5f142756ca763e9d852105c0b9d03d5849034f5749e00"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "f6189b09a3936c1e7f457d16a31e5b099950a859bdc7dd162e9ee1d64dabb3c4"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "49ef9e517928f58b92094913ab7051cef36fc3e78d2940bb45bbc6f70fbda69c"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "1c59081f1fce5ff9079f22a8bdcda73206d0eca7adc86eef4a4727ca3e4a48dc"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 763,
+            "sha256": "3cf294f4ec50515c8f39fdf951934c8679bc9fb8a1d0ee3f421fb902a32f59fd"
+          },
+          "route": {
+            "length": 61,
+            "sha256": "6e9fc9e970c328fc19bbc42abee7f661917f340050f87029a37ece835be1527c",
+            "path": {
+              "length": 32,
+              "sha256": "ebaab7723c51a16bcc245cb67ebde3b072e43afbaf46d5c01dbfca1258a4e952"
+            }
+          },
+          "input": {
+            "count": 10,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "2b48bfafb504cbdacd4917bb12fc57fb80a92939d057f6f56fec82227df5e60e"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "c1b42afbf8b3e1f7cb99fd6c5038a7dedcf21cbae1716c9f5e8ed0f68798739c"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "e9f860ab5f67a4b26adf245eb515927473301bcfb10e9b9a043451d51e47e035"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "6d8a204e74a04d0d87e4a31ce35a7c2dcdb1e10e5f72b2f004e8cb2df016efae"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "73052f7f05892a757607a87c2a302af1cd2bacfb59e4b65fe069ae9be5981d72"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "f6189b09a3936c1e7f457d16a31e5b099950a859bdc7dd162e9ee1d64dabb3c4"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "cba0b9bd510c417f26359bca7eba7c4b919ad1438daf456858da823a43b2fe3e"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "843307b1b4eb427229b1bf14bd280402bcf0405110bcc6c53e0112a61eb592bf"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 254,
+            "sha256": "a2a48e4449763b592674269dd73fa1de5ef5b9ef67fc00e3e8ec24646988b3fd"
+          },
+          "route": {
+            "length": 43,
+            "sha256": "9ccc33dfdebba5bb142e4a7d9c5af8d28d7c7bfdb6fda096fe5ce6bd76c80a33",
+            "path": {
+              "length": 7,
+              "sha256": "cfdc9e876eaf70466c47634e9878c70cbb3544203e9b5a16bf7155666bf28b11"
+            }
+          },
+          "input": {
+            "count": 9,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "a66e2119380ba6c2a2ef530dd3b784f22797f5ecb987655867d563e9d5145947"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result_kind": "alternate",
+          "result": {
+            "count": 1,
+            "rows": [
+              {
+                "key": "X-Neptune",
+                "value": {
+                  "length": 26,
+                  "sha256": "79fdf9e01e87dd4766b7ace72180bed6a3efd438cde0cd6f08d7c6d78223ea68"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 694,
+            "sha256": "7d2ea59430f31dabbcf2362f2a0fa6299088e4a4badba5cc36232505693e2130"
+          },
+          "route": {
+            "length": 88,
+            "sha256": "a025d1cdfa27fd9ef85b92d61d6e8e9a89746bcbf1e29a73838eca893cfcdce6",
+            "path": {
+              "length": 45,
+              "sha256": "a7f6bb904cd1959c93f255f630d8da6b13b274b8a6ae5cad065c83334181d164"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "bb23c52feae2c6c5a3817eea300da7fe4d99072086e38eb83aa6ca48b2460d5a"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "17fe65e904b2fe8b10dc0df2d7db679d119b12da82921c4eae4ea983e6053d63"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "e9f860ab5f67a4b26adf245eb515927473301bcfb10e9b9a043451d51e47e035"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "966079a8107cfbdf3521f1dfb6e2d93f664a434564b56128bd6fc4ee32099580"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "947e75537c01d6aadf8c6fb0df5f842510fe946f22843f2b53e0e87dcb1d6090"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "f6189b09a3936c1e7f457d16a31e5b099950a859bdc7dd162e9ee1d64dabb3c4"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "af35afc57a76bfe226bb5b7f67c86942d910305db2ba34f40e8bbcb7d1e86237"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1272,
+                  "sha256": "5b6bb8f3cfd034a45f4a6e6b2361c952cca028e31a0dfcb8a7350dc9bf6b5c7d"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 790,
+            "sha256": "bf0f570c1ec9df0fa3356ba2ac375371a836e9cb8fc30ec973ca9d118b441c91"
+          },
+          "route": {
+            "length": 63,
+            "sha256": "89b8e6cb0089ef0c6c22c44c7da386e28cc65d65c0f8941851c381212b273af6",
+            "path": {
+              "length": 20,
+              "sha256": "8de69228f6f5b618d9ddf7c6757a075d210843074a38219093464c904be261ce"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "2198b8d1d0d704b47a866223047f96da160af540b7cc4c14f4cef0eed188ad97"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "9ffa697bd24119841f5d022ff943e08cb46b0d5a85ce0feb6a3733937369ed35"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "e9f860ab5f67a4b26adf245eb515927473301bcfb10e9b9a043451d51e47e035"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "3b81bb97e003fc1d584c040108433d9b8dd345a74748992d52cf913fdcffec83"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "61abd546301cca697eccc5cd564690ca2e23500b87eeae293dbfc553606756fb"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "f6189b09a3936c1e7f457d16a31e5b099950a859bdc7dd162e9ee1d64dabb3c4"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "f2a542395122940de8dcb65d1787ae07407a988d4562954a147e8e62f0011fbb"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1272,
+                  "sha256": "0838d767ab02b6c17a6ea30f936fc9a56224ea50c583e2aece030bd33ee795ac"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 665,
+            "sha256": "6c3f0ac848370d73a87a54c3c8f88a0daf5fb1e5a7ff56a433356b9a488e2760"
+          },
+          "route": {
+            "length": 59,
+            "sha256": "609d21931188a55a5c18be7622b516d5988d0093669f0f21ad7378c1bdf813e1",
+            "path": {
+              "length": 22,
+              "sha256": "a9bb882b2460ce3238558fabca4b9ea6112dde1aea01ca6f2e2878f7e21fd64a"
+            }
+          },
+          "input": {
+            "count": 11,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "b2818d4156529d96cec47fb480eac0e4188703bde8625b6dd01b3691bcc4926f"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "f36d7ddee6516e8ed5de6003efe7f35327dddcda075adc20d64a97dfe920f396"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "d113fc068bfd313b5b624b6c001965065e63292d83d82ad8aa6b350e0cf72316"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "2fef9c424275f7716e70d4f461b580af6d6a3aaf53e350c76d47cda0a279da08"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "20bc17c5961dc3db215aac982f8ad6c8018271b1fe6e5cb0a5133b1a48406406"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "a629c6f92cb37fcd504998ebf8351cc9fe40ce6d70d8a9813e00b9c03c957434"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "a145f8d67e887cc6538289e9c7649c40362e714fed1546ede5ce0a570547b540"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1272,
+                  "sha256": "e0d87aca0ade0775c0f3c6f172164336d5cab1d594a80f044ac8fa9ad8bd9514"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 663,
+            "sha256": "f505a2f539c3ada0dbf43f1f034557f312612523a052bc84496d106c4450b652"
+          },
+          "route": {
+            "length": 57,
+            "sha256": "f049b027a71231156fba34d5375e13b901f12049374fa24e266ed0f444b14467",
+            "path": {
+              "length": 27,
+              "sha256": "4aea0e762672409d987180685e922f2f1007478e6b4d31773658b7b5e3b5e1ac"
+            }
+          },
+          "input": {
+            "count": 9,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "2cb249faef8083588b6dc2f43d50e3256c3eb8c388142dd2041bc38924f0dfbf"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result_kind": "six_header",
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "d113fc068bfd313b5b624b6c001965065e63292d83d82ad8aa6b350e0cf72316"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "a288298be83c60f27dcdd58f33f197a757e3989ca29fd915c71f9574ff3567b8"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "f699bec808d2c1a4a64b81197340f160e421a49da860a28c945f29f9900be8fa"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "a629c6f92cb37fcd504998ebf8351cc9fe40ce6d70d8a9813e00b9c03c957434"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "7176a2d8117d82fbe91069ccd8c147c734ed9ea371a5c89a64174900bbbb9a27"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1276,
+                  "sha256": "a5c2ba74a8bea0501e92acff3a441cb21375e7eedaa72cf65524d35950f6ac37"
+                }
+              }
+            ]
+          },
+          "context": null
+        }
+      ],
+      "cronet_event_count": 0,
+      "terminal_event": {
+        "event": "session_detached",
+        "reason": "application-requested"
+      },
+      "raw_capture_retained_in_evidence": false
+    }
+  ],
+  "security_factor_callback_observed": true,
+  "security_factor_callback_count": 19,
+  "six_header_call_count": 18,
+  "alternate_result_count": 1,
+  "observed_header_length_sets": {
+    "X-Argus": [
+      8
+    ],
+    "X-Gorgon": [
+      52
+    ],
+    "X-Helios": [
+      48
+    ],
+    "X-Khronos": [
+      10
+    ],
+    "X-Ladon": [
+      8
+    ],
+    "X-Medusa": [
+      1272,
+      1276
+    ]
+  },
+  "observed_alternate_header_lengths": {
+    "X-Neptune": 26
+  },
+  "cronet_runtime_branch_observed": false,
+  "same_request_cronet_correlation_verified": false,
+  "callback_url_or_map_object_identity_joined": false,
+  "provider_method_or_field_identity_joined": false,
+  "ordinary_cronet_six_head_chain_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "target_app_modified": false,
+  "interpretation": "A bounded attach to the official unmodified 7.2.5.32 APK observed 19 NetworkParams/r4 callbacks. Eighteen returned all six seven-god headers with the recorded lengths; one separate result contained X-Neptune only. All three Cronet entry hooks and o0 were installed but no Cronet event occurred in this reader window. This is an OkHttp/NetworkParams observation and does not establish Cronet execution, standalone signing, or online acceptance."
+}

@@ -795,3 +795,10 @@ online acceptance remain open. See [APK Java loader handoff](../platforms/byteda
 窗口内返回六个七神键。Java bridge 的 identity 字段在冷启动与热进程表现不稳定，
 因此记录为“入口/返回字段配对”，不记录为 Java 对象身份闭合；Cronet、standalone
 signer、整请求差分和线上验签仍未完成。
+
+2026-11-05：新增官方阅读窗口的 r4 多请求复核。30 秒 attach 中观察到 19 次
+`ms.bd.c.r4.onCallToAddSecurityFactor`：18 次为完整六头，`X-Medusa` 长度为
+1272 或 1276；另 1 次为单独的 `X-Neptune` 结果并单独计数。Cronet 两个
+`addSecurityFactor` 入口和 `CronetUrlRequestContext.o0` 均已安装但事件数为 0。
+证据只保留长度、名称和摘要，未建立 Cronet 对象身份或线上验签；详见
+`platforms/bytedance/tomato/evidence/vm9_networkparams_runtime_window_20261105.json`。

@@ -8021,3 +8021,20 @@ Cronet 请求，也没有证明六头线上验签。
 校验器：[verify_vm9_okhttp_r4_stack_20261105.py](python/verify_vm9_okhttp_r4_stack_20261105.py)。
 这一步强化了“当前阅读请求走 OkHttp/r4”的运行时归因，但仍不建立 Cronet 入口、
 跨层对象身份、standalone signer、整请求差分或线上验签；这些结论继续保持 `false`。
+
+## 2026-11-05：官方阅读窗口的 r4 多请求复核
+
+在同一官方未修改的 7.2.5.32/72532 进程上重新 attach 30 秒，五个 hook 均成功安装：
+`MSManager.frameSign`、`ms.bd.c.r4.onCallToAddSecurityFactor`、两个 Cronet
+`addSecurityFactor` 入口和 `CronetUrlRequestContext.o0`。窗口内观察到 19 次
+`r4` 回调，其中 18 次返回完整六头，长度集合为 Argus 8、Gorgon 52、Helios 48、
+Khronos 10、Ladon 8、Medusa 1272 或 1276；另 1 次返回单独的 `X-Neptune`（26 字节），
+被单独归类，未计入六头。所有三类 Cronet 入口事件计数为 0，末端为应用请求断开。
+
+这次复核增加了多请求覆盖，并显示六头 Medusa 长度随请求变化；它仍然只证明当前
+阅读页的 NetworkParams/r4 路径。没有 URL、header 原文或 token 落盘，也没有建立
+同请求 Cronet 对象身份、provider 字段身份、整请求 native/Python 差分、standalone
+signer 或线上验签，因此相关标志继续保持 `false`。
+
+证据：[官方 r4 多请求窗口](evidence/vm9_networkparams_runtime_window_20261105.json)，
+校验器：[verify_vm9_networkparams_runtime_window_20261105.py](python/verify_vm9_networkparams_runtime_window_20261105.py)。
