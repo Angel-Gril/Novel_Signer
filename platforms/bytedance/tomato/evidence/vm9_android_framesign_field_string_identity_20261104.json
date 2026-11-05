@@ -1,0 +1,34 @@
+{
+  "schema": "vm9-android-framesign-field-string-identity-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "device_serial": "emulator-5554",
+  "package_name": "com.dragon.read",
+  "capture_pid": 12881,
+  "capture_file": "native_formatter_field_join_20261104.jsonl",
+  "capture_file_sha256": "aa10d399efebfb7d17047d889750361ca2e30d313b9b6a6356f04ef504eb2948",
+  "frame_sign_hook_ready": true,
+  "frame_sign_enter_events": 1,
+  "frame_sign_leave_ok_events": 1,
+  "frame_sign_result_present": true,
+  "get_object_field_events": 180,
+  "field_ids_observed": {
+    "0x6fe15bb4": 90,
+    "0x6fe22324": 89,
+    "0x6f3dbfb8": 1
+  },
+  "field_object_to_getstringutfchars_joins": 18,
+  "joined_field_ids": {
+    "0x6fe15bb4": 17,
+    "0x6f3dbfb8": 1
+  },
+  "claims": {
+    "get_object_field_return_handle_equals_getstringutfchars_jstring": true,
+    "field_id_to_java_field_name_resolved": false,
+    "provider_field_identity_joined": false,
+    "formatter_consumption_joined_in_this_capture": false,
+    "callback_url_or_map_identity_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

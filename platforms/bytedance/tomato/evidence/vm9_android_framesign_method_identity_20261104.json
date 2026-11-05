@@ -1,0 +1,30 @@
+{
+  "schema": "vm9-android-framesign-method-identity-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "device_serial": "emulator-5554",
+  "package_name": "com.dragon.read",
+  "capture_pid": 12881,
+  "capture_file": "native_formatter_identity_20261104.jsonl",
+  "capture_file_sha256": "ba398a39f07a11224afecf6160191f8184b2bb01bc94fce642a32dd0b4304c73",
+  "frame_sign_hook_ready": true,
+  "frame_sign_enter_events": 1,
+  "frame_sign_leave_ok_events": 1,
+  "frame_sign_result_present": true,
+  "jni_get_method_id_events_in_trigger_window": 15,
+  "jni_call_object_method_v_events_in_trigger_window": 20,
+  "observed_java_methods": [
+    {
+      "name": "getBytes",
+      "signature": "(Ljava/lang/String;)[B"
+    }
+  ],
+  "claims": {
+    "string_to_utf8_byte_array_method_identity_verified": true,
+    "provider_getter_method_identity_joined": false,
+    "provider_return_bytes_joined_to_android_capture": false,
+    "frame_sign_formatter_window_temporal_association_only": true,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

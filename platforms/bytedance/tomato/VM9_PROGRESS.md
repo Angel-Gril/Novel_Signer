@@ -1,5 +1,119 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04: live callback JNI buffers passed to a native callee
+
+在官方番茄 7.2.5.32/72532 阅读页触发一次真实
+`r4.onCallToAddSecurityFactor(String,Map)` 回调，并在同一线程限定窗口记录 JNI 字符串
+操作。捕获到 52 个 `GetStringUTFChars` 返回观测，guest 返回点为 `+0x1a1e30` 与
+`+0x1a1e54`，各 26 次；另记录 192 个 `ReleaseStringUTFChars`，均在回调深度 1，
+guest 返回候选 `+0x1a1ef8` 与 `+0x1a1f00` 各 96 次。对 52 个采样 getter，探针
+生成的内存临时 jstring ID 均与恰好一个 release 事件相同；原始 JNI handle 未落盘。
+
+ELF 静态解码确认两个 getter 分别从 JNI 表 `0x548` 经 `blr x8` 调用，返回的 x0
+分别保存到 `[x22,#0x10]` 与 `[x23,#0x10]`，随后作为 x2/x3 参数传入 `+0x248908`。
+对 `+0x248908` 的完整函数体继续审计后，确认其把 x2/x3 保存到 `[x29,#-0x40]`/`[x29,#-0x38]`，
+并在 `0x248a20` 构造 AArch64 `va_list`，最终在 `0x248a24` 调用 `0x347f70` PLT 的
+`vsnprintf`。函数没有用普通 load 重新读取两个槽；根据 ABI，GP save area 的两个参数槽
+正是 `[x29,#-0x40]` 和 `[x29,#-0x38]`。新的 16 项合成 native/Python 对照在两个加载基址
+上实际观察到 matching libc 读取这两个槽和对应字符串，确认 formatter 组件会消费这条
+参数路径；真实 Android 捕获的 52 个 JNI 返回缓冲尚未与该消费做字节级连接。
+释放由 `+0x1676dc` helper 执行，该 helper 从 JNI 表 `0x550` 读取
+`ReleaseStringUTFChars` 并尾调用。运行时身份探针没有报告 getter jstring 与回调 URL、
+Map key 或 value 的正匹配；该捕获 runner 没有 `IsSameObject(jstring,jstring)` 自检，
+所以不能将这个“未匹配”升级为对象不相同的证明。原始 retry2 捕获生成时的 runner
+版本未被保留；当前目录中的 runner 是之后加入 `IsSameObject` 自检的版本，不能把其
+哈希追溯写入旧捕获。因此证据将 runner provenance 明确标为 unavailable。也没有保存返回字节或证明
+provider 字段来源、parser 语义、完整 signer、整请求差分及线上
+验签仍未闭合。
+
+证据：[callback JNI string flow](evidence/vm9_android_jni_request_string_flow_20261104.json)；
+[校验器](python/verify_vm9_android_jni_request_string_flow_20261104.py)。
+
+本轮补充的动态组件证据见 [JNI formatter varargs](evidence/vm9_jni_formatter_varargs_20261104.json)。
+它确认合成字符串会被 matching libc 消费，并保持 Android 真实 buffer 连接、输入对象身份、
+六头 parser、完整 signer 和线上验签为未闭合。
+
+同一静态窗口还把两个 getter 的 jstring 上游接到 `+0x26f650`：两个 helper 返回分别保存到
+`[x29,#-0x48]` 与 `[x29,#-0x58]`，随后正是两次 `GetStringUTFChars` 的 jstring 参数。
+这只确认 native 静态存储关系；`+0x26f650` 内部如何生成 Java String、是否对应回调 URL/Map
+字段，以及返回字节如何进入最终 parser，仍未验证。
+
+本轮继续解码 `+0x26f650` 的通用 JNI Java method helper。它扫描 signature 中 `)` 后的返回类型，
+通过 JNI 表 `0xf8` 调用 `GetObjectClass`，通过 `0x108` 调用 `GetMethodID`；object-return
+分支从表 `0x118` 取 `CallObjectMethodV`，在 `0x26f960` 保存返回 jobject。由此已确认两个
+jstring 来源经过 Java method invocation helper，但具体 Java 方法名、signature 以及它们与 URL/Map
+字段的身份连接在此前静态证据中仍未知；因此当时只记录
+`jni_string_source_helper_java_method_invocation_verified` 为 true，
+`jni_string_provider_method_identity_joined` 继续为 false。
+
+随后复用同一 unidbg harness 做了脱敏的方法身份观测。frame-sign 试验段在 helper 的
+`GetMethodID` 返回点 `+0x26f854` 与 `CallObjectMethodV` 返回点 `+0x26f95c` 各出现 1 次，
+两者都解析为 `java/lang/String.getBytes(Ljava/lang/String;)[B`，编码参数为 `utf-8`，
+返回对象类型为 byte array `[B`。这把 `+0x26f650` 的已观测 Java 调用具体化为字符串到
+UTF-8 字节数组的转换；它不是 provider 方法身份，也没有把 unidbg 返回对象接到真实 Android
+捕获的 52 个 UTF buffer。该试验因既有写保护故障返回 null，故完整 signer 与线上验签仍保持
+未闭合。证据：[source helper method identity](evidence/vm9_jni_source_helper_method_identity_20261104.json)；
+[校验器](python/verify_vm9_jni_source_helper_method_identity_20261104.py)。
+
+## 2026-11-04: guest JNI reads bracket business callbacks by thread, not by dataflow
+
+在阅读页运行的同一 Frida session 中，对 `r4.onCallToAddSecurityFactor` 加入线程作用域
+计数，同时读取 Houdini guest register-file 的 x7、x16、x30 槽。捕获得到 7 次业务
+回调进入/退出及 49 次 guest `GetStringUTFChars` 返回；每个 JNI 返回均在回调作用域
+之外，x30 槽没有落入 guest ELF 映射的候选。7 个回调线程都在其进入和退出附近观察到
+同线程 JNI 字符串事件；6 个线程在进入前出现长度 9/35 候选，进入后均出现长度 29
+及一个较长候选。此时序模式未证明同一业务请求的数据对象关系。
+
+静态检查确认 `+0x1773e0` 和 `+0x17bbcc` 的前一条 guest 指令分别为 `blr`、`bl`，
+所以 x7/x16 中这两个值是可能的返回地址候选；`+0x27e31c` 的前一条为普通 `b`，
+不是调用返回点。JNI host 通用桥通过 `r13+8/+0x10` 读取 guest x1/x2，因此观测
+到的寄存器槽地址匹配不等同于 PC 身份证明。当前仍未将 Java String、UTF 返回缓冲、
+native callback 输入与 JSON parser 输入接成指针/对象级链。
+
+这是 x30 guest-frame 槽尚未读取时的早期候选筛选结果。后续捕获从 guest register file
+读取 x30 后，在同一回调作用域内直接观察到 JNI getter/release，详见上方
+[live callback JNI flow](evidence/vm9_android_jni_request_string_flow_20261104.json)；
+该后续证据修正了“回调内无 JNI”这一阶段性结论。
+
+证据：[callback-scope capture](evidence/vm9_android_jni_callback_scope_20261104.json)；
+[校验器](python/verify_vm9_android_jni_callback_scope_20261104.py)。
+
+## 2026-11-04: live reader requests return six security headers
+
+在已运行的官方 `com.dragon.read` 7.2.5.32/72532 进程 attach，先确认当前详情页，
+再点击“左滑开始阅读”进入阅读页。60 秒内 Java hook 记录 17 次
+`r4.onCallToAddSecurityFactor(String,Map)`，每次均返回恰好六个键：
+`X-Argus`、`X-Gorgon`、`X-Helios`、`X-Khronos`、`X-Ladon`、`X-Medusa`。
+URL 与 map 值只保留长度和 SHA-256；没有捕获到 `MSManager.frameSign` 直接调用。
+
+并行 JNI hook 记录 70 次 guest 候选字符串返回，长度均有 NUL 终止且首字节为可打印
+ASCII。候选来自 Houdini bridge 的 `r13+0x38` 和 `r13+0x80`；bridge 指令把
+`r13+8/+0x10` 分别作为 guest JNI 的第 2/3 个参数传给 host，故这两个槽对应
+guest x7/x16 值，不能当作 guest PC。`+0x1773e0`、`+0x17bbcc` 恰好邻接 call，
+但只是这些寄存器中的指针值；`+0x27e31c` 前一条为无条件分支。故 caller PC、JNI
+返回缓冲与特定 parser 输入仍未接通，不能把同一运行窗口的 JNI 计数算作回调级关联。
+
+这关闭了当前 APK 上普通 Cronet 安全因子回调的真实运行时观察和六头返回形状；不等于
+完整 signer、native/Python whole-request differential 或线上验签。证据：
+[Android JNI/business capture](evidence/vm9_android_jni_business_capture_20261104.json)；
+[校验器](python/verify_vm9_android_jni_business_capture_20261104.py)。
+
+## 2026-11-04: JNI UTF string calls visible; provider remains unresolved
+
+在一次固定合成 JNI 初始化调用窗口内，unidbg verbose 记录了 48 次
+`GetStringUtfChars`：四个相对主 ELF 的返回偏移分别出现 22、22、2、2 次。
+对照当前 ELF 后，四个 caller 的前序指令都从 JNI 表偏移 `0x548` 取函数并经
+`blr x8` 调用。探针日志只保留 API 名、相对代码偏移与计数，没有原始 JNI 行、
+参数字符串或运行时地址；签名调用退出码为 0，结果长度为 10。
+
+这补正了先前“API hook 计数为空”的解释：空计数来自未覆盖的 SVC 观察路径，不能
+说明初始化没有调用 JNI 字符串 API。当前观察仍没有把原始初始化 `String` 对象、
+`GetStringUtfChars` 返回缓冲区与 JSON parser 输入接起来；provider 归属、copy source、
+完整 signer、普通 Cronet 六头链及线上验签都未闭合。
+
+证据：[JNI string calls](evidence/vm9_framesign_jni_string_calls_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_jni_string_calls_20261104.py)。
+
 ## 2026-11-04：parser writer identity joined; copy source remains unresolved
 
 单次固定合成初始化样本中，三个四字节 JSON parser 读段各自接到 4/4 个较早的
@@ -7567,12 +7681,12 @@ native/Python differential、fresh standalone signer 或线上验签。Frida 的
 复现器：[verify_vm9_actual_android_jvm_frame_sign_20261028.py](python/verify_vm9_actual_android_jvm_frame_sign_20261028.py)。
 ## 2026-10-28：普通业务请求与 live frameSign 的路径分离
 
-静态源码复核闭合了普通请求的调用方向：`s4.a(long)` 注册
+静态源码复核闭合了两条相关但类型不同的方向：`s4.a(long)` 注册
 `NetworkParams.setAddSecurityFactorProcessCallback(r4)`；Cronet 的
 `addSecurityFactor(String,String[])` 将输入转成 map，经过
-`CronetUrlRequestContext.o0 -> com.ttnet.org.chromium.net.w.a`，最终落到
-`ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)`，再由同一 JNI 注册入口使用
-`0x3000001` 生成六个七神 header。`com.bytedance.mobsec.metasec.core.c.frameSign`
+`CronetUrlRequestContext.o0 -> com.ttnet.org.chromium.net.w.a`。`r4` 自身再由
+NetworkParams 回调使用 JNI tag `0x3000001` 生成六个七神 header；当前材料没有把
+Cronet 的 `w` 实现对象接到 `r4`。`com.bytedance.mobsec.metasec.core.c.frameSign`
 则使用 `0x200000A` 返回五键 frameSign map，是独立 API。
 
 本轮在真实进程安装了 `MSManager.frameSign`、`r4.onCallToAddSecurityFactor` 和
@@ -7651,3 +7765,245 @@ Cronet 真实请求分支、完整独立 signer、整请求 native/Python 差分
 证据：[vm9_networkparams_followup_20261031.json](evidence/vm9_networkparams_followup_20261031.json)，
 归纳脚本：[capture_vm9_networkparams_followup_20261031.py](python/capture_vm9_networkparams_followup_20261031.py)，
 校验器：[verify_vm9_networkparams_followup_20261031.py](python/verify_vm9_networkparams_followup_20261031.py)。
+## 2026-11-04：Android frameSign 触发窗口与 native formatter 指针闭合
+
+在 `com.dragon.read` 的真实 Android-JVM 进程中安装 JNI `GetStringUTFChars`/
+`ReleaseStringUTFChars` 与 host `libc.so!vsnprintf` hook，并通过同一进程调用
+`MSManager.frameSign(String,int)`。本轮记录了 `frameSign` hook 安装、一次
+`homepage` 脱敏输入触发、`frameSign_enter(seq=1)`、正常返回和长度为 15 的结果。
+
+在 83 次 `vsnprintf` 调用中，12 个 formatter 事件的 AArch64 `va_list` 槽位与
+JNI getter 返回指针建立关系：9 次为直接指针相等，3 次为 getter 释放后的匿名
+buffer 指纹相等；命中槽位包括 `save16:16`、`va+24`、`va+240` 和 `save8:16`。
+其中 6 次发生在 frameSign 触发后、但 Java 方法返回之后，因此当前证据是同一
+业务触发窗口的时序关联；不能宣称 formatter 消费同步发生在 Java `frameSign`
+方法体内，也没有保存 URL、签名原文或 buffer 字节。
+
+证据：[Android frameSign formatter window](evidence/vm9_android_framesign_formatter_window_20261104.json)，
+校验器：[verify_vm9_android_framesign_formatter_window_20261104.py](python/verify_vm9_android_framesign_formatter_window_20261104.py)。
+这推进了 JNI getter → native `va_list` → `vsnprintf` 的真实设备关系，但
+callback URL/Map 身份、普通 Cronet 六头完整链、whole-request differential、
+standalone signer 和线上验签仍保持未验证。
+
+
+
+## 2026-11-04：真实 frameSign JNI 方法身份
+
+同一 Android 进程的 frameSign 触发窗口内记录到 15 次 `GetMethodID` 与 20 次
+`CallObjectMethodV`。窗口内唯一可解析的方法身份为
+`java.lang.String.getBytes(Ljava/lang/String;)[B`，说明 native source helper
+确实把 Java 字符串转换为 UTF-8 byte[]。当前捕获没有把 provider getter 方法名、
+返回 byte[] 与具体 JNI 字符串 buffer 连接起来，因此 provider 方法身份仍保持未验证。
+
+证据：[Android frameSign method identity](evidence/vm9_android_framesign_method_identity_20261104.json)，
+校验器：[verify_vm9_android_framesign_method_identity_20261104.py](python/verify_vm9_android_framesign_method_identity_20261104.py)。
+普通 Cronet 六头链、whole-request differential、standalone signer 和线上验签继续保持未验证。
+
+## 2026-11-04：frameSign 字段对象到 JNI 字符串句柄
+
+在同一真实进程的 frameSign 触发窗口内 hook `GetObjectField`，并把返回的本地 jobject
+句柄与后续 `GetStringUTFChars` 的 jstring 参数做相等连接。共观察 180 次字段读取，
+其中 18 次字段返回句柄进入 JNI 字符串 getter；17 次属于匿名 field ID `0x6fe15bb4`，
+1 次属于 `0x6f3dbfb8`。字段 ID 在本窗口前已缓存，未能解析 Java 字段名或声明类，
+因此该证据只闭合“匿名字段对象 → JNI String”，没有把它命名为 URL、签名或 provider 字段。
+
+本轮没有 formatter 命中，故不把字段句柄进一步连接到 `vsnprintf`。证据：
+[Android frameSign field/string identity](evidence/vm9_android_framesign_field_string_identity_20261104.json)，
+校验器：[verify_vm9_android_framesign_field_string_identity_20261104.py](python/verify_vm9_android_framesign_field_string_identity_20261104.py)。
+
+## 2026-11-04：frameSign 业务窗口的字段链与 formatter 分离
+
+在重新启动后的进程中观察同一次 `frameSign` 触发窗口：`GetMethodID` 35 次、
+`CallObjectMethodV` 70 次、`GetObjectField` 87 次，其中 12 个字段返回句柄进入
+`GetStringUTFChars`。同一窗口还观察到 385 次 `vsnprintf`、19 个命中事件（20 个
+命中项），其中 16 个位于业务序列 1。字段句柄连接出来的 12 个 getter ID 与
+formatter 命中的 getter ID 没有交集，因此当前证据同时证明两条真实分支存在，
+但没有把字段字符串直接连接到 formatter 输入。
+
+证据：[Android frameSign business window](evidence/vm9_android_framesign_business_window_20261104.json)，
+校验器：[verify_vm9_android_framesign_business_window_20261104.py](python/verify_vm9_android_framesign_business_window_20261104.py)。
+provider 字段名、callback URL/Map 身份、普通 Cronet 六头链、完整 signer 和线上验签仍未验证。
+
+## 2026-11-04：反射解析字段身份并排除文件辅助路径
+
+通过 JNI `ToReflectedField` 对已验证的缓存 field ID 做受限反射，成功解析
+`0x6f3dbfb8` 为 `java.io.File.path`；同一 frameSign 窗口内还观察到
+`checkPermission(String,String)` 与 `String.getBytes(String)`。该字段返回句柄
+进入 JNI 字符串 getter 共 32 次，另一个匿名 field ID `0x6f3df358` 进入 getter
+17 次。formatter 命中的 getter 与这 49 个字段 getter 没有交集，因此文件路径
+分支已从当前 signer formatter 直接数据流中排除。
+
+证据：[Android frameSign reflected fields](evidence/vm9_android_framesign_reflection_fields_20261104.json)，
+校验器：[verify_vm9_android_framesign_reflection_fields_20261104.py](python/verify_vm9_android_framesign_reflection_fields_20261104.py)。
+provider 字段身份、callback URL/Map 连接、普通 Cronet 六头完整链、完整 signer 和线上验签仍未验证。
+
+## 2026-11-05：r4 回调可达，但当前窗口未建立 Cronet 入口归因
+
+在同一真实 `com.dragon.read` 进程中，用受限探针捕获两个有界窗口（60 秒和 25 秒）。
+探针只安装了 `ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)` 与 host
+`libc.so!vsnprintf` hook，没有安装 `CronetUrlRequest.addSecurityFactor`、
+`CronetUrlRequestContext.addSecurityFactor` 或 `o0` hook。`r4` 共进入 5 次并正常返回对象；仅保留
+URL 长度，依次为 684、1154、109、1154、1154。5 次输入 Map 的可见键数均为 0；
+前一个窗口的旧探针没有枚举返回键，后一个窗口枚举到 0，未保存 URL、Map 值、header
+值或运行时地址。
+
+同窗口的 host `libc.so!vsnprintf` 计数为 502 和 36，未出现 JNI getter 指针/指纹命中，
+也没有 callback 与 formatter 的同事件连接。因此这轮只确认 `r4` 安全因子回调在真实进程
+可达，不能确认它由 Cronet 入口触发，也不能把空 Map 结果解释成六头生成完成；普通 Cronet 六头完整链、JNI buffer 消费字节
+连接、URL/Map 对象身份、完整 signer、整请求差分和线上验签继续保持 `false`。
+
+证据：[Cronet formatter window](evidence/vm9_android_cronet_formatter_window_20261105.json)，
+校验器：[verify_vm9_android_cronet_formatter_window_20261105.py](python/verify_vm9_android_cronet_formatter_window_20261105.py)。
+
+同日又在同一进程安装了三个直接 Cronet Java 入口 hook：
+`CronetUrlRequest.addSecurityFactor`、`CronetUrlRequestContext.addSecurityFactor` 和
+`CronetUrlRequestContext.o0`。45 秒窗口内三者均为 0 次，`r4` 也未在该窗口进入。
+因此当前 `r4` 运行时观测不能归因到 Cronet；静态 owner 链仍是
+`addSecurityFactor -> o0 -> w.a`，但真实请求触发尚未捕获。
+
+证据：[Cronet entry window](evidence/vm9_android_cronet_entry_window_20261105.json)，
+校验器：[verify_vm9_android_cronet_entry_window_20261105.py](python/verify_vm9_android_cronet_entry_window_20261105.py)。
+
+## 2026-11-05：Cronet 与 r4 的 Java 类型边界
+
+对同一 pinned APK 的 `classes16.dex` JADX 输出做了受限静态复核。Cronet 两个
+`addSecurityFactor(String,String[])` 都把输入构造成 `Map<String,String>`，经
+`CronetUrlRequestContext.o0(String,Map<String,String>)` 委托给字段类型为
+`com.ttnet.org.chromium.net.w` 的 `a(String,Map)`，再把返回 Map 展平为 `String[]`。
+
+`ms.bd.c.r4` 的接口类型则是 `NetworkParams.b`；其输入值按 `java.util.List` 读取，
+并使用 native tag `0x3000001`。因此当前材料没有证明 `r4` 与 Cronet `w` 是同一
+Java 对象或同一适配器，`r4` 的真实观测不能直接提升为 Cronet 入口证据。具体适配器
+身份和 Cronet 运行时调用仍待设备重新上线后捕获。
+
+证据：[Cronet/r4 type boundary](evidence/vm9_cronet_callback_type_boundary_20261105.json)，
+校验器：[verify_vm9_cronet_callback_type_boundary_20261105.py](python/verify_vm9_cronet_callback_type_boundary_20261105.py)。
+
+进一步扫描 `jadx_out16/sources`：公开 builder 配置入口为
+`com.ttnet.org.chromium.net.c.a.f0(w)`，随后只在 builder 保存并由
+`CronetUrlRequestContext` 读取。排除这些 API 定义后，应用侧 `f0(w)`/builder callback
+调用点为 0，文本中没有具体 `w` 子类。这个结果只约束当前 JADX 源码范围；反射、native
+注入或外部代码仍可能在运行时设置回调，所以没有把它解释成“适配器不存在”。
+
+证据：[Cronet callback injection scan](evidence/vm9_cronet_callback_injection_scan_20261105.json)，
+校验器：[verify_vm9_cronet_callback_injection_scan_20261105.py](python/verify_vm9_cronet_callback_injection_scan_20261105.py)。
+
+同日先对 pinned APK 的 `classes16.dex` 做了直接 DEX 级扫描；随后发现目标类型描述符还
+出现在 `classes17.dex`，因此扩大为 APK 全部 27 个 DEX 的字节预筛选，并对两个目标 DEX
+做定向解析。`classes17.dex` 中存在具体实现类 `org.chromium.c extends
+com.ttnet.org.chromium.net.w`，并覆盖有代码的 `a(String,Map)`；
+`org.chromium.CronetClient.tryCreateCronetEngine` 还有一个应用侧
+`f$a.f0(w)` builder callsite。`w.a(String,Map)` 的唯一直接 dispatch caller 仍是
+`CronetUrlRequestContext.o0(String,Map)`，`h.t(w)` 的唯一直接调用位于
+`com.ttnet.org.chromium.net.c$a.u(w)` API wrapper。扫描范围外没有保留原始方法体；这次
+静态结果闭合了实现类和 builder 调用方向，但没有闭合运行时实际对象身份或真实入口执行，
+也不能把 r4 运行时回调接到 Cronet。反射、native 注册、外部代码和真实对象身份仍待
+设备重新上线后捕获；普通 Cronet 六头完整链、完整 signer、整请求差分和线上验签继续为
+`false`。
+
+证据：[Cronet callback DEX implementation scan](evidence/vm9_cronet_callback_dex_implementation_scan_20261105.json)，
+校验器：[verify_vm9_cronet_callback_dex_implementation_scan_20261105.py](python/verify_vm9_cronet_callback_dex_implementation_scan_20261105.py)。
+
+随后读取 `org.chromium.c`、`CronetAppProviderManager`、`com.dragon.read.base.http.b`、
+`AbsCronetDependAdapter`、`NetworkParams` 和 `ms.bd.c.s4/r4` 的定向 DEX 方法体，静态
+闭合了更完整的 owner 方向：
+`CronetUrlRequestContext.o0 -> org.chromium.c.a -> CronetAppProviderManager.onCallToAddSecurityFactor`
+→ `ICronetAppProvider` → `com.dragon.read.base.http.b` →
+`AbsCronetDependAdapter.onCallToAddSecurityFactor` →
+`NetworkParams.tryAddSecurityFactor` → 已由 `ms.bd.c.s4.a(long)` 注册的
+`ms.bd.c.r4.onCallToAddSecurityFactor`。`r4` 的 native tag 为 `0x3000001`，native
+返回的字符串对在 Java 侧重组为 `HashMap`。
+
+这条静态链与此前真实进程捕获到的 `r4` 回调形状一致；另外，`n0.m()` 首先检查
+`DebugManager.isBOEMode()`，非 BOE 时跳过 `b.c` 的 Cronet adapter 注册，因此这条
+`b -> CronetAppProviderManager` 路径应标记为 BOE 条件路径。仍没有把同一运行时请求的
+Cronet 入口、callback URL/Map 对象、provider 对象身份或六头结果接到一起，因此普通
+Cronet 六头完整链、完整 signer、整请求差分和线上验签继续为 `false`。证据：
+[Cronet static adapter/r4 chain](evidence/vm9_cronet_static_adapter_r4_chain_20261105.json)，
+校验器：[verify_vm9_cronet_static_adapter_r4_chain_20261105.py](python/verify_vm9_cronet_static_adapter_r4_chain_20261105.py)。
+
+设备重新上线后，用 root `frida-server 17.24.3` 和临时兼容 Java bridge 在官方、未修改的
+7.2.5.32 APK 上重新安装五个 Java hook。已在当前打开的阅读页捕获 2 次
+`ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)`：输入 URL 长度为 1155、844，
+输入 Map 键数为 14、4；两次都返回六个七神键，长度固定为 Argus 8、Gorgon 52、
+Helios 48、Khronos 10、Ladon 8、Medusa 1300。`CronetUrlRequest.addSecurityFactor`、
+`CronetUrlRequestContext.addSecurityFactor` 和 `o0` 的 hook 均安装成功，但该有界阅读
+窗口内没有进入。该结果再次确认当前窗口走到了 NetworkParams/r4 六头回调，却没有把
+同一请求对象、Cronet 入口或线上验签接上；普通 Cronet 六头完整链、完整 signer、整请求
+差分和线上验签继续为 `false`。
+
+证据：[official NetworkParams runtime retry](evidence/vm9_networkparams_runtime_retry_20261105.json)，
+校验器：[verify_vm9_networkparams_runtime_retry_20261105.py](python/verify_vm9_networkparams_runtime_retry_20261105.py)。
+
+同一阅读进程的单值运行时探针调用 `DebugManager.isBOEMode()`，返回 `false`。这与
+`n0.m()` 的静态 guard 一致，说明本次普通阅读窗口没有满足 BOE adapter 注册条件；
+它不能外推到其他进程或 BOE 功能，也没有把 Cronet 入口或线上验签提升为已观测。
+
+证据：[Cronet BOE guard runtime](evidence/vm9_cronet_boe_guard_runtime_20261105.json)，
+校验器：[verify_vm9_cronet_boe_guard_runtime_20261105.py](python/verify_vm9_cronet_boe_guard_runtime_20261105.py)。
+
+## 2026-11-05：普通 Cronet 初始化 provider 静态路径
+
+对 pinned APK 的 `classes3.dex`、`classes17.dex`、`classes23.dex` 和 `classes26.dex`
+做定向 DEX 方法体复核，补上了此前 BOE guard 之外的普通初始化路径。启动任务
+`Lcom/dragon/read/app/launch/task/n0;->n(Landroid/app/Application;)V` 直接构造
+`n0$a` 并调用 `Lcom/dragon/read/base/http/e;->h(e$b)`；`e.h` 调用 `e.d`，而
+`e.d` 直接把 `Lcom/dragon/read/base/http/b;->c` 传给
+`TTNetInit.setCronetDepend(ICronetAppProvider)`。这条 `e.d` 指令序列没有
+`DebugManager.isBOEMode()` guard，和 `n0.m()` 中的 BOE-only adapter 注册是两条不同路径。
+
+`TTNetInit.setCronetDepend` 静态保存同一 provider 到 `sCronetProvider`，并转发给
+`SsCronetHttpClient.setCronetAppInfoProvider`；随后 `TTNetInit.forceInitCronetKernel`
+从 `sCronetProvider` 调用 `SsCronetHttpClient.tryCreateCronetEngine(..., provider)`。
+`SsCronetHttpClient` 再把 provider 交给 `ICronetClient.tryCreateCronetEngine`，而
+`CronetClient.tryCreateCronetEngine` 中已有 `f$a.f0(w)` builder callsite。由此普通
+初始化的静态 provider 传递方向已闭合，但仍没有设备级调用次数、运行时 provider
+对象身份或同一请求的 Cronet callback 证据；普通 Cronet 六头完整链、完整 signer、整
+请求差分和线上验签继续保持 `false`。
+
+证据：[ordinary Cronet initializer static path](evidence/vm9_cronet_ordinary_initializer_static_20261105.json)，
+校验器：[verify_vm9_cronet_ordinary_initializer_static_20261105.py](python/verify_vm9_cronet_ordinary_initializer_static_20261105.py)。
+
+## 2026-11-05：普通 provider 的运行时存储状态
+
+在官方未修改 APK 的已运行进程中读取了 TTNet/Cronet 的静态字段，没有触发请求，也没有
+保存 URL、token 或 header 原文。`TTNetInit.sCronetProvider`、
+`SsCronetHttpClient.sCronetAppProvider`、`CronetAppProviderManager.mCronetAppProvider`
+和 `mCronetAppProviderAdapter` 均为 `com.dragon.read.base.http.b`，四处
+`System.identityHashCode` 均为同一值。进程中同时存在 `org.chromium.CronetClient`、
+`CronetUrlRequestContext` 和 `NetworkParams.sAddSecurityFactorProcessCallback` 的
+`ms.bd.c.r4` 实例；运行时 `boe_mode` 为 false。
+
+这把普通初始化的 provider 存储状态与 Cronet context 的存在连接起来，但仍未观察到
+`CronetUrlRequestContext.o0` 或 `addSecurityFactor` 进入，也没有把一次真实 r4 回调的
+URL/Map 对象接到该 Cronet context。因此 `r4_callback_cronet_identity_joined`、普通
+Cronet 六头完整链、完整 signer、整请求差分和线上验签继续为 `false`。
+
+证据：[Cronet provider runtime state](evidence/vm9_cronet_provider_runtime_state_20261105.json)，
+校验器：[verify_vm9_cronet_provider_runtime_state_20261105.py](python/verify_vm9_cronet_provider_runtime_state_20261105.py)。
+
+又在同一官方进程做了一个明确标记为 synthetic 的控制调用：本地构造空 `HashMap`，
+直接调用 `CronetAppProviderManager.onCallToAddSecurityFactor`。调用进入当前保存的
+`com.dragon.read.base.http.b` provider，并同步到 `ms.bd.c.r4`；manager 和 r4 都正常
+返回。该控制只证明当前 manager→provider→NetworkParams/r4 的运行时 dispatch 可达，
+不代表 Cronet 请求，也没有产生六头结果，因此真实 Cronet 入口、真实请求 r4 关联、
+普通六头完整链和线上验签仍保持 `false`。
+
+证据：[synthetic manager/r4 dispatch](evidence/vm9_cronet_synthetic_manager_r4_dispatch_20261105.json)，
+校验器：[verify_vm9_cronet_synthetic_manager_r4_dispatch_20261105.py](python/verify_vm9_cronet_synthetic_manager_r4_dispatch_20261105.py)。
+
+## 2026-11-05：Cronet/OkHttp 运行时选择器状态
+
+在同一官方进程读取 `com.bytedance.ttnet.HttpClient` 和 `SsOkHttp3Client` 的选择器状态：
+`HttpClient.isCronetClientEnable()` 返回 `false`，`sCronetBootSucceed` 为 `true`，
+`sIsCronetException` 为 `false`，HTTP client config 存在，`SsOkHttp3Client.getFallbackReason()`
+返回数值 `2`。同时 `SsCronetHttpClient.sCronetClient` 和
+`org.chromium.CronetClient.sCronetEngine` 都存在。
+
+这解释了阅读页中 Cronet `o0`/`addSecurityFactor` 没有进入：Cronet 已初始化，但当前
+HTTP client selector 选择 OkHttp，所以真实请求进入 NetworkParams/r4。该结果闭合了
+“engine 存在但业务请求不走 Cronet”的分支原因；它没有把 OkHttp 的 r4 回调提升成
+Cronet 请求，也没有证明六头线上验签。
+
+证据：[Cronet runtime selector state](evidence/vm9_cronet_runtime_selector_state_20261105.json)，
+校验器：[verify_vm9_cronet_runtime_selector_state_20261105.py](python/verify_vm9_cronet_runtime_selector_state_20261105.py)。

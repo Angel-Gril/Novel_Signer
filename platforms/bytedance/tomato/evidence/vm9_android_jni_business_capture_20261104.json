@@ -1,0 +1,107 @@
+{
+  "schema": "vm9-android-jni-business-capture-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "sample_scope": "one_read_entry_action_and_two_concurrent_attach_observers",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "android_release": "9",
+    "device_abi": "x86_64",
+    "package_abi": "arm64-v8a",
+    "frida_version": "17.24.3",
+    "process_id": 20196
+  },
+  "trigger": {
+    "action": "tap_reader_entry_from_book_detail",
+    "reader_view_observed": true,
+    "read_window_seconds": 60
+  },
+  "artifacts": {
+    "business_capture_sha256": "e642519a35cf8ddc22f2176a88dee66326e93cc3b83328f1e675ebe54ced8026",
+    "jni_capture_sha256": "9c9dd05b893861db4ce2c8813203ebf22c2e6480b6b396c587c104f226676c73",
+    "business_probe_sha256": "74beb8771464bfd1f4506c69f79e37af34a2dc4331aea4bf05ae24ae30febe30",
+    "jni_probe_sha256": "b091471adcdc17dc9d66562299d0a8c04e377e1b9aa96b9669e07b44c1fdff83",
+    "frida_java_bridge_sha256": "02cb922b7fea29a566bd9ae4a190fad24c503076f2497af5706d117033de6a0e",
+    "metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "houdini_sha256": "bc3c3c15134d4d3df5c6bf72ef8b23f6b17b01ea62752898a9803aa6fcaf5513",
+    "raw_url_header_values_and_runtime_addresses_retained": false
+  },
+  "business_observation": {
+    "hooked_method": "ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)",
+    "callback_count": 17,
+    "input_cardinality_distribution": {
+      "8": 1,
+      "12": 9,
+      "13": 1,
+      "14": 3,
+      "15": 2,
+      "16": 1
+    },
+    "result_cardinality_distribution": {
+      "6": 17
+    },
+    "result_keys": [
+      "X-Argus",
+      "X-Gorgon",
+      "X-Helios",
+      "X-Khronos",
+      "X-Ladon",
+      "X-Medusa"
+    ],
+    "direct_frame_sign_event_count": 0
+  },
+  "jni_observation": {
+    "api": "GetStringUTFChars",
+    "api_call_count_all_callers": 16374,
+    "guest_candidate_return_count": 70,
+    "guest_candidate_length_distribution": {
+      "9": 19,
+      "29": 16,
+      "35": 19,
+      "1202": 1,
+      "1211": 1,
+      "1218": 1,
+      "1220": 2,
+      "1228": 1,
+      "1271": 3,
+      "1284": 2,
+      "1285": 1,
+      "1355": 1,
+      "1387": 1,
+      "2436": 1,
+      "5535": 1
+    },
+    "all_guest_candidates_nul_terminated": true,
+    "all_guest_candidates_first_byte_ascii_printable": true,
+    "register_value_candidate_counts": {
+      "x7_to_0x1773e0_and_x16_to_0x17bbcc": 38,
+      "x7_to_0x27e31c": 32
+    },
+    "guest_caller_pc_resolved": false,
+    "callback_scope_recorded": false
+  },
+  "static_observation": {
+    "houdini_jni_bridge_return_offset": "0x30a328",
+    "r13_plus_8_supplies_guest_x1": true,
+    "r13_plus_0x10_supplies_guest_x2": true,
+    "candidate_offsets_preceded_by_call": {
+      "0x1773e0": true,
+      "0x17bbcc": true,
+      "0x27e31c": false
+    },
+    "candidate_fields_are_guest_x7_or_x16_values": true,
+    "interpret_candidate_fields_as_guest_pc": false
+  },
+  "conclusions": {
+    "ordinary_security_factor_callback_observed": true,
+    "six_header_result_observed": true,
+    "guest_jni_string_returns_observed": true,
+    "jni_calls_attributed_to_security_factor_callback": false,
+    "original_android_provider_input_joined": false,
+    "returned_buffer_joined_to_parser_input": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

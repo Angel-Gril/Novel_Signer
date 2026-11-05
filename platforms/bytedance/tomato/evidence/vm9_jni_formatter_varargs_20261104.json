@@ -1,0 +1,256 @@
+{
+  "schema": "vm9-jni-formatter-varargs-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "scope": "fresh_synthetic_component_inputs_with_explicit_allocator_services",
+  "native_python_controls": 16,
+  "cases": [
+    {
+      "case": "two_strings",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "left_changed",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "right_changed",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "swapped",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "growth",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 3,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "empty_left",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "one_argument_control",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0
+      ],
+      "string_buffers_read_by_libc": [
+        0
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "literal_control",
+      "image_base": "0x122c0000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [],
+      "string_buffers_read_by_libc": [],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "two_strings",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "left_changed",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "right_changed",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "swapped",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "growth",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 3,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "empty_left",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0,
+        1
+      ],
+      "string_buffers_read_by_libc": [
+        0,
+        1
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "one_argument_control",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [
+        0
+      ],
+      "string_buffers_read_by_libc": [
+        0
+      ],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    },
+    {
+      "case": "literal_control",
+      "image_base": "0x775c205000",
+      "vsnprintf_calls": 1,
+      "saved_gp_slots_read_by_libc": [],
+      "string_buffers_read_by_libc": [],
+      "va_list_layout_verified": true,
+      "native_python_memory_and_effects_equal": true,
+      "expected_output_matches": true
+    }
+  ],
+  "saved_x2_x3_reachable_through_va_list": true,
+  "synthetic_string_buffers_consumed_by_matching_libc": true,
+  "android_captured_buffer_consumption_verified": false,
+  "android_input_map_identity_joined": false,
+  "complete_signer_verified": false,
+  "online_header_acceptance_verified": false
+}

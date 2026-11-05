@@ -1,0 +1,41 @@
+{
+  "schema": "vm9-cronet-boe-guard-runtime-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "source_scope": {
+    "artifact": "official fq_7xz.apk runtime guard probe",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "device_serial": "emulator-5554",
+    "process_id": 6465,
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "raw_business_values_retained": false
+  },
+  "source_artifacts": {
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "bridge_sha256": "749e107feb32c21227fa79a5feda5c4a13bf4d797d51d8c94156d8d4b3e97eb2",
+    "probe_script_sha256": "a391f62dc3cee93cfac7f7f6df318e4e301c9b5006b1653c255714c53a5bc52a"
+  },
+  "probe": {
+    "method": "com.dragon.read.util.DebugManager.isBOEMode()",
+    "return_type": "boolean",
+    "observed_return": false,
+    "event_count": 1
+  },
+  "claims": {
+    "boe_mode_runtime_observed": true,
+    "boe_adapter_registration_guard_condition_false": true,
+    "cronet_entry_runtime_observed_in_this_probe": false,
+    "runtime_adapter_identity_resolved": false,
+    "r4_callback_cronet_identity_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "callback_url_or_map_object_identity_joined": false,
+    "provider_method_or_field_identity_joined": false,
+    "android_captured_jni_buffer_consumption_byte_joined": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "The live reader process returned false for DebugManager.isBOEMode(). Combined with the static n0.m guard, the BOE-only adapter registration condition was false during this probe. This does not prove that no other process or feature registers a Cronet adapter, and it does not establish ordinary Cronet request execution or online header acceptance."
+}

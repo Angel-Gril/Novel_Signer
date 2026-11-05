@@ -1,0 +1,103 @@
+{
+  "schema": "vm9-cronet-callback-dex-implementation-scan-20261105-v2",
+  "evidence_date": "2026-11-05",
+  "source_scope": {
+    "artifact": "fq_7xz.apk all DEX direct scan with target-bearing DEX parsed",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "raw_method_bodies_retained": false,
+    "scan_unit": "all 27 classes*.dex; classes16.dex and classes17.dex parsed",
+    "scan_library": "androguard.core.dex.DEX"
+  },
+  "source_artifacts": {
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "classes16_dex_sha256": "c0820f523bc429160614f3f056f1829fe68c173d715db4db3b05e3600d3557ea",
+    "classes16_dex_size": 8008060,
+    "classes17_dex_sha256": "c88f1daee04b1257ca0212b111561ae707775a0a1d8392e6c4e0211ed3c9681b",
+    "classes17_dex_size": 8226640,
+    "apk_dex_count": 27
+  },
+  "dex_scan": {
+    "target_callback_type": "Lcom/ttnet/org/chromium/net/w;",
+    "target_descriptor_byte_occurrence_dex_count": 2,
+    "target_descriptor_byte_occurrence_dexes": [
+      {"dex": "classes16.dex", "size": 8008060, "occurrences": 1},
+      {"dex": "classes17.dex", "size": 8226640, "occurrences": 1}
+    ],
+    "parsed_target_dexes": ["classes16.dex", "classes17.dex"],
+    "parsed_target_dex_class_counts": {"classes16.dex": 8524, "classes17.dex": 9612},
+    "target_callback_type_declaration_count": 1,
+    "concrete_target_subclass_count": 1,
+    "concrete_target_subclasses": [
+      {
+        "dex": "classes17.dex",
+        "class": "Lorg/chromium/c;",
+        "superclass": "Lcom/ttnet/org/chromium/net/w;",
+        "interfaces": []
+      }
+    ],
+    "concrete_target_override": {
+      "class": "Lorg/chromium/c;",
+      "method": "a",
+      "descriptor": "(Ljava/lang/String;Ljava/util/Map;)Ljava/util/Map;",
+      "has_code": true
+    },
+    "target_method_a_signature": "(Ljava/lang/String;Ljava/util/Map;)Ljava/util/Map;",
+    "target_method_a_declaration_count": 1,
+    "target_method_a_has_code": false,
+    "target_method_a_direct_dispatch_ref_count": 1,
+    "target_method_a_direct_dispatch_refs": [
+      {
+        "dex": "classes16.dex",
+        "caller_class": "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequestContext;",
+        "caller_method": "o0",
+        "caller_descriptor": "(Ljava/lang/String;Ljava/util/Map;)Ljava/util/Map;",
+        "invoke_kind": "invoke-virtual",
+        "target_method": "Lcom/ttnet/org/chromium/net/w;->a(Ljava/lang/String;Ljava/util/Map;)Ljava/util/Map;"
+      }
+    ],
+    "builder_callback_method_signature": "Lcom/ttnet/org/chromium/net/h;->t(Lcom/ttnet/org/chromium/net/w;)Lcom/ttnet/org/chromium/net/h;",
+    "builder_callback_direct_dispatch_ref_count": 1,
+    "builder_callback_direct_dispatch_refs": [
+      {
+        "dex": "classes16.dex",
+        "caller_class": "Lcom/ttnet/org/chromium/net/c$a;",
+        "caller_method": "u",
+        "caller_descriptor": "(Lcom/ttnet/org/chromium/net/w;)Lcom/ttnet/org/chromium/net/c$a;",
+        "invoke_kind": "invoke-virtual",
+        "target_method": "Lcom/ttnet/org/chromium/net/h;->t(Lcom/ttnet/org/chromium/net/w;)Lcom/ttnet/org/chromium/net/h;"
+      }
+    ],
+    "application_side_builder_callback_callsite_count": 1,
+    "application_side_builder_callback_callsites": [
+      {
+        "dex": "classes17.dex",
+        "caller_class": "Lorg/chromium/CronetClient;",
+        "caller_method": "tryCreateCronetEngine",
+        "caller_descriptor": "(Landroid/content/Context;ZZZZLjava/lang/String;ZLcom/bytedance/frameworks/baselib/network/http/cronet/ICronetAppProvider;)V",
+        "invoke_kind": "invoke-virtual",
+        "target_method": "Lcom/ttnet/org/chromium/net/f$a;->f0(Lcom/ttnet/org/chromium/net/w;)Lcom/ttnet/org/chromium/net/f$a;"
+      }
+    ],
+    "application_side_target_method_refs_outside_cronet_namespace": 0
+  },
+  "claims": {
+    "dex_concrete_w_subclass_resolved": true,
+    "cronet_callback_implementation_class_resolved": true,
+    "cronet_w_a_dispatch_owner_resolved_to_context_o0": true,
+    "cronet_builder_callback_dispatch_owner_resolved_to_api_wrapper": true,
+    "application_side_builder_callback_callsite_resolved": true,
+    "runtime_adapter_identity_resolved": false,
+    "cronet_entry_runtime_observed": false,
+    "r4_callback_cronet_identity_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "callback_url_or_map_object_identity_joined": false,
+    "provider_method_or_field_identity_joined": false,
+    "android_captured_jni_buffer_consumption_byte_joined": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "The full APK DEX prefilter finds the callback descriptor only in classes16.dex and classes17.dex. Direct parsing resolves the concrete implementation class org.chromium.c and the application-side CronetClient builder callsite. This is static implementation evidence only; runtime object identity, Cronet entry execution, r4 identity, the ordinary six-head chain, and signer/online verification remain unresolved."
+}

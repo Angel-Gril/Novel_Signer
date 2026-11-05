@@ -1,0 +1,53 @@
+{
+  "schema": "vm9-android-framesign-formatter-window-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "device_serial": "emulator-5554",
+  "package_name": "com.dragon.read",
+  "capture_pid": 10193,
+  "capture_file": "native_formatter_capture_business4_20261104.jsonl",
+  "capture_file_sha256": "b67522f1c1181184b45a7c8573ed357665e6e31aa6e2ff9bfcb2b4818f117d4b",
+  "capture_rows": 2571,
+  "jni_getstringutfchars_hooked": true,
+  "jni_release_string_utf_chars_hooked": true,
+  "formatter_hook": "libc.so!vsnprintf",
+  "formatter_calls_observed": 83,
+  "frame_sign_hook_ready": true,
+  "frame_sign_overloads": 1,
+  "frame_sign_trigger": {
+    "profile": "homepage",
+    "url_length": 49,
+    "frame_type": 0,
+    "enter_business_seq": 1,
+    "leave_ok": true,
+    "result_present": true,
+    "result_length": 15,
+    "method_argument_shape": "Ljava/lang/String;,I"
+  },
+  "formatter_matches": {
+    "match_events": 12,
+    "matched_hits": 12,
+    "pre_trigger_business_seq_0": 6,
+    "post_trigger_business_seq_1": 6,
+    "matches_while_java_method_active": 0,
+    "direct_pointer_matches": 9,
+    "released_fingerprint_matches": 3,
+    "va_list_offsets": [
+      "save16:16",
+      "va+24",
+      "va+240",
+      "save8:16"
+    ],
+    "all_matches_via_host_libc_vsnprintf": true
+  },
+  "claims": {
+    "android_getter_return_pointer_reached_vsnprintf_va_list": true,
+    "android_getter_buffer_bytes_captured": false,
+    "frame_sign_synchronous_formatter_consumption_verified": false,
+    "frame_sign_trigger_window_temporal_association_observed": true,
+    "callback_url_or_map_identity_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

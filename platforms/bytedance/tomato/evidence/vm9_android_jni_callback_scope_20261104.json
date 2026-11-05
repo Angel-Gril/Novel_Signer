@@ -1,0 +1,83 @@
+{
+  "schema": "vm9-android-jni-callback-scope-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "sample_scope": "live_reader_requests_with_thread_scoped_r4_hook",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "android_release": "9",
+    "device_abi": "x86_64",
+    "package_abi": "arm64-v8a",
+    "frida_version": "17.24.3"
+  },
+  "artifacts": {
+    "capture_sha256": "06b508e0e8153cbb9708088bd14eaee481965ff1bc237fb72b85460f280081b7",
+    "runner_sha256": "07d94cab573b7d970e0ab2773b3a1cdcb28549336fd000d35c8fcb6e2b107646",
+    "jni_probe_sha256": "b091471adcdc17dc9d66562299d0a8c04e377e1b9aa96b9669e07b44c1fdff83",
+    "frida_java_bridge_sha256": "02cb922b7fea29a566bd9ae4a190fad24c503076f2497af5706d117033de6a0e",
+    "metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "houdini_sha256": "bc3c3c15134d4d3df5c6bf72ef8b23f6b17b01ea62752898a9803aa6fcaf5513",
+    "raw_strings_and_runtime_pointers_retained": false
+  },
+  "observation": {
+    "callback_method": "ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)",
+    "callback_scopes_entered": 7,
+    "callback_scopes_left": 7,
+    "guest_api": "GetStringUTFChars",
+    "all_jni_api_calls": 44533,
+    "guest_jni_returns": 49,
+    "guest_jni_length_distribution": {
+      "4": 1,
+      "7": 2,
+      "9": 12,
+      "11": 3,
+      "13": 1,
+      "17": 2,
+      "18": 1,
+      "29": 7,
+      "35": 11,
+      "86": 1,
+      "110": 1,
+      "1402": 1,
+      "1656": 1,
+      "2007": 1,
+      "2030": 1,
+      "2084": 1,
+      "2320": 1,
+      "2407": 1
+    },
+    "jnis_inside_callback_scope": 0,
+    "same_thread_jni_before_and_after_callback": 7,
+    "threads_with_length_9_and_35_candidates_before_callback": 6,
+    "threads_with_length_29_and_long_candidate_after_callback": 7,
+    "guest_x30_values_in_executable_guest_map": 0,
+    "guest_register_candidate_distribution": {
+      "x7=0x1773e0_and_x16=0x17bbcc": 26,
+      "x16=0x17bbcc_only": 4,
+      "x7=0x27e31c": 17,
+      "x7=0x6e000_and_x16=0x375210": 2
+    }
+  },
+  "static_checks": {
+    "0x1773e0_previous_instruction": "blr",
+    "0x17bbcc_previous_instruction": "bl",
+    "0x27e31c_previous_instruction": "b",
+    "houdini_bridge_guest_x1_register_offset": "0x8",
+    "houdini_bridge_guest_x2_register_offset": "0x10",
+    "houdini_bridge_slot_offset": "0x548"
+  },
+  "conclusions": {
+    "r4_callback_scope_observed": true,
+    "guest_jni_string_returns_observed": true,
+    "guest_jni_call_inside_r4_callback_observed": false,
+    "x7_or_x16_match_static_call_return_candidates": true,
+    "guest_caller_pc_resolved": false,
+    "same_request_dataflow_joined": false,
+    "original_android_provider_input_joined": false,
+    "returned_buffer_joined_to_parser_input": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

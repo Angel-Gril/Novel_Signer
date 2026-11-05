@@ -1,0 +1,49 @@
+{
+  "schema": "vm9-android-cronet-entry-window-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "environment": {
+    "device_serial": "emulator-5554",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "android_release": "9",
+    "device_abi": "x86_64",
+    "package_abi": "arm64-v8a",
+    "frida_version": "17.24.3",
+    "process_id": 21961
+  },
+  "artifacts": {
+    "probe_sha256": "fb963b3add7f1317a4a2a613ab2a97d286a7f6c6f21af974e2049c282bed3a9e",
+    "frida_java_bridge_sha256": "769b77aee5360f4cafb3d541810dda0aa6d97cad1eb3f3fa6285fa50c010b2cf",
+    "capture_file": "cronet_entries2_20261105.jsonl",
+    "capture_sha256": "5c3a973a187ae7cde5fbd58de8ae6f6a67574f224e345a7613632a56225f1704",
+    "capture_row_count": 2,
+    "bounded_seconds": 45,
+    "raw_url_values_map_values_header_values_and_runtime_addresses_retained": false
+  },
+  "hooks": {
+    "cronet_context_o0": true,
+    "cronet_context_add_security_factor": true,
+    "cronet_request_add_security_factor": true
+  },
+  "observation": {
+    "cronet_context_o0_calls": 0,
+    "cronet_context_add_security_factor_calls": 0,
+    "cronet_request_add_security_factor_calls": 0,
+    "r4_callback_calls_in_this_capture": 0,
+    "url_values_captured": false,
+    "map_values_captured": false
+  },
+  "claims": {
+    "cronet_entry_hooks_installed": true,
+    "cronet_entry_runtime_observed": false,
+    "r4_callback_observed_in_same_capture": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "callback_url_or_map_object_identity_joined": false,
+    "android_captured_jni_buffer_consumption_byte_joined": false,
+    "provider_method_or_field_identity_joined": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

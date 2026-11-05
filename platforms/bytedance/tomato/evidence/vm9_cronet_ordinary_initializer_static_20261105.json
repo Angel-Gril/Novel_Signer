@@ -1,0 +1,84 @@
+{
+  "schema": "vm9-cronet-ordinary-initializer-static-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "source_scope": {
+    "artifact": "fq_7xz.apk DEX static ordinary Cronet initializer path",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "raw_method_bodies_retained": false,
+    "parsed_dexes": ["classes3.dex", "classes17.dex", "classes23.dex", "classes26.dex"],
+    "scan_library": "androguard.core.dex.DEX"
+  },
+  "source_artifacts": {
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "classes3.dex": {"sha256": "d4e47c6ba774fa9fd503d335b2aa52d71da48d66ebacdf4576733e8f8f61c2f4", "size": 8234720},
+    "classes17.dex": {"sha256": "c88f1daee04b1257ca0212b111561ae707775a0a1d8392e6c4e0211ed3c9681b", "size": 8226640},
+    "classes23.dex": {"sha256": "09c8cd146d8bb1bcf6a45583ea4820f67d869915c307b0a57209d11b2f4f47c4", "size": 8040388},
+    "classes26.dex": {"sha256": "eb7cb6897a3f791b2835e226ef8882aafc9e428c65b6b842cd82f3dffe50a333", "size": 8596392}
+  },
+  "static_chain": {
+    "ordinary_startup_entry": {
+      "caller": "Lcom/dragon/read/app/launch/task/n0;->n(Landroid/app/Application;)V",
+      "target": "Lcom/dragon/read/base/http/e;->h(Lcom/dragon/read/base/http/e$b;)V",
+      "argument": "Lcom/dragon/read/app/launch/task/n0$a;",
+      "dex": "classes3.dex"
+    },
+    "initializer_wrapper": {
+      "caller": "Lcom/dragon/read/base/http/e;->h(Lcom/dragon/read/base/http/e$b;)V",
+      "target": "Lcom/dragon/read/base/http/e;->d(Lcom/dragon/read/base/http/e$b;)V",
+      "postcondition": "sets Lcom/dragon/read/base/http/e;->b true after d returns",
+      "dex": "classes3.dex"
+    },
+    "ordinary_provider_registration": {
+      "caller": "Lcom/dragon/read/base/http/e;->d(Lcom/dragon/read/base/http/e$b;)V",
+      "provider": "Lcom/dragon/read/base/http/b;->c:Lcom/dragon/read/base/http/b;",
+      "target": "Lcom/bytedance/ttnet/TTNetInit;->setCronetDepend(Lcom/bytedance/frameworks/baselib/network/http/cronet/ICronetAppProvider;)V",
+      "boe_guard_present": false,
+      "dex": "classes3.dex"
+    },
+    "ordinary_ttnet_setup": {
+      "provider_context_setup": "Lcom/dragon/read/base/http/e;->n(Landroid/content/Context;)V -> TTNetInit.setTTNetDepend(Lcom/bytedance/ttnet/ITTNetDepend;)",
+      "ttnet_init": "Lcom/dragon/read/base/http/e;->m(Landroid/content/Context;Landroid/app/Application;)V -> TTNetInit.tryInitTTNet(...)",
+      "cronet_force_init": "Lcom/dragon/read/base/http/e;->d(...)V -> TTNetInit.forceInitCronetKernel()",
+      "dex": "classes3.dex"
+    },
+    "ttnet_provider_storage": {
+      "method": "Lcom/bytedance/ttnet/TTNetInit;->setCronetDepend(Lcom/bytedance/frameworks/baselib/network/http/cronet/ICronetAppProvider;)V",
+      "stores": "Lcom/bytedance/ttnet/TTNetInit;->sCronetProvider",
+      "forwards_to": "Lcom/bytedance/frameworks/baselib/network/http/cronet/impl/SsCronetHttpClient;->setCronetAppInfoProvider(Lcom/bytedance/frameworks/baselib/network/http/cronet/ICronetAppProvider;)V",
+      "dex": "classes26.dex"
+    },
+    "force_init_provider_to_engine": {
+      "method": "Lcom/bytedance/ttnet/TTNetInit;->forceInitCronetKernel()V",
+      "provider_source": "Lcom/bytedance/ttnet/TTNetInit;->sCronetProvider",
+      "target": "Lcom/bytedance/frameworks/baselib/network/http/cronet/impl/SsCronetHttpClient;->tryCreateCronetEngine(ZZZZZLcom/bytedance/frameworks/baselib/network/http/cronet/ICronetAppProvider;)V",
+      "dex": "classes26.dex"
+    },
+    "engine_to_callback_builder": {
+      "method": "Lcom/bytedance/frameworks/baselib/network/http/cronet/impl/SsCronetHttpClient;->tryCreateCronetEngine(ZZZZZLcom/bytedance/frameworks/baselib/network/http/cronet/ICronetAppProvider;)V",
+      "interface_target": "Lcom/bytedance/frameworks/baselib/network/http/cronet/ICronetClient;->tryCreateCronetEngine(Landroid/content/Context;ZZZZZLjava/lang/String;ZLcom/bytedance/frameworks/baselib/network/http/cronet/ICronetAppProvider;)V",
+      "application_builder_callsite": "Lorg/chromium/CronetClient;->tryCreateCronetEngine(...)V -> Lcom/ttnet/org/chromium/net/f$a;->f0(Lcom/ttnet/org/chromium/net/w;)Lcom/ttnet/org/chromium/net/f$a;",
+      "dex": "classes23.dex/classes17.dex"
+    }
+  },
+  "claims": {
+    "ordinary_startup_initializer_static_path_verified": true,
+    "ordinary_provider_registration_boe_independent_static_verified": true,
+    "ttnet_provider_storage_to_sscronet_static_verified": true,
+    "force_init_provider_to_engine_static_verified": true,
+    "engine_builder_callback_provider_static_verified": true,
+    "runtime_initializer_calls_observed": false,
+    "runtime_provider_identity_resolved": false,
+    "cronet_entry_runtime_observed": false,
+    "r4_callback_cronet_identity_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "callback_url_or_map_object_identity_joined": false,
+    "provider_method_or_field_identity_joined": false,
+    "android_captured_jni_buffer_consumption_byte_joined": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "The ordinary startup task statically reaches e.d, which registers the application provider b.c with TTNetInit and forwards the same provider to SsCronetHttpClient before the force-init engine call. This path is separate from the BOE-only n0.m adapter registration. Static edges do not prove that this process executed them, that the runtime provider object was the callback object used by a request, or that a six-header result was accepted online."
+}

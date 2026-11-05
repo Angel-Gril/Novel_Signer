@@ -1,0 +1,54 @@
+{
+  "schema": "vm9-cronet-synthetic-manager-r4-dispatch-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "source_scope": {
+    "artifact": "official fq_7xz.apk synthetic manager-to-r4 dispatch control",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "device_serial": "emulator-5554",
+    "process_id": 1163,
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "raw_business_values_retained": false,
+    "synthetic_control": true
+  },
+  "source_artifacts": {
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "bridge_sha256": "769b77aee5360f4cafb3d541810dda0aa6d97cad1eb3f3fa6285fa50c010b2cf",
+    "probe_script_sha256": "7a9f7d315db1066cadf3824684bed155a607ebce84a12c8ba9edc452c2dc3115"
+  },
+  "observed_events": {
+    "manager_before": {
+      "provider_class": "com.dragon.read.base.http.b",
+      "adapter_class": "com.dragon.read.base.http.b"
+    },
+    "synthetic_manager_call": {
+      "url_length": 24,
+      "input_key_count": 0
+    },
+    "r4_enter": {
+      "url_length": 24,
+      "input_key_count": 0
+    },
+    "r4_leave": {
+      "ok": true,
+      "result_key_count": 0
+    },
+    "manager_after": {
+      "ok": true,
+      "result_key_count": 0
+    }
+  },
+  "claims": {
+    "synthetic_manager_to_r4_dispatch_observed": true,
+    "runtime_provider_manager_identity_resolved": true,
+    "real_cronet_entry_observed": false,
+    "real_request_r4_callback_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "A synthetic local call to CronetAppProviderManager.onCallToAddSecurityFactor entered the installed b provider and reached ms.bd.c.r4 in the same official process. This is a dispatch control only: it uses a locally constructed empty map and does not represent a Cronet request, six-header result, or online acceptance."
+}

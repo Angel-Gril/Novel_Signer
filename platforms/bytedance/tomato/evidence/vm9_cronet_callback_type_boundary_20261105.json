@@ -1,0 +1,46 @@
+{
+  "schema": "vm9-cronet-callback-type-boundary-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "source_scope": {
+    "artifact": "fq_7xz.apk JADX classes16.dex decompilation",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "raw_method_bodies_retained": false
+  },
+  "source_artifacts": {
+    "com/ttnet/org/chromium/net/impl/CronetUrlRequest.java": "7f4cb81b3e8a6c470bca8c33192670ec2c57da0a33f93cb0ee9cdeb492e7e2b2",
+    "com/ttnet/org/chromium/net/impl/CronetUrlRequestContext.java": "dee10f74172f56e60eabbd58cd5d92abd4f78c396f9605447a9fc4799697e553",
+    "com/ttnet/org/chromium/net/impl/CronetEngineBuilderImpl.java": "497184adc7e40ee0270680570ced9935b7314c6869119ca9f86deeeb90b1f178",
+    "com/ttnet/org/chromium/net/c.java": "f41822b11b487d13f74d3563c878137d5d5efcdd2c60097206a21d10f42b7ec6",
+    "com/ttnet/org/chromium/net/w.java": "b305d8b1a8e44bfc57cbdf0fc9d302d92aedd0dbe6f2ba7b8c2c2d4fbd90129a",
+    "ms/bd/c/r4.java": "b3334993de362c69f3d27e116f300121261732fa166c9c34c7a03739ab451b00"
+  },
+  "static_observation": {
+    "cronet_request_add_security_factor_input": "String,String[]",
+    "cronet_context_add_security_factor_input": "String,String[]",
+    "cronet_context_o0_signature": "(String,Map<String,String>)Map<String,String>",
+    "cronet_context_callback_field_type": "com.ttnet.org.chromium.net.w",
+    "cronet_o0_delegates_to_callback_a": true,
+    "cronet_input_map_value_type": "java.lang.String",
+    "cronet_result_flattens_map_to_string_array": true,
+    "r4_interface_type": "com.bytedance.frameworks.baselib.network.http.NetworkParams.b",
+    "r4_input_value_read_as_type": "java.util.List",
+    "r4_native_tag": "0x3000001",
+    "direct_cronet_r4_java_type_identity_verified": false,
+    "runtime_adapter_identity_resolved": false
+  },
+  "claims": {
+    "cronet_static_owner_chain_verified": true,
+    "cronet_entry_runtime_observed": false,
+    "r4_callback_observed": true,
+    "r4_callback_cronet_identity_joined": false,
+    "callback_url_or_map_object_identity_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "provider_method_or_field_identity_joined": false,
+    "android_captured_jni_buffer_consumption_byte_joined": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

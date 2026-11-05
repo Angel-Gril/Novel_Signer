@@ -1,0 +1,43 @@
+{
+  "schema": "vm9-cronet-runtime-selector-state-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "source_scope": {
+    "artifact": "official fq_7xz.apk runtime HTTP client selector state",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "device_serial": "emulator-5554",
+    "process_id": 1163,
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "raw_business_values_retained": false
+  },
+  "source_artifacts": {
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "bridge_sha256": "769b77aee5360f4cafb3d541810dda0aa6d97cad1eb3f3fa6285fa50c010b2cf",
+    "probe_script_sha256": "ce94fa16dc9cf7e0adc364701ddd847465f212339570c0e1e0232c01ca5a1b61"
+  },
+  "observed_state": {
+    "http_client_cronet_enable": false,
+    "http_client_cronet_boot_succeed": true,
+    "http_client_cronet_exception": false,
+    "http_client_exception_message_present": false,
+    "http_client_config_present": true,
+    "okhttp_fallback_reason": 2,
+    "ss_cronet_client_present": true,
+    "cronet_engine_present": true
+  },
+  "claims": {
+    "runtime_selector_disabled_cronet_verified": true,
+    "runtime_cronet_engine_present_verified": true,
+    "runtime_cronet_boot_succeed_verified": true,
+    "runtime_okhttp_fallback_reason_observed": true,
+    "cronet_entry_runtime_observed": false,
+    "r4_callback_cronet_identity_joined": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "The official process has a constructed Cronet client and engine and reports Cronet boot success, but HttpClient.isCronetClientEnable() is false with a numeric OkHttp fallback reason of 2. This explains why the observed reading requests enter the NetworkParams/r4 path while the Cronet o0/addSecurityFactor entries remain absent. It does not establish a Cronet six-header request or online acceptance."
+}

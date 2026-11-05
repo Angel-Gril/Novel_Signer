@@ -1,0 +1,72 @@
+{
+  "schema": "vm9-framesign-jni-string-calls-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "sample_scope": "single_fixed_synthetic_jni_initializer_call",
+  "probe": {
+    "id": "configuration_initializer_copy_provider_probe19_run8",
+    "source_sha256": "5e43236482da0acc18084cf334090077ef46c8d28af30eff5bac7d3280d93ee6",
+    "entry_class_sha256": "ff66bbceca3ba3955a980a7f8224ba3deaf8d664eaaeb4d50fd3d78d53aa2762",
+    "runner_sha256": "ad9b4ba89bddbb77c0f7bc59706883cb8d0b1b686c47588ae6f8ae2e45a0bccd",
+    "sanitized_log_sha256": "88eb63a39a1805fbb860e18c5a3e78552b0e87c9a08de0a569ad23c486d3839f",
+    "metadata_sha256": "7bc091bd1dd41f09e075b29ea6e2bd5bf3c9d5dc472721f09bd3e0641b68b10e",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "process_exit_code": 0,
+    "signature_result_length": 10,
+    "read_only_guest_observation": true
+  },
+  "api_observation": {
+    "window": "one synthetic tag 0x4000001 initializer invocation",
+    "api": "GetStringUtfChars",
+    "call_count": 48,
+    "caller_offsets_relative_to_main_image": {
+      "0x1a1e30": 22,
+      "0x1a1e54": 22,
+      "0x28b9ec": 2,
+      "0x28ba08": 2
+    },
+    "raw_api_lines_retained": false,
+    "raw_arguments_retained": false,
+    "runtime_pointers_retained": false
+  },
+  "static_callsite_checks": [
+    {
+      "caller_return_offset": "0x1a1e30",
+      "jni_table_load_offset": "0x1a1e24",
+      "indirect_call_offset": "0x1a1e2c",
+      "jni_table_byte_offset": "0x548",
+      "count": 22
+    },
+    {
+      "caller_return_offset": "0x1a1e54",
+      "jni_table_load_offset": "0x1a1e48",
+      "indirect_call_offset": "0x1a1e50",
+      "jni_table_byte_offset": "0x548",
+      "count": 22
+    },
+    {
+      "caller_return_offset": "0x28b9ec",
+      "jni_table_load_offset": "0x28b9e4",
+      "indirect_call_offset": "0x28b9e8",
+      "jni_table_byte_offset": "0x548",
+      "count": 2
+    },
+    {
+      "caller_return_offset": "0x28ba08",
+      "jni_table_load_offset": "0x28ba00",
+      "indirect_call_offset": "0x28ba04",
+      "jni_table_byte_offset": "0x548",
+      "count": 2
+    }
+  ],
+  "conclusions": {
+    "verbose_api_calls_observed": true,
+    "caller_offsets_match_getstring_utf_chars_table_slot": true,
+    "original_initializer_object_identity_joined": false,
+    "returned_buffer_bytes_joined": false,
+    "original_android_provider_joined": false,
+    "copy_source_joined": false,
+    "complete_signer_verified": false,
+    "ordinary_cronet_header_chain_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

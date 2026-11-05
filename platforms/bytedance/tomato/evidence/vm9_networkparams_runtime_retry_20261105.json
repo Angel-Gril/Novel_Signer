@@ -1,0 +1,332 @@
+{
+  "schema": "vm9-networkparams-runtime-retry-20261105-v1",
+  "evidence_date": "2026-11-05",
+  "artifact": {
+    "package": "com.dragon.read",
+    "version_code": 72532,
+    "installed_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "android_version": "9",
+    "android_api_level": 28,
+    "abi": "x86_64",
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "probe_source_sha256": "74beb8771464bfd1f4506c69f79e37af34a2dc4331aea4bf05ae24ae30febe30",
+    "bridge_sha256": "749e107feb32c21227fa79a5feda5c4a13bf4d797d51d8c94156d8d4b3e97eb2"
+  },
+  "trigger": "already-open reader activity; bounded 60-second attach",
+  "capture_count": 1,
+  "captures": [
+    {
+      "label": "official_reader_root_frida_retry",
+      "capture_sha256": "eac11f5603dc92f023757024e9011fc660794fcdceb5c16dd96b2a614b024f58",
+      "capture_bytes": 5145,
+      "source_sha256": "74beb8771464bfd1f4506c69f79e37af34a2dc4331aea4bf05ae24ae30febe30",
+      "event_counts": {
+        "script_loaded": 1,
+        "hooked": 5,
+        "probe_ready": 1,
+        "bridge_eval_done": 1,
+        "securityFactor": 2,
+        "session_detached": 1
+      },
+      "hooked_targets": [
+        "CronetUrlRequest.addSecurityFactor",
+        "CronetUrlRequestContext.addSecurityFactor",
+        "CronetUrlRequestContext.o0",
+        "MSManager.frameSign",
+        "ms.bd.c.r4.onCallToAddSecurityFactor"
+      ],
+      "security_factor_calls": [
+        {
+          "url": {
+            "length": 1155,
+            "sha256": "c4ae2c6d214ceeca76e81874284f12d2c3ba62666f426f82e1c8d1400194fc00"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 23,
+                  "sha256": "8f3decc08415de7f1b27043bb8d6c6bd7d02951ec7286389515697177b5bbbcf"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "c5c5c5c916732e92d86a309e6594d4c2b0b44bd9bfe9926a36b2a12f9202ffbf"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "4b62ea7fb0cbef815b2c55a91f31e2e4e536c78a19fd4d68515e9806a5a7ce30"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "73524141918582e69b23ac68653db9853631d17f092efbe8620264039b745077"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "1ecb8bffc795b02e19fef4ad841e0d14a03006ddb8d74a452777a2a3555dbccb"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "5683816d8a625b977f1602993509d1ccf96757065b1568e7aa56fc8b452e54fe"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "de4fde2a86171f8ba435aa3ea035e7a3ef824734d5e31c2b7a8ecc98cb21337c"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1300,
+                  "sha256": "6e2384bb4775f07f9c0cf9ad78f13ea4307dad7f551b32a3d7dc84eb5575b52d"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 844,
+            "sha256": "cb53304cb601a4c914282dba1e05c9d3476ef9205e36014b23f03d4c8c017abd"
+          },
+          "route": {
+            "length": 53,
+            "sha256": "01be2b4c95f4458cfde15ff55b029a491bb21c1fba8e8ca667e656beb8971600",
+            "path": {
+              "length": 16,
+              "sha256": "0aef47dee7e357ea7b618fe89b06bb52a989605f5178d022f270297c97fedafd"
+            }
+          },
+          "input": {
+            "count": 4,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "fbcca84ba6c285c014768832cff6f1cb9a35c09d1db52911d634e8b25fbd3b09"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "8a24a6dd6d855e44feb21c02b4b85b1cfe3d9a235b791e9ef930f33a85d60168"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "07d3919d2b3bc0a31145e08ca6a9c4ee6260d01c4903f5136d940862f5c8f951"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "44d66899c972692091cddcfc9a317baa5d9b2ad7ebe248bded1e61056bcf2dc3"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "0d4502d121e137de38a6d7b33339c7ff9b26b80ddcca138ed8ceee6f4149219a"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1300,
+                  "sha256": "c1c42163f29ef0434696c9b167fa1cf71d9175e81ea98e7416bafd12d45e585e"
+                }
+              }
+            ]
+          },
+          "context": null
+        }
+      ],
+      "certificate_returns": [],
+      "cronet_event_count": 0,
+      "terminal_event": {
+        "event": "session_detached",
+        "reason": "application-requested"
+      },
+      "raw_capture_retained_in_evidence": false
+    }
+  ],
+  "security_factor_callback_observed": true,
+  "six_header_call_count": 2,
+  "observed_header_lengths": {
+    "X-Argus": 8,
+    "X-Gorgon": 52,
+    "X-Helios": 48,
+    "X-Khronos": 10,
+    "X-Ladon": 8,
+    "X-Medusa": 1300
+  },
+  "cronet_runtime_branch_observed": false,
+  "certificate_callback_observed": false,
+  "same_request_certificate_correlation_verified": false,
+  "callback_url_or_map_object_identity_joined": false,
+  "provider_method_or_field_identity_joined": false,
+  "ordinary_cronet_six_head_chain_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "target_app_modified": false,
+  "interpretation": "On the official unmodified 7.2.5.32 APK, root Frida Java hooks captured two ordinary NetworkParams/r4 callbacks. Both returned all six seven-god header keys with the recorded lengths. CronetUrlRequest.addSecurityFactor, CronetUrlRequestContext.addSecurityFactor, and o0 were installed but did not enter during this reader window. This is a bounded path observation; it does not prove the Cronet branch is unreachable or establish online acceptance."
+}

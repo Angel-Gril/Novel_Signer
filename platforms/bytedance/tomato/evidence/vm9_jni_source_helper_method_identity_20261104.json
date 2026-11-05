@@ -1,0 +1,45 @@
+{
+  "schema": "vm9-jni-source-helper-method-identity-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "sample_scope": "one_unidbg_frame_sign_trial_after_fixed_initialization_and_native_sign_rounds",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.1.3.32",
+    "device_abi": "arm64-v8a",
+    "emulator": "unidbg-android-0.9.9",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c"
+  },
+  "artifacts": {
+    "probe_log_sha256": "a8a737054468dad2479fe30afaaffa66c95fb5d46f21aef51b361ac71f6252e7"
+  },
+  "helper": {
+    "offset": "0x26f650",
+    "get_method_id_return_offset": "0x26f854",
+    "call_object_method_v_return_offset": "0x26f95c",
+    "jni_get_method_id_table_byte_offset": "0x108",
+    "jni_call_object_method_v_table_byte_offset": "0x118"
+  },
+  "observed_method": {
+    "class_name": "java/lang/String",
+    "method_name": "getBytes",
+    "signature": "(Ljava/lang/String;)[B",
+    "encoding_argument_observed": "utf-8",
+    "return_object_type": "[B",
+    "frame_sign_get_method_id_events": 1,
+    "frame_sign_call_object_method_v_events": 1
+  },
+  "capture": {
+    "frame_sign_marker": "FRAME_SIGN_TRIAL=0",
+    "frame_sign_result_type": "null_after_write_protected_memory_abort",
+    "raw_log_retained_in_evidence": false,
+    "raw_url_or_byte_array_values_retained": false
+  },
+  "conclusions": {
+    "source_helper_java_method_identity_verified": true,
+    "source_helper_utf8_byte_array_conversion_observed": true,
+    "source_helper_provider_method_identity_joined": false,
+    "source_helper_return_bytes_joined_to_android_capture": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}
