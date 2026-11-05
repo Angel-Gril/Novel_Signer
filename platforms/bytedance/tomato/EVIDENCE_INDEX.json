@@ -11431,8 +11431,14 @@
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
-  }
-  ,
+  },
+  "vm9_claim_matrix_20261106": {
+    "evidence_file": "evidence/vm9_claim_matrix_20261106.json",
+    "verifier": "python/verify_vm9_claim_matrix_20261106.py",
+    "schema": "vm9-claim-matrix-20261106-v1",
+    "record_count": 12,
+    "all_exposed_unresolved_flags_false": true
+  },
   "vm9_outer_graph_fresh_20261106": {
     "evidence_file": "evidence/vm9_outer_graph_fresh_20261106.json",
     "verifier": "python/verify_vm9_outer_graph_fresh_20261106.py",

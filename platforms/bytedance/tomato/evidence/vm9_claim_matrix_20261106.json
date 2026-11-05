@@ -1,0 +1,182 @@
+{
+  "schema": "vm9-claim-matrix-20261106-v1",
+  "record_count": 12,
+  "all_exposed_unresolved_flags_false": true,
+  "records": [
+    {
+      "evidence_file": "evidence/vm9_cronet_callback_type_boundary_20261105.json",
+      "schema": "vm9-cronet-callback-type-boundary-20261105-v1",
+      "sha256": "08f76928f0bb8eaf3ebd02dc8151441a4df3be9e415f6a74fd715586a1365c5f",
+      "unresolved_flags_checked": [
+        "android_captured_jni_buffer_consumption_byte_joined",
+        "callback_url_or_map_object_identity_joined",
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_callback_injection_scan_20261105.json",
+      "schema": "vm9-cronet-callback-injection-scan-20261105-v1",
+      "sha256": "2ca5f03ae07219fcfa4a66a15bc7882848a5de1b7d1bf491cb2cab0b9eb5d502",
+      "unresolved_flags_checked": [
+        "android_captured_jni_buffer_consumption_byte_joined",
+        "callback_url_or_map_object_identity_joined",
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "runtime_adapter_identity_resolved",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_callback_dex_implementation_scan_20261105.json",
+      "schema": "vm9-cronet-callback-dex-implementation-scan-20261105-v2",
+      "sha256": "4ed709bbf980758bccde06f56af124c7478ff66de3522419aa444da4c3390b99",
+      "unresolved_flags_checked": [
+        "android_captured_jni_buffer_consumption_byte_joined",
+        "callback_url_or_map_object_identity_joined",
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "runtime_adapter_identity_resolved",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_static_adapter_r4_chain_20261105.json",
+      "schema": "vm9-cronet-static-adapter-r4-chain-20261105-v1",
+      "sha256": "866a1fd2a97c44edb550b450ce786cfd87535c9809d57b229a5644564a12b0f0",
+      "unresolved_flags_checked": [
+        "android_captured_jni_buffer_consumption_byte_joined",
+        "callback_url_or_map_object_identity_joined",
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "runtime_adapter_identity_resolved",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_ordinary_initializer_static_20261105.json",
+      "schema": "vm9-cronet-ordinary-initializer-static-20261105-v1",
+      "sha256": "755b5fde294de2dd7d378a6f6a537456b72b89d9b559dd31537d381edf188b19",
+      "unresolved_flags_checked": [
+        "android_captured_jni_buffer_consumption_byte_joined",
+        "callback_url_or_map_object_identity_joined",
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_boe_guard_runtime_20261105.json",
+      "schema": "vm9-cronet-boe-guard-runtime-20261105-v1",
+      "sha256": "eeb32276b3de8549f8522b29ec002382c91d2e597293d9bc2a579cff6530822b",
+      "unresolved_flags_checked": [
+        "android_captured_jni_buffer_consumption_byte_joined",
+        "callback_url_or_map_object_identity_joined",
+        "complete_standalone_signer_verified",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "runtime_adapter_identity_resolved",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_provider_runtime_state_20261105.json",
+      "schema": "vm9-cronet-provider-runtime-state-20261105-v1",
+      "sha256": "ae495f36e0b7d3be934b447704d2371f3f2b7bf47288b86db663f3c99814f4bf",
+      "unresolved_flags_checked": [
+        "android_captured_jni_buffer_consumption_byte_joined",
+        "callback_url_or_map_object_identity_joined",
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "runtime_adapter_identity_resolved",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_synthetic_manager_r4_dispatch_20261105.json",
+      "schema": "vm9-cronet-synthetic-manager-r4-dispatch-20261105-v1",
+      "sha256": "a494d1443eb72176be42f6191041d36f846dbb39eb133bd5e8dbab06e3b42312",
+      "unresolved_flags_checked": [
+        "complete_standalone_signer_verified",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_cronet_runtime_selector_state_20261105.json",
+      "schema": "vm9-cronet-runtime-selector-state-20261105-v1",
+      "sha256": "f39deb07cf09d319d6ad2d00a5b3b5c41cf417cb04fb9db8a362efdc1548f62c",
+      "unresolved_flags_checked": [
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "r4_callback_cronet_identity_joined",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_okhttp_r4_stack_20261105.json",
+      "schema": "vm9-okhttp-r4-stack-20261105-v1",
+      "sha256": "43c9a47318258f04853f4a076870d80a09a4d2292a1d13ac739e5de49b2d22ba",
+      "unresolved_flags_checked": [
+        "complete_standalone_signer_verified",
+        "cronet_entry_runtime_observed",
+        "online_header_acceptance_verified",
+        "r4_callback_cronet_identity_joined",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_networkparams_runtime_window_20261105.json",
+      "schema": "vm9-networkparams-runtime-window-20261105-v1",
+      "sha256": "b0bec38919c9598a6a728c4cdceb947b27823985fc168d32cfa115c990322e6b",
+      "unresolved_flags_checked": [
+        "callback_url_or_map_object_identity_joined",
+        "cronet_runtime_branch_observed",
+        "fresh_standalone_signer_verified",
+        "online_header_acceptance_verified",
+        "ordinary_cronet_six_head_chain_verified",
+        "provider_method_or_field_identity_joined",
+        "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_outer_graph_fresh_20261106.json",
+      "schema": "vm9-outer-graph-fresh-differential-v1",
+      "sha256": "4a9091801eec34c89fafc4459a1f3479e63fa3163666c2afc7581b93ac5f0307",
+      "unresolved_flags_checked": [
+        "complete_native_outer_state_equal",
+        "current_online_header_matrix_verified"
+      ]
+    }
+  ]
+}

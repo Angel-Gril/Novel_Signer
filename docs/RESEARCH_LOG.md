@@ -808,3 +808,8 @@ signer、整请求差分和线上验签仍未完成。
 差异都落在四个 24 字节 C-string 槽的 NUL 后未使用尾部。该项只标记语义字节相等，
 不提升为完整 native state、独立 signer、整请求差分或线上验签。详见
 `platforms/bytedance/tomato/evidence/vm9_outer_graph_fresh_20261106.json`。
+
+2026-11-06：新增 `vm9_claim_matrix_20261106` 交叉证据门禁，复核 12 份 Cronet、
+OkHttp、NetworkParams 和 outer graph 记录中的所有未闭合标志均仍为 `false`。
+设备上的最小原生 hook 虽安装了 r4、NetworkParams、Cronet manager 与 `o0`，但目标
+进程随后进入 ANR，未产生新的回调事件；因此没有新增 Cronet 或完整 signer 结论。

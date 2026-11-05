@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-06：当前声明矩阵与设备窗口
+
+新增 `evidence/vm9_claim_matrix_20261106.json` 及其 verifier，读取 11 月 5 日
+Cronet/OkHttp/NetworkParams 记录和本日 outer graph fresh 记录，逐项检查所有已暴露的
+未闭合标志仍为 `false`。12 份证据全部通过；这项门禁只防止把 OkHttp、synthetic
+manager dispatch 或静态 DEX 链升级为普通 Cronet 六头、完整 signer 或线上验签。
+
+本日设备重新上线后，最小原生 Frida 16.7 hook 可以安装 `r4`、`NetworkParams`、
+`CronetAppProviderManager` 和 `CronetUrlRequestContext.o0`，但目标进程随后进入 ANR，
+窗口没有回调事件；兼容 bridge 的 `no setter for property` 错误与 Frida 版本不匹配
+也已确认。该窗口不产生新的运行时结论，所有 Cronet/完整 signer 标志继续保持 `false`。
+
 ## 2026-11-04: live callback JNI buffers passed to a native callee
 
 在官方番茄 7.2.5.32/72532 阅读页触发一次真实
