@@ -1,0 +1,4149 @@
+{
+  "schema": "vm9-networkparams-runtime-fresh-20261107-v1",
+  "evidence_date": "2026-11-07",
+  "artifact": {
+    "package": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "installed_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "android_version": "9",
+    "android_api_level": 28,
+    "abi": "x86_64",
+    "device_serial": "emulator-5554",
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "probe_source_sha256": "74beb8771464bfd1f4506c69f79e37af34a2dc4331aea4bf05ae24ae30febe30",
+    "bridge_sha256": "749e107feb32c21227fa79a5feda5c4a13bf4d797d51d8c94156d8d4b3e97eb2"
+  },
+  "trigger": "already-running official home/recommendation activity; bounded 120-second attach",
+  "capture_count": 1,
+  "captures": [
+    {
+      "capture_sha256": "a0c2053c2cdebb4abe4696924eff28fb4f933517363e0c8163c8b97510720f1d",
+      "capture_bytes": 115279,
+      "capture_row_count": 51,
+      "process_id": 3980,
+      "event_counts": {
+        "script_loaded": 1,
+        "hooked": 9,
+        "probe_ready": 1,
+        "bridge_eval_done": 1,
+        "response_deserialized": 17,
+        "securityFactor": 21,
+        "session_detached": 1
+      },
+      "hooked_targets": [
+        "CronetUrlRequest.addSecurityFactor",
+        "CronetUrlRequestContext.addSecurityFactor",
+        "CronetUrlRequestContext.o0",
+        "MSManager.frameSign",
+        "error_code_exception",
+        "ms.bd.c.r4.onCallToAddSecurityFactor",
+        "reader_exception",
+        "resource_warning",
+        "response_deserialized"
+      ],
+      "security_factor_calls": [
+        {
+          "url": {
+            "length": 691,
+            "sha256": "ae0e76b0c5c845a2cb2a2c5545366d360eea37c9198b1c798d9c19df3dd68961"
+          },
+          "route": {
+            "length": 85,
+            "sha256": "a85f505a503942f54c06859178ed68ce3d7ca097bb717bd3995237ed2d763ee8",
+            "path": {
+              "length": 42,
+              "sha256": "3dc2a5b7dfe5bec5bd56ef6830f0cb9fb7acbb9548b369193dc1aaa4ab2df083"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "7905876076a29fd9d3c735a7d516c428de02832356ec591f178cf49d9db95e53"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "79380033c9abbd3271dda1c753b36bd9b2c00de797d4cb6c1965bf4b71f5dc11"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "1ba6bcc4e0d72d45b91ad0548ab993ba8fb7577942dc8b6fa99382dd6d1d3004"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "e04d93f825f31ebd92d491ac7dac3db529bad7481791ea7905d4ed8a05b1fa94"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "7b3ad15b940f11eb31a8897c10220378913b94409ed9c4749977abcf39400c4e"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "1fc54833625e6c3f060c6e5d84833285afd40db5aa129bc70a6e68dffdffcb11"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "b17d4d010ff66334f44771301d911d1c02acdc0f3f407f3907730f0d3b293217"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "68b18b369b01ca51a092f33d544ec5f1c8717aa34ea04e0aed65614e578029d6"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "7a2f3fa2d87f51ce7c84b51b6946ead09424124b036b8f804806debd52fe17d1"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4580,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1449,
+            "sha256": "060b243ae320a014d854bd28fef0e8ebe8d5b02a06ca0f8bb1a9e245b3c12866"
+          },
+          "route": {
+            "length": 71,
+            "sha256": "fb55566bdef254678ebeb7306bf73c7e5ab21984ee78ad5f11618abdb6801a5e",
+            "path": {
+              "length": 28,
+              "sha256": "66e24462045ad4ada93c7c98eeb7bf82d0046baeda72b42b6c95c89ea5e9941d"
+            }
+          },
+          "input": {
+            "count": 9,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "ca2d34f499a40060c10b5ca0c97b4d425462b3b9bc8f85f6573821e68421912b"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "92e2a10737e2f5924a9f968af28b99565517a3b0e9e28cb6cdb874d8ccf064eb"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "572ae37fa11e6df39b889193a18bd53f40a7985a57a2270851c7f97cf58b8ec5"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "c39e907eeff3cd387e765212e5f027afdbb026a7c384e098a284e8e1606d926a"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "2a22f084940163698e8e58997cd91fc77069b8ed938f8d03ccd8136ba9f7b20e"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "ddaf31a5e0791708f8bc4d0122c9d7d2ec62168f230ca3f83134021dccbaccb8"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "a1a29a3c6fcd0db3b58fb022bf8a17f9043c4bc438221726003673c3463b26b2"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4680,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1333,
+            "sha256": "b8aab90d9d695fa73467e5ae1bad0e07cb45c9557ba11e829187e836c4da9768"
+          },
+          "route": {
+            "length": 82,
+            "sha256": "d2f1e8219629b75dd3f510c4fc31c03ed768ce78d56b9c4dbbb9c64aedd266b5",
+            "path": {
+              "length": 39,
+              "sha256": "566b846f9a319dbc0528ad28306ace95307304e407eb6ad27f6f2515bd3088cc"
+            }
+          },
+          "input": {
+            "count": 9,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "86048f419dbb67b33cf617a4c218b0ea34becd90f8b1e7f4cd714bbc2fbc149e"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "ffc444a0a45322d27eaf59159a3223ffdd9751e785ff67b30b51d76f5ad34a07"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "3b639ae4d7ae9708894d56a1cff331dc716a24e6fc9f53cb39a1937b6d4e349e"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "26e154a827dfdfdd9d3ff9f182cf9c0dea9cc8485102e7cb4b64a44f8ce8b9ea"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "84b30219adad29e151b626f171cd2b063f6efafccc6b6323090493a2ff655708"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "d87f95d1795112479e93bbd3b1307fc3ee1024fa284df4e296f56b79527ff534"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "53780c0722b675d2d8b89f3f8ca58d571bedf80ed1533557dd2ba62c974f7459"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4640,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 692,
+            "sha256": "a9244876ec499d9d71cde3e947c3ace5bb56e6c04a5515b08c3a364155c16170"
+          },
+          "route": {
+            "length": 86,
+            "sha256": "6ad4f57558da71e1793ab40e957a96e66eb788d9a889682d54ca660b513f0ec9",
+            "path": {
+              "length": 43,
+              "sha256": "54e11be321b8ece3ccf4a2a2c23a2f98f156ed8418133ff3effd4af553645ad3"
+            }
+          },
+          "input": {
+            "count": 11,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "e93f6320f24100bdff78cb2712cb4d6355468636d8599b18977a08ee4fedb24f"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "b7b971fc2ce37274c204faf4cbd20cacaba2385d4f8249865bca80bf9ae42100"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "3cb675d75702a1662aa5e2588476bfbd667f00a772048a2cabeccd201cc8b591"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "3bf50ae53400732f4445319d87fd0647b2919fe0cdcf221edea1595cae1b8f08"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "f99f1944000a9916195f976516ea2bb27d4dc4d3bd3776ed4ad91e7ce69f7506"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "dfcb328c776e86e550e0cae796d09616afd57f90f4a31739161c67cea305f83b"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "c2e00fd7d15a609c48c3e53c0f29a826b58eb62376f0c29b9a079ea50d2c797a"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4167,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 775,
+            "sha256": "4c0b1105e74e27d9b9cfc92fac1bb62edb4afc169b7febc1a3969d692c2b9115"
+          },
+          "route": {
+            "length": 89,
+            "sha256": "7860a3200336f53c5e36819458c1eacc4293a48a11de2e2d2ddc4cb449bdcb3c",
+            "path": {
+              "length": 46,
+              "sha256": "d55dc48be86af9199320d22b8198cdbee14001755e89f38694ba3abbb28d6dc5"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "8d766657467eb2478e4ee0b817aadd1caa5de0e03088a418a9277acf04a5a16d"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "eb801d098da259c09a26e36fe260b6efeea6e4ec898e20494c98dc94d5953a90"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "2f6cf911a38fd4b7e462e1c3f03fdd62b817147fb5db213a5290db082525d19e"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "8f5b4c5fa8242f46570eea98b5d103b80f7b299e053ae9d6c02e99927ccbe1b7"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "705835bc1f1865103efacbefed063ed9b64af1464aac28b411726eaabe1cfbfd"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "cac1f2e2d60b7fed0875531b7bb9bc8c4162dfeda900a923eb93743d94bb629b"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "8a51f9a79348bb68bbd788a8fe83a39a17b13694dd7e5ba1fad6fb3d09870d11"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "23301c97f65ccd53b7524dfca3ff4a27ad8d1b4b16266e66a938e6a4af01d0ae"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4162,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 767,
+            "sha256": "87e16d1ebff07d6518f1512c76dcdfda3a9ccee559583cf29f1174202755bd29"
+          },
+          "route": {
+            "length": 89,
+            "sha256": "7860a3200336f53c5e36819458c1eacc4293a48a11de2e2d2ddc4cb449bdcb3c",
+            "path": {
+              "length": 46,
+              "sha256": "d55dc48be86af9199320d22b8198cdbee14001755e89f38694ba3abbb28d6dc5"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "597207d6987ef22c013a1618cc2ce4ce7b294d5c110b850c2569ef156f3b1b3b"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "ca9832b419e345a4171965e6d288cf27921b350269839fcb30b0a899c9bfc5b3"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "1b24615c98bdec7598756bad5cd69a70264899e9f30d743d13003c869a75fb26"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "ef3d52faade4118b1855173b18580c5e31f3a40ebcc1f536c137055ca9a4c257"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "7eb2bce88b3e114800a1341c2bf55688deaf0c4c9e41186229042426f157af1a"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "54b3762d86aea0bd1f5f827458169c9e81bb5ff4778664de3d1ad182c0aa395d"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "78a32510cc919cadb403aed48716c2dd6246e19221e4c8acc51eaa739a2393fd"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "10b1717b554a7012061f58f7a1530e4ef4ba27860862cb2220271c5284ac3ff3"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4182,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": true
+          }
+        },
+        {
+          "url": {
+            "length": 767,
+            "sha256": "87e16d1ebff07d6518f1512c76dcdfda3a9ccee559583cf29f1174202755bd29"
+          },
+          "route": {
+            "length": 89,
+            "sha256": "7860a3200336f53c5e36819458c1eacc4293a48a11de2e2d2ddc4cb449bdcb3c",
+            "path": {
+              "length": 46,
+              "sha256": "d55dc48be86af9199320d22b8198cdbee14001755e89f38694ba3abbb28d6dc5"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "597207d6987ef22c013a1618cc2ce4ce7b294d5c110b850c2569ef156f3b1b3b"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "ca9832b419e345a4171965e6d288cf27921b350269839fcb30b0a899c9bfc5b3"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "1b24615c98bdec7598756bad5cd69a70264899e9f30d743d13003c869a75fb26"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "ef3d52faade4118b1855173b18580c5e31f3a40ebcc1f536c137055ca9a4c257"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "7eb2bce88b3e114800a1341c2bf55688deaf0c4c9e41186229042426f157af1a"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "54b3762d86aea0bd1f5f827458169c9e81bb5ff4778664de3d1ad182c0aa395d"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "78a32510cc919cadb403aed48716c2dd6246e19221e4c8acc51eaa739a2393fd"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "10b1717b554a7012061f58f7a1530e4ef4ba27860862cb2220271c5284ac3ff3"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4182,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "a667cdb82c86434099d0e2c9a64aa3651090ad04ced5a228f16f317e652f1dd1"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "58043b64934d10cbdd025fcc203d168bc5d5fb1b101b84d940fb7f2b0bf1bcaf"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "65d4c1d29fb969b31c7168ec6f947722c0e1ea0009b677023648e460c5b747c1"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "181c289204e715233fc773d66da51a0061e621b2c2ee6386eaeefca09dc36626"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "a3750e5b05c3a25ca1edfd97a5f5e1d44035d94ed897507c141571e09fe41f84"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "a6e568f9f8ccfd169ce62cf700bc238d48244547df2462f00048c3e9d593ad3f"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "0d4d9a7439d2dbe69bc8aa17040c601f644581fc6bd7b9d1c381b5b7106fd7d9"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "ce8929b2368bfc48567980df7a021b4f9b7dc55f38e814e64626db9cce66e690"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "9bd6d9561a809f06361e39f1cafab44e364972fbd525b95c4632f59abdb36b5b"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4705,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "1ba317d36ab930cf00b9cb4e7d61df3d65b0b7c978a9c94a984f0c90f170a178"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "1834d26ee59645b86095c4dbf3f00377a7ac6cb323d746c46d8b78267c8de07f"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "dd5b068e807ec76937120fe657da2c50479b17870f5bd98be33997105cf50b57"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "119fc4aa8b18c2c5bd6c820845d95107a84ec7195d5e966553b87e9bd0bf4482"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "df3366b3b521c45f2aacd3184ffdae3e8379097b5ad5d231663ae6ce01d68e10"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "37df0e647286de62d65a170907e8a7e6f98951d2b7b0684a900ccaaca294c10c"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "8e7067efe5c7b66588770eb65265d1e4a78f9ad6f4a65e18be0fae5a5f38fbb1"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "86da3ee01006c60a156dfaa57ead4cdb29d3d86f131268b67e157ea1fc866f6a"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "da94e8f87cfd89b48a4477b0a63f5bfadc00402cda09c5e01012743b18777c9e"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4699,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "dae60d11e8c167159870b63b87086c8c2b52bdc5f5839588c466f947732a9101"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "833035547b2916cbc3a564d3c9512177f82b6830061d64bfd3a0a44718621943"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "b5e97593686558b35874959b9c156fe81bcd448f711101cafed20c7376d48e4d"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "7df03e717c45c70793f8e6de3ac4ea1ec0fc1e966f93cef4cc2c2f9f566987b9"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "6e1a8e6a36542429072f0c3e4a5c39540d525688f5ecabbaad528e31322abfc3"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "e2d622a3a8577761a03ddc4344c2c20b98dc8863ff165f80d4984cba277339c0"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "8155fe0c04d19074e2875a0fe4da9fc40c1ee57818b5f48bab6036f7ac5fc30d"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "429130393b31ecd3a1e5118ecf70f98ce148517bb0b85e561a2ad59bb54084e6"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "d5eec9b32c967aa7c71212ebb8cc28df8d6e77368b1cbae2052da8a44e8c2fbe"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4556,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "9d73401e0cbf0970bae5997e90cb6833a8a91deec61498ae56b2791947e88945"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "78aaad83be10572d154e3703e88e34105cfaca3fb80a6f7d7072fa43f9d1655f"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "ff943251cd4dbbcb354e8078855c9a6faa458c5b90e5cf57da69dba105a99a94"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "804391b86b9ecb56036ccd4df3feef87cee4fd56dbd98293e8af62122260cbdc"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "dbaf43fb54a39f9dff8688bca1d38301120318b8cd9ab9446f0926f9307cecb9"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "5057cf424f31ad216676840e913e5b80cb090993b86ccf97c75f9e4e7bd833df"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "a5017066c1320368b6318241ed174d86f0d25b527bbd5e80f78b6c58be7f0f39"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "da71ac6a69f0dd560ec1f3e1ecf985ad9a36e8990ae3834e2affbb36d3990cb3"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "1be4469fcd563f419a684cf0eae3798cc3c784b0516af6815b152bc127c02eb1"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4697,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "e3058f922c7e4a91e9f7b13dd372309ac77726a3e6c94249a4579a100782e08d"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "9ddad5a382127de65d7ffefdc36505478dddaf4ac969680fc733d0fd571828c5"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "7ba82969df9aca0bbcda4bb2a37ebe0f76a2ec16c57a7198a89165705b21f47c"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "2b38c46d046f04641b84e2e6b13bbcb4856d73752d3cc85274e92b1ea6180295"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "0fded8349139876330932e81a81b18f4a428eb2914cc18327d86039dc87f76b9"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "5bf077b2e1fcd29140e6e13559653c04686ec350283a2c3c663cbd21f4de7d1a"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "ba0581788af2bdd32cdf1e6a68e49afb9115ffd094cff4e06118e283eb5a2886"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "fb434bc3cf650bc71d690a3956c12c83cc1ef5f362f1f78441caa11141a1a875"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "1d90b89d154f4ac6329efa29dd10ea70a339b932f88095ad92c34fc844c19f16"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4154,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "abe0270aadecd45e832c9551b714721a3bc95d01fada3e3b8d86e77f34b52386"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "4937ce35793c6ca381ebfec9ce4063959c0311d0e4f4b51d025628889e74b015"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "0aa3be176b492394c0a802724344310c2bdfa565d4bf6af8389c7c0e3f407468"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "2b38c46d046f04641b84e2e6b13bbcb4856d73752d3cc85274e92b1ea6180295"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "2901de01855b59a7ef6fc3630c513fc4e7bb984562aee9cee702d03e8936f77d"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "1a946d248a3b79f756254fbdaa5adfb9897a1bf0bbe2d8298d687370e69ed742"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "ba0581788af2bdd32cdf1e6a68e49afb9115ffd094cff4e06118e283eb5a2886"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "4094a7cf8c40ab6fdafa383a5faed5b7d190c7ee06e881c5ce12972071c0e50a"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "aa37e4ec8fde242553a5ee2e258a9e925cda8945c0240c6880613b3fb6deebd7"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4583,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "9d73401e0cbf0970bae5997e90cb6833a8a91deec61498ae56b2791947e88945"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "d188de9364ac2ec1bf725ba97140f58fe3ea83a7265587c11e6919c74cb5b8cd"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "f5fc141367bfac83dbc6be312cca4e06df3efb9173ab0da619a8fb18bd6ea44a"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "3b0203efee3e666095f17c1a3fa69fd1384f46db6c59ecd50fae0fdf11cd4a64"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "b6025889cd79c830a3dd0051d6c7a87753811a2f4ae5670109fa95ec11ab5937"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "9729cfd9bccef297763c1b160c9a7083718358d00078e6a984e2d86f578ae9a6"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "36f660f020501c1b40fa939ecfddba1e46c936c28718c8b0d0cb339cee7e5de4"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "fa5b6b88c95dfe5ecf7b2a47993479ed52a6a680140269c43e71566803229f97"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "fc20e75bdc7a8895f5a43e13df513edd1920a645b311524ea55feee7ae150f28"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4135,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "a1702e094d591975da35e629e6bca90dc339d6c3aae2a669d1091a92bba7d3a7"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "35e6dcc4a2e5946db1e264d27ef4904d34dfb7cb98ac10510de1666615d8649e"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "265a3ec4fb87fdfb3da09fd976cd66adcbaf1fa4f57624862b27a8b532ff6de4"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "3b0203efee3e666095f17c1a3fa69fd1384f46db6c59ecd50fae0fdf11cd4a64"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "726deee640f1abd26c850c82e30c386e6f5f4c41cdc356aa38204c0e84986add"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "635c3c12b47d5bbad5a3ea37904eec53b7f79bd6d1cde0587ce19b80d5129de1"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "36f660f020501c1b40fa939ecfddba1e46c936c28718c8b0d0cb339cee7e5de4"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "b1193913cfe2a730065da6b4ba64d967d61b5493b1357c5353be456df291d293"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "21e9f952d362e7de4a21c077668cc9d425827b7c582c1d3d6c9bd1b48f7d70ba"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4119,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1153,
+            "sha256": "bef248676610f598fe61df9ae3b70d163a65e3846d39b1772d1331598bbceb7c"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "fe1c9887356987bcc48b5788013e1b773f3022e31c066e1fdda6ecc4cbc06250"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "9bddc0c7a3553b32321fea29ac31296c12efe4e1ea6ea39d1072bf6a17ebf926"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "3b0203efee3e666095f17c1a3fa69fd1384f46db6c59ecd50fae0fdf11cd4a64"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "e7a9d6f4be510f645bcb9aa18ffd02998f00ab466995b66b24ddb2c878fdea5a"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "0553cff37e1557298b122664a242838f153d1cb56559e3af9bdfb04733a792bc"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "36f660f020501c1b40fa939ecfddba1e46c936c28718c8b0d0cb339cee7e5de4"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "879c6e7c6bf01b3616aa9951ec30201df1988e476796fe615974f4bd56f3f08b"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "d3a97dddc4ee0e7913fc836910fb3189f7b8ccaf577ce9719d8780dfe07f48ef"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4575,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 154,
+            "sha256": "c33cc027b23002cb56d32551126d66da7af000e35816ad2ac9efbf27d5756e33"
+          },
+          "route": {
+            "length": 58,
+            "sha256": "7017a2d8dd99b4fb3afbfb2897290e04d281266d58b0caecb4f7eadf0ff92f36",
+            "path": {
+              "length": 24,
+              "sha256": "c03f3abe8ed5ceaae44c6b19054acecdb35509dd35551c6588d1588817bf4a5d"
+            }
+          },
+          "input": {
+            "count": 11,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "eca4462421f88cf221ea57a834778893d7abf2c0eb254b688da26ba3f03c547c"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "a7b136ad560c106e269fb224afb637a54b91af95be436dadad23861ac458e328"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "fab7ddeb92e78cfb063642c1f4ba910bac6abfa90c93bab4fdccbc79eb09b0ef"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "583d8ac1f1151c08e1ce6c368a4cbc05cb8842429f4073499159ca2a8bb62f45"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "e96f4250cb61b94e6f8a5ca1e7a8fe8a8474d25b5886cede7560c9a830feb90d"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "62250f4f31a01fbbe5859d88a8e5edf4cc600fc5c51f67128eedee3d8adb45cb"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "dba7d4baec9dedc0849a1be6008e42f4317d1edcf9c6a6a7bcce6540b9de99b7"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "d0996a292fa5d2d449c88384ab63a472d99d95d0fe84c4a59a07bad9fa6b6a73"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 5139,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 869,
+            "sha256": "837acdb793fa4b88e5f1c2b95feaeac4a0a400b5194b9372a039a71926aa9ddc"
+          },
+          "route": {
+            "length": 47,
+            "sha256": "f907ea8814c64ca7dbb70e0b92a0d1129496370085ceacb3a39e208c077377a5",
+            "path": {
+              "length": 10,
+              "sha256": "c478af8b072bc9a7f0eb1294beef0bbe7516309906fab4f9554826f1eb6b15c1"
+            }
+          },
+          "input": {
+            "count": 8,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 5,
+                  "sha256": "1f567cb08cb32698c740f94efa396e82ad0d4ef337b834325a94c56c9e592202"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "cookie",
+                "value": {
+                  "length": 12,
+                  "sha256": "81ce585e2cef69f5f5bec00fe611f98430833a9e2917bc07abb54721b677468a"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 17,
+                  "sha256": "d76c12b6c9c5e1f6199fec3bab5642e9cd78859abe634cbd302b620afae9bc52"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "239e806d65337d14fb64ac4ecc45795c77b4e94225a3b7a86b4116911d10d5e2"
+                }
+              },
+              {
+                "key": "x-tt-request-tag",
+                "value": {
+                  "length": 9,
+                  "sha256": "65b64f7ff8d7e36c4e76241354c153bc48aba00d88db838d801bca655cb035e8"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "16f03267d88bf60e8b7a0135cab33dc7a16d2adad10082447d270d3269bbdaba"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "31788c1b29b101c75bd6c3556cdebc56748b7ddf4b34af7a7a6d08aa09184e51"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "85893b94860f045aed7900d52c48e0011c75b212702f9f11ec0024c821cfa4dc"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "62f880cb18dc0df8e17ed761f65ccadf5b88191197853ea843200356c44e063d"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "c536b4fbecad2185f128462b266106946a1025fa1cc4c8a5ea7fe951b6f0db59"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "380b98f11c6d49add39d0391e8a518131cfc363245ef5af39ea95803aeabbbab"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4225,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1154,
+            "sha256": "8ee1bce4b6a4e7404ce16deafc8f018a03be8598f04209ab39aa6a55b1631645"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "4ea18fbc79673572a6555bd871d27783a4a7449deaaf4e1b13d2998466e9aa9f"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "f2ce7d17cd3b1d5f17048337a3877b93c3d28a5b05f2c8dfc521b8e7936dc7aa"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "553af54f6efc36063dc0627645b9c081c62d06401423e08b7e58aa62353c0357"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "df203770fa3785fe9be928421ac29c336db81080b572ccce083f2ffe33eeb3c3"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "05e5761ba01061a708a0a4cb80b777b91c12b6a9e0298df21d8dfe7754331145"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "fd4134bfb25207a1ab6dc1cdf451f59fa67fa448c3c13ec9c0f208ecd6e6295e"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "b5774081bcddd7677b4a1d2ce543fa18eaf5d025426621b75f0f597c8ce722f1"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "9f2a7e54de244ecf035229a9a14a24f7b67f4b5cf739f07ac26745befa5ea612"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4711,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 1154,
+            "sha256": "c27adfee8f9c65a8a3d9c77c7bda775486caea9c2fc305685ef31544b6aa6559"
+          },
+          "route": {
+            "length": 83,
+            "sha256": "30fa86d8f90c690f24b9f86d5d9ae11624d71c9b785bf0338da211a3d87a3000",
+            "path": {
+              "length": 40,
+              "sha256": "3cae8b8e11d36a0f6bc622c295816342dc4985ae9ca1fd147fed9f3573fae155"
+            }
+          },
+          "input": {
+            "count": 14,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "content-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 23,
+                  "sha256": "79ca02623b9458abf4d30490573a63d45e2b2f673fe5da3e4f89b4c1aad7f4cc"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "d5c376906ea7d7df41a560fd51ab5518da1b3a3db5527087176912db90d3203e"
+                }
+              },
+              {
+                "key": "x-ss-stub",
+                "value": {
+                  "length": 34,
+                  "sha256": "8b098a794b500aaf892975bd039aa6d8a2a8a7dc2bfff0a85f25914aa927c4ee"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "9250018d7db6985d965e1c8d5217e1ba762d01822206980c97fd8d3a0b710778"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "dbbece6c16b27608307266fe33de4c0ff4f3873b7392a6cabad09634f29b4226"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "63e48f6962cd05be876ed77210e26344e7c333603325c8c5a66176f5ccd0a349"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "f99c1ccd979a862487bfbd2f89c3f3ca454153a05fa3766a0f38c870d7a3d42d"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "3c1f54e290d8515f70595c6480ecf010b7e868bbe9050ba06c9ef605e32a2356"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "39d81c687ff338f08f1a6f60d0c35775cdfee5bd9ddce47a551aa038d45176e2"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4117,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        },
+        {
+          "url": {
+            "length": 708,
+            "sha256": "cd31b131b541c7b281af4849233f11e1e698e33ec0a0fa0c22731b50ccda84a4"
+          },
+          "route": {
+            "length": 72,
+            "sha256": "8020c71f4e2e349af0fbb5db84501f8dec10a321ee6f9575fd9dd9bc5453ed6b",
+            "path": {
+              "length": 29,
+              "sha256": "477aeb8ff6801abd2ae21faaaceb4c246e87721fefbc93e1026a2f089a956b99"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "9465026cd1106d02d8400662bd2a7ab52af17a9ff674165f166111ab25cad205"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "8de3dbbf07901856179fcb794ad491d3d3ad714172c8ab0917419d3abcbdbc8c"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "3d6f8c30f9ef0bda2e5a69f5da8d0b2c9d1f17c33ae085c759122ba1b637512d"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "a8eff2c0658d84c6ee59e77c6251097c9702a3f93c0dd27e71612c7659b36096"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "973746f035aca7acc4af0108db313174ecb736bf86352b460dc6a1796d5867ec"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "88a4062075602526fa0640bc4e8f0189a140b8a145b8f97765b620727f336710"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "921fa6e5028dbacae8ed40f42724b957c457c3f569ae60eba1d5721cfbcda274"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "85a40d880f8f129fd933623bab0e31fddf527fc668bfc1a83ebdc2865946de9f"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 4189,
+            "stack_prefix": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              }
+            ],
+            "stack_depth": 24,
+            "duplicate_r4_frame": false
+          }
+        }
+      ],
+      "response_deserialized_count": 17,
+      "response_http_business_code_counts": {
+        "200:-2002": 3,
+        "200:0": 14
+      },
+      "cronet_event_count": 0,
+      "terminal_event": {
+        "event": "session_detached",
+        "reason": "application-requested"
+      },
+      "raw_capture_retained_in_evidence": false
+    }
+  ],
+  "security_factor_callback_observed": true,
+  "security_factor_callback_count": 21,
+  "six_header_call_count": 21,
+  "observed_header_length_sets": {
+    "X-Argus": [
+      8
+    ],
+    "X-Gorgon": [
+      52
+    ],
+    "X-Helios": [
+      48
+    ],
+    "X-Khronos": [
+      10
+    ],
+    "X-Ladon": [
+      8
+    ],
+    "X-Medusa": [
+      1288,
+      1292
+    ]
+  },
+  "cronet_runtime_branch_observed": false,
+  "r4_callback_cronet_identity_joined": false,
+  "callback_url_or_map_object_identity_joined": false,
+  "provider_method_or_field_identity_joined": false,
+  "ordinary_cronet_six_header_chain_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "target_app_modified": false,
+  "interpretation": "A fresh bounded attach to the official unmodified 7.2.5.32 APK observed 21 NetworkParams/r4 security-factor callbacks. Every callback returned all six seven-god header keys; X-Medusa was observed at lengths 1288 and 1292. The bounded stacks consistently entered OkHttp3SecurityFactorInterceptor and okhttp3.RealCall, with no Cronet frames or Cronet entry events. Seventeen response-deserialization events were HTTP 200, with business codes 0 or -2002. This remains an OkHttp path observation and does not establish Cronet execution, standalone signing, whole-request differential, or online acceptance."
+}

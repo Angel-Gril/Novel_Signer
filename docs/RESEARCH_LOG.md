@@ -827,3 +827,11 @@ URL、header 值和不稳定 identity 字段均未作为证据。该结果加强
 父 probe 仍使用显式 JNI/OS/import services，因此 whole-request native differential、
 standalone signer 和线上 header acceptance 继续未完成。详见
 `platforms/bytedance/tomato/evidence/vm9_dispatch_table_encoding_fresh_20261106.json`。
+
+2026-11-07：在设备恢复到 2 GB 内存并切换匹配的 Frida 17.24.3 服务后，官方未修改
+7.2.5.32/72532 主页/推荐页做了新的 120 秒 attach。捕获到 21 次 `r4` 安全因子回调，
+全部返回六个七神键，`X-Medusa` 长度为 1288 或 1292；17 次响应反序列化均为 HTTP 200，
+业务码为 0 的 14 次、-2002 的 3 次。所有回调栈均进入 OkHttp 拦截器和 `okhttp3.RealCall`，
+没有 Cronet 栈帧或 Cronet 入口事件。该窗口继续只闭合 OkHttp 路径覆盖，不提升为
+Cronet 六头链、standalone signer、整请求差分或线上验签。详见
+`platforms/bytedance/tomato/evidence/vm9_networkparams_runtime_fresh_20261107.json`。

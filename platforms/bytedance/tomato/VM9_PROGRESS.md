@@ -8063,7 +8063,18 @@ signer 或线上验签，因此相关标志继续保持 `false`。
 出现新差异，verifier 会直接失败。它没有把 native 残留 padding 当作 Python 输入，
 也没有改变 `complete_native_outer_state_equal=false`、完整 standalone signer、
 整请求差分或线上验签的状态。证据：[outer graph fresh 20261106](evidence/vm9_outer_graph_fresh_20261106.json)，
-校验器：[verify](python/verify_vm9_outer_graph_fresh_20261106.py)。
+校验器：[verify_vm9_outer_graph_fresh_20261106.py](python/verify_vm9_outer_graph_fresh_20261106.py)。
+
+## 2026-11-07：官方 OkHttp/r4 fresh 运行窗口
+
+设备重启后确认实际内存约 2 GB，并恢复匹配的 Frida 17.24.3 root 服务。在官方未修改
+7.2.5.32/72532 主页/推荐页上做 120 秒 attach，21 次 `ms.bd.c.r4` 回调全部返回六个
+七神键；`X-Medusa` 长度集合为 1288、1292。17 次响应反序列化均为 HTTP 200，其中
+14 次业务码 0、3 次业务码 -2002。21 个受限栈前缀均包含
+`OkHttp3SecurityFactorInterceptor` 和 `okhttp3.RealCall`，没有 Cronet 栈帧，三个 Cronet
+入口事件为 0。该证据增加真实 OkHttp 覆盖，但不闭合 Cronet、对象身份、standalone signer、
+整请求差分或线上验签。证据：[networkparams runtime fresh 20261107](evidence/vm9_networkparams_runtime_fresh_20261107.json)，
+校验器：[verify_vm9_networkparams_runtime_fresh_20261107.py](python/verify_vm9_networkparams_runtime_fresh_20261107.py)。
 
 ## 2026-11-06：OkHttp/r4 多请求窗口脱敏固化
 

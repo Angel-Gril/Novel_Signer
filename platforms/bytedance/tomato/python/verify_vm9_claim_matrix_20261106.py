@@ -48,6 +48,7 @@ RECORDS = (
     "vm9_okhttp_r4_multirequest_20261106.json",
     "vm9_dispatch_table_encoding_fresh_20261106.json",
     "vm9_outer_graph_fresh_20261106.json",
+    "vm9_networkparams_runtime_fresh_20261107.json",
 )
 
 

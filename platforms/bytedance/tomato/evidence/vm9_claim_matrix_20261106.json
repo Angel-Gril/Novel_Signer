@@ -1,6 +1,6 @@
 {
   "schema": "vm9-claim-matrix-20261106-v1",
-  "record_count": 14,
+  "record_count": 15,
   "all_exposed_unresolved_flags_false": true,
   "records": [
     {
@@ -197,6 +197,20 @@
       "unresolved_flags_checked": [
         "complete_native_outer_state_equal",
         "current_online_header_matrix_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_networkparams_runtime_fresh_20261107.json",
+      "schema": "vm9-networkparams-runtime-fresh-20261107-v1",
+      "sha256": "77bafab2ce2dab28c8e26890ed045a96734f24d7b3e7511b1b3f5c5e92b14e62",
+      "unresolved_flags_checked": [
+        "callback_url_or_map_object_identity_joined",
+        "cronet_runtime_branch_observed",
+        "fresh_standalone_signer_verified",
+        "online_header_acceptance_verified",
+        "provider_method_or_field_identity_joined",
+        "r4_callback_cronet_identity_joined",
+        "whole_request_native_python_differential_verified"
       ]
     }
   ]
