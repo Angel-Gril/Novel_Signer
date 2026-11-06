@@ -8073,3 +8073,12 @@ signer 或线上验签，因此相关标志继续保持 `false`。
 没有 Cronet 栈帧；`NetworkParams` 在受限栈前缀中可见 31 次。URL/header 值未保留，
 identity 字段均为 0，不能用于跨层对象关联。Cronet 六头完整链、standalone signer、
 整请求差分和线上验签继续为 `false`。
+
+## 2026-11-06：request VM dispatch table fresh provenance 重跑
+
+重新执行五组 dispatch table 的 fresh native continuation：两个 image base、外部 canary
+存在/缺失共 4 项 controls，每项观察到 1191 次 table load；468 项 selector controls
+均在 handler body 前到达 ELF 解码目标。所有加载 word 与 pinned ELF 的
+`R_AARCH64_RELATIVE` relocation 一致，slot/table 没有 native 写入，外部 dispatch mapping
+不再是该 continuation 的必要条件。该项仍使用父 probe 的显式 JNI/OS/import services，
+所以 whole-request native differential、standalone signer 和线上验签继续为 `false`。

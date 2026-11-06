@@ -819,3 +819,11 @@ OkHttp、NetworkParams 和 outer graph 记录中的所有未闭合标志均仍�
 `okhttp3.RealCall`，没有 Cronet 栈帧。受限栈前缀中 31 次保留 NetworkParams；所有
 URL、header 值和不稳定 identity 字段均未作为证据。该结果加强当前窗口的 OkHttp 路径
 覆盖，不改变 Cronet、完整 signer、整请求差分或线上验签的未闭合状态。
+
+2026-11-06：重新执行 request VM 五组 dispatch table fresh continuation。两个 image base、
+外部 canary 存在/缺失共 4 项 controls，均观察到 1191 次 table load；两基址各完成 234
+项 selector controls。加载 word 与 pinned ELF `.data.rel.ro` 的相对 relocation 一致，
+没有 relocation slot 或 table 写入，外部 dispatch mapping 对该 continuation 不是必需的。
+父 probe 仍使用显式 JNI/OS/import services，因此 whole-request native differential、
+standalone signer 和线上 header acceptance 继续未完成。详见
+`platforms/bytedance/tomato/evidence/vm9_dispatch_table_encoding_fresh_20261106.json`。

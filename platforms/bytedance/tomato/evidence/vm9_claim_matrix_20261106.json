@@ -1,6 +1,6 @@
 {
   "schema": "vm9-claim-matrix-20261106-v1",
-  "record_count": 13,
+  "record_count": 14,
   "all_exposed_unresolved_flags_false": true,
   "records": [
     {
@@ -179,6 +179,15 @@
         "online_header_acceptance_verified",
         "r4_callback_cronet_identity_joined",
         "whole_request_native_python_differential_verified"
+      ]
+    },
+    {
+      "evidence_file": "evidence/vm9_dispatch_table_encoding_fresh_20261106.json",
+      "schema": "vm9-dispatch-table-encoding-fresh-20261026-v1",
+      "sha256": "0a74b525043e5f3113e25162412929be09bedbe01b2f6b81969827eb7d6fa42a",
+      "unresolved_flags_checked": [
+        "fresh_standalone_signer_verified",
+        "online_header_acceptance_verified"
       ]
     },
     {

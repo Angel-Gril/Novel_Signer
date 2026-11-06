@@ -11456,6 +11456,19 @@
     "whole_request_native_python_differential_verified": false,
     "online_header_acceptance_verified": false
   },
+  "vm9_dispatch_table_encoding_fresh_20261106": {
+    "evidence_file": "evidence/vm9_dispatch_table_encoding_fresh_20261106.json",
+    "verifier": "python/verify_vm9_dispatch_table_encoding_fresh_20261106.py",
+    "schema": "vm9-dispatch-table-encoding-fresh-20261026-v1",
+    "fresh_cases": 4,
+    "dispatch_loads_per_case": 1191,
+    "native_selector_controls": 468,
+    "encoded_dispatch_pointer_provenance_closed": true,
+    "external_dispatch_mapping_required_for_this_continuation": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_outer_graph_fresh_20261106": {
     "evidence_file": "evidence/vm9_outer_graph_fresh_20261106.json",
     "verifier": "python/verify_vm9_outer_graph_fresh_20261106.py",
