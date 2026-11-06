@@ -8064,3 +8064,12 @@ signer 或线上验签，因此相关标志继续保持 `false`。
 也没有改变 `complete_native_outer_state_equal=false`、完整 standalone signer、
 整请求差分或线上验签的状态。证据：[outer graph fresh 20261106](evidence/vm9_outer_graph_fresh_20261106.json)，
 校验器：[verify](python/verify_vm9_outer_graph_fresh_20261106.py)。
+
+## 2026-11-06：OkHttp/r4 多请求窗口脱敏固化
+
+将本地未跟踪的官方进程窗口转换为独立摘要 `evidence/vm9_okhttp_r4_multirequest_20261106.json`：
+130 次 `ms.bd.c.r4.onCallToAddSecurityFactor` 中，126 次返回六个标准七神键，4 次返回
+`X-Neptune`。130 个栈均出现 `OkHttp3SecurityFactorInterceptor`、`okhttp3.RealCall`，
+没有 Cronet 栈帧；`NetworkParams` 在受限栈前缀中可见 31 次。URL/header 值未保留，
+identity 字段均为 0，不能用于跨层对象关联。Cronet 六头完整链、standalone signer、
+整请求差分和线上验签继续为 `false`。

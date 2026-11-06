@@ -45,6 +45,7 @@ RECORDS = (
     "vm9_cronet_runtime_selector_state_20261105.json",
     "vm9_okhttp_r4_stack_20261105.json",
     "vm9_networkparams_runtime_window_20261105.json",
+    "vm9_okhttp_r4_multirequest_20261106.json",
     "vm9_outer_graph_fresh_20261106.json",
 )
 

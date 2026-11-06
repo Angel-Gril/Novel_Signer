@@ -813,3 +813,9 @@ signer、整请求差分和线上验签仍未完成。
 OkHttp、NetworkParams 和 outer graph 记录中的所有未闭合标志均仍为 `false`。
 设备上的最小原生 hook 虽安装了 r4、NetworkParams、Cronet manager 与 `o0`，但目标
 进程随后进入 ANR，未产生新的回调事件；因此没有新增 Cronet 或完整 signer 结论。
+
+2026-11-06：将官方进程的一份未跟踪多请求捕获转成脱敏摘要。130 次 r4 回调中，126 次
+返回六个标准七神键，4 次返回 `X-Neptune`；130 个栈都包含 OkHttp3 安全因子拦截器和
+`okhttp3.RealCall`，没有 Cronet 栈帧。受限栈前缀中 31 次保留 NetworkParams；所有
+URL、header 值和不稳定 identity 字段均未作为证据。该结果加强当前窗口的 OkHttp 路径
+覆盖，不改变 Cronet、完整 signer、整请求差分或线上验签的未闭合状态。

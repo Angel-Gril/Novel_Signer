@@ -1,0 +1,106 @@
+{
+  "schema": "vm9-okhttp-r4-multirequest-window-20261106-v1",
+  "evidence_date": "2026-11-06",
+  "source_scope": {
+    "artifact": "official fq_7xz.apk redacted multi-request OkHttp/r4 callback window",
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "device_serial": "emulator-5554",
+    "frida_version": "17.24.3",
+    "frida_server_privilege": "root",
+    "raw_business_values_retained": false
+  },
+  "source_artifacts": {
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "bridge_sha256": "749e107feb32c21227fa79a5feda5c4a13bf4d797d51d8c94156d8d4b3e97eb2",
+    "probe_sha256": "68297ca89e1fd4d1cd111004f76d0499b3e93b0409a00eae82874e187490b8b5",
+    "capture_sha256": "c7b545a4b9b2ebcea13737a884f465679aec8731acd93f699e56971e5e741b4e",
+    "capture_row_count": 264
+  },
+  "observed": {
+    "capture_sha256": "c7b545a4b9b2ebcea13737a884f465679aec8731acd93f699e56971e5e741b4e",
+    "capture_bytes": 1001527,
+    "capture_row_count": 264,
+    "process_id": 14268,
+    "event_counts": {
+      "hooked": 1,
+      "probe_ready": 1,
+      "script_loaded": 1,
+      "r4_enter": 130,
+      "r4_leave": 130,
+      "session_detached": 1
+    },
+    "callback_count": 130,
+    "six_header_callback_count": 126,
+    "alternate_neptune_callback_count": 4,
+    "input_key_count_distribution": {
+      "5": 1,
+      "8": 6,
+      "9": 23,
+      "10": 11,
+      "11": 8,
+      "12": 53,
+      "13": 5,
+      "14": 21,
+      "15": 2
+    },
+    "url_length_min": 67,
+    "url_length_max": 1647,
+    "url_length_distinct_count": 81,
+    "thread_count": 95,
+    "representative_stack_prefix": [
+      {
+        "class_name": "ms.bd.c.r4",
+        "method_name": "onCallToAddSecurityFactor"
+      },
+      {
+        "class_name": "com.bytedance.frameworks.baselib.network.http.NetworkParams",
+        "method_name": "tryAddSecurityFactor"
+      },
+      {
+        "class_name": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+        "method_name": "intercept"
+      },
+      {
+        "class_name": "okhttp3.internal.http.RealInterceptorChain",
+        "method_name": "proceed"
+      },
+      {
+        "class_name": "okhttp3.internal.http.RealInterceptorChain",
+        "method_name": "proceed"
+      },
+      {
+        "class_name": "okhttp3.RealCall",
+        "method_name": "getResponseWithInterceptorChain"
+      },
+      {
+        "class_name": "okhttp3.RealCall",
+        "method_name": "execute"
+      },
+      {
+        "class_name": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+        "method_name": "p"
+      }
+    ],
+    "okhttp_interceptor_visible_count": 130,
+    "real_call_visible_count": 130,
+    "network_params_visible_count": 31,
+    "duplicate_r4_frame_count": 3,
+    "cronet_stack_frame_count": 0,
+    "raw_business_values_retained": false
+  },
+  "claims": {
+    "okhttp_security_factor_stack_observed": true,
+    "six_header_result_shape_observed": true,
+    "alternate_neptune_result_observed": true,
+    "java_object_identity_verified": false,
+    "cronet_entry_runtime_observed": false,
+    "r4_callback_cronet_identity_joined": false,
+    "ordinary_cronet_six_header_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "Across 130 callbacks in this bounded window, 126 returned the six standard headers and four returned X-Neptune. Every captured stack used OkHttp3SecurityFactorInterceptor without a Cronet frame; NetworkParams remained visible in the bounded stack prefix for 31 callbacks. Identity fields were zero and are deliberately not used to join requests across layers."
+}
