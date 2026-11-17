@@ -1,0 +1,60 @@
+{
+  "schema": "novel-sound-sign-reference-20261117-v1",
+  "evidence_date": "2026-11-17",
+  "repository": "https://github.com/ch6vip/novel-sound",
+  "commit": "8af547f310ad42f7698d2cb8d847d0f0ee9989d1",
+  "license": "GPL-3.0",
+  "source_sha256": {
+    "LICENSE": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809",
+    "rust/src/sign/mod.rs": "ece87dccaa2f7380de6b9ef817f9d5a378b22f21db03f0dce1e88ee86c882c44",
+    "rust/src/sign/argus.rs": "f1759d56147ca1563bde30ef7f8469d9d35bc3944d2d782e1c49888bdb3946c1",
+    "rust/src/sign/gorgon.rs": "c5ecf979039a223eda2b2f22bc86f8fe1fdff0b379a71dd3cca06f8c85e2b718",
+    "rust/src/sign/ladon.rs": "d8c5ff91fafe8d31f5fedae04b25e38dc51794a5e095734afda3bde6f2ca5a32",
+    "rust/src/sign/simon.rs": "60e088b75cce57d22cefb85a19e6ae7d13b5b6936cfebcf70b19b3ee7ebb831d",
+    "rust/src/sign/sm3.rs": "b686f4c7497fdecf7037c6a24868afb92c21cb42dc912a4fecc9b3316860c08b",
+    "rust/src/sign/protobuf.rs": "4706efd56d17e3a50817b60ac4dbb3fe95d270347a3add65bf3553c263d1b6a0",
+    "rust/src/crypto.rs": "0d6505b5680162c4d769fa485e781bbd4adba4a65347c4e31084eef40d8e0f75",
+    "rust/src/device/crypto.rs": "83b245fb48ef4a12125c663ae3b595624b37f084f01508ed609d3100126b7d77",
+    "rust/src/device/register.rs": "04eac3d9dc50a0ac60d6232f1a322d03787283087f1e5fcbdb2e0570c67620e4",
+    "rust/src/upstream/client.rs": "706ecad327dcf765770501bfbe2c1b869e6c072d250aaf12032a1091bac54126",
+    "rust/tests/crypto_vectors.rs": "114c38996b24b12a9bea64c3e306affad35fb1bdf45200647d5c4a9d47b3e6aa",
+    "rust/testdata/vectors.json": "1b76ece9da101d2908a0a90cfcbd25ca23714b0969a5015f682ef62e83f86124",
+    "rust/testdata/device_vectors.json": "6fcafe2a20e04ed221d60ea1f8bc6e3e125ac13541535b49f4a531d580d09dad"
+  },
+  "local_implementations": [
+    "Argus",
+    "Ladon",
+    "Gorgon",
+    "Khronos timestamp"
+  ],
+  "default_gorgon_enabled": false,
+  "medusa_generator_found": false,
+  "helios_generator_found": false,
+  "medusa_playback_behavior": "remove supplied header; no local generator identified",
+  "argus_comparison": {
+    "reference_inner": "SM3/Simon",
+    "existing_legacy_inner": "SHA-256/AES",
+    "interchangeability_verified": false
+  },
+  "determinism_limits": [
+    "Argus nonce zero requests fresh randomness",
+    "enabled Gorgon uses its own clock and random bytes"
+  ],
+  "offline_test": {
+    "original_integration_test": "rust/tests/crypto_vectors.rs",
+    "passed": 13,
+    "failed": 0,
+    "ignored": 0,
+    "harness": "external minimal crate loading original upstream modules and test file",
+    "url_dependency_binding": "same form_urlencoded 1.2.2 parser used directly; full URL/IDNA omitted",
+    "gorgon_and_header_manager_behavior_tested": false,
+    "network_requests_performed": false
+  },
+  "upstream_code_or_vectors_copied_into_main_repository": false,
+  "claims": {
+    "current_android_argus_input_model_verified": false,
+    "medusa_or_helios_completed": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

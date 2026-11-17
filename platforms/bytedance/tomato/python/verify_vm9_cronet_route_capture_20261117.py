@@ -26,8 +26,8 @@ function check(force) {
   const targets = [
     [H, 'isCronetClientEnable'], [H, 'getHttpClient'], [H, 'getDefaultClient'],
     ['com.bytedance.frameworks.baselib.network.http.cronet.impl.SsCronetHttpClient', 'execute'],
-    ['org.chromium.CronetClient', 'openConnection'], [C, 'createRequest'],
-    ['com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'start'],
+    ['org.chromium.CronetClient', 'openConnection'], [C, 'X'],
+    ['com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'o'],
     ['com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'addSecurityFactor'],
     [C, 'addSecurityFactor'], [C, 'o0'], [M, 'onCallToAddSecurityFactor'], [R, 'onCallToAddSecurityFactor']
   ];
@@ -58,11 +58,21 @@ function check(force) {
   });
   vm.runInContext(source.replace('"force_selector": false', '"force_selector": ' + force), context);
   assert.equal(events.find(e => e.event === 'route_ready').required_hooks_ready, true);
+  for (const [owner, method, stage] of [
+    [C, 'X', 'cronet_create'],
+    ['com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'o', 'cronet_start']
+  ]) {
+    const target = owner + '.' + method;
+    assert.ok(events.some(e => e.event === 'route_hooked' && e.target === target && e.stage === stage),
+              'hook the creation/start names verified in the pinned Android DEX');
+    assert.equal(methods.get(target).implementation(secret), result);
+    assert.equal(calls.get(target), 1, 'preserve the original creation/start call');
+  }
   assert.equal(timers.size, 0, 'installation timer must stop');
   assert.equal(methods.get(H + '.isCronetClientEnable').implementation(), force);
   assert.equal(calls.get(H + '.isCronetClientEnable'), 1, 'invoke original exactly once');
   assert.equal(methods.get(C + '.o0').implementation(secret, {}), result, 'preserve exact result');
-  const enters = events.filter(e => e.event === 'route_enter' && e.stage !== 'selector');
+  const enters = events.filter(e => e.event === 'route_enter' && ['cronet_map', 'manager', 'r4'].includes(e.stage));
   assert.deepEqual(enters.map(e => e.stage), ['cronet_map', 'manager', 'r4']);
   assert.equal(enters[0].parent_call_id, null);
   assert.equal(enters[1].parent_call_id, enters[0].call_id);

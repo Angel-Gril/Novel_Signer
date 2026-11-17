@@ -35,8 +35,21 @@ does not prove Java object identity or online acceptance.
 `--force-selector` explicitly enables a temporary session-only override of
 `isCronetClientEnable`; use it as a separate diagnostic run after the passive
 control. It does not prove that a business request reached Cronet. Android hook
-installation and this probe's live business path remain unverified; the earlier
-transport timeout is a connection failure, not a negative business observation.
+installation and request creation/start were verified on the dedicated Android
+13 arm64 test process on 2026-11-17. The pinned 7.2.5.32 DEX uses
+`CronetUrlRequestContext.X` and `CronetUrlRequest.o`; the probe now observes those
+names. A passive window recorded 52 calls at each of client selection, connection,
+creation and start, with zero security-factor callbacks. A separate extended
+window observed 55 response callbacks. See the
+[aggregate evidence](../evidence/vm9_cloud_cronet_route_20261117.json).
+These observations do not establish the six-header chain or online acceptance.
+The earlier transport timeout was a connection failure, not a negative business
+observation.
+
+The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
+header implementations, the Argus variant differences and the 13 passing offline
+crypto-vector tests. No upstream implementation or golden vectors were copied
+into this MIT repository.
 
 `verify_vm9_framesign_watched_region_ownership_20261103.py` checks the read-only
 follow-up: in two independent four-call runs, the watched bytes lie at the start

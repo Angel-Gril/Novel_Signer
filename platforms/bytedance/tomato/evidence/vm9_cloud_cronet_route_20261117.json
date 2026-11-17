@@ -1,0 +1,167 @@
+{
+  "schema": "vm9-cloud-cronet-route-20261117-v1",
+  "evidence_date": "2026-11-17",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532,
+    "android_release": "13",
+    "executing_arch": "arm64",
+    "translation_involved": false,
+    "frida_version": "17.24.3",
+    "dedicated_target_package_and_uid_verified": true,
+    "test_apk_sha256": "2aebb1e98f96f8f4f66e136c435a6b93b6576d849f836d3d6e2028e44cacb36b"
+  },
+  "source_mapping": {
+    "dex_entry": "classes16.dex",
+    "request_create": "CronetUrlRequestContext.X",
+    "request_start": "CronetUrlRequest.o",
+    "verified_by_android_reflection_and_passive_calls": true,
+    "probe_python_sha256": "5950bcf03fd4743a0f5889ab65d5758caffdb7aeaa218c3936a6257fcd92a508"
+  },
+  "windows": [
+    {
+      "label": "passive_initial",
+      "capture_sha256": "0118e92126246ccacab4af56b183d6f2abbd73ba4239be0b0f31f8fd47443e9f",
+      "source_js_sha256": "61f0a8998fc2a3597f89353973d90cef90e0ec9e10284b93d4f42e5e10eabe4c",
+      "duration_seconds": 120.0,
+      "row_count": 539,
+      "counts": {
+        "client_selection": 85,
+        "selector": 91,
+        "cronet_connection": 85
+      },
+      "security_stage_counts": {
+        "cronet_request": 0,
+        "cronet_context": 0,
+        "cronet_map": 0,
+        "manager": 0,
+        "r4": 0,
+        "network_params": null,
+        "app_provider": null
+      },
+      "security_stage_hooks_installed": {
+        "cronet_request": true,
+        "cronet_context": true,
+        "cronet_map": true,
+        "manager": true,
+        "r4": true,
+        "network_params": false,
+        "app_provider": false
+      },
+      "selector_original_and_returned_always_true": true,
+      "force_selector": false,
+      "required_hooks_ready": true,
+      "event_limit_reached": false,
+      "cleanup_complete": true
+    },
+    {
+      "label": "passive_extended",
+      "capture_sha256": "0899ecc9917ee0915889abf91b30f9d95d78d886afbbc636a320cfdc2b47a7c1",
+      "source_js_sha256": "b65aa64f6bc566559cbeb7c6e2ee8675f3c52183b142ba2df200778530121a76",
+      "duration_seconds": 90.0,
+      "row_count": 1259,
+      "counts": {
+        "client_selection": 55,
+        "selector": 66,
+        "cronet_connection": 55,
+        "context_c": 55,
+        "context_X": 55,
+        "request_o": 55,
+        "response_started": 55,
+        "request_d": 174,
+        "request_b": 22,
+        "request_f": 22,
+        "request_c": 1
+      },
+      "security_stage_counts": {
+        "cronet_request": 0,
+        "cronet_context": 0,
+        "cronet_map": 0,
+        "manager": 0,
+        "r4": 0,
+        "network_params": 0,
+        "app_provider": 0
+      },
+      "security_stage_hooks_installed": {
+        "cronet_request": true,
+        "cronet_context": true,
+        "cronet_map": true,
+        "manager": true,
+        "r4": true,
+        "network_params": true,
+        "app_provider": true
+      },
+      "selector_original_and_returned_always_true": true,
+      "force_selector": false,
+      "required_hooks_ready": true,
+      "event_limit_reached": false,
+      "cleanup_complete": true
+    },
+    {
+      "label": "passive_corrected",
+      "capture_sha256": "e2b20e8d6ccd86186b96ebb86c29aafcde88333d4114dbcc65fe6e92f8edf535",
+      "source_js_sha256": "1a68f85012c28edd972ec03e2290b59b8724337fe5d790521a1a36e1fd1733e3",
+      "duration_seconds": 90.0,
+      "row_count": 537,
+      "counts": {
+        "client_selection": 52,
+        "selector": 52,
+        "cronet_connection": 52,
+        "cronet_create": 52,
+        "cronet_start": 52
+      },
+      "security_stage_counts": {
+        "cronet_request": 0,
+        "cronet_context": 0,
+        "cronet_map": 0,
+        "manager": 0,
+        "r4": 0,
+        "network_params": null,
+        "app_provider": null
+      },
+      "security_stage_hooks_installed": {
+        "cronet_request": true,
+        "cronet_context": true,
+        "cronet_map": true,
+        "manager": true,
+        "r4": true,
+        "network_params": false,
+        "app_provider": false
+      },
+      "selector_original_and_returned_always_true": true,
+      "force_selector": false,
+      "required_hooks_ready": true,
+      "event_limit_reached": false,
+      "cleanup_complete": true
+    }
+  ],
+  "reader_observation": {
+    "test_build_displayed_unsafe_version_message": true,
+    "cause_attributed_to_repack_or_server": false,
+    "same_device_and_title_control_performed": true,
+    "original_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "title_sha256": "ca3660fc5b97f870641e19cdd4a70634bb7518226aef02f42f1c7378914b1737",
+    "original_readable_chapter_visually_verified": true,
+    "original_screenshot_sha256": "b38d693f0ed81198aecc5c5b402c1ac3314aa40d27645f7600e8d14b0e1216ee",
+    "test_screenshot_sha256": "f4aca96dcf0ca8b446cd571ec254fdc3659f92994e6a1c0d6327b6733c26764c",
+    "test_build_restored_and_runtime_identity_reverified": true,
+    "control_limits": [
+      "Fresh application data and device registration after each reinstall",
+      "Re-signing and Gadget modification not isolated from each other",
+      "Client versus server rejection not identified"
+    ]
+  },
+  "claims": {
+    "cronet_creation_and_start_observed": true,
+    "cronet_response_callback_observed_in_extended_window": true,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "callback_object_identity_joined": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "privacy": {
+    "raw_url_body_signatures_device_identifiers_or_other_project_details_published": false
+  }
+}

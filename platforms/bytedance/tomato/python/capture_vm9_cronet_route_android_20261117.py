@@ -106,8 +106,8 @@ ROUTE_JS = r"""
           install('com.bytedance.ttnet.HttpClient', 'getDefaultClient', 'client_selection', false);
           install('com.bytedance.frameworks.baselib.network.http.cronet.impl.SsCronetHttpClient', 'execute', 'cronet_http', false);
           install('org.chromium.CronetClient', 'openConnection', 'cronet_connection', false);
-          install('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext', 'createRequest', 'cronet_create', false);
-          install('com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'start', 'cronet_start', false);
+          install('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext', 'X', 'cronet_create', false);
+          install('com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'o', 'cronet_start', false);
           install('com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'addSecurityFactor', 'cronet_request', true);
           install('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext', 'addSecurityFactor', 'cronet_context', true);
           install('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext', 'o0', 'cronet_map', true);

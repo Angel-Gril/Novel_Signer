@@ -1,5 +1,42 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-17：Cronet 实际入口修复、原版阅读对照与四神参考
+
+后续已按用户确认替换番茄测试包，并在专用 `27043` Gadget 上核验 native UID、Java 包名和 UID。
+Android 13 的实际执行架构为 arm64，Frida/Gadget 均为 17.24.3，安全模块已加载。
+下方“本轮没有卸载或替换原版”是安装前的历史检查点，不再代表当前状态。
+
+首次初始化使进程 PID 改变；旧 PID 的 attach 失败没有安装业务 hook，不能当作业务负样本。
+刷新身份后完成三个被动窗口，默认 selector 均返回 true，无需强制 override：
+
+- 初始 120 秒：85 次连接，91 次 selector；安全因子回调为零。
+- 扩展 90 秒：55 次请求创建、启动和响应回调；NetworkParams、provider、manager/r4 安全链为零。
+- 修复后的主探针 90 秒：client selection、selector、connection、create、start 各 52 次，安全链仍为零。
+
+APK `classes16.dex` 与 Android 反射确认当前样本使用 `CronetUrlRequestContext.X` 和
+`CronetUrlRequest.o`，不是此前探针中的可读方法名。已修正主探针并补充原调用与返回保留的回归检查；
+检查先复现漏挂，再通过。三个窗口均正常结束、未达到事件上限，hook/session 清理完成。
+这证明了 Cronet 创建与启动路径，不能升级为六头回调或线上验签。
+
+同设备、同一本书做了原版与测试包的阅读对照：原版显示可读正文，测试包显示
+“当前版本不安全，请到正规应用市场下载”。测试包已恢复，并重新验证身份。
+每次重装会产生新本地数据和设备注册；本次没有把重签、Gadget 修改以及客户端/服务端判断分别隔离，
+因此只把它记录为测试包相关限制，不认定唯一根因。后续优先取得保留原签名的运行时，定位安全回调条件。
+
+原版 `classes9.dex` 的字符串交叉引用把“不安全版本”提示定位到
+`ChapterOriginalContentHelper.A0` 和 `i0`。两处均存在集合命中后直接返回
+`ErrorCodeException(110)` 的分支。本轮尚未证明当前 UI 命中了哪一处，也未找到该集合的写入来源；
+不能据此把最初的拒绝归因于客户端或服务端。后续可先被动观察该分支及集合写入，避免反复观察缓存后的拒绝。
+
+对 [novel-sound 的分析](NOVEL_SOUND_REFERENCE.md) 固定在 `8af547f`：有本地四神组件，
+上游原始密码模块及原始向量测试在隔离的最小 harness 中 13 项全通过；未做其线上验签。
+没有发现 Medusa/Helios 生成器。其 SM3/Simon Argus 与本仓库现有 SHA-256/AES 旧实现有实质差异，
+不能直接替换；没有将 GPLv3 上游实现或向量复制进本仓库。
+
+证据：[云手机脱敏窗口与阅读对照](evidence/vm9_cloud_cronet_route_20261117.json)、
+[参考源码摘要与测试范围](evidence/novel_sound_reference_20261117.json)。
+普通 Cronet 六头链、native/Python 整请求差分、独立 signer 和线上验签继续未闭合。
+
 ## 2026-11-17：云手机连接恢复与 Frida 目标身份核对
 
 使用用户提供的当前隧道后，ADB 已恢复：Android 13、arm64，原版番茄
