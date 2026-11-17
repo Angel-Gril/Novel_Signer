@@ -1,0 +1,692 @@
+{
+  "schema": "vm9-cronet-native-security-selector-20261118-v1",
+  "evidence_date": "2026-11-18",
+  "provenance": {
+    "base_git_revision": "f9dbeb43ea9ceeaa10198948c67a11fbf94d6774",
+    "original_Cronet_ELF_sha256": "ab0547460f1c06e5111b69826d2277f145aad4f79c7d2b7aea0356dcf25e49ac",
+    "original_Metasec_ELF_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "source_JS_sha256": [
+      "df51750be5a52c375944b17e077c98d20bc3ebd7b38b99c10dfdd811532c4734",
+      "981e56bab9274c26876111f6c5b2aa801244ba313ee4d9a733950ca3b7312533"
+    ],
+    "private_file_sha256": {
+      "observe_native_security_slot.py": "f4c39844b935cfb51bb3012e37755aa1748687970393dcfc479af0887f924710",
+      "observe_native_security_slot_prefix.py": "e50fb37997471f3b2ca7ade7f2f3c80be8adc16533bfe6f0fd529d3deabcd1d2",
+      "build_native_slot_prefix_observer.py": "7fdc908b5e51b00fb2f39d9642071bfe9a91096fad95aa27a237195ebe012ccb",
+      "native-security-slot-snapshot.json": "b7691dbc8930724c2f5f5f5236ef1dcd2dbbed1f93e21c90971b81226b39abd1",
+      "native-security-slot-prefix-snapshot.json": "49486a6cf0bbfb050f44b21254ca56cc81582d790e823b4a09a93d5472ebb88e",
+      "native-security-selector-index.json": "95da2ca3a65a244f57391114dc306ad65893929aba4c7b5d451e8af493a4aa76",
+      "index_native_security_selector.py": "675d6a068c3c9fc9773b9d697f2852f95d52684307befe294ca68234c95a03d0",
+      "verify_native_security_selector.py": "7828ac5b5916de0014d7d5abc4a918214e742cdd85baddf7a5c28cdb0cd0153d",
+      "native-security-selector-emulation.json": "9eec6061ae6b0c2bf8f0c5b6cd507bdcf6e4b38e87c9f8a2603d870effcd3bcc",
+      "publish_native_security_selector.py": "8b4be7fedf0be82f68e986f047e55962e685f2c0c5ffe19b964e547ad3fb1dce"
+    }
+  },
+  "static_instruction_bindings": [
+    {
+      "offset": "0x472ac0",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x5f5000"
+    },
+    {
+      "offset": "0x472ac4",
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x458"
+    },
+    {
+      "offset": "0x472ac8",
+      "mnemonic": "ldar",
+      "operands": "x23, [x8]"
+    },
+    {
+      "offset": "0x472acc",
+      "mnemonic": "ldrb",
+      "operands": "w8, [x26]"
+    },
+    {
+      "offset": "0x472ad0",
+      "mnemonic": "cbz",
+      "operands": "x23, #0x472e10"
+    },
+    {
+      "offset": "0x472ad4",
+      "mnemonic": "cbnz",
+      "operands": "w8, #0x472e34"
+    },
+    {
+      "offset": "0x472b00",
+      "mnemonic": "bl",
+      "operands": "#0x32baf0"
+    },
+    {
+      "offset": "0x472b04",
+      "mnemonic": "str",
+      "operands": "x0, [x19, #0x1108]"
+    },
+    {
+      "offset": "0x472b08",
+      "mnemonic": "mov",
+      "operands": "x0, x21"
+    },
+    {
+      "offset": "0x472b0c",
+      "mnemonic": "mov",
+      "operands": "x1, x22"
+    },
+    {
+      "offset": "0x472b10",
+      "mnemonic": "blr",
+      "operands": "x23"
+    },
+    {
+      "offset": "0x472b20",
+      "mnemonic": "cbz",
+      "operands": "x21, #0x472e34"
+    },
+    {
+      "offset": "0x472e10",
+      "mnemonic": "cbnz",
+      "operands": "w8, #0x472e34"
+    },
+    {
+      "offset": "0x472e14",
+      "mnemonic": "add",
+      "operands": "x1, sp, #0x70"
+    },
+    {
+      "offset": "0x472e18",
+      "mnemonic": "add",
+      "operands": "x2, sp, #0x58"
+    },
+    {
+      "offset": "0x472e1c",
+      "mnemonic": "mov",
+      "operands": "x0, x19"
+    },
+    {
+      "offset": "0x472e20",
+      "mnemonic": "mov",
+      "operands": "x3, x20"
+    },
+    {
+      "offset": "0x472e24",
+      "mnemonic": "bl",
+      "operands": "#0x4077e4"
+    },
+    {
+      "offset": "0x4077e4",
+      "mnemonic": "bti",
+      "operands": "c"
+    },
+    {
+      "offset": "0x4077e8",
+      "mnemonic": "mov",
+      "operands": "x8, x0"
+    },
+    {
+      "offset": "0x4077ec",
+      "mnemonic": "ldr",
+      "operands": "x0, [x0, #0x530]"
+    },
+    {
+      "offset": "0x4077f0",
+      "mnemonic": "mov",
+      "operands": "x4, x3"
+    },
+    {
+      "offset": "0x4077f4",
+      "mnemonic": "mov",
+      "operands": "x3, x8"
+    },
+    {
+      "offset": "0x4077f8",
+      "mnemonic": "ldr",
+      "operands": "x9, [x0]"
+    },
+    {
+      "offset": "0x4077fc",
+      "mnemonic": "ldr",
+      "operands": "x16, [x9, #0x38]"
+    },
+    {
+      "offset": "0x407800",
+      "mnemonic": "br",
+      "operands": "x16"
+    },
+    {
+      "offset": "0x472370",
+      "mnemonic": "mov",
+      "operands": "x20, x2"
+    },
+    {
+      "offset": "0x472374",
+      "mnemonic": "mov",
+      "operands": "x19, x1"
+    },
+    {
+      "offset": "0x472428",
+      "mnemonic": "mov",
+      "operands": "w8, #0x11b8"
+    },
+    {
+      "offset": "0x472430",
+      "mnemonic": "add",
+      "operands": "x26, x19, x8"
+    },
+    {
+      "offset": "0x26970c",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x5f5000"
+    },
+    {
+      "offset": "0x269710",
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x458"
+    },
+    {
+      "offset": "0x269714",
+      "mnemonic": "stlr",
+      "operands": "x1, [x8]"
+    },
+    {
+      "offset": "0x269718",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x47326c",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x5f5000"
+    },
+    {
+      "offset": "0x473270",
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x458"
+    },
+    {
+      "offset": "0x473274",
+      "mnemonic": "stlr",
+      "operands": "x0, [x8]"
+    },
+    {
+      "offset": "0x473278",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x405310",
+      "mnemonic": "mov",
+      "operands": "x27, x3"
+    },
+    {
+      "offset": "0x405404",
+      "mnemonic": "str",
+      "operands": "x27, [x20, #0x530]"
+    },
+    {
+      "offset": "0x21934c",
+      "mnemonic": "mov",
+      "operands": "x3, x19"
+    },
+    {
+      "offset": "0x219358",
+      "mnemonic": "bl",
+      "operands": "#0x408cfc"
+    },
+    {
+      "offset": "0x408d30",
+      "mnemonic": "mov",
+      "operands": "x22, x3"
+    },
+    {
+      "offset": "0x408d58",
+      "mnemonic": "mov",
+      "operands": "x3, x22"
+    },
+    {
+      "offset": "0x408d70",
+      "mnemonic": "bl",
+      "operands": "#0x4052dc"
+    }
+  ],
+  "selector": {
+    "function_offset": "0x472340",
+    "native_callback_slot": "0x5f5458",
+    "request_register": "x19",
+    "skip_byte_field": "0x11b8",
+    "native_call_offset": "0x472b10",
+    "null_slot_JNI_fallback_call_offset": "0x472e24",
+    "JNI_forwarder": "0x4077e4",
+    "request_delegate_field": "0x530",
+    "delegate_virtual_slot": "0x38",
+    "output_source_register": "x20",
+    "bridge_output_register": "x4",
+    "native_requires_nonnull_slot_and_zero_skip_byte": true,
+    "JNI_requires_null_slot_and_zero_skip_byte": true
+  },
+  "registered_native_target": {
+    "module_name": "libmetasec_ml.so",
+    "module_offset": "0x27d288",
+    "executable": true,
+    "registered_slot_samples": 4,
+    "original_code_prefix_bytes": 64
+  },
+  "independent_runtime_snapshots": {
+    "independent_windows": 2,
+    "samples_per_window": 2,
+    "total_slot_samples": 4,
+    "sample_interval_seconds": 3,
+    "package_and_UID_reverified": true,
+    "arm64_and_pointer_size_reverified": true,
+    "positive_null_and_unreadable_controls_passed": true,
+    "Cronet_code_windows_bound": 8,
+    "native_target_prefix_bound_samples": 2,
+    "native_target_prefix_bytes": 64,
+    "request_security_JNI_cache_present": false,
+    "context_security_JNI_cache_present": false,
+    "business_or_native_hooks_installed": false,
+    "security_callback_or_registration_setter_invoked": false,
+    "business_UI_actions": 0,
+    "cleanup_complete": true,
+    "same_target_process_survived_each_window": true,
+    "same_business_response_identity_join_claimed": false
+  },
+  "bounded_emulation": {
+    "cases": 32,
+    "outcomes": {
+      "JNI_bridge_before_external_call": 3,
+      "JNI_bridge_null_return": 1,
+      "native_selected_before_clock_call": 4,
+      "processing_skipped": 24
+    },
+    "unchanged_original_code": true,
+    "synthetic_memory_only": true,
+    "native_callback_invocations": 0,
+    "JNI_executions": 0,
+    "Android_execution": false,
+    "seeded_dispatch_blocks_only": true,
+    "frozen_traces_replayed_exactly": true
+  },
+  "case_controls": [
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "JNI_bridge_null_return",
+      "original_JNI_bridge_reached": true,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "JNI_bridge_before_external_call",
+      "original_JNI_bridge_reached": true,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "JNI_bridge_before_external_call",
+      "original_JNI_bridge_reached": true,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "JNI_bridge_before_external_call",
+      "original_JNI_bridge_reached": true,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": false,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "native_selected_before_clock_call",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "native_selected_before_clock_call",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "native_selected_before_clock_call",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 0,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "native_selected_before_clock_call",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 1,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 128,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 0,
+      "output_argument_is_null": true,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 1,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 2,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "native_callback_present": true,
+      "skip_byte_control": 255,
+      "output_control_ordinal": 3,
+      "output_argument_is_null": false,
+      "outcome": "processing_skipped",
+      "original_JNI_bridge_reached": false,
+      "out_of_scope_calls_executed": 0
+    }
+  ],
+  "original_code_ranges": [
+    {
+      "start": "0x472ac0",
+      "end_exclusive": "0x472b14",
+      "sha256": "f280ac7636ac4604475ad2c72803c4f7984ec6f9f207f217819fe8e06cc29aab"
+    },
+    {
+      "start": "0x472e10",
+      "end_exclusive": "0x472e34",
+      "sha256": "05b7eafe87caaf819e5051f05269ac97012d203c8331668c89ea68010a167122"
+    },
+    {
+      "start": "0x4077e4",
+      "end_exclusive": "0x407804",
+      "sha256": "f5a0b7f99993f4af868f83069fadecea5d493ba746b324a47bd0dd75dac91c70"
+    },
+    {
+      "start": "0x21baf8",
+      "end_exclusive": "0x21bb0c",
+      "sha256": "0687fb993f7aac262577d6a220b8fa904ddb74f76cbf8ded5386af2e2fa573c6"
+    },
+    {
+      "start": "0x202698",
+      "end_exclusive": "0x202858",
+      "sha256": "4c7e2a8ab82899fe6fc091f58b1a6e6d4b646a86d86ee6faeaa7e077b26fc432"
+    }
+  ],
+  "runtime_Cronet_code_windows": [
+    {
+      "offset": "0x472ac0",
+      "size": 24,
+      "sha256": "de9b43248b03e90bf12f01fd6b4a7f1b6c53ee411412b2d22ff6c5b85493e8b0"
+    },
+    {
+      "offset": "0x4077e4",
+      "size": 32,
+      "sha256": "f5a0b7f99993f4af868f83069fadecea5d493ba746b324a47bd0dd75dac91c70"
+    },
+    {
+      "offset": "0x21baf8",
+      "size": 20,
+      "sha256": "0687fb993f7aac262577d6a220b8fa904ddb74f76cbf8ded5386af2e2fa573c6"
+    },
+    {
+      "offset": "0x202698",
+      "size": 8,
+      "sha256": "c4812b49c9b6a9530ec474ac59931bf7f2a69ff23ba54aeef8388afbd5268616"
+    }
+  ],
+  "runtime_Metasec_prefix_sha256": "78ada3bba7361f920478461db10c01c37f57127b7a7d40f4fa764b15748eddfe",
+  "validation": {
+    "original_APK_ELF_bytes_bound": true,
+    "observer_sources_rebuilt_exactly": true,
+    "observer_templates_contain_no_business_or_native_hooks": true,
+    "original_Cronet_bindings": {
+      "instructions": 45,
+      "emulated_code_ranges": 5,
+      "runtime_code_windows": 4,
+      "relative_relocations": 2
+    },
+    "original_Metasec_binding": {
+      "original_prefix_bytes": 64,
+      "runtime_prefix_samples_bound": 2
+    }
+  },
+  "claims": {
+    "native_callback_registered_at_independent_snapshots_verified": true,
+    "original_native_JNI_selector_conditions_verified": true,
+    "original_request_delegate_forwarder_verified": true,
+    "actual_business_skip_byte_observed": false,
+    "actual_business_branch_execution_verified": false,
+    "actual_native_callback_execution_verified": false,
+    "same_business_response_native_callback_join_verified": false,
+    "initial_rejection_cause_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "limits": [
+    "The slot and target prefix snapshots are independent of the prior business response windows; they do not prove a same-request native callback invocation",
+    "The actual request skip byte and earlier dispatch preconditions were not observed; registration does not establish the branch executed",
+    "The native branch can bypass the Java security bridge under the verified local conditions, so zero Java callback counts alone do not establish that no native signing occurred",
+    "Emulation seeds only selected dispatch blocks, flags and synthetic owner/delegate tables; it is not a whole-request or original-signature runtime equivalence test",
+    "The native branch stops before its clock call, and the JNI branch stops before external bridge code or returns through the null guard; no security callback or signer was invoked",
+    "Only 64 target bytes were bound to the shipped Metasec ELF; complete runtime-module equivalence and complete function reconstruction are not claimed",
+    "The earlier +0x38ed48 same-slot route remains an unattributed synthetic candidate, not the established business caller"
+  ],
+  "privacy": {
+    "raw_addresses_requests_headers_UIDs_or_identifiers_published": false
+  }
+}

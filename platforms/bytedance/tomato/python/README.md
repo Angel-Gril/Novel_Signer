@@ -1,5 +1,18 @@
 # Tomato Python material
 
+`verify_vm9_cronet_native_security_selector_20261118.py` checks the original
+native/JNI selector and two independent read-only registration windows. Four slot
+samples point to executable `libmetasec_ml.so+0x27d288`; two also bind its first
+64 bytes to the shipped ELF. No hooks, callback calls, setters or UI actions were
+used. Thirty-two retained synthetic controls exercise native selection, JNI
+fallback and the skip flag, with zero native callback/JNI executions; 57 damaged
+records are rejected. Optional `--elf <original-libsscronet.so>` and
+`--metasec-elf <original-libmetasec_ml.so>` verify original instructions, code
+digests and runtime prefix bindings. The CLI checks retained evidence without
+connecting to Android or replaying the emulator. Registration and zero Java
+callback counts do not prove which branch a business request executed. See the
+[native selector evidence](../evidence/vm9_cronet_native_security_selector_20261118.json).
+
 `verify_vm9_cronet_candidate_security_route_20261118.py` verifies a conditional
 upstream route: entry x2 becomes intermediate x5, then security-bridge x4 when
 the virtual slot selects the known wrapper. It checks 24 retained synthetic
