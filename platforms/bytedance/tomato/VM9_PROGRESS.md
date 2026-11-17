@@ -1,5 +1,30 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-17：Cronet 响应流到正文 110 的身份链
+
+后续两个被动窗口把边界推进到实际 Cronet URLConnection 响应流。
+完整窗口中，`http.cronet.impl.f.inputStream()` 的返回对象进入 `StreamParser`，
+parser 返回同一个流，再作为 `m90.b` 构造输入；该包装对象由 TypedInput 返回，
+并在实际 RPC `read([B)` 时确认为其底层输入。RPC 包装流的构造对象、provider 返回值
+和 `c.m` 输入也按对象身份连接。`c.m` 原调用仅执行一次，其输出 `code=110`，
+与 Gson 输入逐字符一致；解码结果、decoder 返回和正文 F0 参数仍为同一个对象。
+
+两次窗口各 45 秒，分别 492／807 行、46／76 次 Cronet 创建和启动；
+流对象身份正反控制、同线程与事件顺序、源码绑定均通过。65 项损坏捕获被拒绝。
+没有额外读取、关闭或替换业务流，没有记录正文、请求参数或对象句柄。
+两次操作均先核对目标包前台，正常卸载脚本并 detach，无事件截断；截图仍为不安全版本提示。
+第二窗口准备时截图传输曾超时，复查连接并重新看图后才按当前推荐卡片选择坐标，
+未沿用旧榜单坐标。decoder 的接口 wrapper 类名读取为 null；具体 provider 的
+receiver 身份已在拦截的实现中连接，不把 null 当作 provider 缺失。
+
+原版 DEX 的三种 RPC wrapper `read` 均直接委托底层流，TypedInput 的懒加载路径
+经网络 `inputStream` 或错误流 `j` 后进入 StreamParser；本次实际走 `inputStream`。
+这确认 Cronet 响应流到正文处理的关系，仍未观察原始 HTTP 传输字节、缓存／native
+拦截或最早响应生产点，不能直接认定服务端来源或证书变更是唯一根因。
+六头安全回调在两次窗口中仍为零，签名回调对象身份、整请求差分、完整 signer
+与线上验签继续未闭合。下一步定位该 Cronet 响应流的填充来源及请求关联。
+见[脱敏响应流证据](evidence/vm9_reader_stream_provenance_20261117.json)。
+
 ## 2026-11-17：JSON 解码前的 110 与正文响应对象身份
 
 后续被动窗口把边界推进到实际 RPC Gson 解码入口：调用原始

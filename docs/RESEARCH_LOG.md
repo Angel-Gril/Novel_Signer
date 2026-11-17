@@ -1,5 +1,13 @@
 # Checkpoint log
 
+2026-11-17：两次被动窗口连接了实际 Cronet `inputStream`、StreamParser、
+`m90.b`、RPC 包装流、`c.m`、Gson 和正文 F0。parser 返回同一流，流与包装对象
+身份链成立；转换后的 110 JSON 与 Gson 输入逐字符一致，解码结果仍是同一正文对象。
+两次各 45 秒，46／76 次 Cronet 创建和启动，完整清理；源码绑定及 65 项损坏捕获
+拒绝检查通过。没有额外消费业务流或公开正文。原始 HTTP 字节、最早响应生产点和
+初始拒绝根因仍未证明，六头、整请求差分、完整 signer 与线上验签仍未闭合。
+见[响应流证据](../platforms/bytedance/tomato/evidence/vm9_reader_stream_provenance_20261117.json)。
+
 2026-11-17：被动观察到目标 FullResponse 的 JSON 在原始 Gson 反序列化前已带 `code=110`，
 解码结果及 F0 输入保持 110，并用 Android IdentityHashMap 的正反控制连接到同一 Java 对象。
 45 秒窗口完成，62 次 Cronet 创建/启动，操作前核对前台包，脚本/session 清理完成。

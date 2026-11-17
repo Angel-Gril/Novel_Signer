@@ -68,9 +68,21 @@ the original `Gson.fromJson(String,Type)`, then in its decoded FullResponse and
 the exact same object received by F0. Probe-owned IdentityHashMap positive and
 negative controls passed on Android; the 45-second window completed with 62
 Cronet create/start calls and foreground checks before each UI action. This
-joins the reader response only. Earlier stream/interceptor ownership and the
-raw HTTP response remain unverified; see the
+joins the reader response only. That window left earlier stream/interceptor
+ownership and the raw HTTP response unverified; see the
 [JSON provenance evidence](../evidence/vm9_reader_json_provenance_20261117.json).
+
+Two later private passive windows joined the actual Cronet response stream to
+StreamParser, its unchanged stream result, the constructed `m90.b`, the RPC
+wrapper at its real read, `c.m`, Gson and the reader's same response object.
+The original conversion ran once, produced code 110 and matched Gson's input
+character for character. No business stream was consumed or replaced by the
+probe. Stream-identity positive/negative controls, source bindings, event order,
+foreground guards and cleanup passed; 65 damaged captures were rejected.
+The 45-second windows recorded 46 and 76 Cronet create/start calls. Raw HTTP
+bytes, cache/native interception, initial rejection cause and original-signature
+runtime equivalence remain unverified; the six-header callbacks stayed at zero.
+See the [stream provenance evidence](../evidence/vm9_reader_stream_provenance_20261117.json).
 
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
