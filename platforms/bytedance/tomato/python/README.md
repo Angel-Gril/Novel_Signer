@@ -134,6 +134,30 @@ table role remains unverified. Masking does not authenticate PAC or establish a
 complete unwind, earliest response production or the six-header chain. See the
 [saved-return candidate evidence](../evidence/vm9_cronet_saved_return_candidates_20261118.json).
 
+A later private window identified the live delegate table at `libsscronet.so+0x5c90a0`:
+slot `+0x20` points to the read callback and `+0x28` to the security bridge. The
+restored caller owner refers to the current delegate, whose Java reference is
+the JNI receiver. Thirteen original instructions, four runtime code windows,
+source binding, full cleanup and 152 damaged-capture/action rejections passed
+(45 seconds, 683 rows, 62 create/start calls). The security JNI caches were null
+at the sampled times. A guarded tap ran; a swipe was skipped when the target
+foreground was unconfirmed. The inspected final image showed a second book cover.
+
+After process recovery, a separate Java-only window observed the same response
+request's context provider as non-null `org.chromium.c`, matching its declared
+type. Its shipped definition is in `classes17.dex`, identical in the original
+and test APKs, and directly delegates to the security manager. That manager also
+has null internal-provider return paths; its actual internal registration is
+still unverified. This window completed with 708 rows, 65 create/start calls,
+one foreground-guarded tap, full cleanup and 133 damaged-capture/action rejections.
+Its inspected final image showed recommendation home. Each window retained the
+existing HTTP-200, `wasCached=false`, code-110 response identity chain, with zero
+security-stage calls. Objects are not joined across these windows or processes.
+Failed setup and zero-target-response trials are excluded; a later signal-11
+exit remains unattributed, and recovery preserved app data. The live table and
+non-null provider do not prove security bridge execution, six-header generation
+or a complete signer. See the [dispatch/provider evidence](../evidence/vm9_cronet_dispatch_provider_20261118.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

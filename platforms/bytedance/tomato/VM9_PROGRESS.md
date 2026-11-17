@@ -1,5 +1,38 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：实时原生函数表与实际请求 Java 安全 provider 已分别确认
+
+在稳定 `CallVoidMethodV` 入口读取当前 delegate：实时函数表为
+`libsscronet.so+0x5c90a0`，`+0x20` 槽指向读取完成函数 `+0x201f30`，
+`+0x28` 槽指向请求级安全因子桥 `+0x202698`。按原版指令恢复 caller 保存的 x19 后，
+其 owner 的 delegate 与当前对象相同；delegate 保存的 Java 引用也经 JNI 对象身份
+比较确认是实际 receiver。13 条原版指令、4 段运行时代码摘要及 152 项损坏捕获／操作
+保护拒绝检查通过。45 秒、683 行、62 次 Cronet 创建和启动，完整卸载/detach。
+初始化与该回调采样时，请求级和 context 级安全 JNI 缓存均为 null；不外推其永久状态。
+
+恢复进程后的另一窗口仅沿既有 Java 观察链读取实际请求的 `CronetUrlRequest.g` 与
+context 的 `E`，确认 provider 为非空 `org.chromium.c`，且符合声明类型
+`com.ttnet.org.chromium.net.w`。四个关联序号与同一读取完成事件一致；45 秒、708 行、
+65 次创建和启动，源码绑定、正／null 控制、133 项损坏记录拒绝和完整清理通过。
+原版 `classes17.dex` 与测试包字节相同；其中 `c.a(String,Map)` 直接转调
+`CronetAppProviderManager.onCallToAddSecurityFactor`。manager 还有内部 provider 为空
+时返回 null 的路径，实际内部注册状态尚未观察，不能把 context provider 非空等同完整注册。
+
+两窗口各自保留 buffer/request/stream/RPC/Gson/正文 110 的身份链，均为 HTTP 200、
+`wasCached=false`，五个安全观察阶段计数均为零。两者跨越进程恢复，不声称跨窗口对象
+相同。原生窗口只执行一次前台确认的 tap，后续 swipe 因前台未确认而跳过；截图为第二本书
+封面。Java 窗口仅一次前台确认的 tap，截图为推荐首页，均不作为完整阅读成功证据。
+
+准备失败的 y/z、JNI 控制失败的 ac、无目标响应的 ab 均排除；ad 在枚举时连接失败，
+未加载其 flush 假设版本。自检内存的范围查询问题已单变量复核并修正控制，应用内存
+读取保护保留。目标退出历史另记 signal 11，原因未知；仅重新启动已不存在的目标进程，
+复核身份、4 段原始代码和正常清理，保留应用数据，没有重装。
+
+下一步追踪 native 安全派发的触发条件及 manager 内部注册状态。函数表含有安全入口、
+实际请求 provider 非空，均未证明安全回调执行；最早响应生产、拒绝根因、普通 Cronet
+六头、整请求差分、原签名运行时等价、完整 signer 与线上验签仍未闭合。
+见[实时派发与 provider 证据](evidence/vm9_cronet_dispatch_provider_20261118.json)。
+
 ## 2026-11-18：稳定 JNI 入口读到八个可执行返回地址候选
 
 在已验证的 JNI 入口继续只读观察保存帧，没有重新挂载此前异常的 native 函数或指令中点。

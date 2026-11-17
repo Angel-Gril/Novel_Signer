@@ -1,0 +1,344 @@
+{
+  "schema": "vm9-cronet-dispatch-provider-20261118-v1",
+  "evidence_date": "2026-11-18",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "android_release": "13",
+    "executing_arch": "arm64",
+    "frida_version": "17.24.3",
+    "test_apk_sha256": "2aebb1e98f96f8f4f66e136c435a6b93b6576d849f836d3d6e2028e44cacb36b",
+    "original_apk_signature_preserved": false,
+    "target_java_package_and_uid_checked_before_business_hooks": true
+  },
+  "provenance": {
+    "base_probe_git_revision": "346e2917d9647353716fc2700e9cd4aafd4a156f",
+    "original_ELF_sha256": "ab0547460f1c06e5111b69826d2277f145aad4f79c7d2b7aea0356dcf25e49ac",
+    "private_file_sha256": {
+      "build_live_dispatch_probe.py": "55cc71db0146386097ac24d5f4ebd8cb601faf2ae8f8ac988291cfe6e3478524",
+      "build_dispatch_stage_probe.py": "c379ee6aa928b4a564fba4e750cb8e0b1d62731ecf131dc95d85997aefe65ed2",
+      "build_dispatch_memory_fix.py": "5c34196fbb05e29ddf2e355eb786825e6f206aec02e82456f1f96a1eca8e911b",
+      "build_java_provider_probe.py": "cf13f33182cb01cd3dc5a44fdcac6168624ef4a2fd1220d0777847ae4507d72b",
+      "validate_live_dispatch.py": "c6540d4354241c9b15f96240a7f6b0e988a81082eb5bf21473d5332c91a02234",
+      "validate_java_provider.py": "33bf5d073548c96ff993024a8612ead543b52984c9931dceba09431916c4ffbd",
+      "index_java_security_provider.py": "97f18ead8d05aa1ede335a1028c80e65dd1adbff5af4995ff86df69df61d2f77",
+      "java-security-provider-index.json": "9a1ab2e9e592aa881ee8b1728f07457bdb17f2c31bc962ef81cbb1cbdcc99948",
+      "native-live-dispatch-bindings.json": "350a70e1af48bc889e61dd33b67266f28a10df551304ef3c023f15b53a56df14",
+      "native-callback-relocation-xrefs.json": "7d1919f4bff31aa72d8281b02c714271b2644bcab7768bb9af9708d9c3c3d569",
+      "dispatch-control-diagnostic.json": "c894914dcdb206153d4d2532b3d9f0b8863fab17affd0f2671638f32cc1791be",
+      "dispatch-recovered-health-proof.json": "d3e231bf9a51ee59be6dd1ad5cbe2b456581d61744d3430576f7017d455434db",
+      "fill-aa-ui-actions.json": "4d066eec118bb8033dadf3951a16c55af8028b889a36461add8f05c596fe5d06",
+      "fill-ae-ui-actions.json": "da6ef8187cd5cf1c38003b99b431f0f1ad0e42151bf18c5c63ce9e18ab66cdaf"
+    }
+  },
+  "windows": [
+    {
+      "label": "aa",
+      "duration_seconds": 45,
+      "row_count": 683,
+      "counts": {
+        "client_selection": 62,
+        "selector": 62,
+        "cronet_connection": 62,
+        "cronet_create": 62,
+        "cronet_start": 62
+      },
+      "security_stage_counts": {
+        "cronet_request": 0,
+        "cronet_context": 0,
+        "cronet_map": 0,
+        "manager": 0,
+        "r4": 0
+      },
+      "cleanup_complete": true,
+      "event_limit_reached": false,
+      "performed_target_foreground_guarded_taps": 1,
+      "inspected_after_UI": "second_book_cover",
+      "capture_sha256": "11d4315438abcb5a53ede0fbc270466cf490db2db44190d10bc467b9b031bb7b",
+      "source_js_sha256": "b5aaccfdae2e33f6899a6b57ac1bafe20ff37dd650ece37dfc7f821d4b62a9db"
+    },
+    {
+      "label": "ae",
+      "duration_seconds": 45,
+      "row_count": 708,
+      "counts": {
+        "client_selection": 65,
+        "selector": 65,
+        "cronet_connection": 65,
+        "cronet_create": 65,
+        "cronet_start": 65
+      },
+      "security_stage_counts": {
+        "cronet_request": 0,
+        "cronet_context": 0,
+        "cronet_map": 0,
+        "manager": 0,
+        "r4": 0
+      },
+      "cleanup_complete": true,
+      "event_limit_reached": false,
+      "performed_target_foreground_guarded_taps": 1,
+      "inspected_after_UI": "recommendation_home",
+      "capture_sha256": "e31142e8ee9aba26f66895320b8ef24f6991cb04fa089c6093d9d6f923ddd1ab",
+      "source_js_sha256": "4c1e63db0c1f3702af506b6e548232d68385eea075b738d0ab544ebdab0b3a42"
+    }
+  ],
+  "native_delegate_observation": {
+    "window": "aa",
+    "JNI_entry": "CallVoidMethodV",
+    "module": "libsscronet.so",
+    "JNI_return_offset": "0x1f009c",
+    "delegate_reference_is_JNI_receiver": true,
+    "live_dispatch": {
+      "vtable": {
+        "module": "libsscronet.so",
+        "offset": "0x5c90a0"
+      },
+      "read_target": {
+        "module": "libsscronet.so",
+        "offset": "0x201f30"
+      },
+      "security_target": {
+        "module": "libsscronet.so",
+        "offset": "0x202698"
+      },
+      "owner_delegate_matches_current_receiver": true,
+      "security_cache_states": {
+        "request": "null",
+        "context": "null"
+      }
+    },
+    "restored_caller_saved_x19_offset_from_callback_FP": "0x48",
+    "caller_owner_delegate_field_offset": "0x8",
+    "delegate_Java_reference_field_offset": "0x18",
+    "virtual_read_slot": "0x20",
+    "virtual_security_slot": "0x28",
+    "request_security_JNI_cache_slot": "0x5ef8d8",
+    "context_security_JNI_cache_slot": "0x5ef738",
+    "initial_security_cache_states": {
+      "request": "null",
+      "context": "null"
+    },
+    "saved_return_candidates": [
+      {
+        "module": "libsscronet.so",
+        "offset": "0x201fc8",
+        "high_bits_masked": true,
+        "candidate_only": true
+      },
+      {
+        "module": "libsscronet.so",
+        "offset": "0x21abfc",
+        "high_bits_masked": true,
+        "candidate_only": true
+      },
+      {
+        "module": "libsscronet.so",
+        "offset": "0x2198c4",
+        "high_bits_masked": true,
+        "candidate_only": true
+      },
+      {
+        "module": "libsscronet.so",
+        "offset": "0x2113a4",
+        "high_bits_masked": true,
+        "candidate_only": true
+      },
+      {
+        "module": "libsscronet.so",
+        "offset": "0x216418",
+        "high_bits_masked": true,
+        "candidate_only": true
+      },
+      {
+        "module": "libsscronet.so",
+        "offset": "0x2ed2cc",
+        "high_bits_masked": true,
+        "candidate_only": true
+      },
+      {
+        "module": "libsscronet.so",
+        "offset": "0x2fb324",
+        "high_bits_masked": true,
+        "candidate_only": true
+      },
+      {
+        "module": "libsscronet.so",
+        "offset": "0x32a198",
+        "high_bits_masked": true,
+        "candidate_only": true
+      }
+    ],
+    "preceding_original_callsites": [
+      {
+        "return_offset": "0x201fc8",
+        "callsite_offset": "0x201fc4",
+        "mnemonic": "bl",
+        "operands": "#0x1f0034"
+      },
+      {
+        "return_offset": "0x21abfc",
+        "callsite_offset": "0x21abf8",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "return_offset": "0x2198c4",
+        "callsite_offset": "0x2198c0",
+        "mnemonic": "bl",
+        "operands": "#0x21ab88"
+      },
+      {
+        "return_offset": "0x2113a4",
+        "callsite_offset": "0x2113a0",
+        "mnemonic": "blr",
+        "operands": "x9"
+      },
+      {
+        "return_offset": "0x216418",
+        "callsite_offset": "0x216414",
+        "mnemonic": "blr",
+        "operands": "x9"
+      },
+      {
+        "return_offset": "0x2ed2cc",
+        "callsite_offset": "0x2ed2c8",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "return_offset": "0x2fb324",
+        "callsite_offset": "0x2fb320",
+        "mnemonic": "bl",
+        "operands": "#0x2ed1a4"
+      },
+      {
+        "return_offset": "0x32a198",
+        "callsite_offset": "0x32a194",
+        "mnemonic": "bl",
+        "operands": "#0x2fb1cc"
+      }
+    ],
+    "HTTP_status": 200,
+    "buffer_stream_and_reader_code": 110,
+    "was_cached": false
+  },
+  "java_provider_observation": {
+    "window": "ae",
+    "request_context_field": "CronetUrlRequest.g",
+    "security_provider_field": "CronetUrlRequestContext.E",
+    "declared_provider_type": "com.ttnet.org.chromium.net.w",
+    "request_context_present": true,
+    "security_provider_present": true,
+    "security_provider_class": "org.chromium.c",
+    "provider_matches_declared_type": true,
+    "decode_read_fill_and_thread_ids_match_same_native_completion": true,
+    "observed_before_original_read_completion": true,
+    "native_interceptors_installed": false,
+    "HTTP_status": 200,
+    "buffer_stream_and_reader_code": 110,
+    "was_cached": false
+  },
+  "provider_static_binding": {
+    "dex_entry": "classes17.dex",
+    "dex_sha256": "c88f1daee04b1257ca0212b111561ae707775a0a1d8392e6c4e0211ed3c9681b",
+    "original_and_test_DEX_identical": true,
+    "provider_superclass": "Lcom/ttnet/org/chromium/net/w;",
+    "provider_callback": "a(String,Map)",
+    "callback_directly_delegates_to": "CronetAppProviderManager.onCallToAddSecurityFactor",
+    "manager_has_interface_and_reflection_dispatch_paths": true,
+    "manager_has_null_provider_return_paths": true
+  },
+  "validation": {
+    "native_damaged_captures_and_action_guards_rejected": 152,
+    "java_damaged_captures_and_action_guards_rejected": 133,
+    "source_rebuilds_match_exact_loaded_sources": true,
+    "original_native_binding": {
+      "original_instruction_bindings": 13,
+      "code_windows": 4,
+      "callback_saved_x19_offset": "0x48",
+      "read_vtable_slot": "0x20",
+      "security_vtable_slot": "0x28"
+    },
+    "null_distinct_method_and_unreadable_controls_passed": true,
+    "Java_present_null_and_declaring_class_controls_passed": true,
+    "actual_buffer_request_stream_RPC_Gson_reader_identity_chain_preserved_in_each_window": true,
+    "native_origin_to_java_provider_cross_window_identity_claimed": false
+  },
+  "excluded_experiments": [
+    {
+      "labels": [
+        "y",
+        "z"
+      ],
+      "reason": "setup control memory was absent from the range lookup although direct own-memory reads worked",
+      "accepted_as_complete_response": false,
+      "application_memory_read_guards_retained": true
+    },
+    {
+      "label": "ab",
+      "reason": "complete window with 8 requests but no target response/native origin",
+      "accepted_as_complete_response": false
+    },
+    {
+      "label": "ac",
+      "reason": "actual JNI A and distinct-method setup controls failed",
+      "accepted_as_complete_response": false
+    },
+    {
+      "label": "ad",
+      "reason": "transport failed at process enumeration before source load",
+      "installed_flush_hypothesis_verified": false,
+      "retained_capture_exists": false
+    }
+  ],
+  "recovery": {
+    "exclusion_checks": {
+      "failed_setup_windows_excluded": 3,
+      "zero_reader_windows_excluded": 1,
+      "no_retained_AD_capture_or_installed_business_window": true,
+      "recovered_target_identity_only_health_verified": true
+    },
+    "target_exit_history_reason": "SIGNALED",
+    "target_exit_history_status": 11,
+    "exact_exit_cause_verified": false,
+    "only_missing_target_process_started": true,
+    "target_package_UID_original_code_and_normal_unload_detach_reverified": true,
+    "health_check_original_code_windows_matched": 4,
+    "health_check_installed_business_or_native_interceptors": false,
+    "app_data_cleared_or_APK_reinstalled": false,
+    "subsequent_accepted_window": "ae"
+  },
+  "UI_action_limits": {
+    "aa_swipe_skipped_because_target_foreground_not_confirmed": true,
+    "ae_single_guarded_tap_only": true,
+    "complete_reading_success_claimed": false
+  },
+  "limits": [
+    "The native delegate and Java provider were observed in different windows separated by process recovery; no cross-window object identity is claimed",
+    "The live function table contains a security callback target; execution of that target is not established",
+    "The JNI caches were null at the sampled times; this does not prove permanent absence or a specific disabled condition",
+    "The actual request context provider is non-null; manager handler registration and actual security callback execution remain unresolved",
+    "Static provider delegation does not establish six-header generation or whole-request signing",
+    "Low-48-bit return candidates do not authenticate PAC or prove a complete unwind",
+    "The test APK is re-signed; original-signature runtime equivalence and initial code-110 cause remain unresolved",
+    "The signal-11 exit is not attributed to low memory, anti-analysis or a specific hook"
+  ],
+  "claims": {
+    "live_native_delegate_function_table_identity_verified": true,
+    "same_response_request_Java_security_provider_present_verified": true,
+    "shipped_provider_to_manager_static_delegation_verified": true,
+    "native_security_callback_execution_verified": false,
+    "manager_handler_registration_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "earliest_response_byte_production_verified": false,
+    "server_origin_of_110_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "privacy": {
+    "raw_addresses_pointers_request_response_content_header_values_identifiers_or_signatures_published": false
+  }
+}
