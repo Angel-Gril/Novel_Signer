@@ -173,6 +173,19 @@ the inspected final image showed a third book cover. This is a response-time
 snapshot, leaving earlier registration state and native dispatch unresolved.
 See the [manager registration evidence](../evidence/vm9_cronet_manager_registration_20261118.json).
 
+Focused static lookup then located the provider's inherited security method in
+`AbsCronetDependAdapter`: it converts header values to lists and delegates to
+`NetworkParams.tryAddSecurityFactor`, which calls its non-null registered callback
+or returns null. The inherited owner and NetworkParams DEX entries match the
+original APK. The application's `classes3.dex` differs as a whole; only the
+provider's superclass and declared method signatures were compared. A separate
+three-second read-only snapshot found `ms.bd.c.r4` registered in the downstream
+field. Identity/type and present/null controls, exact source binding, cleanup
+and survival of the same target process passed, with no business/native hooks,
+UI action or signer invocation. This snapshot is not joined to a business
+response and does not prove callback execution or six-header generation. See the
+[downstream callback evidence](../evidence/vm9_cronet_downstream_callback_20261118.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

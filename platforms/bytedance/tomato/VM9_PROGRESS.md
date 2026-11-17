@@ -1,5 +1,24 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：继承安全方法的静态路径与独立 r4 注册快照已确认
+
+实际 provider 类 `com.dragon.read.base.http.b` 没有声明安全方法，继承自
+`AbsCronetDependAdapter`。原版/测试包的该父类 DEX 字节相同；实现把 Map 的值包装为
+列表，再调用 `NetworkParams.tryAddSecurityFactor`。后者从
+`sAddSecurityFactorProcessCallback` 取回调，非空则转调接口，空则返回 null。
+该 owner 的 `classes23.dex` 同样与原版一致。应用 provider 所在 `classes3.dex`
+整份不同，仅复核了该类的父类及声明方法签名，未声称全 DEX 或全部方法体等价。
+
+另一独立 3 秒只读快照确认该下游字段非空，类型为 `ms.bd.c.r4`，符合声明接口。
+包名/UID、字段声明类/类型、正/null 控制、源码逐字重建及卸载/detach 通过，目标进程
+保持存活；没有业务/原生入口 hook、页面操作、注册 setter 或主动签名调用。
+这不是此前业务响应的对象身份关联，也不证明 r4 执行或生成六头。
+
+已观察到的 Java 注册层继续向下接到 r4；此前五个安全阶段计数仍为零。下一步定位
+native 到 Java 安全桥的更早派发条件。普通 Cronet 六头、整请求差分、原签名运行时
+等价、完整 signer 与线上验签仍未闭合。
+见[下游静态路径与注册快照](evidence/vm9_cronet_downstream_callback_20261118.json)。
+
 ## 2026-11-18：实际响应时 manager 内部 provider 与安全方法均存在
 
 后续 Java 被动窗口沿同一请求/响应链读取现有 manager 单例字段，没有调用可能创建

@@ -1,5 +1,12 @@
 # Checkpoint log
 
+2026-11-18：确认应用 provider 继承 `AbsCronetDependAdapter` 的安全方法，经
+`NetworkParams.tryAddSecurityFactor` 转调静态回调字段；父类及 NetworkParams 的
+DEX 与原版相同，应用类所在的整份 DEX 则不同。独立 3 秒只读快照确认下游已注册
+`ms.bd.c.r4`，身份/类型、正/null 控制、源码绑定、完整清理和进程存活检查通过。
+该快照不连接此前业务响应，也不证明回调执行；普通 Cronet 六头与 signer 仍未闭合。
+见[下游回调证据](../platforms/bytedance/tomato/evidence/vm9_cronet_downstream_callback_20261118.json)。
+
 2026-11-18：后续同响应 Java 窗口确认现有 manager 单例、接口 provider 和反射
 adapter 均存在，当前 false 优化标志选中反射路径；所选对象类型可解析返回 Map 的
 公开安全方法。仅直接读字段，没有调用单例 accessor、注册或签名方法。

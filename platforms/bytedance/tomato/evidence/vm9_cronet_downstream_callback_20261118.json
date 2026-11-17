@@ -1,0 +1,79 @@
+{
+  "schema": "vm9-cronet-downstream-callback-20261118-v1",
+  "evidence_date": "2026-11-18",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "android_release": "13",
+    "executing_arch": "arm64",
+    "frida_version": "17.24.3",
+    "test_apk_sha256": "2aebb1e98f96f8f4f66e136c435a6b93b6576d849f836d3d6e2028e44cacb36b",
+    "original_apk_signature_preserved": false,
+    "target_java_package_and_uid_checked_before_business_hooks": true
+  },
+  "provenance": {
+    "base_probe_git_revision": "a6bff22bc08fd3548d9efba1addb8ca07fb9eb79",
+    "source_js_sha256": "ca9e146d4509d07bff727db14b5ed6b152eb9349d1e9de9f4a9a660d96e14538",
+    "private_file_sha256": {
+      "observe_network_callback.py": "b0bc4e1f861e120c6ce7e418076622c91fb0f159f84b47b2085fc8e60065e5ae",
+      "network-callback-snapshot.json": "876f81dfb329c26aab9124fd223a2197bcd26dc446151998c5fed9f6e4a7060c",
+      "index_app_provider_inheritance.py": "295922e9b74214d00cfe4ae154ab0a56ea7a7be3408468d62940076188518305",
+      "java-app-provider-inheritance-index.json": "eeb40fee54a54f00f2c877bc910a47df0023ac352243614ff2057fe010f4534c",
+      "index_network_security_callbacks.py": "f6e6b34774075b486bb1ae843d69b6adbd4c1af006a213bd8b283cc9242c6636",
+      "java-network-security-callback-index.json": "435340a30b59e9fd66a944b4fade0b6a9181d6125e7b0b366070625f7ed810ce"
+    }
+  },
+  "static_provider_path": {
+    "application_provider_class": "com.dragon.read.base.http.b",
+    "inherited_security_method_owner": "com.bytedance.ttnet.cronet.AbsCronetDependAdapter",
+    "application_class_overrides_security_method": false,
+    "application_class_super_and_method_signatures_match_original": true,
+    "application_provider_whole_DEX_identical": false,
+    "inherited_owner_whole_DEX_identical": true,
+    "converts_header_values_to_lists": true,
+    "delegates_to": "NetworkParams.tryAddSecurityFactor",
+    "downstream_field": "NetworkParams.sAddSecurityFactorProcessCallback",
+    "nonnull_dispatch": "NetworkParams$b.onCallToAddSecurityFactor",
+    "null_dispatch_returns_null": true,
+    "network_params_whole_DEX_identical": true
+  },
+  "independent_read_only_snapshot": {
+    "observation_delay_seconds": 3,
+    "callback_present": true,
+    "callback_class": "ms.bd.c.r4",
+    "callback_matches_declared_type": true,
+    "package_and_UID_reverified": true,
+    "present_and_null_controls_passed": true,
+    "cleanup_complete": true,
+    "same_target_process_survived": true,
+    "business_UI_actions": 0,
+    "business_or_native_interceptors_installed": false,
+    "callback_or_registration_setter_invoked": false
+  },
+  "validation": {
+    "source_rebuilt_and_retained_exactly": true,
+    "original_and_test_DEX_hashes_bound": true,
+    "changed_DEX_class_super_and_method_signatures_reverified": true
+  },
+  "limits": [
+    "The r4 registration snapshot is independent of the business response windows and is not a same-response object-identity join",
+    "A registered callback and a shipped static call path do not prove that the callback executed or generated headers",
+    "The provider class is in a changed DEX; only its superclass and declared method signatures were compared, not the entire DEX or all method bodies",
+    "The inherited callback and NetworkParams owner DEX entries are byte-identical in the original and test APKs",
+    "The earlier five observed security-stage counts remain zero; the native dispatch condition and initial code-110 cause remain unresolved"
+  ],
+  "claims": {
+    "downstream_r4_callback_registered_at_snapshot_verified": true,
+    "shipped_provider_inheritance_and_downstream_static_path_verified": true,
+    "same_business_response_r4_identity_join_verified": false,
+    "callback_execution_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "privacy": {
+    "raw_addresses_references_request_response_content_header_values_identifiers_or_signatures_published": false
+  }
+}
