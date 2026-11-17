@@ -1,0 +1,533 @@
+{
+  "schema": "vm9-cronet-candidate-security-route-20261118-v1",
+  "evidence_date": "2026-11-18",
+  "provenance": {
+    "base_git_revision": "bcbdb000b50ecf49946f2b77d8d8c550e80b7f89",
+    "original_ELF_sha256": "ab0547460f1c06e5111b69826d2277f145aad4f79c7d2b7aea0356dcf25e49ac",
+    "private_file_sha256": {
+      "verify_candidate_security_route.py": "0015da7d64e316c8ec02079145669196b0447ad79b730b46fd048ecd6081c594",
+      "native-candidate-security-route-emulation.json": "718b321c195030308878b56b0c14017fe37eb320f0488fb99ff368f17ffb3216",
+      "publish_candidate_security_route.py": "57322f3f9a89e8164cba9262f481b9a8374d41a6d77247326d63034f688779c4"
+    }
+  },
+  "static_instruction_bindings": [
+    {
+      "offset": "0x38938c",
+      "mnemonic": "mov",
+      "operands": "x19, x2"
+    },
+    {
+      "offset": "0x3893a0",
+      "mnemonic": "ldr",
+      "operands": "x0, [x20, #0x730]"
+    },
+    {
+      "offset": "0x3893a4",
+      "mnemonic": "add",
+      "operands": "x3, x20, #0x330"
+    },
+    {
+      "offset": "0x3893a8",
+      "mnemonic": "add",
+      "operands": "x4, x20, #0x2e8"
+    },
+    {
+      "offset": "0x3893ac",
+      "mnemonic": "mov",
+      "operands": "x1, x20"
+    },
+    {
+      "offset": "0x3893b0",
+      "mnemonic": "mov",
+      "operands": "x5, x19"
+    },
+    {
+      "offset": "0x3893b4",
+      "mnemonic": "mov",
+      "operands": "x2, x21"
+    },
+    {
+      "offset": "0x3893c8",
+      "mnemonic": "b",
+      "operands": "#0x38ed48"
+    },
+    {
+      "offset": "0x38ed64",
+      "mnemonic": "mov",
+      "operands": "x22, x2"
+    },
+    {
+      "offset": "0x38ed6c",
+      "mnemonic": "mov",
+      "operands": "x19, x5"
+    },
+    {
+      "offset": "0x38ed70",
+      "mnemonic": "mov",
+      "operands": "x20, x4"
+    },
+    {
+      "offset": "0x38ed74",
+      "mnemonic": "mov",
+      "operands": "x21, x3"
+    },
+    {
+      "offset": "0x38ed88",
+      "mnemonic": "ldr",
+      "operands": "x8, [x23, #0x28]"
+    },
+    {
+      "offset": "0x38ed8c",
+      "mnemonic": "cbz",
+      "operands": "x8, #0x38eda8"
+    },
+    {
+      "offset": "0x38ed90",
+      "mnemonic": "ldrb",
+      "operands": "w9, [x23, #0xc1]"
+    },
+    {
+      "offset": "0x38ed94",
+      "mnemonic": "ldr",
+      "operands": "x8, [x23, #0xf0]"
+    },
+    {
+      "offset": "0x38ed98",
+      "mnemonic": "cbz",
+      "operands": "w9, #0x38edcc"
+    },
+    {
+      "offset": "0x38ed9c",
+      "mnemonic": "cmp",
+      "operands": "x8, x24"
+    },
+    {
+      "offset": "0x38eda0",
+      "mnemonic": "mov",
+      "operands": "x8, x24"
+    },
+    {
+      "offset": "0x38eda4",
+      "mnemonic": "b.eq",
+      "operands": "#0x38edcc"
+    },
+    {
+      "offset": "0x38edc8",
+      "mnemonic": "b",
+      "operands": "#0x38e438"
+    },
+    {
+      "offset": "0x38edcc",
+      "mnemonic": "cbnz",
+      "operands": "x8, #0x38eddc"
+    },
+    {
+      "offset": "0x38edd8",
+      "mnemonic": "bl",
+      "operands": "#0x38ea5c"
+    },
+    {
+      "offset": "0x38eddc",
+      "mnemonic": "ldr",
+      "operands": "x0, [x23, #0x30]"
+    },
+    {
+      "offset": "0x38ede0",
+      "mnemonic": "mov",
+      "operands": "x1, x22"
+    },
+    {
+      "offset": "0x38ede4",
+      "mnemonic": "mov",
+      "operands": "x2, x21"
+    },
+    {
+      "offset": "0x38ede8",
+      "mnemonic": "mov",
+      "operands": "x3, x20"
+    },
+    {
+      "offset": "0x38edec",
+      "mnemonic": "mov",
+      "operands": "x4, x19"
+    },
+    {
+      "offset": "0x38ee04",
+      "mnemonic": "ldr",
+      "operands": "x16, [x8, #0x38]"
+    },
+    {
+      "offset": "0x38ee10",
+      "mnemonic": "br",
+      "operands": "x16"
+    },
+    {
+      "offset": "0x38a010",
+      "mnemonic": "adr",
+      "operands": "x8, #0x389368"
+    },
+    {
+      "offset": "0x38a01c",
+      "mnemonic": "str",
+      "operands": "x20, [x21, #0x30]"
+    },
+    {
+      "offset": "0x38a020",
+      "mnemonic": "stp",
+      "operands": "x8, xzr, [x21, #0x20]"
+    },
+    {
+      "offset": "0x38c4d8",
+      "mnemonic": "ldp",
+      "operands": "x10, x9, [x0, #0x28]"
+    },
+    {
+      "offset": "0x38c4dc",
+      "mnemonic": "ldr",
+      "operands": "x8, [x0, #0x20]"
+    },
+    {
+      "offset": "0x38c4e0",
+      "mnemonic": "add",
+      "operands": "x0, x9, x10, asr #1"
+    },
+    {
+      "offset": "0x38c4e4",
+      "mnemonic": "tbz",
+      "operands": "w10, #0, #0x38c4f0"
+    },
+    {
+      "offset": "0x38c4ec",
+      "mnemonic": "ldr",
+      "operands": "x8, [x9, x8]"
+    },
+    {
+      "offset": "0x38c500",
+      "mnemonic": "blr",
+      "operands": "x8"
+    }
+  ],
+  "conditional_route": {
+    "entry_offset": "0x389368",
+    "intermediate_offset": "0x38ed48",
+    "candidate_object_field": "0x30",
+    "candidate_virtual_slot": "0x38",
+    "selected_fixture_target": "0x21baf8",
+    "security_bridge_offset": "0x202698",
+    "entry_source_register": "x2",
+    "intermediate_register": "x5",
+    "bridge_destination_register": "x4",
+    "actual_object_or_slot_target_observed": false
+  },
+  "static_callback_setup": {
+    "target_address_instruction": "0x38a010",
+    "target_function": "0x389368",
+    "bound_target_field": "0x20",
+    "bound_adjustment_field": "0x28",
+    "bound_object_field": "0x30",
+    "candidate_trampoline": "0x38c4c8",
+    "setup_or_trampoline_emulated": false,
+    "actual_business_registration_or_invocation_observed": false
+  },
+  "bounded_emulation": {
+    "cases": 24,
+    "outcomes": {
+      "bridge_first_external_call_boundary": 6,
+      "bridge_null_return": 2,
+      "fallback": 12,
+      "initialization_boundary": 4
+    },
+    "original_helper_entries_per_case": 3,
+    "out_of_scope_calls_executed": 0,
+    "unchanged_original_code": true,
+    "synthetic_objects_and_selected_tables_only": true,
+    "no_stubbed_or_replaced_instructions": true,
+    "Android_execution": false
+  },
+  "case_controls": [
+    {
+      "gate": "missing_precondition",
+      "source_control_ordinal": 0,
+      "source_argument_is_null": true,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "missing_precondition",
+      "source_control_ordinal": 1,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "missing_precondition",
+      "source_control_ordinal": 2,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "missing_precondition",
+      "source_control_ordinal": 3,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_mismatch",
+      "source_control_ordinal": 0,
+      "source_argument_is_null": true,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_mismatch",
+      "source_control_ordinal": 1,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_mismatch",
+      "source_control_ordinal": 2,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_mismatch",
+      "source_control_ordinal": 3,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_nonzero",
+      "source_control_ordinal": 0,
+      "source_argument_is_null": true,
+      "outcome": "bridge_null_return",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_nonzero",
+      "source_control_ordinal": 1,
+      "source_argument_is_null": false,
+      "outcome": "bridge_first_external_call_boundary",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_nonzero",
+      "source_control_ordinal": 2,
+      "source_argument_is_null": false,
+      "outcome": "bridge_first_external_call_boundary",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_nonzero",
+      "source_control_ordinal": 3,
+      "source_argument_is_null": false,
+      "outcome": "bridge_first_external_call_boundary",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_matches",
+      "source_control_ordinal": 0,
+      "source_argument_is_null": true,
+      "outcome": "bridge_null_return",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_matches",
+      "source_control_ordinal": 1,
+      "source_argument_is_null": false,
+      "outcome": "bridge_first_external_call_boundary",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_matches",
+      "source_control_ordinal": 2,
+      "source_argument_is_null": false,
+      "outcome": "bridge_first_external_call_boundary",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_matches",
+      "source_control_ordinal": 3,
+      "source_argument_is_null": false,
+      "outcome": "bridge_first_external_call_boundary",
+      "third_argument_forwarding_verified": true,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_zero",
+      "source_control_ordinal": 0,
+      "source_argument_is_null": true,
+      "outcome": "initialization_boundary",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_zero",
+      "source_control_ordinal": 1,
+      "source_argument_is_null": false,
+      "outcome": "initialization_boundary",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_zero",
+      "source_control_ordinal": 2,
+      "source_argument_is_null": false,
+      "outcome": "initialization_boundary",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "inactive_current_zero",
+      "source_control_ordinal": 3,
+      "source_argument_is_null": false,
+      "outcome": "initialization_boundary",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_zero",
+      "source_control_ordinal": 0,
+      "source_argument_is_null": true,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_zero",
+      "source_control_ordinal": 1,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_zero",
+      "source_control_ordinal": 2,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    },
+    {
+      "gate": "active_current_zero",
+      "source_control_ordinal": 3,
+      "source_argument_is_null": false,
+      "outcome": "fallback",
+      "third_argument_forwarding_verified": false,
+      "original_helper_entries_executed": 3,
+      "out_of_scope_calls_executed": 0
+    }
+  ],
+  "original_code_ranges": [
+    {
+      "start": "0x389368",
+      "end_exclusive": "0x3893cc",
+      "sha256": "58bc134af42214816db4ea1ae9020113278c8806d23018f9f355754d80b7dd9b"
+    },
+    {
+      "start": "0x2c8788",
+      "end_exclusive": "0x2c87e8",
+      "sha256": "6450de98ad25d170c5fb813c7671399d82ab8da6d71ed1de3684a86d45f2f876"
+    },
+    {
+      "start": "0x388e28",
+      "end_exclusive": "0x388e44",
+      "sha256": "e694423a23cd77a555ceca788f6733776cbb6fc8822a371f559b42e1adb4e383"
+    },
+    {
+      "start": "0x38ed48",
+      "end_exclusive": "0x38ee14",
+      "sha256": "d5c3e926f2664baed9db015a6571f602b77e7e7706751983be614feb2416ac7c"
+    },
+    {
+      "start": "0x38e9f4",
+      "end_exclusive": "0x38ea5c",
+      "sha256": "5ff2093827ec812b0c928f335ceccb2f53935ff6f4cb1fcbc98d35ff4f077b95"
+    },
+    {
+      "start": "0x21baf8",
+      "end_exclusive": "0x21bb0c",
+      "sha256": "0687fb993f7aac262577d6a220b8fa904ddb74f76cbf8ded5386af2e2fa573c6"
+    },
+    {
+      "start": "0x202698",
+      "end_exclusive": "0x202858",
+      "sha256": "4c7e2a8ab82899fe6fc091f58b1a6e6d4b646a86d86ee6faeaa7e077b26fc432"
+    }
+  ],
+  "validation": {
+    "frozen_trace_replayed_exactly": true,
+    "all_data_access_in_synthetic_or_selected_table_memory": true,
+    "original_instructions": 39,
+    "original_code_ranges": 7,
+    "relative_relocations": 2
+  },
+  "claims": {
+    "candidate_parameter_forwarding_verified": true,
+    "bounded_gate_controls_verified": true,
+    "actual_business_caller_type_or_table_identity_verified": false,
+    "actual_business_argument_observed": false,
+    "actual_security_callback_execution_verified": false,
+    "initial_rejection_cause_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "limits": [
+    "The +0x38 slot and +0x30 object field alone do not identify a security caller; the selected table target is a synthetic fixture, not a live identity observation",
+    "The verified x2 to x5 to x4 forwarding is conditional on this original route reaching the selected wrapper; no business argument value is observed",
+    "All 24 cases execute three unchanged original helpers on controlled empty or immediate-return paths; other helper branches and object states are untested",
+    "Fallback, initialization-helper and bridge first-external-call boundaries stop before execution; no JNI or signing code is executed",
+    "The bound-callback setup and trampoline instructions are static evidence only and are not included in the 24 emulated paths",
+    "No new Android hooks, device actions, runtime capture or server validation were performed"
+  ],
+  "privacy": {
+    "raw_pointers_requests_headers_or_identifiers_published": false
+  }
+}

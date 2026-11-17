@@ -1,5 +1,17 @@
 # Tomato Python material
 
+`verify_vm9_cronet_candidate_security_route_20261118.py` verifies a conditional
+upstream route: entry x2 becomes intermediate x5, then security-bridge x4 when
+the virtual slot selects the known wrapper. It checks 24 retained synthetic
+ARM64 cases and 44 damaged-evidence controls. Optional `--elf <original-libsscronet.so>`
+binds 39 instructions, seven unchanged code ranges and two relative relocations.
+Each case executes three original helpers on controlled empty/immediate-return
+paths, then stops at the fallback, initialization or bridge external-call boundary,
+or returns from the bridge's null guard. The bound-callback setup/trampoline is
+static evidence only. This CLI checks retained summaries, without replaying the
+emulator or identifying a live business caller. See the
+[conditional route evidence](../evidence/vm9_cronet_candidate_security_route_20261118.json).
+
 `verify_vm9_cronet_security_bridge_guard_20261118.py` checks the retained static
 guard/forwarding evidence and 29 damaged-evidence controls. It records 12 bounded
 ARM64 emulations, with no Android or external-call execution. Run it from the
