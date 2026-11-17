@@ -1,0 +1,98 @@
+{
+  "schema": "vm9-reader-response-cache-provenance-20261117-v1",
+  "evidence_date": "2026-11-17",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "executing_arch": "arm64",
+    "android_release": "13",
+    "frida_version": "17.24.3",
+    "test_apk_sha256": "2aebb1e98f96f8f4f66e136c435a6b93b6576d849f836d3d6e2028e44cacb36b",
+    "original_apk_signature_preserved": false
+  },
+  "provenance": {
+    "probe_python_sha256": "0c4578b6d2acfe12757fbee54dd67227ce883045a3eeb0546d22e3528c4e8aa6",
+    "source_js_sha256": "0f6535c49773ffed22fdfdfdef286983b4e2b580a08222d3c944ed8f9d913552",
+    "capture_sha256": "4492b5a94690913e265cfb7a7405f65f1b6fa2c0207d50834e8b9f9aa1b37244",
+    "runner_sha256": "5487743db17311fbfacc8e77a9fca1148d351eeb1bb164f40cf065adef4ad422",
+    "original_dex_entry": "classes9.dex",
+    "original_dex_sha256": "4c52098066241285817bcd1154c989f943e834564831b795242c9348d2d12171",
+    "actual_cli_executed": true
+  },
+  "window": {
+    "duration_seconds": 45.0,
+    "row_count": 729,
+    "counts": {
+      "client_selection": 69,
+      "selector": 72,
+      "cronet_connection": 69,
+      "cronet_create": 69,
+      "cronet_start": 69,
+      "reader_cache": 2,
+      "reader_response": 1,
+      "reader_cache_update": 1
+    },
+    "security_stage_counts": {
+      "cronet_request": 0,
+      "cronet_context": 0,
+      "cronet_map": 0,
+      "manager": 0,
+      "r4": 0
+    },
+    "selector_override_used": false,
+    "required_hooks_ready": true,
+    "event_limit_reached": false,
+    "reader_telemetry_errors": 0,
+    "session_detached": true,
+    "cleanup_complete": true
+  },
+  "reader_observation": {
+    "incoming_full_response_codes": [
+      110
+    ],
+    "cache_lookup_results_in_event_order": [
+      false,
+      true
+    ],
+    "cache_update": {
+      "method": "ChapterOriginalContentHelper.y0",
+      "before_blocked": false,
+      "after_blocked": true,
+      "before_and_after_same_call": true,
+      "same_thread_as_incoming_response": true
+    },
+    "event_order_verified": [
+      "cache_miss",
+      "incoming_response_110",
+      "cache_update_before_false",
+      "cache_update_after_true",
+      "cache_hit"
+    ],
+    "field_access": "getDeclaredField(a), then HashSet.contains; no cache values changed by the probe",
+    "static_owner": "ChapterOriginalContentHelper.F0/i0/y0",
+    "wire_response_or_decoder_observed": false,
+    "same_helper_and_chapter_identity_across_calls_verified": false,
+    "initial_rejection_cause_identified": false
+  },
+  "validation": {
+    "host_lifecycle_cases": 6,
+    "original_result_and_exception_preserved": true,
+    "field_method_name_collision_regression": true,
+    "missing_reader_hook_rejected": true,
+    "telemetry_failure_isolated": true
+  },
+  "claims": {
+    "incoming_reader_response_110_observed": true,
+    "local_rejection_cache_transition_observed": true,
+    "server_origin_of_110_verified": false,
+    "sole_cause_attributed_to_certificate_change": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "callback_object_identity_joined": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "privacy": {
+    "raw_request_response_content_signatures_or_device_identifiers_published": false
+  }
+}

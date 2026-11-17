@@ -46,6 +46,23 @@ These observations do not establish the six-header chain or online acceptance.
 The earlier transport timeout was a connection failure, not a negative business
 observation.
 
+`--observe-reader-response` adds passive hooks for the pinned reader's `F0`,
+`i0` and `y0` methods. It records incoming `FullResponse` numeric codes,
+rejection-cache membership and membership before/after the original update.
+The cache field is read by reflection because a method can hide its Frida
+property. No chapter identifiers, response content or exception messages are
+recorded. These three hooks become required when this option is enabled;
+`route_reader_observation_unavailable` reports a metadata read failure without
+changing the original call, result or exception. A completed window alone does
+not prove that reader metadata was collected; check its events as well.
+
+The actual CLI completed a 45-second Android window with 69 Cronet creation/start
+calls. Its reader events were cache miss, incoming code 110, `y0` cache membership
+false before/true after, then cache hit. The response and update ran on the same
+thread. This locates a local secondary rejection cache; it does not identify the
+wire response, initial rejection cause or matching objects across calls. See the
+[reader provenance evidence](../evidence/vm9_reader_response_cache_20261117.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

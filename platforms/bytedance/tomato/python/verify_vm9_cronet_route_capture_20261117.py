@@ -16,20 +16,23 @@ import capture_vm9_cronet_route_android_20261117 as probe
 JS_CHECK = r"""
 const assert = require('node:assert/strict'), vm = require('node:vm');
 const source = JSON.parse(require('node:fs').readFileSync(0, 'utf8')).source;
-function check(force) {
+function check(force, readerEnabled, missingReader = false) {
   const events = [], methods = new Map(), calls = new Map(), timers = new Set();
   let thrown = null, tid = 7;
   const H = 'com.bytedance.ttnet.HttpClient';
   const C = 'com.ttnet.org.chromium.net.impl.CronetUrlRequestContext';
   const M = 'org.chromium.CronetAppProviderManager';
   const R = 'ms.bd.c.r4';
+  const Q = 'com.dragon.read.reader.utils.ChapterOriginalContentHelper';
+  const F = 'readersaas.com.dragon.read.saas.rpc.model.FullResponse';
   const targets = [
     [H, 'isCronetClientEnable'], [H, 'getHttpClient'], [H, 'getDefaultClient'],
     ['com.bytedance.frameworks.baselib.network.http.cronet.impl.SsCronetHttpClient', 'execute'],
     ['org.chromium.CronetClient', 'openConnection'], [C, 'X'],
     ['com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'o'],
     ['com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'addSecurityFactor'],
-    [C, 'addSecurityFactor'], [C, 'o0'], [M, 'onCallToAddSecurityFactor'], [R, 'onCallToAddSecurityFactor']
+    [C, 'addSecurityFactor'], [C, 'o0'], [M, 'onCallToAddSecurityFactor'], [R, 'onCallToAddSecurityFactor'],
+    [Q, 'F0'], [Q, 'i0'], [Q, 'y0']
   ];
   const classes = {};
   const secret = 'PRIVATE_REQUEST_VALUE';
@@ -44,20 +47,62 @@ function check(force) {
       if (target === H + '.isCronetClientEnable') return false;
       if (target === C + '.o0') return methods.get(M + '.onCallToAddSecurityFactor').implementation(...args);
       if (target === M + '.onCallToAddSecurityFactor') return methods.get(R + '.onCallToAddSecurityFactor').implementation(...args);
-      if (target === R + '.onCallToAddSecurityFactor' && thrown) throw thrown;
+      if (target === Q + '.y0') args[0]._cache.add(args[1]);
+      if ((target === R + '.onCallToAddSecurityFactor' || target === Q + '.F0') && thrown) throw thrown;
       return result;
     }};
     methods.set(target, method);
     (classes[owner] || (classes[owner] = {}))[name] = {overloads: [method]};
   }
+  classes[F] = {};
+  classes[Q].class = {getDeclaredField(name) {
+    assert.equal(name, 'a');
+    return {setAccessible(value) { assert.equal(value, true); }, get(helper) { return helper._cache; }};
+  }};
+  classes['java.util.HashSet'] = {};
+  if (missingReader) delete classes[Q].F0;
   const context = vm.createContext({
     Process: {getCurrentThreadId() { return tid; }}, rpc: {exports: {}},
-    Java: {perform(fn) { fn(); }, use(name) { return classes[name]; }},
+    Java: {perform(fn) { fn(); }, use(name) { return classes[name]; }, cast(value) { return value; }},
     send(row) { events.push(row); },
     setInterval(fn) { timers.add(fn); return fn; }, clearInterval(fn) { timers.delete(fn); }
   });
-  vm.runInContext(source.replace('"force_selector": false', '"force_selector": ' + force), context);
+  vm.runInContext(source.replace('"force_selector": false', '"force_selector": ' + force)
+    .replace('"observe_reader_response": false', '"observe_reader_response": ' + readerEnabled), context);
+  if (missingReader) {
+    assert.equal(events.find(e => e.event === 'route_ready').required_hooks_ready, false,
+                 'explicit reader mode must fail closed when its response hook is missing');
+    return;
+  }
   assert.equal(events.find(e => e.event === 'route_ready').required_hooks_ready, true);
+  const responseMethod = methods.get(Q + '.F0'), cacheMethod = methods.get(Q + '.i0');
+  if (readerEnabled) {
+    assert.equal(typeof responseMethod.implementation, 'function', 'reader response hook must be installed');
+    const response = {code: {value: {getValue() { return 110; }}}};
+    assert.equal(responseMethod.implementation(secret, response), result);
+    assert.equal(calls.get(Q + '.F0'), 1);
+    const observed = events.find(e => e.event === 'route_reader_response');
+    assert.equal(observed.code, 110);
+    assert.ok(events.some(e => e.event === 'route_enter' && e.stage === 'reader_response' &&
+      e.call_id === observed.call_id && e.thread_id === observed.thread_id));
+    const receiver = {a() {}, _cache: {contains(value) { assert.equal(value, secret); return true; }}};
+    assert.equal(cacheMethod.implementation.call(receiver, secret, secret, secret), result);
+    assert.equal(events.find(e => e.event === 'route_reader_cache').blocked, true);
+    const cache = {blocked: false, contains() { return this.blocked; }, add() { this.blocked = true; }};
+    assert.equal(methods.get(Q + '.y0').implementation({a() {}, _cache: cache}, secret), result);
+    const updates = events.filter(e => e.event === 'route_reader_cache_update');
+    assert.deepEqual(updates.map(e => [e.phase, e.blocked]), [['before', false], ['after', true]]);
+    assert.equal(updates[0].call_id, updates[1].call_id);
+    assert.equal(responseMethod.implementation(null), result, 'failed telemetry must preserve the original');
+    assert.ok(events.some(e => e.event === 'route_reader_observation_unavailable' &&
+      e.stage === 'reader_response' && e.phase === 'before'), 'metadata failures must be explicit');
+    thrown = Error(secret);
+    assert.throws(() => responseMethod.implementation(response), actual => actual === thrown);
+    thrown = null;
+  } else {
+    assert.equal(responseMethod.implementation, undefined, 'reader hooks are opt in');
+    assert.equal(cacheMethod.implementation, undefined);
+  }
   for (const [owner, method, stage] of [
     [C, 'X', 'cronet_create'],
     ['com.ttnet.org.chromium.net.impl.CronetUrlRequest', 'o', 'cronet_start']
@@ -81,7 +126,7 @@ function check(force) {
   for (const row of returned) assert.equal(row.security_keys.length, 6);
   thrown = Error(secret);
   assert.throws(() => methods.get(C + '.o0').implementation(secret, {}), actual => actual === thrown);
-  assert.equal(events.filter(e => e.event === 'route_throw').length, 3);
+  assert.equal(events.filter(e => e.event === 'route_throw' && e.stage !== 'reader_response').length, 3);
   thrown = null; tid = 8;
   assert.equal(methods.get(R + '.onCallToAddSecurityFactor').implementation(secret, {}), result);
   assert.equal(events.filter(e => e.event === 'route_enter').at(-1).parent_call_id, null);
@@ -91,10 +136,11 @@ function check(force) {
   assert.ok(!JSON.stringify(events).includes(secret), 'never serialize arguments or exception messages');
   assert.ok(!JSON.stringify(events).includes('authorization'), 'retain only security key names');
 }
-check(false); check(true);
+check(false, false); check(true, false); check(false, true); check(false, true, true);
 console.log(JSON.stringify({passive_selector_preserved: true, explicit_override: true,
   original_result_and_exception_preserved: true, nesting_and_thread_cleanup: true,
-  telemetry_failure_isolated: true, event_limit_enforced: true, raw_values_omitted: true}));
+  telemetry_failure_isolated: true, event_limit_enforced: true, raw_values_omitted: true,
+  opt_in_reader_response_and_cache: true, missing_reader_hook_rejected: true}));
 """
 
 

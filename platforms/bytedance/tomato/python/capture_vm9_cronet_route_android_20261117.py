@@ -4,6 +4,8 @@ Attach to an already running application. No request is generated. The optional
 selector override lasts only for this instrumentation session. Stage nesting is
 an observation, not proof of Java object identity or online header acceptance.
 The older capture source is reused without changing its pinned artifact.
+Optional reader observation records incoming FullResponse codes and the local
+rejection cache, without recording book/chapter identifiers or response content.
 """
 from __future__ import annotations
 
@@ -25,6 +27,7 @@ ROUTE_JS = r"""
   var sequence = 0, nextCall = 0, emitted = 0, capped = false;
   var stacks = Object.create(null), counts = Object.create(null);
   var installed = [], missing = [], timer = null, scheduled = false, done = false;
+  var readerCacheField = null;
   var headerNames = ['X-Argus', 'X-Gorgon', 'X-Helios', 'X-Khronos', 'X-Ladon', 'X-Medusa'];
   function emit(row) {
     if (emitted >= vm9RouteConfig.event_limit) {
@@ -51,6 +54,34 @@ ROUTE_JS = r"""
       return keys.sort();
     });
   }
+  function readerObservation(stage, receiver, args, call, tid, phase) {
+    if (stage !== 'reader_response' && stage !== 'reader_cache' && stage !== 'reader_cache_update') return;
+    function blocked(helper, key) {
+      if (readerCacheField === null) {
+        readerCacheField = Java.use('com.dragon.read.reader.utils.ChapterOriginalContentHelper')
+          .class.getDeclaredField('a');
+        readerCacheField.setAccessible(true);
+      }
+      return !!Java.cast(readerCacheField.get(helper), Java.use('java.util.HashSet')).contains(key);
+    }
+    try {
+      if (stage === 'reader_response' && phase === 'before') {
+        var response = Java.cast(args[args.length - 1],
+          Java.use('readersaas.com.dragon.read.saas.rpc.model.FullResponse'));
+        emit({event: 'route_reader_response', call_id: call, thread_id: tid,
+              code: Number(response.code.value.getValue())});
+      } else if (stage === 'reader_cache' && phase === 'before') {
+        emit({event: 'route_reader_cache', call_id: call, thread_id: tid,
+              blocked: blocked(receiver, args[2])});
+      } else if (stage === 'reader_cache_update') {
+        emit({event: 'route_reader_cache_update', call_id: call, thread_id: tid,
+              phase: phase, blocked: blocked(args[0], args[1])});
+      }
+    } catch (_) {
+      emit({event: 'route_reader_observation_unavailable', stage: stage,
+            call_id: call, thread_id: tid, phase: phase});
+    }
+  }
   function install(owner, method, stage, required) {
     var target = owner + '.' + method;
     try {
@@ -66,7 +97,9 @@ ROUTE_JS = r"""
           emit({event: 'route_enter', stage: stage, target: target,
                 call_id: call, parent_call_id: parent, thread_id: tid});
           try {
+            readerObservation(stage, this, args, call, tid, 'before');
             var result = original.call.apply(original, [this].concat(args));
+            readerObservation(stage, this, args, call, tid, 'after');
             var returned = result;
             if (stage === 'selector' && vm9RouteConfig.force_selector) returned = true;
             attempt(function () {
@@ -113,6 +146,11 @@ ROUTE_JS = r"""
           install('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext', 'o0', 'cronet_map', true);
           install('org.chromium.CronetAppProviderManager', 'onCallToAddSecurityFactor', 'manager', true);
           install('ms.bd.c.r4', 'onCallToAddSecurityFactor', 'r4', true);
+          if (vm9RouteConfig.observe_reader_response) {
+            install('com.dragon.read.reader.utils.ChapterOriginalContentHelper', 'F0', 'reader_response', true);
+            install('com.dragon.read.reader.utils.ChapterOriginalContentHelper', 'i0', 'reader_cache', true);
+            install('com.dragon.read.reader.utils.ChapterOriginalContentHelper', 'y0', 'reader_cache_update', true);
+          }
           done = true;
           emit({event: 'route_ready', required_hooks_ready: !missing.some(function (row) { return row.required; }),
                 installed: installed, unavailable: missing, force_selector: vm9RouteConfig.force_selector});
@@ -151,11 +189,13 @@ def bounded_call(frida: Any, seconds: float, operation: Callable[[], Any]) -> An
         timer.join()
 
 
-def build_source(bridge: Path | None, force_selector: bool, event_limit: int) -> str:
+def build_source(bridge: Path | None, force_selector: bool, event_limit: int,
+                 observe_reader_response: bool = False) -> str:
     original, _ = shared._load_source(bridge, 50000)
     if not original.endswith(shared.JS):
         raise ValueError('shared bridge loader contract changed')
-    config = json.dumps({'force_selector': force_selector, 'event_limit': event_limit})
+    config = json.dumps({'force_selector': force_selector, 'event_limit': event_limit,
+                         'observe_reader_response': observe_reader_response})
     return original[:-len(shared.JS)] + '\nvar vm9RouteConfig = ' + config + ';\n' + ROUTE_JS
 
 
@@ -296,6 +336,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument('--event-limit', type=int, default=10000)
     parser.add_argument('--force-selector', action='store_true',
                         help='temporarily return true from isCronetClientEnable; default is observation only')
+    parser.add_argument('--observe-reader-response', action='store_true',
+                        help='observe incoming reader error codes and rejection-cache state without content or identifiers')
     paths = parser.add_mutually_exclusive_group(required=True)
     paths.add_argument('--output', type=Path, help='new JSONL file; existing files are refused')
     paths.add_argument('--emit-script', type=Path, help='write JavaScript for offline syntax checking')
@@ -308,7 +350,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error('--device usb requires --adb-serial')
     if args.device != 'usb' and args.adb_serial:
         parser.error('--adb-serial requires --device usb')
-    source = build_source(args.bridge_js, args.force_selector, args.event_limit)
+    source = build_source(args.bridge_js, args.force_selector, args.event_limit,
+                          args.observe_reader_response)
     if args.emit_script is not None:
         with args.emit_script.open('x', encoding='utf-8', newline='\n') as output:
             output.write(source)
