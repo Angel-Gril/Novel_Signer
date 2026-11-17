@@ -1,5 +1,25 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：同一 110 响应的 Cronet 缓存标志为 false
+
+另一被动窗口读取了 `CronetUrlRequest.B` 的具体 `impl.z` 响应对象，并确认
+URLConnection 读取 adapter 收到同一个对象。原版 DEX 的 `k()Z` 读取布尔字段 d，
+其 `toString` 明确把该 getter 标注为 `wasCached`；探针自有 true/false 对照均通过。
+本次同一响应报告 `wasCached=false`、HTTP 200、URL scheme 为 HTTPS；读取完成
+buffer 仍已含 110，实际流字节与副本相同，并接入既有 RPC/Gson/正文身份链。
+
+45 秒、1,382 行、132 次 Cronet 创建/启动，两个前台保护操作，完整卸载/detach。
+源码重建、原版 DEX 语义绑定和 109 项损坏捕获拒绝检查通过；没有改变缓存、响应、
+头或路由，没有额外读取业务流。采样后截图已查看，仍显示“当前版本不安全”。
+协议仅归类为 other，代理元数据非空；这些字段不推断具体协议或实际代理路由。
+精确旧版 `reader/full` 路径比较为 false，本轮不声称已识别该请求的精确接口路径。
+
+这证明 Cronet 未把本次响应标为缓存命中，不能排除更早层的缓存、拦截或 native 合成，
+也不能据此认定服务端来源或证书是唯一原因。六头安全回调继续为零，普通 Cronet
+六头、整请求差分、原签名等价、完整 signer 与线上验签仍未闭合。
+下一步追踪更早 native 响应生产及安全回调触发条件。
+见[同响应缓存元数据证据](evidence/vm9_cronet_response_metadata_20261118.json)。
+
 ## 2026-11-18：110 已在 Cronet 读取完成入口的缓冲区内
 
 后续被动窗口在原始 `CronetUrlRequest.onReadCompleted` 执行前，复制其已填充

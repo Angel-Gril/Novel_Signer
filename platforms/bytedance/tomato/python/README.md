@@ -97,6 +97,17 @@ recommendation home page. Native/cache/transport production before this Java
 callback, server attribution and the six-header chain remain unverified. See the
 [read-buffer evidence](../evidence/vm9_cronet_read_buffer_provenance_20261118.json).
 
+A subsequent private window joined the request's concrete response-info object
+to the read adapter and retained the buffer/reader chain. Original DEX semantics
+and true/false control instances identify `impl.z.k()` as `wasCached`; the
+observed value was false, with HTTP 200 and an HTTPS URL scheme. This is Cronet's
+cache flag and does not exclude earlier caches or native interception. Protocol
+and proxy metadata remain opaque classifications, and the exact legacy
+reader/full path comparison did not match. The 45-second window had 1,382 rows,
+132 create/start calls, complete cleanup and 109 damaged-capture rejections.
+Its inspected screenshot still showed the unsafe-version message. See the
+[response metadata evidence](../evidence/vm9_cronet_response_metadata_20261118.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

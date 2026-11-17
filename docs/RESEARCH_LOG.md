@@ -1,5 +1,12 @@
 # Checkpoint log
 
+2026-11-18：后续窗口把同一个具体响应对象连接到读取完成 buffer 与 adapter，
+原版 DEX 语义和 true/false 对照确认 `k()` 为 `wasCached`，本次值为 false。
+HTTP 200、HTTPS，同一 buffer/流/RPC/Gson/正文链仍为 110；截图仍显示不安全版本。
+45 秒、1,382 行、132 次创建/启动，109 项损坏捕获拒绝检查及完整清理通过。
+该标志不能排除更早缓存或 native 拦截，也不证明服务端根因；六头和 signer 仍未闭合。
+见[响应元数据证据](../platforms/bytedance/tomato/evidence/vm9_cronet_response_metadata_20261118.json)。
+
 2026-11-18：在原始 Cronet `onReadCompleted` 执行前，其 ByteBuffer 副本已有 110，
 随后实际流返回的完整数据块与副本逐字节一致，并连接到既有 RPC/Gson/正文对象链。
 request、connection、buffer 和 adapter 身份关联跨线程成立，HTTP 状态为 200。
