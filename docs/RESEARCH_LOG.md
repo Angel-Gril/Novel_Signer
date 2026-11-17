@@ -1,5 +1,12 @@
 # Checkpoint log
 
+2026-11-17：被动观察到目标 FullResponse 的 JSON 在原始 Gson 反序列化前已带 `code=110`，
+解码结果及 F0 输入保持 110，并用 Android IdentityHashMap 的正反控制连接到同一 Java 对象。
+45 秒窗口完成，62 次 Cronet 创建/启动，操作前核对前台包，脚本/session 清理完成。
+该结果把拒绝定位到 JSON 解码前；更早响应流、拦截器、原始 HTTP 响应及最初拒绝根因未证明，
+正文对象身份不能外推为六头签名回调身份。见
+[JSON 来源证据](../platforms/bytedance/tomato/evidence/vm9_reader_json_provenance_20261117.json)。
+
 2026-11-17：新增可复用的被动 reader 观察模式，实际 CLI 在云手机完成 45 秒窗口：
 69 次 Cronet 创建/启动；缓存未命中后 `F0` 收到响应码 110，同线程 `y0` 前后
 缓存由未命中变为命中，随后查询命中。字段反射修复了同名方法可能遮蔽字段时的漏记，

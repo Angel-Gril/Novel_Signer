@@ -63,6 +63,15 @@ thread. This locates a local secondary rejection cache; it does not identify the
 wire response, initial rejection cause or matching objects across calls. See the
 [reader provenance evidence](../evidence/vm9_reader_response_cache_20261117.json).
 
+A separate private passive extension observed code 110 in the JSON string before
+the original `Gson.fromJson(String,Type)`, then in its decoded FullResponse and
+the exact same object received by F0. Probe-owned IdentityHashMap positive and
+negative controls passed on Android; the 45-second window completed with 62
+Cronet create/start calls and foreground checks before each UI action. This
+joins the reader response only. Earlier stream/interceptor ownership and the
+raw HTTP response remain unverified; see the
+[JSON provenance evidence](../evidence/vm9_reader_json_provenance_20261117.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

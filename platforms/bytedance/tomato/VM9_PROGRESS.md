@@ -1,5 +1,25 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-17：JSON 解码前的 110 与正文响应对象身份
+
+后续被动窗口把边界推进到实际 RPC Gson 解码入口：调用原始
+`Gson.fromJson(String,Type)` 前，仅从目标 FullResponse 的 JSON 字符串提取 `code=110`；
+原调用返回的 FullResponse.code 仍为 110，随后 F0 收到同一个 Java 对象。
+同线程和顺序成立；探针自有 IdentityHashMap 的同对象跨 bridge wrapper 正控制、
+不同对象负控制均在 Android 上通过。只记录临时序号与数值，不记录 JSON 正文或对象句柄。
+
+原版 `classes26.dex` 确认 `iy0.d.c` 从 `ky0.e.in()` 取流，经
+`com.bytedance.rpc.internal.c.m` 转字符串后进入该 Gson 重载。
+45 秒窗口有 62 次 Cronet 创建/启动，完整清理、未截断，两次页面操作均先确认目标包在前台。
+先前零业务窗口因榜单页多按返回而退到其他前台，不是解码器未命中的证据。
+构造入口窗口另观察到 RPC/Gson 创建栈，但那次没有对象身份连接，不能替代本次结果。
+
+现在可确认 110 在 JSON 反序列化前已存在。尚未连接更早的响应流、拦截器与原始 HTTP 响应，
+因此不把拒绝归因于服务端，也不认定重签或 Gadget 是唯一根因。对象身份结论仅覆盖
+正文响应，未覆盖六头签名回调。下一步追溯 `ky0.e` 的实际网络响应流提供者。
+完整 signer、整请求差分及普通 Cronet 六头线上验签仍未闭合。
+见[脱敏 JSON 来源证据](evidence/vm9_reader_json_provenance_20261117.json)。
+
 ## 2026-11-17：正文响应 110 与本地拒绝缓存的运行时顺序
 
 新增被动选项 `--observe-reader-response`，观察当前样本的 `F0/i0/y0`。

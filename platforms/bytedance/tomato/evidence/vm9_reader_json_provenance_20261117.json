@@ -1,0 +1,89 @@
+{
+  "schema": "vm9-reader-json-object-provenance-20261117-v1",
+  "evidence_date": "2026-11-17",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "android_release": "13",
+    "executing_arch": "arm64",
+    "frida_version": "17.24.3",
+    "test_apk_sha256": "2aebb1e98f96f8f4f66e136c435a6b93b6576d849f836d3d6e2028e44cacb36b",
+    "original_apk_signature_preserved": false
+  },
+  "provenance": {
+    "capture_sha256": "e5cf1e0b77b17f99ab595d6cab8d522d4faa19a00000adae6c4e8f83246fac0c",
+    "source_js_sha256": "ba29ac6e4a9986c7cbb2ef01e1fd9608300bd30e81e829180597767411eefa94",
+    "probe_extension_sha256": "720c59852eb0831cee6320f86b1ff344e365bbc7125e7ce4b9e3817aa5a5e237",
+    "private_runner_sha256": "f96761dd0aaacd23e5f17825b7b0acf669e792dddfd173c1e9e8c4bb154c9673",
+    "base_probe_python_sha256": "0c4578b6d2acfe12757fbee54dd67227ce883045a3eeb0546d22e3528c4e8aa6",
+    "original_dex_entry": "classes26.dex",
+    "original_dex_sha256": "eb7cb6897a3f791b2835e226ef8882aafc9e428c65b6b842cd82f3dffe50a333"
+  },
+  "window": {
+    "duration_seconds": 45.0,
+    "row_count": 653,
+    "counts": {
+      "client_selection": 62,
+      "selector": 65,
+      "cronet_connection": 62,
+      "cronet_create": 62,
+      "cronet_start": 62,
+      "reader_i0": 2
+    },
+    "security_stage_counts": {
+      "cronet_request": 0,
+      "cronet_context": 0,
+      "cronet_map": 0,
+      "manager": 0,
+      "r4": 0
+    },
+    "target_foreground_checked_before_each_ui_action": true,
+    "ui_actions_performed": 2,
+    "required_hooks_ready": true,
+    "selector_override_used": false,
+    "event_limit_reached": false,
+    "session_detached": true,
+    "cleanup_complete": true
+  },
+  "decoder_boundary": {
+    "static_call_path": [
+      "iy0.d.c",
+      "ky0.e.in",
+      "com.bytedance.rpc.internal.c.m",
+      "Gson.fromJson(String,Type)"
+    ],
+    "json_input_code_before_original_decoder": 110,
+    "decoded_full_response_code": 110,
+    "reader_F0_received_code": 110,
+    "same_thread_and_order_verified": true,
+    "decoded_object_is_reader_F0_argument": true,
+    "identity_method": "probe-owned Java IdentityHashMap; session-local ordinals only",
+    "identity_controls": {
+      "same_object_through_a_separate_bridge_wrapper": true,
+      "distinct_object_not_matched": true
+    },
+    "response_type": "readersaas.com.dragon.read.saas.rpc.model.FullResponse",
+    "only_code_extracted_from_json": true,
+    "original_decoder_and_consumer_called_without_overrides": true
+  },
+  "limits": [
+    "One observed business response in the re-signed Gadget build",
+    "Raw HTTP response and earlier input-stream/interceptor ownership not joined",
+    "Initial rejection cause and original-signature runtime equivalence remain unknown",
+    "Reader response identity does not establish signing-callback object identity"
+  ],
+  "claims": {
+    "json_input_110_observed_before_deserialization": true,
+    "reader_decoded_object_identity_joined": true,
+    "server_origin_of_110_verified": false,
+    "sole_cause_attributed_to_certificate_change": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "callback_object_identity_joined": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "privacy": {
+    "raw_json_content_requests_signatures_device_identifiers_or_object_handles_published": false
+  }
+}
