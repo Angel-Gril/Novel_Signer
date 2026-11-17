@@ -122,6 +122,18 @@ unload/detach checks without clearing app data. Neither a full native stack nor
 the earliest response producer, crash cause or six-header chain is established.
 See the [JNI/native boundary evidence](../evidence/vm9_cronet_native_boundary_20261118.json).
 
+A further private window reused only the stable JNI entrypoints and read eight
+saved return candidates by masking unmapped returns to their low 48 bits. Each
+candidate mapped to executable module memory and followed an original ELF BL/BLR
+instruction; the first matched the callback helper callsite. Unsigned-module,
+synthetic-high-bit and unmapped-negative controls passed. The 45-second window
+had 701 rows, 64 create/start calls, full cleanup and 135 damaged-capture
+rejections. Its inspected post-window image showed recommendation home. A static
+relative relocation points to the callback in `.data.rel.ro`; the live virtual
+table role remains unverified. Masking does not authenticate PAC or establish a
+complete unwind, earliest response production or the six-header chain. See the
+[saved-return candidate evidence](../evidence/vm9_cronet_saved_return_candidates_20261118.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

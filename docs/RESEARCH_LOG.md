@@ -1,5 +1,12 @@
 # Checkpoint log
 
+2026-11-18：继续在稳定 JNI 入口只读观察，保存返回值经低 48 位屏蔽后得到 8 个可执行
+模块候选，前一条原版 ELF 指令均为调用；首个对应此前定位的回调 helper 调用点。
+45 秒、701 行、64 次创建/启动，135 项损坏捕获拒绝、源码绑定与完整清理通过。
+静态定位一个 `.data.rel.ro` 相对重定位引用，未证明实时虚表；地址屏蔽也不验证 PAC
+或完整栈。采样后为推荐首页，六头及完整 signer 仍未闭合。见
+[返回地址候选证据](../platforms/bytedance/tomato/evidence/vm9_cronet_saved_return_candidates_20261118.json)。
+
 2026-11-18：两次完整窗口连接了实际 `CallVoidMethodV` receiver 与既有正文 110
 身份链，通用 helper 返回位置为 `libsscronet.so+0x1f009c`。两次各 45 秒，602／740
 行、54／68 次创建/启动，123 项损坏捕获拒绝、源码绑定及完整清理通过。
