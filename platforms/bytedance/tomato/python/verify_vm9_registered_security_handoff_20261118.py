@@ -44,9 +44,30 @@ EXPECTED = [
     (0x27D7B4, 'bl', '#0x3484b0'), (0x27D7B8, 'sub', 'x8, x22, x0, asr #2'),
     (0x27D7C0, 'add', 'x0, x8, #0x522'), (0x27D854, 'bl', '#0x271998'),
     (0x27ECD8, 'bl', '#0x27ed9c'), (0x27ED34, 'bl', '#0x27f84c'),
+    (0x27ED2C, 'ldp', 'x8, x1, [x0]'), (0x27ED30, 'mov', 'x0, x8'),
+    (0x27FBA8, 'bl', '#0x32d3a0'), (0x27FBC0, 'bl', '#0x1658e4'),
+    (0x27FBC8, 'mov', 'x1, x0'), (0x27FBCC, 'add', 'x26, x26, #0x950'),
+    (0x27FBD0, 'mov', 'x0, x26'), (0x27FBD4, 'bl', '#0x27c7dc'),
+    (0x27FB34, 'ldr', 'x8, [x8, #0x950]'), (0x27FB38, 'ldr', 'x26, [x8, #0x18]'),
+    (0x27FB4C, 'ldr', 'x8, [x26]'), (0x27FB58, 'mov', 'x0, x26'),
+    (0x27FB5C, 'mov', 'w3, #0x171'), (0x27FB64, 'ldr', 'x9, [x8, #0x20]'),
+    (0x27FB70, 'blr', 'x9'), (0x165900, 'tbz', 'w8, #0, #0x165914'),
+    (0x165904, 'ldr', 'x0, [x19, #0x5d8]'),
+    (0x27C814, 'ldr', 'x8, [x19]'), (0x27C818, 'str', 'x8, [x20]'),
 ]
+DOWNSTREAM = dict(inner_function='0x27f84c',singleton_getter='0x1658e4',
+                  shared_global_reference='0x3e0950',root_child_field='0x18',
+                  virtual_call='0x27fb70',virtual_slot='0x20',native_mode='0x171',
+                  prior_Java_facade_model_mode='0x138',known_child_vtable='0x35d5f0',
+                  relative_relocation_slot='0x35d610',relative_relocation_target='0x27dd04',
+                  prior_object_graph_evidence='vm9_outer_graph_object_provenance_20261028.json',
+                  conditional_on_prior_initialized_object_graph_type=True,
+                  actual_object_identity_or_virtual_call_observed=False,
+                  native_and_Java_mode_equivalence_established=False)
 CLAIMS = dict(registered_entry_to_encoded_callback_synthetic_path_verified=True,
               original_adapter_existing_python_frame_match_verified=True,
+              downstream_native_mode_and_child_slot_static_bindings_verified=True,
+              downstream_virtual_call_execution_verified=False,
               callback_bodies_executed=False,actual_business_callback_execution_verified=False,
               actual_business_arguments_observed=False,complete_callback_reconstructed=False,
               ordinary_cronet_six_head_chain_verified=False,
@@ -82,6 +103,7 @@ def validate(data):
     assert data['provenance']['original_Metasec_ELF_sha256'] == SHA256
     assert data['provenance']['runtime_registration_evidence'] == 'vm9_cronet_native_security_selector_20261118.json'
     assert data['claims'] == CLAIMS
+    assert data['static_downstream'] == DOWNSTREAM
     assert data['boundary'] == dict(entry='0x27d288', adapter='0x271998',
         prefix_test='first two bytes equal ws ignoring ASCII case',
         prefix_target='0x27ecbc', other_target='0x27ed14', decoded_decimal='5256',
@@ -142,7 +164,11 @@ def verify_elf(data, path):
     imports = {r['r_offset']: symbols.get_symbol(r['r_info_sym']).name for r in rela.iter_relocations()}
     for name, slot in IMPORTS.values():
         assert imports[slot] == name
-    return dict(instructions=len(EXPECTED), code_ranges=len(RANGES), data_ranges=len(DATA_RANGES), imports=3)
+    refs = {r['r_offset']:r['r_addend'] for r in elf.get_section_by_name('.rela.dyn').iter_relocations()
+            if r['r_info_type']==1027 and r['r_offset']==0x35D610}
+    assert refs == {0x35D610:0x27DD04}
+    return dict(instructions=len(EXPECTED), code_ranges=len(RANGES), data_ranges=len(DATA_RANGES),
+                imports=3,relative_relocations=1)
 
 
 def replay(path):
@@ -286,6 +312,7 @@ def negatives(data):
     mutations = [('claims',key,not value) for key,value in CLAIMS.items()]
     mutations += [('boundary','other_target','0x27dd04'),('boundary','decoded_decimal','5252')]
     mutations += [('privacy','real_requests_headers_identifiers_or_runtime_addresses_published',True)]
+    mutations += [('static_downstream','native_mode','0x138')]
     for owner,key,value in mutations:
         bad=deepcopy(data); bad[owner][key]=value
         try: validate(bad)

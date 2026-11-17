@@ -6,13 +6,17 @@ The tested case-insensitive `ws` prefix selects `+0x27ecbc` with a concatenated
 text argument; other tested inputs reach `+0x27ed14` with the original two input
 words. Seventy isolated original-code controls compare argument blocks, query
 checksum/context writes and the existing Python adapter's retained frame and
-registers. The default CLI checks retained evidence and rejects 84 damaged
-records. `--elf <original-libmetasec_ml.so>` binds 33 instructions, 16 code ranges,
-three data ranges and three imports; adding `--replay` reruns all 70 controls
+registers. The default CLI checks retained evidence and rejects 87 damaged
+records. `--elf <original-libmetasec_ml.so>` binds 52 instructions, 16 code ranges,
+three data ranges, three imports and one relative relocation; adding `--replay` reruns all 70 controls
 with Capstone, pyelftools and Unicorn. Initialized singleton/TLS state and the
 pthread lookup, allocation and decimal parsing providers are synthetic. Callback
 bodies, later prefix-path continuation, Android execution and a complete signer
-are outside this proof. See the
+are outside this proof. A separate static connection follows `+0x27f84c` through
+the outer singleton's child `+0x18` and virtual slot `+0x20`. If the child has the
+previously modeled vtable, the slot targets `+0x27dd04`, with native mode `0x171`.
+The Java facade model uses `0x138`; actual child identity, virtual-call execution
+and equivalence between these modes remain unverified. See the
 [registered entry handoff evidence](../evidence/vm9_registered_security_handoff_20261118.json).
 
 `verify_vm9_cronet_native_security_selector_20261118.py` checks the original

@@ -3,7 +3,7 @@
   "provenance": {
     "original_Metasec_ELF_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
     "runtime_registration_evidence": "vm9_cronet_native_security_selector_20261118.json",
-    "producer_sha256": "64713c3610ced89b1db4deaca607ad72ba531d45c74957034bb3aa0d8fc99ec4"
+    "producer_sha256": "58130ec534ae25849e5e7f022f6a24ddbbb1af6a7c875ff23fe1b989d102eb09"
   },
   "boundary": {
     "entry": "0x27d288",
@@ -186,6 +186,101 @@
       "offset": "0x27ed34",
       "mnemonic": "bl",
       "operands": "#0x27f84c"
+    },
+    {
+      "offset": "0x27ed2c",
+      "mnemonic": "ldp",
+      "operands": "x8, x1, [x0]"
+    },
+    {
+      "offset": "0x27ed30",
+      "mnemonic": "mov",
+      "operands": "x0, x8"
+    },
+    {
+      "offset": "0x27fba8",
+      "mnemonic": "bl",
+      "operands": "#0x32d3a0"
+    },
+    {
+      "offset": "0x27fbc0",
+      "mnemonic": "bl",
+      "operands": "#0x1658e4"
+    },
+    {
+      "offset": "0x27fbc8",
+      "mnemonic": "mov",
+      "operands": "x1, x0"
+    },
+    {
+      "offset": "0x27fbcc",
+      "mnemonic": "add",
+      "operands": "x26, x26, #0x950"
+    },
+    {
+      "offset": "0x27fbd0",
+      "mnemonic": "mov",
+      "operands": "x0, x26"
+    },
+    {
+      "offset": "0x27fbd4",
+      "mnemonic": "bl",
+      "operands": "#0x27c7dc"
+    },
+    {
+      "offset": "0x27fb34",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x950]"
+    },
+    {
+      "offset": "0x27fb38",
+      "mnemonic": "ldr",
+      "operands": "x26, [x8, #0x18]"
+    },
+    {
+      "offset": "0x27fb4c",
+      "mnemonic": "ldr",
+      "operands": "x8, [x26]"
+    },
+    {
+      "offset": "0x27fb58",
+      "mnemonic": "mov",
+      "operands": "x0, x26"
+    },
+    {
+      "offset": "0x27fb5c",
+      "mnemonic": "mov",
+      "operands": "w3, #0x171"
+    },
+    {
+      "offset": "0x27fb64",
+      "mnemonic": "ldr",
+      "operands": "x9, [x8, #0x20]"
+    },
+    {
+      "offset": "0x27fb70",
+      "mnemonic": "blr",
+      "operands": "x9"
+    },
+    {
+      "offset": "0x165900",
+      "mnemonic": "tbz",
+      "operands": "w8, #0, #0x165914"
+    },
+    {
+      "offset": "0x165904",
+      "mnemonic": "ldr",
+      "operands": "x0, [x19, #0x5d8]"
+    },
+    {
+      "offset": "0x27c814",
+      "mnemonic": "ldr",
+      "operands": "x8, [x19]"
+    },
+    {
+      "offset": "0x27c818",
+      "mnemonic": "str",
+      "operands": "x8, [x20]"
     }
   ],
   "original_code_ranges": [
@@ -1969,9 +2064,28 @@
       "trace_sha256": "609fad438fd0a3baefe16acc14d84e3a7cffd708724e95e89ca629dcf9df52b1"
     }
   ],
+  "static_downstream": {
+    "inner_function": "0x27f84c",
+    "singleton_getter": "0x1658e4",
+    "shared_global_reference": "0x3e0950",
+    "root_child_field": "0x18",
+    "virtual_call": "0x27fb70",
+    "virtual_slot": "0x20",
+    "native_mode": "0x171",
+    "prior_Java_facade_model_mode": "0x138",
+    "known_child_vtable": "0x35d5f0",
+    "relative_relocation_slot": "0x35d610",
+    "relative_relocation_target": "0x27dd04",
+    "prior_object_graph_evidence": "vm9_outer_graph_object_provenance_20261028.json",
+    "conditional_on_prior_initialized_object_graph_type": true,
+    "actual_object_identity_or_virtual_call_observed": false,
+    "native_and_Java_mode_equivalence_established": false
+  },
   "claims": {
     "registered_entry_to_encoded_callback_synthetic_path_verified": true,
     "original_adapter_existing_python_frame_match_verified": true,
+    "downstream_native_mode_and_child_slot_static_bindings_verified": true,
+    "downstream_virtual_call_execution_verified": false,
     "callback_bodies_executed": false,
     "actual_business_callback_execution_verified": false,
     "actual_business_arguments_observed": false,
@@ -1991,7 +2105,8 @@
     "Execution stops before the first callback body, including on the prefix path; any later prefix-path continuation remains unverified",
     "No full function boundary was inferred from linear disassembly or an absent unwind header; bounded executed instruction ranges are pinned",
     "The query checksum/context update and adapter frames are compared; this is not a complete signing algorithm or a whole-request differential",
-    "The first and second text labels describe synthetic inputs only; actual business argument values and semantic ownership remain unobserved"
+    "The first and second text labels describe synthetic inputs only; actual business argument values and semantic ownership remain unobserved",
+    "The deeper native mode 0x171 and known child slot relocation are static bindings only; actual global/child identity, the virtual call and equivalence with Java facade mode 0x138 are unverified"
   ],
   "privacy": {
     "real_requests_headers_identifiers_or_runtime_addresses_published": false
