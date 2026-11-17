@@ -108,6 +108,20 @@ reader/full path comparison did not match. The 45-second window had 1,382 rows,
 Its inspected screenshot still showed the unsafe-version message. See the
 [response metadata evidence](../evidence/vm9_cronet_response_metadata_20261118.json).
 
+Two complete private JNI windows joined the actual `CallVoidMethodV` receiver to
+the Java read-completion callback and existing buffer/request/stream/reader chain.
+The return site `libsscronet.so+0x1f009c` belongs to a generic JNI helper. Reflected
+method-ID, actual JNI A and distinct-method controls passed. The 45-second windows
+had 602 and 740 rows, 54 and 68 create/start calls, complete cleanup and 123
+damaged-capture rejections. A separate three-second read-only window identified
+method cache slot `+0x5ef8a0` and matched the original helper code. Exact static
+references identify callback candidate `+0x201f30`, but its deeper runtime trials
+are excluded: one timed out during cleanup and another detached with signal 11
+in exit history. The recovered target passed identity, original-instruction and
+unload/detach checks without clearing app data. Neither a full native stack nor
+the earliest response producer, crash cause or six-header chain is established.
+See the [JNI/native boundary evidence](../evidence/vm9_cronet_native_boundary_20261118.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

@@ -1,5 +1,13 @@
 # Checkpoint log
 
+2026-11-18：两次完整窗口连接了实际 `CallVoidMethodV` receiver 与既有正文 110
+身份链，通用 helper 返回位置为 `libsscronet.so+0x1f009c`。两次各 45 秒，602／740
+行、54／68 次创建/启动，123 项损坏捕获拒绝、源码绑定及完整清理通过。
+独立只读窗口定位方法缓存槽 `+0x5ef8a0`；候选回调函数仅静态定位，深入的清理超时和
+signal 11 窗口均排除。恢复后身份、原始指令与正常卸载/detach 已复核，应用数据保留。
+最早 native 生产、拒绝根因、六头和 signer 仍未闭合。见
+[JNI/native 边界证据](../platforms/bytedance/tomato/evidence/vm9_cronet_native_boundary_20261118.json)。
+
 2026-11-18：后续窗口把同一个具体响应对象连接到读取完成 buffer 与 adapter，
 原版 DEX 语义和 true/false 对照确认 `k()` 为 `wasCached`，本次值为 false。
 HTTP 200、HTTPS，同一 buffer/流/RPC/Gson/正文链仍为 110；截图仍显示不安全版本。

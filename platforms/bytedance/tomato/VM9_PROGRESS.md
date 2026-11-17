@@ -1,5 +1,26 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：JNI 读取完成回调与方法缓存槽已关联
+
+两次完整被动窗口把 `CallVoidMethodV` 的实际 receiver 接到 Java
+`onReadCompleted`，再沿既有 buffer/request/stream/RPC/Gson 身份链连接正文 110。
+原生返回位置为 `libsscronet.so+0x1f009c`，属于通用 JNI helper，不能作为最早
+响应生产点。反射方法 ID、实际 JNI A 调用和不同方法负控制通过，原生调用帧闭合为零。
+两次各 45 秒，分别 602／740 行、54／68 次 Cronet 创建和启动；源码绑定、前台保护、
+完整卸载/detach 及 123 项损坏捕获拒绝检查通过。同一响应仍为 HTTP 200、110、
+`wasCached=false`。扩展保存帧未解析出额外已映射返回位置，不声称完整 native 调用栈。
+
+另一个 3 秒只读窗口定位方法缓存槽 `+0x5ef8a0`，正反扫描控制和原始代码窗口摘要
+匹配。原版与测试包的该 ELF 字节相同；静态精确引用位于 `+0x201f88`，候选回调函数
+为 `+0x201f30`、helper 调用点为 `+0x201fc4`，这些静态结果尚无有效的深入运行时关联。
+
+两个深入实验均排除：指令中点探测清理超时；函数入口探测期间 session 退出，退出历史
+记有 signal 11。故障原因未定位，不能归因于低内存或反分析。恢复后已复核目标包、UID、
+arm64、原始指令和独立身份检查的正常卸载/detach，应用数据保留。
+下一步先分析故障与候选回调的静态上游，再选择能完整清理的最小运行时观察。
+六头安全回调仍为零；最早字节生产、初始拒绝根因、整请求差分、完整 signer 与线上验签
+仍未闭合。见[JNI/native 边界证据](evidence/vm9_cronet_native_boundary_20261118.json)。
+
 ## 2026-11-18：同一 110 响应的 Cronet 缓存标志为 false
 
 另一被动窗口读取了 `CronetUrlRequest.B` 的具体 `impl.z` 响应对象，并确认
