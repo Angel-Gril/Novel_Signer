@@ -158,6 +158,21 @@ exit remains unattributed, and recovery preserved app data. The live table and
 non-null provider do not prove security bridge execution, six-header generation
 or a complete signer. See the [dispatch/provider evidence](../evidence/vm9_cronet_dispatch_provider_20261118.json).
 
+A subsequent Java-only window read the existing manager singleton directly.
+Both its interface provider and reflection adapter were present and reported
+class `com.dragon.read.base.http.b`; their object identities were not compared.
+The current false `sOptReflection` flag selected the adapter, whose type resolved
+the public `onCallToAddSecurityFactor(String,Map)` method returning Map. The
+lookup may resolve an inherited method and does not prove execution. Original
+and test DEX entries bind the singleton layout and boolean getter. No singleton
+accessor, registration setter or signer was invoked by the probe. The same
+response identity chain remained code 110, HTTP 200 and `wasCached=false`, with
+zero security-stage calls. The 45-second window had 710 rows, 65 create/start
+calls, one guarded tap, full cleanup and 164 damaged-record/action rejections;
+the inspected final image showed a third book cover. This is a response-time
+snapshot, leaving earlier registration state and native dispatch unresolved.
+See the [manager registration evidence](../evidence/vm9_cronet_manager_registration_20261118.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

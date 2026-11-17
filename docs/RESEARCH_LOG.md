@@ -1,5 +1,13 @@
 # Checkpoint log
 
+2026-11-18：后续同响应 Java 窗口确认现有 manager 单例、接口 provider 和反射
+adapter 均存在，当前 false 优化标志选中反射路径；所选对象类型可解析返回 Map 的
+公开安全方法。仅直接读字段，没有调用单例 accessor、注册或签名方法。
+45 秒、710 行、65 次创建/启动，164 项损坏记录拒绝、原版 DEX 绑定、源码与完整
+清理通过；同一正文 110 链保持，安全阶段计数仍为零。采样后为第三本书封面。
+结论限于响应时的注册快照，六头与完整 signer 仍未完成。见
+[manager 快照证据](../platforms/bytedance/tomato/evidence/vm9_cronet_manager_registration_20261118.json)。
+
 2026-11-18：稳定 JNI 入口确认实际 delegate 的函数表，读取／安全槽分别指向
 `+0x201f30`／`+0x202698`，owner 和 Java receiver 身份关联成立。45 秒、683 行、
 62 次创建/启动，13 条原版指令、4 段运行时代码摘要与 152 项损坏记录拒绝检查通过。

@@ -1,0 +1,134 @@
+{
+  "schema": "vm9-cronet-manager-registration-20261118-v1",
+  "evidence_date": "2026-11-18",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "android_release": "13",
+    "executing_arch": "arm64",
+    "frida_version": "17.24.3",
+    "test_apk_sha256": "2aebb1e98f96f8f4f66e136c435a6b93b6576d849f836d3d6e2028e44cacb36b",
+    "original_apk_signature_preserved": false,
+    "target_java_package_and_uid_checked_before_business_hooks": true
+  },
+  "provenance": {
+    "base_probe_git_revision": "56c669df5bbd40211004174994d2a85ffd283593",
+    "capture_sha256": "c87a4428ecaf01d1f5fd316e6904642647a069c696d44185d354cd7d50263c35",
+    "source_js_sha256": "c87ded716bc3b76e7f38040b87a248af5c3bdc933e43c3fd07945a0cf2620ef8",
+    "private_file_sha256": {
+      "build_java_manager_probe.py": "51724e5554a82c2956a41d83c77c28597605366f935c11e9a1af226f9fc0b8c9",
+      "validate_java_manager.py": "42e36122d682e6d7a9db2a2edf0bf78e27c943276d9da71448a1ea72dd6f7111",
+      "index_java_manager_state.py": "ff61c688dc3659a245c48df7ea0d7ca996f3bba6b50276c45878aec01482e38b",
+      "java-manager-state-index.json": "14aab339f2b4b1e98d77766ec1479ece682ec31d957702f2aa31262ade28f5b4",
+      "index_opt_reflection.py": "726cd93ae4a30264d42a642e5738feef1c4f2d9f9094e8cfa4ff5e3541177c80",
+      "java-opt-reflection-index.json": "634a2f37e78a353e34f18d0564fc3444eea048f4ea8b02c462284bafb70d4eca",
+      "fill-af-ui-actions.json": "da6ef8187cd5cf1c38003b99b431f0f1ad0e42151bf18c5c63ce9e18ab66cdaf"
+    }
+  },
+  "window": {
+    "label": "af",
+    "duration_seconds": 45,
+    "row_count": 710,
+    "counts": {
+      "client_selection": 65,
+      "selector": 65,
+      "cronet_connection": 65,
+      "cronet_create": 65,
+      "cronet_start": 65
+    },
+    "security_stage_counts": {
+      "cronet_request": 0,
+      "cronet_context": 0,
+      "cronet_map": 0,
+      "manager": 0,
+      "r4": 0
+    },
+    "cleanup_complete": true,
+    "event_limit_reached": false,
+    "foreground_guarded_taps": 1,
+    "inspected_before_UI": "recommendation_home",
+    "inspected_after_UI": "third_book_cover"
+  },
+  "same_response_observation": {
+    "request_context_provider_class": "org.chromium.c",
+    "manager_metadata_precedes_original_read_completion": true,
+    "decode_thread_read_and_fill_ids_match": true,
+    "HTTP_status": 200,
+    "callback_buffer_code": 110,
+    "actual_stream_and_reader_code": 110,
+    "was_cached": false,
+    "original_buffer_state_preserved": true,
+    "no_extra_business_stream_read": true
+  },
+  "manager_registration_snapshot": {
+    "manager_instance_present": true,
+    "opt_reflection": false,
+    "interface_provider_present": true,
+    "interface_provider_class": "com.dragon.read.base.http.b",
+    "interface_provider_matches_type": true,
+    "adapter_present": true,
+    "adapter_class": "com.dragon.read.base.http.b",
+    "selected_path": "reflection",
+    "selected_provider_present": true,
+    "selected_provider_class": "com.dragon.read.base.http.b",
+    "selected_security_method_present": true,
+    "selected_security_return_is_map": true,
+    "singleton_accessor_invoked": false,
+    "security_callback_invoked_by_probe": false
+  },
+  "static_binding": {
+    "DEX_bindings": [
+      {
+        "dex_entry": "classes23.dex",
+        "dex_sha256": "09c8cd146d8bb1bcf6a45583ea4820f67d869915c307b0a57209d11b2f4f47c4",
+        "original_and_test_DEX_identical": true
+      },
+      {
+        "dex_entry": "classes17.dex",
+        "dex_sha256": "c88f1daee04b1257ca0212b111561ae707775a0a1d8392e6c4e0211ed3c9681b",
+        "original_and_test_DEX_identical": true
+      }
+    ],
+    "opt_getter_reads_observed_boolean_field": true,
+    "manager_singleton_accessor_can_initialize_missing_instance": true,
+    "probe_reads_static_singleton_field_without_invoking_accessor": true
+  },
+  "validation": {
+    "damaged_captures_and_action_guards_rejected": 164,
+    "source_binding": {
+      "exact_source_rebuilt": true,
+      "no_new_native_interceptors": true,
+      "singleton_accessor_and_signer_not_invoked": true,
+      "guarded_single_tap": true
+    },
+    "selection_true_false_null_controls_passed": true,
+    "security_method_present_absent_reflection_controls_passed": true,
+    "field_declaring_classes_and_boolean_flag_type_matched": true,
+    "singleton_accessor_invoked": false,
+    "security_callback_invoked_by_probe": false,
+    "native_interceptors_installed": false
+  },
+  "limits": [
+    "The singleton, internal providers and selected method are observed at response completion; their earlier request-creation state is not established",
+    "Both internal fields report the same class name; equality of their Java object identities was not tested",
+    "getMethod can resolve an inherited public method; method presence does not identify its declaring class or prove its execution",
+    "The current false optimization flag selects the reflection adapter path; no configuration or provider was changed",
+    "No singleton accessor, provider registration method or signing callback was invoked by this probe",
+    "Static field and getter semantics are bound to identical original/test DEX entries; original-signature runtime equivalence remains unproved",
+    "The post-window screen is a book cover; it does not prove successful chapter reading",
+    "The absence of observed security-stage calls does not identify the native dispatch guard or initial code-110 cause"
+  ],
+  "claims": {
+    "same_response_manager_selected_provider_and_method_present_at_snapshot_verified": true,
+    "request_creation_time_registration_verified": false,
+    "selected_provider_method_execution_verified": false,
+    "initial_rejection_cause_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "privacy": {
+    "raw_addresses_references_request_response_content_header_values_identifiers_or_signatures_published": false
+  }
+}

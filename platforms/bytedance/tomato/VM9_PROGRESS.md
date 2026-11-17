@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：实际响应时 manager 内部 provider 与安全方法均存在
+
+后续 Java 被动窗口沿同一请求/响应链读取现有 manager 单例字段，没有调用可能创建
+单例的 `inst()`。接口 provider 与反射 adapter 均非空，类名均为
+`com.dragon.read.base.http.b`；未比较两字段的对象身份。实际 `sOptReflection=false`，
+选择反射 adapter 路径；在该对象的类型上可解析公开的
+`onCallToAddSecurityFactor(String,Map)`，返回类型为 Map。`getMethod` 可解析继承的方法，
+这里不声称该类自行定义该方法，也不把方法存在等同方法执行。
+
+这些字段、实际请求的非空 `org.chromium.c` provider 和原读取完成事件按同一
+decode/thread/read/fill 序号关联。45 秒、710 行、65 次创建/启动，五个安全阶段计数
+仍为零；buffer/流/RPC/Gson/正文仍为 110、HTTP 200、`wasCached=false`。
+源码逐字重建、字段声明类、选路与反射正反控制、164 项损坏记录拒绝和完整清理通过。
+原版/测试包相同的 `classes17.dex`、`classes23.dex` 分别绑定 manager 单例结构与
+布尔 getter。探针仅直接读字段，没有设置 provider、改配置或主动调用签名方法。
+一次前台确认的 tap 后截图为第三本书封面，不作为正文阅读成功证据。
+
+该结果排除的是响应采样时“manager 单例/所选 provider/公开安全方法不存在”的窄假设，
+不证明请求创建时的注册状态或 native 安全桥执行。下一步追踪更早的 native 派发条件；
+初始拒绝根因、普通 Cronet 六头、整请求差分、原签名等价、完整 signer 与线上验签仍未闭合。
+见[manager 注册快照证据](evidence/vm9_cronet_manager_registration_20261118.json)。
+
 ## 2026-11-18：实时原生函数表与实际请求 Java 安全 provider 已分别确认
 
 在稳定 `CallVoidMethodV` 入口读取当前 delegate：实时函数表为
