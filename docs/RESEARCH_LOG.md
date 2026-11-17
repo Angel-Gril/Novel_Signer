@@ -1,5 +1,14 @@
 # Checkpoint log
 
+2026-11-17：新增有完整操作超时的 Cronet 分层捕获入口，观察客户端选择、请求创建及
+安全回调。实际旧 Frida 端点在枚举阶段按 5 秒限时取消，退出码 1，未安装 hook，
+清理完成。6 类 host 生命周期、实际 Cancellable 取消、JavaScript 行为/脱敏、完整
+bridge 语法、6 项非法 CLI 参数、输出文件保护及既有 capture lifecycle 回归通过。
+本轮复查时 ADB 设备与 forward 列表均为空，本机旧 Frida 端口无监听；新探针的 Android
+hook 安装和业务窗口仍未验证，普通 Cronet 六头、独立 signer、整请求差分及线上验签
+保持未闭合。详见 [捕获入口](../platforms/bytedance/tomato/python/capture_vm9_cronet_route_android_20261117.py)
+及 [host 校验器](../platforms/bytedance/tomato/python/verify_vm9_cronet_route_capture_20261117.py)。
+
 2026-11-04：单次固定合成 JNI 初始化样本把三个四字节 JSON parser 读段接到各自
 4/4 个先前写事件，写入地址和时序相符；源操作数不匹配，寄存器组无连续四字节
 来源，native copy/clone 入口和 JNI string provider 返回均未观察到，来源账本仍为

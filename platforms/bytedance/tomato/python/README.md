@@ -1,5 +1,39 @@
 # Tomato Python material
 
+`capture_vm9_cronet_route_android_20261117.py` attaches to an already running
+app and observes client selection, Cronet request creation and the security
+callbacks through manager/r4. Start with the default observation mode. Use a
+Frida client/server (or Gadget) pair and Java bridge that match the current
+device runtime; omit `--bridge-js` when that runtime already supplies `Java`.
+It does not start the app or generate a request: after `route_ready` reports
+`required_hooks_ready=true`, exercise the business page during the window.
+
+From the repository root, with a new capture path outside the repository:
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_cronet_route_capture_20261117.py
+python platforms/bytedance/tomato/python/capture_vm9_cronet_route_android_20261117.py `
+  --device remote --remote <current-host:port> --bridge-js <matching-bridge.js> `
+  --operation-timeout 15 --duration 60 --output <new-private-capture.jsonl>
+```
+
+The host verifier needs Python `frida` and Node.js. `--pid <running-pid>` skips
+process enumeration; USB mode requires `--adb-serial <exact-device-id>`.
+`--operation-timeout` bounds each Frida operation separately, including cleanup;
+`--duration` is the observation window after hook readiness. Existing output
+files are refused. Failure, missing required hooks, an event limit or incomplete
+cleanup returns a nonzero status. Exit 0 only means that the observation window
+finished with the required hooks installed; it can contain zero business calls.
+The JSONL keeps method names, counts, thread nesting and standard security key
+names. It omits request arguments, header values and exception messages. Nesting
+does not prove Java object identity or online acceptance.
+
+`--force-selector` explicitly enables a temporary session-only override of
+`isCronetClientEnable`; use it as a separate diagnostic run after the passive
+control. It does not prove that a business request reached Cronet. Android hook
+installation and this probe's live business path remain unverified; the earlier
+transport timeout is a connection failure, not a negative business observation.
+
 `verify_vm9_framesign_watched_region_ownership_20261103.py` checks the read-only
 follow-up: in two independent four-call runs, the watched bytes lie at the start
 of a new 112-byte callback allocation and the same pointer enters cleanup.

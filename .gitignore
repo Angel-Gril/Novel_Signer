@@ -19,3 +19,4 @@ fq_device.json
 *.bin
 *.raw
 *.log
+/platforms/bytedance/tomato/evidence/_runtime*.jsonl

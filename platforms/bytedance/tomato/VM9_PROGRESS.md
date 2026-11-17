@@ -1,5 +1,32 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-17：Cronet 分层捕获与连接超时修复
+
+新增 `python/capture_vm9_cronet_route_android_20261117.py`，复用原捕获器的 bridge
+加载与分块传输，按层记录 selector、client selection、Cronet request、manager 和 r4。
+默认只观察；`--force-selector` 显式启用会话内的临时 selector override。
+日志只保留方法、计数、同线程调用嵌套和六个标准安全键名。嵌套不代表 Java 对象身份。
+必需 hook 未就绪、日志达到上限、目标退出或任一阶段失败均返回非零退出码。
+连接、枚举、attach、加载、summary、卸载和 detach 使用 Frida Cancellable 限时执行。
+
+本机 Frida 17.24.3 的实际旧端点枚举按 `--operation-timeout 5` 被取消，得到
+`stage=enumerate / OperationCancelledError`，退出码 1，未安装 hook，清理完成。
+此前旧 serial 的设备内查询超时；本轮复查时 ADB 设备列表及 forward 列表均为空，
+本机 `127.0.0.1:27042` 没有监听。当前 APK、root 和服务状态无法验证。
+11 月 7 日的旧临时 selector 实验已经 detach；其 6 次强制返回没有产生 Cronet 入口事件。
+下一次需要可用的设备连接，先观察默认路径，再按缺失的具体阶段做单变量诊断。
+
+新增 host verifier 验证 6 类生命周期、实际 Cancellable 取消、默认/强制 selector、
+原始返回与异常保留、线程嵌套清理、事件上限和脱敏；完整 bridge 的 Node 语法检查、
+6 项非法 CLI 参数拒绝、输出碰撞时连接前拒绝及既有 capture lifecycle 回归通过。
+使用说明见 `python/README.md`。新探针在 Android 上的 hook 安装及业务请求尚未验证；
+普通 Cronet 六头链、独立 signer、整请求差分和线上验签继续未闭合。
+
+```powershell
+python python/verify_vm9_cronet_route_capture_20261117.py
+python python/capture_vm9_cronet_route_android_20261117.py --device remote --remote <current-host:port> --bridge-js <matching-bridge.js> --operation-timeout 15 --duration 60 --output <new-local-capture.jsonl>
+```
+
 ## 2026-11-06：当前声明矩阵与设备窗口
 
 新增 `evidence/vm9_claim_matrix_20261106.json` 及其 verifier，读取 11 月 5 日
