@@ -1,5 +1,20 @@
 # Tomato Python material
 
+`verify_vm9_registered_security_handoff_20261118.py` checks the original registered
+entry `+0x27d288` through the existing `+0x271998` adapter to its first callback.
+The tested case-insensitive `ws` prefix selects `+0x27ecbc` with a concatenated
+text argument; other tested inputs reach `+0x27ed14` with the original two input
+words. Seventy isolated original-code controls compare argument blocks, query
+checksum/context writes and the existing Python adapter's retained frame and
+registers. The default CLI checks retained evidence and rejects 84 damaged
+records. `--elf <original-libmetasec_ml.so>` binds 33 instructions, 16 code ranges,
+three data ranges and three imports; adding `--replay` reruns all 70 controls
+with Capstone, pyelftools and Unicorn. Initialized singleton/TLS state and the
+pthread lookup, allocation and decimal parsing providers are synthetic. Callback
+bodies, later prefix-path continuation, Android execution and a complete signer
+are outside this proof. See the
+[registered entry handoff evidence](../evidence/vm9_registered_security_handoff_20261118.json).
+
 `verify_vm9_cronet_native_security_selector_20261118.py` checks the original
 native/JNI selector and two independent read-only registration windows. Four slot
 samples point to executable `libmetasec_ml.so+0x27d288`; two also bind its first
