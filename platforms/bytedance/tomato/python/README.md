@@ -1,5 +1,15 @@
 # Tomato Python material
 
+`verify_vm9_cronet_security_bridge_guard_20261118.py` checks the retained static
+guard/forwarding evidence and 29 damaged-evidence controls. It records 12 bounded
+ARM64 emulations, with no Android or external-call execution. Run it from the
+repository root; `--elf <original-libsscronet.so>` additionally checks the pinned
+SHA-256, 17 exact instructions and three relative relocations using Capstone and
+pyelftools. The CLI verifies the retained emulation summary; it does not replay
+Unicorn or observe a business request's fifth argument. See the
+[guard evidence](../evidence/vm9_cronet_security_bridge_guard_20261118.json).
+The null guard is not established as the reason security callbacks remained zero.
+
 `capture_vm9_cronet_route_android_20261117.py` attaches to an already running
 app and observes client selection, Cronet request creation and the security
 callbacks through manager/r4. Start with the default observation mode. Use a

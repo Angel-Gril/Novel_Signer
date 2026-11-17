@@ -1,0 +1,175 @@
+{
+  "schema": "vm9-cronet-security-bridge-guard-20261118-v1",
+  "evidence_date": "2026-11-18",
+  "provenance": {
+    "base_git_revision": "a060da5d53fe94bf6d4eb04b1c21ccc2cccb9d54",
+    "original_ELF_sha256": "ab0547460f1c06e5111b69826d2277f145aad4f79c7d2b7aea0356dcf25e49ac",
+    "original_ELF_APK_entry": "lib/arm64-v8a/libsscronet.so",
+    "private_file_sha256": {
+      "publish_security_bridge_guard.py": "e523f30d83d55e90e14050b714ee874b296a3de2155702bf981e337b1c1d0056",
+      "native-security-bridge-guard.json": "c9d68382f05eb61f359afa74005dfedb73ee3e3f1b638ce71e05d4803d61902f",
+      "native-security-tail-dispatch.json": "36a4070da46f6a4edccdeb23f040edb64f38360149bf680f571c66e681cdbd56",
+      "verify_security_guard_emulation.py": "23705c47b364263c6a6166d3020e759c08f75d9077f51508506d7c9e92b8c371",
+      "verify_forwarded_security_guard.py": "a885ec31c823aa002b9890253cf39c08d2de71601de14267daf54bff9e891a39",
+      "native-security-guard-emulation.json": "437e66ae97de12eb66e07517c00bfe1d35bf193698e907ad6406e65415ecb751",
+      "native-forwarded-security-guard-emulation.json": "a364183e1e0419821b92f5fbf3e131341e2d5226bc57817cf15d50440fe63d5d"
+    }
+  },
+  "static_instruction_bindings": [
+    {
+      "offset": "0x202698",
+      "mnemonic": "bti",
+      "operands": "c"
+    },
+    {
+      "offset": "0x20269c",
+      "mnemonic": "cbz",
+      "operands": "x4, #0x202854"
+    },
+    {
+      "offset": "0x2026bc",
+      "mnemonic": "mov",
+      "operands": "x19, x4"
+    },
+    {
+      "offset": "0x2026d0",
+      "mnemonic": "bl",
+      "operands": "#0x323310"
+    },
+    {
+      "offset": "0x202744",
+      "mnemonic": "adrp",
+      "operands": "x5, #0x5ef000"
+    },
+    {
+      "offset": "0x202748",
+      "mnemonic": "add",
+      "operands": "x5, x5, #0x8d8"
+    },
+    {
+      "offset": "0x20275c",
+      "mnemonic": "bl",
+      "operands": "#0x1efffc"
+    },
+    {
+      "offset": "0x202774",
+      "mnemonic": "bl",
+      "operands": "#0x1f46ac"
+    },
+    {
+      "offset": "0x202854",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x21baf8",
+      "mnemonic": "bti",
+      "operands": "c"
+    },
+    {
+      "offset": "0x21bafc",
+      "mnemonic": "ldr",
+      "operands": "x0, [x0, #8]"
+    },
+    {
+      "offset": "0x21bb00",
+      "mnemonic": "ldr",
+      "operands": "x8, [x0]"
+    },
+    {
+      "offset": "0x21bb04",
+      "mnemonic": "ldr",
+      "operands": "x16, [x8, #0x28]"
+    },
+    {
+      "offset": "0x21bb08",
+      "mnemonic": "br",
+      "operands": "x16"
+    },
+    {
+      "offset": "0x219b28",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x5c9000"
+    },
+    {
+      "offset": "0x219b2c",
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x828"
+    },
+    {
+      "offset": "0x219b30",
+      "mnemonic": "str",
+      "operands": "x8, [x19]"
+    }
+  ],
+  "bridge_guard": {
+    "function_offset": "0x202698",
+    "tested_register": "x4",
+    "argument_ordinal": 5,
+    "null_branch_offset": "0x20269c",
+    "null_return_offset": "0x202854",
+    "first_external_call_offset": "0x2026d0",
+    "JNI_helper_call_offset": "0x202774",
+    "actual_business_argument_observed": false
+  },
+  "static_forwarding": {
+    "function_offset": "0x21baf8",
+    "owner_delegate_field": "0x8",
+    "delegate_function_slot": "0x28",
+    "tail_branch": true,
+    "preserves_x1_through_x4": true,
+    "owner_table_base": "0x5c9828",
+    "owner_table_security_slot": "0x38",
+    "owner_security_relocation_slot": "0x5c9860",
+    "owner_security_target": "0x21baf8",
+    "delegate_security_relocation_slot": "0x5c90c8",
+    "delegate_security_target": "0x202698",
+    "observed_business_execution": false
+  },
+  "bounded_emulation": {
+    "original_prefix_cases": 8,
+    "synthetic_forwarded_cases": 4,
+    "null_cases_returned": 3,
+    "nonnull_cases_stopped_before_external_call": 9,
+    "external_calls_executed": 0,
+    "unchanged_original_code": true,
+    "synthetic_objects_only": true,
+    "forwarded_arguments_preserved": true,
+    "Android_runtime_execution": false
+  },
+  "validation": {
+    "original_instruction_bindings": 17,
+    "relative_relocation_bindings": 3,
+    "original_APK_ELF_bytes_identical": true,
+    "frozen_emulation_records_rebuilt_exactly": true
+  },
+  "excluded_analysis": {
+    "complete_six_function_Ghidra_batch_verified": false,
+    "partial_pseudocode_files": 3,
+    "owned_analysis_processes_remaining": 0,
+    "pseudocode_used_as_instruction_proof": false
+  },
+  "claims": {
+    "static_null_guard_verified": true,
+    "bounded_original_prefix_emulation_verified": true,
+    "actual_business_null_argument_verified": false,
+    "actual_security_bridge_execution_verified": false,
+    "initial_rejection_cause_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "limits": [
+    "The fifth argument is not observed on an Android business request; the null guard is not established as the reason security callbacks remained absent",
+    "Emulation executes unchanged original prefixes with synthetic memory only and stops before the first external BL; no Android, JNI or signing code is executed",
+    "The owner table and forwarding wrapper are static bindings; neither the live owner table identity nor business execution of this wrapper is established",
+    "Same-slot virtual-call candidates do not establish the upstream security caller or the fifth argument source",
+    "The six-function local Ghidra batch timed out; three partial outputs are excluded from completed-batch proof and image-base-adjusted pseudocode is only an analysis aid",
+    "No additional Android hooks, device actions or runtime experiments were performed for this evidence"
+  ],
+  "privacy": {
+    "raw_pointers_request_response_or_header_values_published": false
+  }
+}

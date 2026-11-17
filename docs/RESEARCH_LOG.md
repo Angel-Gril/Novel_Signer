@@ -1,5 +1,14 @@
 # Checkpoint log
 
+2026-11-18：原版请求级安全桥先检查第五参数 x4，空值在进入 JNI 前直接返回。
+静态尾包装器经 owner `+8` 与 delegate `+0x28` 槽转发，保留 x1..x4；owner 表
+`+0x38` 槽的重定位绑定成立，但其业务执行未观察。17 条指令、3 个相对重定位、
+原版 APK/ELF 字节、12 组原版前缀隔离仿真逐项重建及 29 项损坏证据拒绝检查通过。
+3 个空值返回，9 个非空停在首外部调用前，外部调用执行数零；没有 Android 实验。
+Ghidra 六函数批次超时，3 份部分结果不计完整成功，分析进程已清理并复核。
+真实业务 x4、未触发原因、初始 110 根因与完整六头/signer 仍未验证。
+见[安全桥条件证据](../platforms/bytedance/tomato/evidence/vm9_cronet_security_bridge_guard_20261118.json)。
+
 2026-11-18：确认应用 provider 继承 `AbsCronetDependAdapter` 的安全方法，经
 `NetworkParams.tryAddSecurityFactor` 转调静态回调字段；父类及 NetworkParams 的
 DEX 与原版相同，应用类所在的整份 DEX 则不同。独立 3 秒只读快照确认下游已注册
