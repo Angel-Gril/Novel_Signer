@@ -19,6 +19,10 @@ python platforms/bytedance/tomato/python/capture_vm9_cronet_route_android_202611
 
 The host verifier needs Python `frida` and Node.js. `--pid <running-pid>` skips
 process enumeration; USB mode requires `--adb-serial <exact-device-id>`.
+An embedded Gadget enumerates its own host as `Gadget`. Check that runtime's
+actual Java package name and UID against the target app before choosing a PID
+or loading hooks. A reachable port can belong to another app. Use a dedicated
+device port for the Tomato test build when another Gadget is already running.
 `--operation-timeout` bounds each Frida operation separately, including cleanup;
 `--duration` is the observation window after hook readiness. Existing output
 files are refused. Failure, missing required hooks, an event limit or incomplete

@@ -1,5 +1,24 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-17：云手机连接恢复与 Frida 目标身份核对
+
+使用用户提供的当前隧道后，ADB 已恢复：Android 13、arm64，原版番茄
+`7.2.5.32 / 72532` 可启动。安装包 SHA-256 为
+`95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd`，与既有
+原版记录一致。下节旧本机端口的失败记录只描述当时的本机连接状态，不能据此认定
+云手机离线。
+
+设备 `27042` 实际监听的是另一个应用中的 Frida `16.7.19` Gadget；17.x 客户端的
+ProtocolError 不代表设备离线。使用匹配客户端后可枚举一个 Gadget，随后通过
+Java 实际包名和 UID 确认其与番茄不同，且未加载番茄安全模块。身份读取脚本已卸载、
+session 已 detach，本轮临时创建的本机 `27042` forward 已移除。这不是番茄运行时证据。
+
+原版番茄没有 DEBUGGABLE、PROFILEABLE 或 ALLOW_BACKUP 标志；设备为 user build，
+`ro.debuggable=0`，且没有可用 `su`。后续番茄测试包使用独立 `27043` 端口。
+测试包与原版签名不同，替换需先卸载原版，不能保证保留番茄本地数据；安装前须明确
+这一数据影响。本轮没有卸载或替换原版。普通 Cronet 六头、整请求差分、独立 signer
+和线上验签继续未闭合。
+
 ## 2026-11-17：Cronet 分层捕获与连接超时修复
 
 新增 `python/capture_vm9_cronet_route_android_20261117.py`，复用原捕获器的 bridge
