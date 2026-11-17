@@ -1,0 +1,134 @@
+{
+  "schema": "vm9-cronet-read-buffer-provenance-20261118-v1",
+  "evidence_date": "2026-11-18",
+  "environment": {
+    "package_name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "android_release": "13",
+    "executing_arch": "arm64",
+    "frida_version": "17.24.3",
+    "test_apk_sha256": "2aebb1e98f96f8f4f66e136c435a6b93b6576d849f836d3d6e2028e44cacb36b",
+    "original_apk_signature_preserved": false,
+    "target_java_package_and_uid_checked_before_business_hooks": true
+  },
+  "provenance": {
+    "capture_sha256": "9d0fd8f69429e81cecc64369bced439872895672daa54a86ef3bba7dec2fe14e",
+    "source_js_sha256": "38798315f017b6de6cd2ab6784af6d5940a676fb47058fdc839d4033a67ddbcb",
+    "extension_sha256": "75824b81bbcf9c21155f51ab87d4436501dbb5f57eaf84469d6c43ef744dc6ff",
+    "combined_extension_sha256": "75cc762723b63ea7e894b1de5c340245416772c156836575ed0d04bd14960e78",
+    "private_runner_sha256": "b89690f97f1d010ec83a559fb256561f7fc66cde89f9163b3132ce189de834bd",
+    "private_validator_sha256": "4071c7821b35bfea97f664191d020557eb926acd8258a8629558edbf5826e022",
+    "base_probe_git_revision": "6f14401b8b23d8ef612ae8a910c954cafd20b2ea",
+    "base_probe_python_sha256": "0c4578b6d2acfe12757fbee54dd67227ce883045a3eeb0546d22e3528c4e8aa6",
+    "java_bridge_sha256": "749e107feb32c21227fa79a5feda5c4a13bf4d797d51d8c94156d8d4b3e97eb2",
+    "original_dex_sha256": {
+      "classes16.dex": "c0820f523bc429160614f3f056f1829fe68c173d715db4db3b05e3600d3557ea",
+      "classes23.dex": "09c8cd146d8bb1bcf6a45583ea4820f67d869915c307b0a57209d11b2f4f47c4",
+      "classes26.dex": "eb7cb6897a3f791b2835e226ef8882aafc9e428c65b6b842cd82f3dffe50a333"
+    },
+    "private_fill_index_sha256": "69753c1bc4bafd5383594dadbdfd17916948f898ffccbda471f614896536e126",
+    "private_callback_index_sha256": "bb62ebc93fc778bafd568414df88a82bcb463e0e11761dba93d4f25df4d36982",
+    "rebuilt_source_matches_exact_retained_loaded_source": true
+  },
+  "window": {
+    "duration_seconds": 45,
+    "row_count": 612,
+    "counts": {
+      "client_selection": 55,
+      "selector": 59,
+      "cronet_connection": 55,
+      "cronet_create": 55,
+      "cronet_start": 55
+    },
+    "cleanup_complete": true,
+    "event_limit_reached": false
+  },
+  "capture_controls": {
+    "same_buffer_across_bridge_wrapper_positive_control": true,
+    "duplicate_buffer_distinct_identity_negative_control": true,
+    "code_110_and_code_zero_copy_controls_preserve_original_position_and_limit": true,
+    "prior_stream_identity_controls_and_upstream_reader_chain_passed": true,
+    "damaged_captures_rejected": 90,
+    "source_binding_verified": true,
+    "target_foreground_checked_before_both_ui_actions": true,
+    "scripts_unloaded_and_sessions_detached": true,
+    "selector_override_used": false,
+    "extra_business_stream_read_close_skip_or_replacement": false
+  },
+  "buffer_relation": {
+    "stream_class": "com.ttnet.org.chromium.net.urlconnection.d",
+    "submit_method": "CronetHttpURLConnection.F(java.nio.ByteBuffer)",
+    "request_read_method": "CronetUrlRequest.g(java.nio.ByteBuffer)",
+    "completion_method": "CronetUrlRequest.onReadCompleted(java.nio.ByteBuffer,int,int,int,long)",
+    "adapter_method": "CronetHttpURLConnection$a.c",
+    "completion_sample_observed_before_calling_original_completion_method": true,
+    "sample_uses_duplicate_buffer_without_changing_original_position_or_limit": true,
+    "read_calls": 2,
+    "fill_submissions": 2,
+    "positive_read_completions": 1,
+    "native_callback_code": 110,
+    "actual_stream_read_code": 110,
+    "http_status": 200,
+    "request_buffer_stream_identity_joined": true,
+    "callback_and_decoder_threads_differ": true,
+    "original_buffer_state_preserved": true,
+    "complete_callback_chunk_matches_actual_stream_read": true,
+    "eof_observed": true,
+    "active_fill_records_at_context_close": 0,
+    "active_read_frames_at_context_close": 0
+  },
+  "reader_relation": {
+    "same_decode_ordinal_joins_callback_buffer_to_actual_stream_read_and_reader": true,
+    "callback_relation_uses_object_identity_instead_of_thread_nesting": true,
+    "stream_input_is_same_Cronet_stream_returned_by_StreamParser": true,
+    "RPC_original_conversion_count": 1,
+    "RPC_conversion_code": 110,
+    "Gson_input_code": 110,
+    "decoded_FullResponse_code": 110,
+    "reader_F0_code": 110,
+    "RPC_output_equals_Gson_input_character_for_character": true,
+    "decoded_response_is_decoder_return_and_reader_F0_argument": true
+  },
+  "static_boundary": {
+    "original_dex_entries": [
+      "classes16.dex",
+      "classes23.dex",
+      "classes26.dex"
+    ],
+    "stream_read_copies_from_its_ByteBuffer_field": true,
+    "connection_fill_calls_request_read_and_waits": true,
+    "completion_checks_buffer_state_advances_position_and_schedules_callback": true,
+    "response_production_before_completion_not_identified": true
+  },
+  "ui": {
+    "after_window_screenshot_inspected": true,
+    "after_window_page": "recommendation_home",
+    "new_unsafe_version_screen_observation_claimed": false,
+    "original_signature_runtime_retested": false
+  },
+  "limits": [
+    "One response in the re-signed Gadget build; original APK signature is not preserved",
+    "The Java read-completion entry already contains code 110; this is not an encrypted-wire or socket capture",
+    "Native response production, cache and transport interception before the observed callback remain unobserved",
+    "HTTP 200 is a transport status and does not establish business success or server origin of code 110",
+    "Response object identity does not establish signing-callback identity; security-factor callbacks stayed at zero",
+    "The inspected post-window screenshot is the recommendation home page, not a new unsafe-version UI proof"
+  ],
+  "claims": {
+    "code_110_at_Java_read_completion_entry_verified": true,
+    "callback_buffer_to_actual_stream_bytes_and_reader_join_verified": true,
+    "encrypted_wire_or_raw_socket_response_verified": false,
+    "server_origin_of_110_verified": false,
+    "solely_certificate_caused_rejection_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "signing_callback_object_identity_joined": false,
+    "whole_request_native_python_differential_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "privacy": {
+    "request_response_content_headers_signatures_identifiers_or_object_handles_published": false,
+    "transient_buffer_bytes_retained_only_until_original_read_returns": true
+  }
+}

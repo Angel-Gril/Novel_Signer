@@ -1,5 +1,30 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：110 已在 Cronet 读取完成入口的缓冲区内
+
+后续被动窗口在原始 `CronetUrlRequest.onReadCompleted` 执行前，复制其已填充
+ByteBuffer 区域；副本中已有 `code=110`。副本通过 `duplicate()` 读取，原缓冲区的
+position/limit 保持不变。随后 `urlconnection.d.read([B,int,int)` 返回的完整数据块
+与副本逐字节一致，再接入既有 RPC、Gson 与正文 F0 的同一响应对象链。
+
+流持有的 connection、connection 的 request、提交给 `F/g` 的 buffer、读取完成
+receiver 和 adapter 参数均按 Java 对象身份连接。读取完成入口与正文解码位于不同线程，
+使用临时序号和 IdentityHashMap 关联，不依赖线程嵌套；adapter 观察到 HTTP 状态 200。
+本次正数读取后又读到 EOF，两个 fill 和读取帧均在上下文结束前清理。
+
+45 秒窗口包含 612 行、55 次 Cronet 创建/启动；源码重建与实际加载文件逐字一致，
+原版 DEX 摘要绑定、buffer/stream 正反控制、90 项损坏捕获拒绝检查通过。
+两次页面操作均核对目标前台，脚本卸载及 detach 完成，无事件截断或元数据错误。
+探针没有额外消费业务流，没有公开正文、头值、标识或对象句柄。
+复查采样后截图为推荐首页，本次不新增“不安全版本”画面的验证声明。
+
+这把已观察到的 110 推进到 Java 的读取完成入口，仍不是 socket 或加密传输抓包；
+更早 native 响应生产、缓存和传输拦截来源尚未区分。HTTP 200 不代表业务成功，
+也不能据此断言 110 来自服务端或仅由证书变化导致。六头安全回调仍为零；
+原签名运行时等价、整请求差分、完整 signer 与线上验签继续未闭合。
+下一步检查同一响应的缓存/传输元数据及更早的生产边界。
+见[读取完成缓冲区证据](evidence/vm9_cronet_read_buffer_provenance_20261118.json)。
+
 ## 2026-11-17：Cronet 响应流到正文 110 的身份链
 
 后续两个被动窗口把边界推进到实际 Cronet URLConnection 响应流。

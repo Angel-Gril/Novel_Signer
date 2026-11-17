@@ -84,6 +84,19 @@ bytes, cache/native interception, initial rejection cause and original-signature
 runtime equivalence remain unverified; the six-header callbacks stayed at zero.
 See the [stream provenance evidence](../evidence/vm9_reader_stream_provenance_20261117.json).
 
+A later private passive window copied the filled ByteBuffer region at the entry
+to `CronetUrlRequest.onReadCompleted`, before the original method ran. It already
+contained code 110. The actual stream read returned the exact complete copied
+chunk, then joined the existing RPC/Gson/reader chain. Buffer, request and
+connection identity joined the callback and reader across different threads;
+the adapter reported HTTP 200. The duplicate-buffer observation preserved the
+original position/limit and made no extra business-stream read. The 45-second
+window had 612 rows and 55 create/start calls; source binding, cleanup and 90
+damaged-capture rejections passed. Its inspected post-window screenshot was the
+recommendation home page. Native/cache/transport production before this Java
+callback, server attribution and the six-header chain remain unverified. See the
+[read-buffer evidence](../evidence/vm9_cronet_read_buffer_provenance_20261118.json).
+
 The [novel-sound comparison](../NOVEL_SOUND_REFERENCE.md) describes its four local
 header implementations, the Argus variant differences and the 13 passing offline
 crypto-vector tests. No upstream implementation or golden vectors were copied

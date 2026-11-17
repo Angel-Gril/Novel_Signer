@@ -1,5 +1,13 @@
 # Checkpoint log
 
+2026-11-18：在原始 Cronet `onReadCompleted` 执行前，其 ByteBuffer 副本已有 110，
+随后实际流返回的完整数据块与副本逐字节一致，并连接到既有 RPC/Gson/正文对象链。
+request、connection、buffer 和 adapter 身份关联跨线程成立，HTTP 状态为 200。
+45 秒、612 行、55 次创建/启动；源码绑定、90 项损坏捕获拒绝与完整清理通过。
+采样后截图为推荐首页，不新增拒绝 UI 声明。更早 native/缓存/传输来源仍待定位，
+六头、完整 signer 和线上验签未闭合。见
+[缓冲区来源证据](../platforms/bytedance/tomato/evidence/vm9_cronet_read_buffer_provenance_20261118.json)。
+
 2026-11-17：两次被动窗口连接了实际 Cronet `inputStream`、StreamParser、
 `m90.b`、RPC 包装流、`c.m`、Gson 和正文 F0。parser 返回同一流，流与包装对象
 身份链成立；转换后的 110 JSON 与 Gson 输入逐字符一致，解码结果仍是同一正文对象。
