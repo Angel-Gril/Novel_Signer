@@ -1,5 +1,25 @@
 # Tomato Python material
 
+`verify_vm9_native_171_aid_cache_20261118.py` uses a separately selected synthetic
+`?aid=1` / absent-cache profile. Four controls at two bases observe the original
+aid search, local length one and the non-equal branch to `+0xfc244`. Only one
+main-image SVC is allowed, binding site `+0x271dbc`, cursor `+0xfca40`, syscall
+48, the static cache pathname and all four syscall arguments. The inherited
+absent-filesystem service returns -2; original code stores errno 2, returns -1,
+converts readability to false and falls through to directory handling. An
+observation sentinel stops before `+0x25ef6c`; no callback or ordinary wrapper
+return is claimed. Guard one and the 128-byte handler are retained. The new
+path adds one existing file check and two existing clock calls, with no new
+OS/JNI/helper service. Twenty-four instruction bindings, one added bytecode
+binding, four public CLI native replays, eight unchanged legacy rows, 177
+damaged-evidence rejections and four actual negative CLI invocations pass.
+A separate native negative control proves the default profile still rejects
+the main-image SVC before execution. Use `--elf`, `--libc`, `--replay`.
+This synthetic absence says nothing about Android cache state. Directory
+handling, restored business state, real JVM identity, ordinary six headers,
+whole-request equivalence and complete signing remain unverified.
+See the [aid/cache evidence](../evidence/vm9_native_171_aid_cache_20261118.json).
+
 `verify_vm9_native_171_diagnostic_gates_20261118.py` observes both diagnostic
 gates without changing the upstream fixture, services or registry guard. Four
 controls reproduce the entire previous output row exactly. The synthetic URL

@@ -1,0 +1,1014 @@
+{
+  "schema": "vm9-native-171-aid-cache-20261118-v1",
+  "provenance": {
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "default_URL_sha256": "33fdbad7bffeeab054cc72dffc598ccbc0878cba3079ec9e117c179d64d9b499",
+    "synthetic_URL_sha256": "f6b4d932c07ae544918dc3b6ef22924de3cab7776450771de8f591abef2001a4"
+  },
+  "claims": {
+    "synthetic_aid_input_reaches_nonempty_local_gate": true,
+    "first_minus_8_diagnostic_branch_not_taken_before_stop": true,
+    "narrowly_bound_original_main_image_faccessat_executed": true,
+    "inherited_absent_filesystem_result_consumed_by_original_code": true,
+    "original_errno_store_and_false_readability_return_verified": true,
+    "original_caller_falls_through_to_directory_path": true,
+    "original_outer_postconditions_passed": true,
+    "original_default_libc_only_SVC_policy_unchanged": true,
+    "observation_sentinel_before_directory_path": true,
+    "callback_or_ordinary_wrapper_returned": false,
+    "registry_guard_modified": false,
+    "new_OS_JNI_or_internal_helper_providers": false,
+    "real_Android_cache_state_verified": false,
+    "business_state_restored": false,
+    "real_JVM_identity_verified": false,
+    "ordinary_Cronet_six_headers_verified": false,
+    "whole_request_native_Python_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "Android_execution": false,
+    "online_acceptance_verified": false
+  },
+  "providers": {
+    "inherited_context_profile": {
+      "inherited_outer": {
+        "inherited_owner": "verify_vm9_outer_signer_native.py",
+        "actual_matching_Bionic_allocator": true,
+        "explicit_virtual_OS_and_JNI": true,
+        "virtual_threads_created": 3,
+        "virtual_thread_bodies_executed": false,
+        "diagnostic_helpers_substituted": [
+          "0x26c858",
+          "0x26c9d0"
+        ],
+        "Android_JVM_used": false,
+        "thread_id": 137,
+        "clock_seconds": 1791023800,
+        "clock_nanoseconds": 500000000,
+        "ordinary_inputs": "fresh synthetic CStrings in an isolated mapped page",
+        "root_child_context_or_cache_bytes_seeded_by_continuation": false
+      },
+      "JNI_owner": "verify_vm9_request_stack_evaluator_fresh_20261012.py:Services.jni",
+      "JNI_environment_adapter": "validate outer environment, translate only its ABI identity",
+      "JNI_slots": [
+        "0x30",
+        "0x388",
+        "0x720",
+        "0xb8"
+      ],
+      "main_import_names": [
+        "memset",
+        "__cxa_atexit"
+      ],
+      "main_import_targets": "resolved matching Bionic exports",
+      "permitted_libc_SVC_numbers": [
+        48,
+        56,
+        57,
+        63,
+        79,
+        80,
+        98,
+        167,
+        198,
+        214,
+        215,
+        222,
+        226,
+        233
+      ],
+      "scenarios": [
+        "NULL_class0",
+        "NULL_static_id"
+      ],
+      "stop": "observer stops after context store and moves PC to the oracle sentinel; no function return"
+    },
+    "request_profile": "synthetic_aid_absent_cache",
+    "changed_input": "fresh synthetic URL CString only",
+    "main_image_SVC_allowance": [
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 48,
+        "dirfd_u32": 4294967196,
+        "mode": 4,
+        "flags": 0,
+        "pathname_length": 30,
+        "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522"
+      }
+    ],
+    "main_image_SVC_maximum_calls": 1,
+    "absent_filesystem_owner": "verify_vm9_outer_signer_native.py:case.syscall",
+    "syscall_result": -2,
+    "errno_address_owner": "existing outer __errno import and TLS+0x100",
+    "new_OS_JNI_or_internal_helper_providers": [],
+    "registry_guard_write": false,
+    "stop_before": "0x25ef6c",
+    "stop_kind": "explicit observation sentinel; no callback return"
+  },
+  "instructions": [
+    {
+      "offset": "0x271dbc",
+      "mnemonic": "svc",
+      "operands": "#0"
+    },
+    {
+      "offset": "0x271dc0",
+      "mnemonic": "cmn",
+      "operands": "x0, #1, lsl #12"
+    },
+    {
+      "offset": "0x271dc4",
+      "mnemonic": "cneg",
+      "operands": "x0, x0, hi"
+    },
+    {
+      "offset": "0x271dc8",
+      "mnemonic": "b.hi",
+      "operands": "#0x271d68"
+    },
+    {
+      "offset": "0x271d74",
+      "mnemonic": "mov",
+      "operands": "w19, w0"
+    },
+    {
+      "offset": "0x271d78",
+      "mnemonic": "bl",
+      "operands": "#0x3481a0"
+    },
+    {
+      "offset": "0x271d7c",
+      "mnemonic": "mov",
+      "operands": "x8, x0"
+    },
+    {
+      "offset": "0x271d80",
+      "mnemonic": "mov",
+      "operands": "x0, #-1"
+    },
+    {
+      "offset": "0x271d84",
+      "mnemonic": "str",
+      "operands": "w19, [x8]"
+    },
+    {
+      "offset": "0x271d88",
+      "mnemonic": "ldr",
+      "operands": "x19, [sp, #0x10]"
+    },
+    {
+      "offset": "0x271d90",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x273088",
+      "mnemonic": "bl",
+      "operands": "#0x271d9c"
+    },
+    {
+      "offset": "0x2730a0",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x25de04",
+      "mnemonic": "bl",
+      "operands": "#0x2730a4"
+    },
+    {
+      "offset": "0x25de08",
+      "mnemonic": "cmp",
+      "operands": "w0, #0"
+    },
+    {
+      "offset": "0x25de0c",
+      "mnemonic": "cset",
+      "operands": "w0, eq"
+    },
+    {
+      "offset": "0x25de10",
+      "mnemonic": "b",
+      "operands": "#0x25de18"
+    },
+    {
+      "offset": "0x25de1c",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x25ef64",
+      "mnemonic": "bl",
+      "operands": "#0x25ddec"
+    },
+    {
+      "offset": "0x25ef68",
+      "mnemonic": "tbnz",
+      "operands": "w0, #0, #0x25ef7c"
+    },
+    {
+      "offset": "0x25ef6c",
+      "mnemonic": "ldr",
+      "operands": "x0, [x19]"
+    },
+    {
+      "offset": "0x25ef70",
+      "mnemonic": "mov",
+      "operands": "w1, #0x1ed"
+    },
+    {
+      "offset": "0x25ef74",
+      "mnemonic": "mov",
+      "operands": "w2, #1"
+    },
+    {
+      "offset": "0x25ef78",
+      "mnemonic": "bl",
+      "operands": "#0x25eb54"
+    }
+  ],
+  "bytecode": {
+    "offset": "0xfca40",
+    "word": "0x67e0c91"
+  },
+  "case_results": [
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "absent",
+        "null_at": "class0"
+      },
+      "fresh_URL_verified": true,
+      "aid_searches": [
+        {
+          "bytecode": "0xfbf2c",
+          "target": "0x248c54",
+          "pattern": "&aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 4294967295
+        },
+        {
+          "bytecode": "0xfc130",
+          "target": "0x248c54",
+          "pattern": "aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 0
+        }
+      ],
+      "local_string_length": 1,
+      "aid_branch": {
+        "bytecode": "0xfc240",
+        "equal": false,
+        "target": "0xfc244"
+      },
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "mode": 4,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522"
+        }
+      ],
+      "observed_native_flow": [
+        {
+          "native_pc": "0x271dc0",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc4",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc8",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d68",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d78",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d84",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d88",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d90",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x27308c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x2730a0",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de08",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de0c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de10",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25de18",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef68",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef6c",
+          "signed_x0": 0
+        }
+      ],
+      "errno_value": 2,
+      "errno_slot_is_inherited_TLS": true,
+      "errno_store_completed": true,
+      "readability_result": 0,
+      "callback_or_ordinary_RET_seen": false,
+      "guard_at_member": 1,
+      "guard_at_stop": 1,
+      "early_status_stores": [],
+      "diagnostic_formatters": [],
+      "context_handler_bytes_unchanged": true,
+      "original_outer_postconditions_passed": true,
+      "observation_stop_before": "0x25ef6c",
+      "oracle_PC_is_observation_sentinel": true,
+      "member_prefix": {
+        "instruction_observations": 186334,
+        "trace_sha256": "f6200f43f551f47c0aaefd09e538641b0e13ca5c8036fd2e0937d3fe6935618b",
+        "code_sha256": "8618d4983e681a21f08d3c5700dd0474076561e15d06a022d6647b966019e613"
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "NULL_or_false",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 283958,
+      "continuation_trace_sha256": "77d7e68d4e0b05ea5a810773b4b6286d8e0f5d8a8a51ea48c88f16034a4007ea",
+      "continuation_code_sha256": "0b75876d43943cc6f28cfdb017aae2ade70a3a432d02bdef2526ef072bf98565",
+      "allocator_counts": {
+        "malloc": 418,
+        "free": 163,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 3,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 9,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 16,
+        "property_find": 1,
+        "syscall_48": 3,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "5e630fc3917889fd4c294b00eb91718e1a543f1bf3560d2cee9b693b1e24d3b3"
+    },
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "absent",
+        "null_at": "static_id"
+      },
+      "fresh_URL_verified": true,
+      "aid_searches": [
+        {
+          "bytecode": "0xfbf2c",
+          "target": "0x248c54",
+          "pattern": "&aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 4294967295
+        },
+        {
+          "bytecode": "0xfc130",
+          "target": "0x248c54",
+          "pattern": "aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 0
+        }
+      ],
+      "local_string_length": 1,
+      "aid_branch": {
+        "bytecode": "0xfc240",
+        "equal": false,
+        "target": "0xfc244"
+      },
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "mode": 4,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522"
+        }
+      ],
+      "observed_native_flow": [
+        {
+          "native_pc": "0x271dc0",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc4",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc8",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d68",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d78",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d84",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d88",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d90",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x27308c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x2730a0",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de08",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de0c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de10",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25de18",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef68",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef6c",
+          "signed_x0": 0
+        }
+      ],
+      "errno_value": 2,
+      "errno_slot_is_inherited_TLS": true,
+      "errno_store_completed": true,
+      "readability_result": 0,
+      "callback_or_ordinary_RET_seen": false,
+      "guard_at_member": 1,
+      "guard_at_stop": 1,
+      "early_status_stores": [],
+      "diagnostic_formatters": [],
+      "context_handler_bytes_unchanged": true,
+      "original_outer_postconditions_passed": true,
+      "observation_stop_before": "0x25ef6c",
+      "oracle_PC_is_observation_sentinel": true,
+      "member_prefix": {
+        "instruction_observations": 186367,
+        "trace_sha256": "f3de7e279176619bd6e40da0d216c67674bb42c34e02e427c5235309f7bb3238",
+        "code_sha256": "181d25796811e94651c1c47e34d90d3a268e5ae17417bb6aec415ea29faba968"
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "class_fixture",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x27186c"
+        },
+        {
+          "slot": "0x388",
+          "result": "NULL_or_false",
+          "caller": "0x28b758"
+        },
+        {
+          "slot": "0xb8",
+          "result": "NULL_or_false",
+          "caller": "0x28b798"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 283991,
+      "continuation_trace_sha256": "ce1c58266b9190e8aaae105177fc75036517039e04c7e310a9ce57dd6ed3cb7e",
+      "continuation_code_sha256": "060066aaf1fb307ccdaa6fe7047449509bf3cdd31b89224e67b08c449acfd5d1",
+      "allocator_counts": {
+        "malloc": 418,
+        "free": 163,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 3,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 9,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 16,
+        "property_find": 1,
+        "syscall_48": 3,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "5e630fc3917889fd4c294b00eb91718e1a543f1bf3560d2cee9b693b1e24d3b3"
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "absent",
+        "null_at": "class0"
+      },
+      "fresh_URL_verified": true,
+      "aid_searches": [
+        {
+          "bytecode": "0xfbf2c",
+          "target": "0x248c54",
+          "pattern": "&aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 4294967295
+        },
+        {
+          "bytecode": "0xfc130",
+          "target": "0x248c54",
+          "pattern": "aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 0
+        }
+      ],
+      "local_string_length": 1,
+      "aid_branch": {
+        "bytecode": "0xfc240",
+        "equal": false,
+        "target": "0xfc244"
+      },
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "mode": 4,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522"
+        }
+      ],
+      "observed_native_flow": [
+        {
+          "native_pc": "0x271dc0",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc4",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc8",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d68",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d78",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d84",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d88",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d90",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x27308c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x2730a0",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de08",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de0c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de10",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25de18",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef68",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef6c",
+          "signed_x0": 0
+        }
+      ],
+      "errno_value": 2,
+      "errno_slot_is_inherited_TLS": true,
+      "errno_store_completed": true,
+      "readability_result": 0,
+      "callback_or_ordinary_RET_seen": false,
+      "guard_at_member": 1,
+      "guard_at_stop": 1,
+      "early_status_stores": [],
+      "diagnostic_formatters": [],
+      "context_handler_bytes_unchanged": true,
+      "original_outer_postconditions_passed": true,
+      "observation_stop_before": "0x25ef6c",
+      "oracle_PC_is_observation_sentinel": true,
+      "member_prefix": {
+        "instruction_observations": 186334,
+        "trace_sha256": "f6200f43f551f47c0aaefd09e538641b0e13ca5c8036fd2e0937d3fe6935618b",
+        "code_sha256": "8618d4983e681a21f08d3c5700dd0474076561e15d06a022d6647b966019e613"
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "NULL_or_false",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 283958,
+      "continuation_trace_sha256": "77d7e68d4e0b05ea5a810773b4b6286d8e0f5d8a8a51ea48c88f16034a4007ea",
+      "continuation_code_sha256": "0b75876d43943cc6f28cfdb017aae2ade70a3a432d02bdef2526ef072bf98565",
+      "allocator_counts": {
+        "malloc": 418,
+        "free": 163,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 3,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 9,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 16,
+        "property_find": 1,
+        "syscall_48": 3,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "5e630fc3917889fd4c294b00eb91718e1a543f1bf3560d2cee9b693b1e24d3b3"
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "absent",
+        "null_at": "static_id"
+      },
+      "fresh_URL_verified": true,
+      "aid_searches": [
+        {
+          "bytecode": "0xfbf2c",
+          "target": "0x248c54",
+          "pattern": "&aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 4294967295
+        },
+        {
+          "bytecode": "0xfc130",
+          "target": "0x248c54",
+          "pattern": "aid=",
+          "source_length": 5,
+          "source_sha256": "87029cc54b2bdc0f76a9d6f36edb2d08fd01d43df399f8aab5f7408dd88acc3b",
+          "start_u32": 0,
+          "result_u32": 0
+        }
+      ],
+      "local_string_length": 1,
+      "aid_branch": {
+        "bytecode": "0xfc240",
+        "equal": false,
+        "target": "0xfc244"
+      },
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "mode": 4,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522"
+        }
+      ],
+      "observed_native_flow": [
+        {
+          "native_pc": "0x271dc0",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc4",
+          "signed_x0": -2
+        },
+        {
+          "native_pc": "0x271dc8",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d68",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d78",
+          "signed_x0": 2
+        },
+        {
+          "native_pc": "0x271d84",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d88",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x271d90",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x27308c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x2730a0",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de08",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de0c",
+          "signed_x0": -1
+        },
+        {
+          "native_pc": "0x25de10",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25de18",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef68",
+          "signed_x0": 0
+        },
+        {
+          "native_pc": "0x25ef6c",
+          "signed_x0": 0
+        }
+      ],
+      "errno_value": 2,
+      "errno_slot_is_inherited_TLS": true,
+      "errno_store_completed": true,
+      "readability_result": 0,
+      "callback_or_ordinary_RET_seen": false,
+      "guard_at_member": 1,
+      "guard_at_stop": 1,
+      "early_status_stores": [],
+      "diagnostic_formatters": [],
+      "context_handler_bytes_unchanged": true,
+      "original_outer_postconditions_passed": true,
+      "observation_stop_before": "0x25ef6c",
+      "oracle_PC_is_observation_sentinel": true,
+      "member_prefix": {
+        "instruction_observations": 186367,
+        "trace_sha256": "f3de7e279176619bd6e40da0d216c67674bb42c34e02e427c5235309f7bb3238",
+        "code_sha256": "181d25796811e94651c1c47e34d90d3a268e5ae17417bb6aec415ea29faba968"
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "class_fixture",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x27186c"
+        },
+        {
+          "slot": "0x388",
+          "result": "NULL_or_false",
+          "caller": "0x28b758"
+        },
+        {
+          "slot": "0xb8",
+          "result": "NULL_or_false",
+          "caller": "0x28b798"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 283991,
+      "continuation_trace_sha256": "ce1c58266b9190e8aaae105177fc75036517039e04c7e310a9ce57dd6ed3cb7e",
+      "continuation_code_sha256": "060066aaf1fb307ccdaa6fe7047449509bf3cdd31b89224e67b08c449acfd5d1",
+      "allocator_counts": {
+        "malloc": 418,
+        "free": 163,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 3,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 9,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 16,
+        "property_find": 1,
+        "syscall_48": 3,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "5e630fc3917889fd4c294b00eb91718e1a543f1bf3560d2cee9b693b1e24d3b3"
+    }
+  ]
+}

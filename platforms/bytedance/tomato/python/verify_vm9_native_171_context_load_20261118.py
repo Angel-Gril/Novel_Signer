@@ -20,6 +20,11 @@ import verify_vm9_request_stack_evaluator_fresh_20261012 as stack
 EVIDENCE = graph.EVIDENCE.with_name('vm9_native_171_context_load_20261118.json')
 SLOTS = (0x30, 0x388, 0x720, 0xB8)
 INHERITED_SYSCALLS = (48,56,57,63,79,80,98,167,198,214,215,222,226,233)
+AID_CACHE_PROFILE = dict(
+    name='synthetic_aid_absent_cache', URL=graph.inputs.URL+b'?aid=1',
+    native_pc=0x271DBC, bytecode=0xFCA40, number=48,
+    dirfd_u32=0xFFFFFF9C, pathname=b'/data/local/tmp/bdms/mssdk/ml/', mode=4, flags=0,
+)
 LOAD, STORE, STOP = 0x16F96C, 0x16F974, 0x16F978
 CURSOR, WORD = 0xFAE4C, 0x10820418
 EXPECTED = [
@@ -63,9 +68,14 @@ def controls():
             for base in graph.BASES for profile in ('class0', 'static_id')]
 
 
-def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=None):
+def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=None,
+           _request_profile=None):
     from unicorn import arm64_const as arm
     from capstone import Cs, CS_ARCH_ARM64, CS_MODE_ARM
+    assert _request_profile in (None, AID_CACHE_PROFILE['name']), 'unknown request profile'
+    aid_cache = _request_profile == AID_CACHE_PROFILE['name']
+    assert not aid_cache or _extension_factory is not None, 'aid cache profile requires an explicit observer'
+    request_URL = AID_CACHE_PROFILE['URL'] if aid_cache else graph.inputs.URL
     _, main_loads, read_main = graph.inputs.load_elf(path)
     libc_elf, _ = graph.inputs.libc_image(libc)
     libc_bytes = [(s['p_vaddr'], s.data()) for s in libc_elf.iter_segments() if s['p_type']=='PT_LOAD']
@@ -80,7 +90,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
         extension = None if _extension_factory is None else _extension_factory(control)
         service = stack.Services(image, {}, dict(null_at=control['null_at']))
         targets = {slot:graph.SCRATCH+0x800+i*16 for i,slot in enumerate(SLOTS)}
-        trace, code, jni, reads, returns, syscalls = [], {}, [], [], [], []
+        trace, code, jni, reads, returns, syscalls, main_syscalls = [], {}, [], [], [], [], []
 
         def reg(cpu, name):
             return cpu.reg_read(getattr(arm,'UC_ARM64_REG_'+name.upper()))
@@ -122,7 +132,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 state['allocator_events_ref']=unused['allocator_events']
             assert not any(start<graph.SCRATCH+4096 and graph.SCRATCH<=end for start,end,_ in cpu.mem_regions())
             cpu.mem_map(graph.SCRATCH,4096)
-            cpu.mem_write(graph.SCRATCH+0x100,graph.inputs.URL+b'\0')
+            cpu.mem_write(graph.SCRATCH+0x100,request_URL+b'\0')
             cpu.mem_write(graph.SCRATCH+0x200,b'x-test\r\nvalue\r\n\0')
             cpu.mem_write(graph.SCRATCH,(graph.SCRATCH+0x100).to_bytes(8,'little')
                           +(graph.SCRATCH+0x200).to_bytes(8,'little'))
@@ -186,12 +196,27 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
             if site not in code:
                 instruction,=decoder.disasm(original,local)
                 assert instruction.mnemonic not in ('hvc','smc','brk','hlt')
-                if instruction.mnemonic=='svc': assert domain=='libc' and instruction.op_str=='#0'
+                if instruction.mnemonic=='svc':
+                    assert instruction.op_str=='#0'
+                    assert domain=='libc' or (aid_cache and local==AID_CACHE_PROFILE['native_pc'])
                 code[site]=original.hex()
             if original==b'\x01\x00\x00\xd4':
                 number=reg(cpu,'x8')
-                assert domain=='libc' and number in INHERITED_SYSCALLS
-                syscalls.append(dict(libc_pc=hex(local),number=number))
+                if domain=='libc':
+                    assert number in INHERITED_SYSCALLS
+                    syscalls.append(dict(libc_pc=hex(local),number=number))
+                else:
+                    binding=AID_CACHE_PROFILE
+                    assert aid_cache and not main_syscalls
+                    assert local==binding['native_pc'] and number==binding['number']
+                    assert word(cpu,state['PC_slot'])==image+binding['bytecode']
+                    assert reg(cpu,'x0')==binding['dirfd_u32']
+                    assert outer.io.cstring(cpu,reg(cpu,'x1'))==binding['pathname']
+                    assert reg(cpu,'x2')==binding['mode'] and reg(cpu,'x3')==binding['flags']
+                    main_syscalls.append(dict(native_pc=hex(local),bytecode=hex(binding['bytecode']),
+                        number=number,dirfd_u32=binding['dirfd_u32'],mode=binding['mode'],flags=binding['flags'],
+                        pathname_length=len(binding['pathname']),
+                        pathname_sha256=hashlib.sha256(binding['pathname']).hexdigest()))
             trace.append([domain,local])
             assert len(trace)<400000,'continuation instruction bound'
             if offset==graph.CALLBACK:
@@ -235,6 +260,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
             row=extension.finish(result,state,dict(
                 context_reads=reads,evaluator_returns=returns,JNI_calls=jni,
                 libc_SVC_boundaries=syscalls,instruction_observations=len(trace),
+                main_image_SVC_boundaries=main_syscalls,
                 trace_sha256=graph.digest(trace),
                 code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             rows.append(row)
