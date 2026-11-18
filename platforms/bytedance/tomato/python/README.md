@@ -1,5 +1,26 @@
 # Tomato Python material
 
+`verify_vm9_native_171_kmsv_scope_exit_20261119.py` follows the original
+configuration counter retain and the matching diagnostic scope exit.
+The selected branch compares the configuration's counter pointer with zero;
+it falls through and retains its u32 count from 1 to 2, preserving the next
+12 bytes. It does not consume the saved KMSV NULL. The current live counter
+allocation is four bytes; address reuse is allowed and full construction
+provenance remains unverified. Thirteen argument bytecodes agree with fresh
+declared Python VM inputs at two bases. The original exit body tail-calls
+matching Bionic unlock, preserving the scope object and table while releasing
+the selected recursive lock. Existing Python enter/leave owners independently
+construct and release that state. No native memory seeds the model.
+The cold scope instruction/code prefix and all allocation/service/JNI/SVC
+ledgers agree. Four native cases, four independent CLI replays, four exact
+old-scope rows, four bad CLI requests, 23 instruction bindings, 14 bytecode
+words and 138 damaged-evidence rejections pass. Read/main-SVC limits remain
+2/4. Observation stops before consuming the zero exit return. Saved NULL
+business branches, key values, actual business state, full VM equivalence,
+ordinary six headers, online acceptance and complete signing remain unverified.
+Use `--elf`, `--libc`, `--replay`. See the
+[scope-exit evidence](../evidence/vm9_native_171_kmsv_scope_exit_20261119.json).
+
 `verify_vm9_native_171_kmsv_scope_20261119.py` continues the original KMSV
 NULL result through its frame spill and the next cold diagnostic scope.
 The scope input comes from the configuration object's member at +0xa0;

@@ -280,7 +280,10 @@ class Scenario(previous.Scenario):
             assert name.previous.previous.previous.output._cstring(cpu,self.prefix.source)==self.prefix.raw
             assert u(self.scope_frame+1536)==0 and u(self.scope_frame+1744)==self.scope_owner and u(self.scope_owner+160)==self.scope_input
             assert u(self.image+0x3D1558,1)==1 and u(context.outer.root_fixture.TLS+0x100,4)==2
-            self.scope_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.scope_done=True;self.scope_boundary(cpu,state)
+
+    def scope_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         old_data=json.loads(previous.EVIDENCE.read_text(encoding='utf-8'));previous.validate(old_data)
