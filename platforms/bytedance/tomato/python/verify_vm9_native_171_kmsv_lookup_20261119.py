@@ -219,7 +219,10 @@ class Scenario(previous.Scenario):
             assert name.blob(raw(self.image+GUARD,8))==self.kmsv_model['guard_after_release']
             assert raw(self.image+MUTEX,40)==bytes(40) and raw(self.image+TEXT,10)==raw(self.kmsv_payload,10)==NAME+b'\0'
             self.kmsv_events.append('NULL lookup returned');assert self.kmsv_events==EVENTS
-            self.kmsv_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.kmsv_done=True;self.kmsv_boundary(cpu,state)
+
+    def kmsv_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         frozen=json.loads(previous.EVIDENCE.read_text(encoding='utf-8'));previous.validate(frozen)

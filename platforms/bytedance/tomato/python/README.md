@@ -1,5 +1,27 @@
 # Tomato Python material
 
+`verify_vm9_native_171_kmsv_scope_20261119.py` continues the original KMSV
+NULL result through its frame spill and the next cold diagnostic scope.
+The scope input comes from the configuration object's member at +0xa0;
+the selected source frame write and 264/88-byte allocations are observed,
+but complete member construction provenance remains unverified.
+Existing `vm_full.VM` executes eleven argument bytecodes on fresh declared
+pages at two bases. The original scope body and matching Bionic mutexes
+execute only after the selected entry enables the existing diagnostic option.
+Cold guard, table, selected recursive lock, input and padding agree with
+the existing independent `vm9_diagnostics` owner. Three allocations of
+48/2048/48 bytes are added; services and JNI/libc/main-SVC rows stay unchanged.
+The previous KMSV instruction/code/allocation prefix agrees; read/main-SVC
+limits stay 2/4. Four native controls, four independent public CLI replays,
+four exact old-KMSV rows, four bad CLI requests, 21 instruction bindings,
+12 ELF bytecode words and 150 damaged-evidence rejections pass.
+Observation stops before the interpreter consumes the zero return; the
+selected entry lock is still held. Scope exit, full VM/physical stack
+equivalence, later NULL business branches, KMSV/key values, actual business
+state, ordinary six headers, online acceptance and complete signing remain
+unverified. Use `--elf`, `--libc`, `--replay`. See the
+[KMSV scope evidence](../evidence/vm9_native_171_kmsv_scope_20261119.json).
+
 `verify_vm9_native_171_kmsv_lookup_20261119.py` joins the original
 `X-BD-KMSV` ELF decode, separate static guard, ten-byte name construction,
 matching-Bionic destructor registration, guard publication and NULL lookup.
