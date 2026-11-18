@@ -1,5 +1,16 @@
 # Checkpoint log
 
+2026-11-19：下一静态名称 `X-BD-KMSV` 的原版解码、独立 guard 获取、
+字符串构造、析构登记、发布及缺失键查询已连接。名称来自已绑定 ELF 常量，
+实际写入九字节、分配十字节；独立新页面上的既有 Python 模型逐项对照。
+原版登记记录唯一出现，两次保护请求绑定到同一页及权限 3/1；当前合成
+请求树仅有 `X-TEST: value`，KMSV 查询实际返回 NULL。四组原生及四组
+独立公开 CLI 重放、四组旧结果回归、四种错误 CLI、36 条指令、六个
+字节码字和 118 项损坏证据拒绝通过。上一结果的指令/代码/分配前缀相同，
+新增分配一次十字节、libc SVC 226 两次，读取/main-SVC 限制仍为 2/4。
+此检查点没有生成 KMSV 值，没有恢复真实业务状态或完成普通六头与 signer。
+见[KMSV 名称查询证据](../platforms/bytedance/tomato/evidence/vm9_native_171_kmsv_lookup_20261119.json)。
+
 2026-11-19：已连接缺失 client-key 查询后的 NULL 落槽与下一静态 guard
 预检查。原版保存 NULL 到 frame+1552；紧随其后的分支实际消费另一个
 guard 的低位，冷 guard 为零，继续准备其获取调用。函数指针绑定 ELF

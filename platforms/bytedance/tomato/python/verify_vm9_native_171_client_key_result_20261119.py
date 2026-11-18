@@ -229,7 +229,10 @@ class Scenario(previous.Scenario):
             assert previous.previous.previous.previous.previous.output._cstring(cpu,self.prefix.source)==self.prefix.raw
             assert previous.tree_projection(raw,self.image,self.container)==self.tree
             assert u(self.image+0x3D1558,1)==1 and u(context.outer.root_fixture.TLS+0x100,4)==2
-            self.result_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.result_done=True;self.result_boundary(cpu,state)
+
+    def result_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         retained=super().finish(result,state,proof['client_key_lookup_prefix'])

@@ -1,5 +1,25 @@
 # Tomato Python material
 
+`verify_vm9_native_171_kmsv_lookup_20261119.py` joins the original
+`X-BD-KMSV` ELF decode, separate static guard, ten-byte name construction,
+matching-Bionic destructor registration, guard publication and NULL lookup.
+The decoder writes nine bytes and preserves the initial zero terminator.
+Two bound protection requests surround a uniquely observed registration
+record, at byte 112 in all four controls. The request tree still contains
+only the declared `X-TEST: value`. Lookup returns NULL and preserves the
+other packed bytes; observation stops before the interpreter consumes it.
+Existing Python owners run on independent fresh pages and declared inputs.
+The previous result's instruction/code/allocation prefix agrees; one ten-byte
+allocation and two libc SVC 226 requests are added. JNI/main-SVC rows and
+the read/main-SVC limits of 2/4 remain unchanged. Four native cases, four
+independent public CLI replays, four exact old-result rows, four bad CLI
+requests, 36 instruction bindings, six bytecode words and 118 damaged-evidence
+rejections pass. This verifies the name and missing-key behavior. KMSV/key
+values, actual business state, full VM/Bionic state equivalence, later NULL
+consumption, ordinary six headers, online acceptance and complete signing
+remain unverified. Use `--elf`, `--libc`, `--replay`. See the
+[KMSV lookup evidence](../evidence/vm9_native_171_kmsv_lookup_20261119.json).
+
 `verify_vm9_native_171_client_key_result_20261119.py` continues the NULL
 lookup through its frame-local spill and the next static guard precheck.
 The branch consumes that other guard's low bit; it does not consume the
