@@ -1,5 +1,35 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：普通原生回调的输入转换已回放到 `0x171` child 入口
+
+在合成的已初始化 root/child 图上，从普通包装器 `+0x27ed14` 执行原版代码，
+经 `+0x27f84c` 完成 URL owning reference 和头树构造，再经 `+0x27fb70` 的真实
+虚调用到达 `+0x27dd04` 入口，停在其首条指令之前。传入模式为 `0x171`，URL 和
+头树的引用计数均为 2；X8 输出槽为 caller 的 `FP-0x48`，不假定槽内容已清零。
+这将此前的下游静态连接补成合成对象上的执行证据，仍未观察真实业务对象或参数。
+
+第二输入按 CRLF 拆成片段，每两个片段组成键值；末尾的单个空片段省略。
+空列表或奇数个片段不插入，最终空树使普通回调返回零。空键、空值保留；重复键
+保留最后值，键比较区分大小写，空格和二进制字节不改写，CString 的 NUL 截断
+后续内容。`key: value\r\n` 只是单个片段，不会自动按冒号拆分键值。
+
+32 组控制覆盖两个基址、分隔符冷/热状态及上述边界：19 组停在 child 入口，
+13 组返回零且临时分配全部释放。回放保留堆摘要、分配/释放及 mutex ledger 摘要，
+并绑定 21 条精确指令、3 段代码、1 段数据、11 个导入和 1 个相对重定位；91 项
+损坏证据拒绝通过。公开验证器 `verify_vm9_native_171_inputs_20261118.py` 的
+`--elf <Metasec> --libc <matching-Bionic> --replay` 可重建全部冻结结果。
+
+未替换内部 Metasec helper。匹配的原版 Bionic 执行无竞争 recursive mutex 和
+字符串比较路径；malloc/realloc/free、strlen/memcpy/memmove/memset 则使用显式
+合成 provider。root guard、诊断 bucket、比较 singleton、TLS 和全部输入是合成
+状态；没有新增 Android 实验，没有验证分配失败、竞争或冷 root 构造。
+
+child dispatcher/VM、成功返回后的序列化与清理、前缀回调分支和 `0x171`/`0x138`
+模式等价仍未验证。这里也不是完整堆的原生/Python 模型差分。真实业务回调执行、
+普通 Cronet 六头、整请求差分、原签名运行时等价、完整 signer 和线上验签仍未闭合。
+下一步沿 `0x171` dispatcher 核对实际 callback/context 和 VM 输入。
+见[原生输入转换证据](evidence/vm9_native_171_inputs_20261118.json)。
+
 ## 2026-11-18：实际注册入口到两种编码回调的合成路径已贯通
 
 从原版 Metasec `+0x27d288` 执行到 `+0x271998` 适配器，再停在首个回调入口。

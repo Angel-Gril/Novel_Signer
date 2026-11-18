@@ -1,5 +1,27 @@
 # Tomato Python material
 
+`verify_vm9_native_171_inputs_20261118.py` executes the ordinary wrapper
+`+0x27ed14` through original input conversion and its native `0x171` virtual
+call, stopping before the first child-dispatcher instruction at `+0x27dd04`.
+Thirty-two synthetic controls cover CRLF fragment pairing, empty/odd lists,
+empty keys/values, last-value replacement, case, whitespace, binary bytes, NUL,
+two image bases and both delimiter initialization states. Nineteen reach the
+child entry with URL/tree reference counts of two; thirteen return zero with
+all temporary allocations freed. The output slot is FP-0x48; its initial bytes
+are not assumed to be zero. A colon-formatted line is not split into a pair.
+The default CLI checks retained evidence and rejects 91 damaged records.
+`--elf <original-libmetasec_ml.so> --libc <matching-libc.so> --replay` binds both
+sample digests and rebuilds all frozen traces, heap and effect summaries.
+Metasec bindings cover 21 instructions, three code ranges, one data range,
+eleven imports and one relative relocation. The root/child graph, diagnostic
+state and TLS are synthetic and initialized. Internal Metasec helpers execute;
+matching Bionic executes uncontended recursive mutex and string comparison
+paths, with explicit synthetic allocation and memory providers. No Android,
+child dispatcher body, VM, successful callback return/cleanup, complete heap
+Python-model differential or real business execution is established. Native
+`0x171` and Java `0x138` equivalence and the complete signer remain unverified.
+See the [native input evidence](../evidence/vm9_native_171_inputs_20261118.json).
+
 `verify_vm9_registered_security_handoff_20261118.py` checks the original registered
 entry `+0x27d288` through the existing `+0x271998` adapter to its first callback.
 The tested case-insensitive `ws` prefix selects `+0x27ecbc` with a concatenated
