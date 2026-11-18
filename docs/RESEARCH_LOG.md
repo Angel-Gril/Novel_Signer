@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-18：普通 `0x171` 路径已进入请求字节码，并闭合首次模式读取：
+`+0xf7e08/0x03024001` 解码为 R1 = s32[R4+24]，原版 `+0x170308`
+读取打包块 `+0x18` 的 4 字节，`+0x17030c` 写入 R1=`0x171`，在下一次
+字节码获取前停止。四组、两个基址控制各执行 34029 条 VM 入口后原版指令，
+保留 443 次 cursor 状态记录和轨迹/代码摘要；非零 mode padding 未混入读取。
+5 条指令、1 个字节码字及 50 项损坏证据拒绝通过，公开 CLI 支持双 ELF 重放。
+没有增加 OS/JNI provider，生产 signer 未修改。context 槽和两个 tag-only
+对象区域均受读取检查保护，尚未被读取；真实业务参数、完整 context、callback
+返回/成功清理、六头与完整 signer 仍未验证。私有的更长探索停在运行时初始化
+`pthread_create`，该边界尚未闭合，不计作通过结果。
+见[首次模式读取证据](../platforms/bytedance/tomato/evidence/vm9_native_171_mode_read_20261118.json)。
+
 2026-11-18：普通 `0x171` 路径已在四组合成控制上继续执行通用 VM 初始化的
 115 条连续原版指令，停在 `+0x1684f0` 之前。两个基址、registry/fallback、空
 context 和已有 reader 状态下，32 个虚拟寄存器槽及 PC 槽均匹配现有模型，

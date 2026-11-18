@@ -1,0 +1,283 @@
+{
+  "schema": "vm9-native-171-mode-read-20261118-v1",
+  "provenance": {
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "upstream_prelude_evidence": "vm9_native_171_vm_prelude_20261118.json"
+  },
+  "boundary": {
+    "entry": "0x27ed14",
+    "callback": "0x2830c4",
+    "VM_entry": "0x168324",
+    "bytecode_entry": "0xf7720",
+    "first_mode_bytecode": "0xf7e08",
+    "bytecode_word": "0x3024001",
+    "opcode": 1,
+    "base_register": 4,
+    "destination_register": 1,
+    "signed_immediate": 24,
+    "read_width": 4,
+    "native_load": "0x170308",
+    "native_store": "0x17030c",
+    "stop_before": "0x170310"
+  },
+  "claims": {
+    "synthetic_ordinary_path_first_mode_read_verified": true,
+    "packed_mode_low_u32_loaded_into_R1": true,
+    "nonzero_mode_padding_excluded_from_load": true,
+    "first_mode_read_native_and_bytecode_binding_verified": true,
+    "original_code_and_internal_helpers_preserved": true,
+    "request_bytecode_prefix_executed": true,
+    "packed_context_read_observed": false,
+    "context_object_read_observed": false,
+    "complete_context_state_verified": false,
+    "callback_return_or_success_cleanup_verified": false,
+    "whole_request_native_Python_differential_verified": false,
+    "native_171_and_Java_138_VM_equivalence_verified": false,
+    "actual_business_callback_execution_verified": false,
+    "ordinary_cronet_six_heads_verified": false,
+    "complete_standalone_signer_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "online_acceptance_verified": false
+  },
+  "limits": [
+    "All inputs, root/child/registry/context objects, TLS and inherited providers are synthetic",
+    "The four controls inherit the prelude profiles and observed local callback-state model input",
+    "Only the first mode operand load is closed; no fresh whole-request Python differential is claimed",
+    "Context objects contain a known vtable tag only; reads of their 0x80-byte spans are rejected",
+    "Execution stops after the mode register store, before the next bytecode fetch at +0x170310",
+    "No clock, gettid, thread creation, JNI, Android action or new native hook is introduced",
+    "Callback return, output serialization, successful cleanup and online signer acceptance are unverified"
+  ],
+  "providers": {
+    "synthetic": [
+      "malloc",
+      "realloc",
+      "free",
+      "strlen",
+      "memcpy",
+      "memmove",
+      "memset"
+    ],
+    "original_matching_Bionic": [
+      "pthread_mutex_lock",
+      "pthread_mutex_unlock",
+      "memcmp",
+      "strcmp"
+    ],
+    "internal_Metasec_helpers_substituted": false,
+    "allocation_failure_paths_exercised": false,
+    "mutex_contention_or_kernel_paths_exercised": false
+  },
+  "Android_execution": false,
+  "synthetic_memory_only": true,
+  "static_instruction_bindings": [
+    {
+      "offset": "0x1702f4",
+      "mnemonic": "ldr",
+      "operands": "x10, [x28, x13, lsl #3]"
+    },
+    {
+      "offset": "0x1702f8",
+      "mnemonic": "sxth",
+      "operands": "x11, w9"
+    },
+    {
+      "offset": "0x170308",
+      "mnemonic": "ldrsw",
+      "operands": "x9, [x10, x11]"
+    },
+    {
+      "offset": "0x17030c",
+      "mnemonic": "str",
+      "operands": "x9, [x28, x14, lsl #3]"
+    },
+    {
+      "offset": "0x170310",
+      "mnemonic": "ldr",
+      "operands": "w9, [x8, #4]!"
+    }
+  ],
+  "bytecode_binding": {
+    "offset": "0xf7e08",
+    "bytes_hex": "01400203"
+  },
+  "case_results": [
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "fallback",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 90
+      },
+      "reads": [
+        {
+          "bytecode": "0xf7e08",
+          "native_pc": "0x170308",
+          "size": 4,
+          "packed_offset": 24,
+          "bytes_hex": "71010000"
+        }
+      ],
+      "decoded_load": {
+        "bytecode": "0xf7e08",
+        "base_register": 4,
+        "destination_register": 1,
+        "signed_immediate": 24,
+        "base_is_packed_arguments": true
+      },
+      "stored_R1": "0x171",
+      "packed_context_reads": 0,
+      "context_object_reads": 0,
+      "post_VM_instructions_executed": 34029,
+      "post_VM_trace_sha256": "98b045b3def28d32280a77e6dc4acb7eb9ea58dba664791ad1b61a3b8a6b2412",
+      "post_VM_code_sha256": "89821a7afbee9abaeac82c31bb6cb528e881fd9097a34412d2c056071c4f0580",
+      "bytecode_cursor_transitions": 443,
+      "bytecode_cursor_sha256": "bbf2acc1c3b91d6d3eba32331c179c891e1cd688a3b3c063c478cbbdafc62840",
+      "stopped_before_next_bytecode_fetch": true,
+      "prefix_instructions_executed": 4650,
+      "prefix_trace_sha256": "211979822309308ff834edb32054dc4dd1b961c59a02cf1694bf48264a1f93c4",
+      "guest_heap_sha256_at_mode_stop": "e72f5f766fcc2aa8c1a16260a5d8ebe988cd19eb82aba950d0464b4cd4d5f2e5",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 1,
+      "mode_padding_hex": "5a5a5a5a",
+      "callback_context_guest_offset": "0x9400"
+    },
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "registry",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 211
+      },
+      "reads": [
+        {
+          "bytecode": "0xf7e08",
+          "native_pc": "0x170308",
+          "size": 4,
+          "packed_offset": 24,
+          "bytes_hex": "71010000"
+        }
+      ],
+      "decoded_load": {
+        "bytecode": "0xf7e08",
+        "base_register": 4,
+        "destination_register": 1,
+        "signed_immediate": 24,
+        "base_is_packed_arguments": true
+      },
+      "stored_R1": "0x171",
+      "packed_context_reads": 0,
+      "context_object_reads": 0,
+      "post_VM_instructions_executed": 34029,
+      "post_VM_trace_sha256": "98b045b3def28d32280a77e6dc4acb7eb9ea58dba664791ad1b61a3b8a6b2412",
+      "post_VM_code_sha256": "89821a7afbee9abaeac82c31bb6cb528e881fd9097a34412d2c056071c4f0580",
+      "bytecode_cursor_transitions": 443,
+      "bytecode_cursor_sha256": "bbf2acc1c3b91d6d3eba32331c179c891e1cd688a3b3c063c478cbbdafc62840",
+      "stopped_before_next_bytecode_fetch": true,
+      "prefix_instructions_executed": 4476,
+      "prefix_trace_sha256": "eef9bb3ae7d12faf8f2fa9fd3a91d859169b93d1bfe3f0c4f97061bb91642df1",
+      "guest_heap_sha256_at_mode_stop": "22803e47e2627ae897e4d0a2b29e6d2d56a10ae870274cba2903fae175be2421",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 1,
+      "mode_padding_hex": "d3d3d3d3",
+      "callback_context_guest_offset": "0x9480"
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "null_context",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 127
+      },
+      "reads": [
+        {
+          "bytecode": "0xf7e08",
+          "native_pc": "0x170308",
+          "size": 4,
+          "packed_offset": 24,
+          "bytes_hex": "71010000"
+        }
+      ],
+      "decoded_load": {
+        "bytecode": "0xf7e08",
+        "base_register": 4,
+        "destination_register": 1,
+        "signed_immediate": 24,
+        "base_is_packed_arguments": true
+      },
+      "stored_R1": "0x171",
+      "packed_context_reads": 0,
+      "context_object_reads": 0,
+      "post_VM_instructions_executed": 34029,
+      "post_VM_trace_sha256": "98b045b3def28d32280a77e6dc4acb7eb9ea58dba664791ad1b61a3b8a6b2412",
+      "post_VM_code_sha256": "89821a7afbee9abaeac82c31bb6cb528e881fd9097a34412d2c056071c4f0580",
+      "bytecode_cursor_transitions": 443,
+      "bytecode_cursor_sha256": "bbf2acc1c3b91d6d3eba32331c179c891e1cd688a3b3c063c478cbbdafc62840",
+      "stopped_before_next_bytecode_fetch": true,
+      "prefix_instructions_executed": 4620,
+      "prefix_trace_sha256": "2edeeb10c812fcb3d7532db4ac0fc2c30cf051898d1f0a139bf51dbb311abb76",
+      "guest_heap_sha256_at_mode_stop": "561b0440d2c8567e374b2db07dbd136e1c5a08662ae9e650676c1744d30f1715",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 1,
+      "mode_padding_hex": "7f7f7f7f",
+      "callback_context_guest_offset": null
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "readers7",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 226
+      },
+      "reads": [
+        {
+          "bytecode": "0xf7e08",
+          "native_pc": "0x170308",
+          "size": 4,
+          "packed_offset": 24,
+          "bytes_hex": "71010000"
+        }
+      ],
+      "decoded_load": {
+        "bytecode": "0xf7e08",
+        "base_register": 4,
+        "destination_register": 1,
+        "signed_immediate": 24,
+        "base_is_packed_arguments": true
+      },
+      "stored_R1": "0x171",
+      "packed_context_reads": 0,
+      "context_object_reads": 0,
+      "post_VM_instructions_executed": 34029,
+      "post_VM_trace_sha256": "98b045b3def28d32280a77e6dc4acb7eb9ea58dba664791ad1b61a3b8a6b2412",
+      "post_VM_code_sha256": "89821a7afbee9abaeac82c31bb6cb528e881fd9097a34412d2c056071c4f0580",
+      "bytecode_cursor_transitions": 443,
+      "bytecode_cursor_sha256": "bbf2acc1c3b91d6d3eba32331c179c891e1cd688a3b3c063c478cbbdafc62840",
+      "stopped_before_next_bytecode_fetch": true,
+      "prefix_instructions_executed": 4620,
+      "prefix_trace_sha256": "2edeeb10c812fcb3d7532db4ac0fc2c30cf051898d1f0a139bf51dbb311abb76",
+      "guest_heap_sha256_at_mode_stop": "f451c7dcc0bfd1dc6094e44cd42592f9cc050b0f763bca2811cbe80c6c25020f",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 8,
+      "mode_padding_hex": "e2e2e2e2",
+      "callback_context_guest_offset": "0x9400"
+    }
+  ]
+}

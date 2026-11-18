@@ -1,5 +1,22 @@
 # Tomato Python material
 
+`verify_vm9_native_171_mode_read_20261118.py` continues the same synthetic
+ordinary path into request bytecode. At `+0xf7e08`, word `0x03024001`
+decodes to R1 = s32[R4+24]. Original `+0x170308` reads the packed mode's
+four bytes, and `+0x17030c` stores `0x171` in R1. Execution stops before
+the next bytecode fetch at `+0x170310`. Four controls across two bases retain
+34029 instructions from VM entry and 443 bytecode cursor states each,
+unchanged prefix/allocation/mutex ledgers and distinct nonzero mode padding.
+Five native instructions and one bytecode word are bound; 50 damaged-evidence
+rejections pass. The CLI accepts `--elf`, `--libc` and `--replay`.
+No additional OS/JNI provider is introduced. Packed context and both tag-only
+context fixtures are guarded against reads and remain unread at this stop.
+Full context, callback return, successful cleanup, actual business execution,
+ordinary six headers and complete signing remain unverified. A longer private
+exploration stopped at runtime initialization's `pthread_create`; it is
+outside the retained passing controls.
+See the [first mode-read evidence](../evidence/vm9_native_171_mode_read_20261118.json).
+
 `verify_vm9_native_171_vm_prelude_20261118.py` extends the ordinary native path
 through 115 original generic VM instructions, stopping before `+0x1684f0`.
 Four synthetic controls cover two image bases, registry/fallback, null context
