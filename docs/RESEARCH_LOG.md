@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-18：既有原版 outer 构造输出已在同一 CPU 上接到普通 `0x171` 回调选择，
+停在 `+0x2830c4` 首指令之前。四组控制覆盖两个基址和 absent/sdk_30 属性；
+空普通缓存由原版 getter/引用复制填入同一 root，共享计数 1→2，guard 随后释放。
+选择的 context 是该次构造的 service_refs handler，四个引用成员有效且 128 字节
+摘要保持不变；URL/头树计数均为 3。continuation 未预置对象或缓存。
+8 条指令绑定、42 项损坏证据拒绝及双 ELF CLI 重放受到新验证器约束。
+上游仅增加显式私有 runner，默认执行和最终返回检查保留。本批继承旧 outer 的
+OS/JNI、虚拟线程及诊断 helper 服务，不能与无内部 helper 替换的 tag-only
+模式读取控制混同。普通 callback/请求 VM、context 消费、业务语义、六头与
+完整 signer 仍未验证，没有 Android 操作。
+见[构造图交接证据](../platforms/bytedance/tomato/evidence/vm9_native_171_constructed_graph_20261118.json)。
+
 2026-11-18：普通 `0x171` 路径已进入请求字节码，并闭合首次模式读取：
 `+0xf7e08/0x03024001` 解码为 R1 = s32[R4+24]，原版 `+0x170308`
 读取打包块 `+0x18` 的 4 字节，`+0x17030c` 写入 R1=`0x171`，在下一次

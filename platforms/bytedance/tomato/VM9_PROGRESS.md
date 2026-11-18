@@ -1,5 +1,29 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：原版构造图已接到普通 `0x171` 回调选择
+
+在同一 Unicorn CPU 上完成既有 outer getter 的原版构造，再以新合成 CString
+进入普通包装器 `+0x27ed14`，最终停在 callback `+0x2830c4` 首条指令之前。
+四组控制覆盖两个基址及 absent/sdk_30 两种属性输入。普通缓存最初为空，
+由 `+0x27fbc0` 调用已初始化的 getter，再经 `+0x27fbd4` 的原版引用复制
+把同一 root 写入 `image+0x3e0950`，其共享计数从 1 增至 2，随后释放 guard。
+continuation 只写新输入页及调用寄存器，没有预置 root、child、context 或缓存。
+
+child 实际选择的 context 来自该次构造产生的 service_refs handler；
+`+0x30/+0x40/+0x50/+0x60` 四个引用成员均有非空 payload/counter，handler
+的 128 字节摘要到选择时保持一致。传入模式为 `0x171`，URL/头树引用计数均为 3。
+每组保留 10168 个普通路径指令观察点（含 provider 边界）、轨迹和代码摘要。
+新增验证器绑定 8 条缓存相关指令，拒绝 42 项损坏证据，支持双 ELF 的 CLI 重放。
+停止位置由显式私有 runner 设置；上游默认流程和最终返回检查均保留。
+
+本控制继承旧 outer oracle 的显式 OS/JNI、延后执行的虚拟线程描述符和
+`+0x26c858/+0x26c9d0` 诊断 helper 服务，使用匹配 Bionic 的实际 allocator。
+它与此前 tag-only mode-read 控制的 provider 范围不同，不能据此合并为整请求
+差分。没有执行普通 callback/请求 VM，没有验证引用的 Java/业务含义、完整
+context 语义、真实业务身份、返回/成功清理、六头或完整 signer，也没有 Android
+操作。下一步在这份原版构造状态上定位 context 的首次消费。
+见[构造图交接证据](evidence/vm9_native_171_constructed_graph_20261118.json)。
+
 ## 2026-11-18：普通请求字节码首次读取 `0x171` 已闭合
 
 同一普通原生路径已继续越过通用 VM 初始化，在字节码 `+0xf7e08` 的

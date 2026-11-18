@@ -1,5 +1,25 @@
 # Tomato Python material
 
+`verify_vm9_native_171_constructed_graph_20261118.py` keeps the original
+outer constructor's output on the same Unicorn CPU, enters the ordinary
+wrapper with fresh synthetic CStrings, and stops before callback `+0x2830c4`.
+Four controls cover two image bases and absent/sdk_30 property inputs.
+Original getter/copy instructions populate the initially empty ordinary cache
+with the constructed root and increment its reference count from 1 to 2.
+The selected context is the constructed service_refs handler; its four live
+reference members and unchanged 128-byte digest are checked. W2 is `0x171`,
+and URL/tree counts are 3. Each control retains 10168 instruction observations,
+including provider boundaries. Eight additional instructions and 42 damaged
+evidence rejections are bound; `--elf`, `--libc`, `--replay` are supported.
+An explicit private runner supplies the stop; default outer execution and
+final postconditions remain intact. This inherits the older outer oracle's
+explicit OS/JNI, virtual thread descriptors and diagnostic helper services,
+plus actual matching-Bionic allocation. Its provider profile differs from
+the tag-only mode-read controls. Ordinary callback/VM execution, context
+consumption, live business identity, whole-request differential and complete
+signing remain unverified. No Android action is included.
+See the [constructed graph evidence](../evidence/vm9_native_171_constructed_graph_20261118.json).
+
 `verify_vm9_native_171_mode_read_20261118.py` continues the same synthetic
 ordinary path into request bytecode. At `+0xf7e08`, word `0x03024001`
 decodes to R1 = s32[R4+24]. Original `+0x170308` reads the packed mode's

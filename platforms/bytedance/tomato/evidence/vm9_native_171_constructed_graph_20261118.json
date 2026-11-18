@@ -1,0 +1,443 @@
+{
+  "schema": "vm9-native-171-constructed-graph-20261118-v1",
+  "provenance": {
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "constructor_owner": "verify_vm9_outer_signer_native.py",
+    "prior_graph_evidence": "vm9_outer_graph_object_provenance_20261028.json"
+  },
+  "boundary": {
+    "outer_getter": "0x1658e4",
+    "ordinary_entry": "0x27ed14",
+    "child_dispatcher": "0x27dd04",
+    "stop_before": "0x2830c4",
+    "mode": "0x171",
+    "outer_wrapper_slot": "0x3d15d8",
+    "ordinary_cache": "0x3e0950",
+    "ordinary_guard": "0x3e0960",
+    "cache_copy": "0x27c7dc",
+    "callback_pair_context_offset": 8
+  },
+  "providers": {
+    "inherited_owner": "verify_vm9_outer_signer_native.py",
+    "actual_matching_Bionic_allocator": true,
+    "explicit_virtual_OS_and_JNI": true,
+    "virtual_threads_created": 3,
+    "virtual_thread_bodies_executed": false,
+    "diagnostic_helpers_substituted": [
+      "0x26c858",
+      "0x26c9d0"
+    ],
+    "Android_JVM_used": false,
+    "thread_id": 137,
+    "clock_seconds": 1791023800,
+    "clock_nanoseconds": 500000000,
+    "ordinary_inputs": "fresh synthetic CStrings in an isolated mapped page",
+    "root_child_context_or_cache_bytes_seeded_by_continuation": false
+  },
+  "claims": {
+    "constructor_to_ordinary_callback_selection_same_CPU_verified": true,
+    "ordinary_cache_populated_by_original_copy_from_constructed_wrapper": true,
+    "callback_context_is_constructor_produced_service_refs_handler": true,
+    "native_mode_171_and_three_count_input_references_preserved": true,
+    "native_input_snapshot_used_as_Python_model_input": false,
+    "ordinary_callback_body_or_request_VM_executed": false,
+    "complete_handler_semantics_or_live_identity_verified": false,
+    "request_context_operand_consumption_verified": false,
+    "callback_return_serialization_or_success_cleanup_verified": false,
+    "whole_request_native_Python_differential_verified": false,
+    "ordinary_cronet_six_heads_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_acceptance_verified": false
+  },
+  "limits": [
+    "The older outer oracle has explicit OS/JNI, deferred virtual-thread and diagnostic helper services",
+    "This provider profile is distinct from the tag-only no-internal-stub mode-read controls",
+    "Fresh inputs and native constructor output are retained on one CPU; no native bytes seed a Python model",
+    "Four handler reference members are checked while live; their Java/business semantics are not inferred",
+    "Execution stops before callback +0x2830c4; ordinary request bytecode and context consumption do not execute",
+    "Background thread execution, concurrency, live JVM, Android and network validation are unverified"
+  ],
+  "Android_execution": false,
+  "synthetic_inputs_only": true,
+  "static_instruction_bindings": [
+    {
+      "offset": "0x27fbc0",
+      "mnemonic": "bl",
+      "operands": "#0x1658e4"
+    },
+    {
+      "offset": "0x27fbd4",
+      "mnemonic": "bl",
+      "operands": "#0x27c7dc"
+    },
+    {
+      "offset": "0x27fc00",
+      "mnemonic": "bl",
+      "operands": "#0x32d4f8"
+    },
+    {
+      "offset": "0x27c814",
+      "mnemonic": "ldr",
+      "operands": "x8, [x19]"
+    },
+    {
+      "offset": "0x27c818",
+      "mnemonic": "str",
+      "operands": "x8, [x20]"
+    },
+    {
+      "offset": "0x27c81c",
+      "mnemonic": "ldr",
+      "operands": "x8, [x19, #8]"
+    },
+    {
+      "offset": "0x27c820",
+      "mnemonic": "str",
+      "operands": "x8, [x20, #8]"
+    },
+    {
+      "offset": "0x27c830",
+      "mnemonic": "str",
+      "operands": "w9, [x8]"
+    }
+  ],
+  "case_results": [
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "absent"
+      },
+      "native_stop_before": "0x2830c4",
+      "calls": [
+        {
+          "site": "0x27e6a8",
+          "mode": "0x171",
+          "context_is_constructed_handler": true,
+          "URL_reference_count": 3,
+          "tree_reference_count": 3,
+          "cache_reference_count": 2,
+          "handler_unchanged": true
+        }
+      ],
+      "cache_initially_zero": true,
+      "cache_copy_and_guard_events": [
+        "0x27fbc0",
+        "0x27fbd4",
+        "0x27fc00"
+      ],
+      "handler_reference_members": [
+        {
+          "field": "0x30",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 1
+        },
+        {
+          "field": "0x40",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 3
+        },
+        {
+          "field": "0x50",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        },
+        {
+          "field": "0x60",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        }
+      ],
+      "constructor_handler_sha256": "671ed327b7c6c3aff2a8ddf690bce969f2bdc22d1b123aee6dffd68eab4316e6",
+      "ordinary_instruction_observations": 10168,
+      "ordinary_trace_sha256": "05b57554c09e983672186317c2407f5fd1e7a70ab5c3cc2f5c2ad5ac44d75754",
+      "ordinary_code_sha256": "5fc0874b1a687a9a42e319112b34d6fd167b57a9f5e0d1d357e940541e770671",
+      "allocator_counts": {
+        "malloc": 336,
+        "free": 127,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 1,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 3,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 15,
+        "property_find": 1,
+        "syscall_48": 2,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "26b1582726e8a96c3992accb040efe3c73a0f2e8ec492739281ef9c84f5495bb",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d",
+      "original_outer_postconditions_passed": true,
+      "request_callback_instructions_executed": 0
+    },
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "sdk_30"
+      },
+      "native_stop_before": "0x2830c4",
+      "calls": [
+        {
+          "site": "0x27e6a8",
+          "mode": "0x171",
+          "context_is_constructed_handler": true,
+          "URL_reference_count": 3,
+          "tree_reference_count": 3,
+          "cache_reference_count": 2,
+          "handler_unchanged": true
+        }
+      ],
+      "cache_initially_zero": true,
+      "cache_copy_and_guard_events": [
+        "0x27fbc0",
+        "0x27fbd4",
+        "0x27fc00"
+      ],
+      "handler_reference_members": [
+        {
+          "field": "0x30",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 1
+        },
+        {
+          "field": "0x40",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 3
+        },
+        {
+          "field": "0x50",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        },
+        {
+          "field": "0x60",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        }
+      ],
+      "constructor_handler_sha256": "671ed327b7c6c3aff2a8ddf690bce969f2bdc22d1b123aee6dffd68eab4316e6",
+      "ordinary_instruction_observations": 10168,
+      "ordinary_trace_sha256": "05b57554c09e983672186317c2407f5fd1e7a70ab5c3cc2f5c2ad5ac44d75754",
+      "ordinary_code_sha256": "5fc0874b1a687a9a42e319112b34d6fd167b57a9f5e0d1d357e940541e770671",
+      "allocator_counts": {
+        "malloc": 336,
+        "free": 127,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 1,
+        "syscall_56": 2,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 1,
+        "clock": 3,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 15,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall_198": 1,
+        "syscall_48": 2,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "26b1582726e8a96c3992accb040efe3c73a0f2e8ec492739281ef9c84f5495bb",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d",
+      "original_outer_postconditions_passed": true,
+      "request_callback_instructions_executed": 0
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "absent"
+      },
+      "native_stop_before": "0x2830c4",
+      "calls": [
+        {
+          "site": "0x27e6a8",
+          "mode": "0x171",
+          "context_is_constructed_handler": true,
+          "URL_reference_count": 3,
+          "tree_reference_count": 3,
+          "cache_reference_count": 2,
+          "handler_unchanged": true
+        }
+      ],
+      "cache_initially_zero": true,
+      "cache_copy_and_guard_events": [
+        "0x27fbc0",
+        "0x27fbd4",
+        "0x27fc00"
+      ],
+      "handler_reference_members": [
+        {
+          "field": "0x30",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 1
+        },
+        {
+          "field": "0x40",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 3
+        },
+        {
+          "field": "0x50",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        },
+        {
+          "field": "0x60",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        }
+      ],
+      "constructor_handler_sha256": "0d618bdf3d9f7bd6a883506da2ded3e16bd094270e9bec9e200e6110e3cdbcc3",
+      "ordinary_instruction_observations": 10168,
+      "ordinary_trace_sha256": "05b57554c09e983672186317c2407f5fd1e7a70ab5c3cc2f5c2ad5ac44d75754",
+      "ordinary_code_sha256": "5fc0874b1a687a9a42e319112b34d6fd167b57a9f5e0d1d357e940541e770671",
+      "allocator_counts": {
+        "malloc": 336,
+        "free": 127,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 1,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 3,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 15,
+        "property_find": 1,
+        "syscall_48": 2,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "26b1582726e8a96c3992accb040efe3c73a0f2e8ec492739281ef9c84f5495bb",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d",
+      "original_outer_postconditions_passed": true,
+      "request_callback_instructions_executed": 0
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "sdk_30"
+      },
+      "native_stop_before": "0x2830c4",
+      "calls": [
+        {
+          "site": "0x27e6a8",
+          "mode": "0x171",
+          "context_is_constructed_handler": true,
+          "URL_reference_count": 3,
+          "tree_reference_count": 3,
+          "cache_reference_count": 2,
+          "handler_unchanged": true
+        }
+      ],
+      "cache_initially_zero": true,
+      "cache_copy_and_guard_events": [
+        "0x27fbc0",
+        "0x27fbd4",
+        "0x27fc00"
+      ],
+      "handler_reference_members": [
+        {
+          "field": "0x30",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 1
+        },
+        {
+          "field": "0x40",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 3
+        },
+        {
+          "field": "0x50",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        },
+        {
+          "field": "0x60",
+          "payload_nonzero": true,
+          "counter_nonzero": true,
+          "count": 2
+        }
+      ],
+      "constructor_handler_sha256": "0d618bdf3d9f7bd6a883506da2ded3e16bd094270e9bec9e200e6110e3cdbcc3",
+      "ordinary_instruction_observations": 10168,
+      "ordinary_trace_sha256": "05b57554c09e983672186317c2407f5fd1e7a70ab5c3cc2f5c2ad5ac44d75754",
+      "ordinary_code_sha256": "5fc0874b1a687a9a42e319112b34d6fd167b57a9f5e0d1d357e940541e770671",
+      "allocator_counts": {
+        "malloc": 336,
+        "free": 127,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 1,
+        "syscall_56": 2,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 1,
+        "clock": 3,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 15,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall_198": 1,
+        "syscall_48": 2,
+        "syscall_79": 2,
+        "mkdir_exists": 1
+      },
+      "allocation_ledger_sha256": "26b1582726e8a96c3992accb040efe3c73a0f2e8ec492739281ef9c84f5495bb",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d",
+      "original_outer_postconditions_passed": true,
+      "request_callback_instructions_executed": 0
+    }
+  ]
+}

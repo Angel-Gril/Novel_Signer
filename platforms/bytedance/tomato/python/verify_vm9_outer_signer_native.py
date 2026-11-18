@@ -65,7 +65,7 @@ def bind_native_imports(library, libc, redirect, imports):
     return exports
 
 
-def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None, constructor_counter=None, terminal_continuation=None, continuation_host_imports=None, continuation_references=(), continuation_reference_types=None, unmapped_observer=None, continuation_memory_write_observer=None, continuation_memory_read_observer=None, continuation_syscall_observer=None, continuation_main_import_names=(), continuation_main_import_observer=None):
+def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None, constructor_counter=None, terminal_continuation=None, continuation_host_imports=None, continuation_references=(), continuation_reference_types=None, unmapped_observer=None, continuation_memory_write_observer=None, continuation_memory_read_observer=None, continuation_syscall_observer=None, continuation_main_import_names=(), continuation_main_import_observer=None, _native_runner=None):
     pages, sdk_name = fresh(library, libc, image, property_value)
     if canary is not None: _w(pages, root_fixture.TLS + 0x28, canary)
     if constructor_counter is not None:
@@ -332,8 +332,9 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
     reference_values = (io.GUEST + 0x8000, io.GUEST + 0x8010, *continuation_references)
     reference_types = {io.GUEST + 0x8000: 2, io.GUEST + 0x8010: 3,
                        **(continuation_reference_types or {})}
+    runner = oracle.native if _native_runner is None else _native_runner
     try:
-            _, _, allocations, ledger = oracle.native(library, image, 0x1658E4, [], initial,
+            _, _, allocations, ledger = runner(library, image, 0x1658E4, [], initial,
             references=reference_values, env=io.GUEST + 0x7800,
             ref_types=reference_types, libc=libc, real_malloc=True,
             real_mutexes=True, real_recursive_mutexes=True, real_singletons=True, thread_id=137,
