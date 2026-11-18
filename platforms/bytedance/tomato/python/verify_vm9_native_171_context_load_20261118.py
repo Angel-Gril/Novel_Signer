@@ -204,6 +204,14 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
                     instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',LOAD]]),
                     code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())]))
+            if (null_payload and offset==0x16EE38 and word(cpu,state['PC_slot'])==image+0xFD064):
+                assert 'null_branch_prefix' not in state
+                observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
+                state['null_branch_prefix']=dict(
+                    context_reads=list(reads),evaluator_returns=list(returns),JNI_calls=list(jni),
+                    libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
+                    instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                    code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
             if extension is not None:
                 extension.observe(cpu,pc,state)
             if offset==STOP and state['stored'] and not state['store_verified']:
@@ -329,6 +337,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 libc_SVC_boundaries=syscalls,instruction_observations=len(trace),
                 main_image_SVC_boundaries=main_syscalls,
                 **({'second_handler_read_prefix':state['second_handler_read_prefix']} if null_payload else {}),
+                **({'null_branch_prefix':state['null_branch_prefix']} if 'null_branch_prefix' in state else {}),
                 trace_sha256=graph.digest(trace),
                 code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             rows.append(row)

@@ -1,5 +1,26 @@
 # Tomato Python material
 
+`verify_vm9_native_171_client_key_name_20261119.py` joins the original masked
+ELF constant to the `X-BD-CLIENT-KEY` name, cold static guard acquisition and
+its StringObject construction. The decoder writes 15 bytes into an initially
+zero span; its terminator is preserved. Independent ELF decoding agrees.
+The original guard callback returns 1, stores u32 at packed+16 and preserves
+the other 20 bytes. The original constructor allocates 16 bytes, creates the
+15-byte name plus terminator and returns its actual payload pointer to the
+interpreter at `+0x16aa4c`. The static guard is still initializing at this
+observation stop. Existing Python guard/mutex/string owners run on fresh
+declared inputs; selected complete guard/mutex/string projections agree.
+Native memory never seeds the model. Four native cases and four independent
+public CLI replays agree; eight old native rows, four bad CLI calls, 20 new
+instruction bindings, four bytecode words and 127 damaged-evidence rejections
+pass. The retained instruction/code and allocation-ledger prefixes agree;
+only one 16-byte allocation is added. Service/JNI/libc-SVC rows and the
+two-handler-read/four-main-SVC limits stay unchanged. This verifies the header
+name; its value, guard release, request insertion, whole VM/physical stack,
+actual identity/cache, ordinary six headers, online acceptance and complete
+signing remain unverified. Use `--elf`, `--libc`, `--replay`. See the
+[client-key name evidence](../evidence/vm9_native_171_client_key_name_20261119.json).
+
 `verify_vm9_native_171_null_payload_20261118.py` verifies the original
 constructor's zero write to handler+8, the second handler load into R2 and
 its consuming equality branch. A separate read profile binds the exact

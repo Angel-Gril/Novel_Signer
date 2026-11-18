@@ -185,7 +185,10 @@ class Scenario(previous.Scenario):
             assert u(self.image+0x3D1558,1)==1 and u(context.outer.root_fixture.TLS+0x100,4)==2
             assert previous.previous.output._cstring(cpu,self.prefix.source)==self.prefix.raw
             self.null_flow.append(hex(off));self.branch_stopped=True
-            cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.branch_boundary(cpu,state)
+
+    def branch_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         old_row=super().finish(result,state,proof['second_handler_read_prefix'])

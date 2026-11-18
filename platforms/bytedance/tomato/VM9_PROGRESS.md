@@ -1,5 +1,40 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-19：client-key 名称解码、静态 guard 和字符串构造已验证
+
+原版初始化阶段在 `+0x167e70` 实际将 15 个字节写到 `+0x3e0f14`，源为
+`+0xf2724`、掩码为 `+0xf27c0`，得到 `X-BD-CLIENT-KEY`。目标 16 字节
+最初全零，decoder 未写结束零；独立 ELF 解码及既有 Python decoder 在
+独立页面上复现该结果。未使用原生数据作为模型输入。
+
+外层 `+0xfd064` 实际从 R29+1048 读取静态 guard `+0x3e0cb0` 到 R17。
+`+0x285944` 调用原版 `+0x32d3a0`，冷 guard 从八字节全零变为
+`0002000089000000`：byte1=2、thread id=137，byte0 仍为零。完整 40 字节
+全局 mutex 在调用前后均为零。包装器实际将 u32 结果 1 写到参数块 +16，
+其余 20 字节保持原值。随后 `+0xfd0a0` 比较取得的结果与零，进入初始化。
+
+外层 `+0xfd0d4` 的 `+0x2859a8` 将静态对象 `+0x3e0c98` 及上述名称
+CString 传给原版 `+0x248344`。原版经 `+0x248388` 返回的一次 16 字节
+分配构造对象：vtable=`+0x34f5f8`，capacity=16、length=15，数据为名称
+加结束零。X0 为实际数据指针；构造函数已返回解释器 `+0x16aa4c`，观察器
+停在该指令执行前。guard 尚未释放，名称尚未作为键值插入请求。
+
+既有 `acquire_serial_guard`、mutex 和 `construct_string_object` 以声明
+的零 guard/mutex/object 和名称在新页面上运行；完整 guard、mutex、名称
+数据、对象字段及参数块 u32 写回投影一致。不声称完整 VM 或物理栈等价。
+
+两基址、两种 NULL JNI 共四组，每组 336535/336568 个 continuation
+观察点，公开 CLI 四组独立重放一致。上个检查点的控制流/代码摘要和分配
+账本前缀相同，新增 2277 个观察点及一次 16 字节分配；完整服务计数、
+JNI 和 libc SVC 行不变，handler/空状态/源目录保持原值，registry guard=1、
+errno=2。八组旧原生输出、四种错误 CLI 调用、20 条新增指令、四条字节码、
+127 项损坏证据拒绝通过；handler 读取最多两次、主镜像 SVC 最多四次的
+限制保持原样，没有新增 provider。
+
+本检查点仅验证请求头名称，尚未生成 client-key 值。真实业务身份/缓存、
+guard 释放与名称发布、键值插入、普通六头、整请求等价、在线接受及完整
+signer 仍未完成。见[名称初始化证据](evidence/vm9_native_171_client_key_name_20261119.json)。
+
 ## 2026-11-19：构造 NULL payload 的读取、R2 写回与相等分支已验证
 
 新增独立读取配置 `constructed_null_payload`，仅与现有文件检查配置及
