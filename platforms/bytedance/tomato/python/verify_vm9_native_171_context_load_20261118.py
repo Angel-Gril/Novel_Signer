@@ -35,6 +35,10 @@ AID_FILE_PROFILE = dict(
     pathname=AID_CACHE_PROFILE['pathname']+b'/.msp_'+hashlib.sha1(b'def').hexdigest().encode(),
     return_pc=0x27308C, maximum_main_SVCs=4,
 )
+NULL_PAYLOAD_READ_PROFILE = dict(
+    name='constructed_null_payload', bytecode=0xFCD04, member_offset=8,
+    virtual_register=2, value=0, maximum_handler_reads=2,
+)
 LOAD, STORE, STOP = 0x16F96C, 0x16F974, 0x16F978
 CURSOR, WORD = 0xFAE4C, 0x10820418
 EXPECTED = [
@@ -79,12 +83,15 @@ def controls():
 
 
 def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=None,
-           _request_profile=None):
+           _request_profile=None, _handler_read_profile=None):
     from unicorn import arm64_const as arm
     from capstone import Cs, CS_ARCH_ARM64, CS_MODE_ARM
     assert _request_profile in (None, AID_CACHE_PROFILE['name'], AID_DIRECTORY_PROFILE['name'], AID_FILE_PROFILE['name']), 'unknown request profile'
     aid_cache = _request_profile is not None
     aid_file = _request_profile == AID_FILE_PROFILE['name']
+    assert _handler_read_profile in (None, NULL_PAYLOAD_READ_PROFILE['name']), 'unknown handler read profile'
+    null_payload = _handler_read_profile is not None
+    assert not null_payload or (aid_file and _extension_factory is not None), 'second handler read requires the file profile and observer'
     aid_directory = aid_file or _request_profile == AID_DIRECTORY_PROFILE['name']
     assert not aid_cache or _extension_factory is not None, 'aid cache profile requires an explicit observer'
     request_URL = AID_CACHE_PROFILE['URL'] if aid_cache else graph.inputs.URL
@@ -162,6 +169,18 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
             if not state['continued']: return
             context=state['context']
             if address<context+0x80 and context<address+size:
+                if null_payload and reads:
+                    profile=NULL_PAYLOAD_READ_PROFILE
+                    assert len(reads)==1 and reg(cpu,'pc')==image+LOAD, 'second handler read count or site'
+                    assert word(cpu,state['PC_slot'])==image+profile['bytecode']
+                    assert address==context+profile['member_offset'] and size==8
+                    assert reg(cpu,'x12')==context and reg(cpu,'x13')==profile['member_offset']
+                    assert reg(cpu,'x14')==profile['virtual_register']
+                    assert word(cpu,address)==int.from_bytes(state['handler_bytes'][8:16],'little')==profile['value']
+                    reads.append(dict(native_pc=hex(LOAD),bytecode=hex(profile['bytecode']),member_offset='0x8',
+                        size=8,virtual_register=2,value_u64=0,base_is_constructed_handler=True,
+                        value_is_constructor_member_payload=True))
+                    return
                 assert not reads and reg(cpu,'pc')==image+LOAD
                 assert word(cpu,state['PC_slot'])==image+CURSOR
                 assert address==context+0x50 and size==8
@@ -175,6 +194,16 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
         def observe(cpu,pc):
             if not state['continued']: return
             offset=pc-image
+            if (null_payload and offset==LOAD and reg(cpu,'x12')==state['context']
+                    and word(cpu,state['PC_slot'])==image+NULL_PAYLOAD_READ_PROFILE['bytecode']):
+                assert len(reads)==1 and 'second_handler_read_prefix' not in state
+                # The retained old stop counted this observed LDR before its
+                # execution. Reproduce that trace convention for comparison.
+                state['second_handler_read_prefix']=dict(
+                    context_reads=list(reads),evaluator_returns=list(returns),JNI_calls=list(jni),
+                    libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
+                    instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',LOAD]]),
+                    code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())]))
             if extension is not None:
                 extension.observe(cpu,pc,state)
             if offset==STOP and state['stored'] and not state['store_verified']:
@@ -291,13 +320,15 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
             _native_runner=None if extension is None else extension.native_runner,
             continuation_host_imports={target-image:(lambda cpu,slot=slot:call(cpu,slot))
                                        for slot,target in targets.items()})
-        assert state['store_verified'] and len(reads)==len(returns)==1
+        assert state['store_verified'] and len(returns)==1
+        assert len(reads)==(NULL_PAYLOAD_READ_PROFILE['maximum_handler_reads'] if null_payload else 1)
         assert result['virtual_descriptors_not_executed']
         if extension is not None:
             row=extension.finish(result,state,dict(
                 context_reads=reads,evaluator_returns=returns,JNI_calls=jni,
                 libc_SVC_boundaries=syscalls,instruction_observations=len(trace),
                 main_image_SVC_boundaries=main_syscalls,
+                **({'second_handler_read_prefix':state['second_handler_read_prefix']} if null_payload else {}),
                 trace_sha256=graph.digest(trace),
                 code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             rows.append(row)

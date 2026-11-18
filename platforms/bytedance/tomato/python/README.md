@@ -1,5 +1,26 @@
 # Tomato Python material
 
+`verify_vm9_native_171_null_payload_20261118.py` verifies the original
+constructor's zero write to handler+8, the second handler load into R2 and
+its consuming equality branch. A separate read profile binds the exact
+native site, outer cursor, member, width, destination and constructed value;
+old profiles still permit only the first handler read. The original branch
+compares R2=0 with R0=0 and stores cursor `+0xfd064` with displacement 214
+words. The observer stops before native `+0x16ee38`; the next bytecode is
+fetched but its handler has not executed. Existing `vm_full.VM` executes
+the two bytecodes at two bases using fresh declared inputs, without native
+memory seeds. Four native cases and four independent public CLI replays
+agree; eight old native rows, four actual policy negatives, four invalid
+profile selections, four bad CLI calls, 13 instruction bindings, three
+bytecode words and 110 damaged-evidence rejections pass. The entire previous
+file-check row is reproduced; service/JNI/libc-SVC/allocation ledgers do not
+change in the added segment. Handler, empty state and source directory are
+preserved. This proves a selected two-instruction projection; full request
+VM/physical-stack equivalence, actual business cache restoration, real JVM,
+ordinary six headers, whole requests, online acceptance and complete signing
+remain unverified. Use `--elf`, `--libc`, `--replay`. See the
+[NULL payload evidence](../evidence/vm9_native_171_null_payload_20261118.json).
+
 `verify_vm9_native_171_file_check_20261118.py` continues through the generated
 cache file's ENOENT result under an explicit four-call profile. The added
 faccessat binds its exact site, outer cursor, path, arguments and return PC.

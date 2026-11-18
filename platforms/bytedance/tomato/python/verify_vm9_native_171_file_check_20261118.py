@@ -187,7 +187,10 @@ class Scenario:
             assert u(self.state_owner+0x18)==self.node
             self.next_read=dict(native_pc=hex(off),bytecode=hex(CURSOR),member_offset='0x8',
                 virtual_register=2,base_is_constructed_handler=True,load_executed=False)
-            self.stopped=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.stopped=True;self.handler_read_boundary(cpu,state)
+
+    def handler_read_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         assert self.stopped and proof['main_image_SVC_boundaries']==providers()['ordered_main_image_SVCs']
