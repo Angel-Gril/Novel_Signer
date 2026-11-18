@@ -30,6 +30,11 @@ AID_DIRECTORY_PROFILE = dict(
     stat_paths=(b'/data/local/tmp/bdms/mssdk/ml', b'/data'), stat_buffer_size=128,
     stat_return_pc=0x272D68,
 )
+AID_FILE_PROFILE = dict(
+    name='synthetic_aid_absent_cache_file', URL=AID_CACHE_PROFILE['URL'],
+    pathname=AID_CACHE_PROFILE['pathname']+b'/.msp_'+hashlib.sha1(b'def').hexdigest().encode(),
+    return_pc=0x27308C, maximum_main_SVCs=4,
+)
 LOAD, STORE, STOP = 0x16F96C, 0x16F974, 0x16F978
 CURSOR, WORD = 0xFAE4C, 0x10820418
 EXPECTED = [
@@ -77,9 +82,10 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
            _request_profile=None):
     from unicorn import arm64_const as arm
     from capstone import Cs, CS_ARCH_ARM64, CS_MODE_ARM
-    assert _request_profile in (None, AID_CACHE_PROFILE['name'], AID_DIRECTORY_PROFILE['name']), 'unknown request profile'
+    assert _request_profile in (None, AID_CACHE_PROFILE['name'], AID_DIRECTORY_PROFILE['name'], AID_FILE_PROFILE['name']), 'unknown request profile'
     aid_cache = _request_profile is not None
-    aid_directory = _request_profile == AID_DIRECTORY_PROFILE['name']
+    aid_file = _request_profile == AID_FILE_PROFILE['name']
+    aid_directory = aid_file or _request_profile == AID_DIRECTORY_PROFILE['name']
     assert not aid_cache or _extension_factory is not None, 'aid cache profile requires an explicit observer'
     request_URL = AID_CACHE_PROFILE['URL'] if aid_cache else graph.inputs.URL
     _, main_loads, read_main = graph.inputs.load_elf(path)
@@ -213,7 +219,13 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     syscalls.append(dict(libc_pc=hex(local),number=number))
                 else:
                     binding=AID_CACHE_PROFILE
-                    if aid_directory:
+                    file_call=aid_file and len(main_syscalls)==3
+                    if aid_file:
+                        assert len(main_syscalls)<AID_FILE_PROFILE['maximum_main_SVCs'], 'cache file SVC count exceeded'
+                    if file_call:
+                        binding=dict(binding,pathname=AID_FILE_PROFILE['pathname'])
+                        assert reg(cpu,'x30')==image+AID_FILE_PROFILE['return_pc']
+                    elif aid_directory:
                         assert len(main_syscalls)<=len(AID_DIRECTORY_PROFILE['stat_paths']), 'directory SVC count exceeded'
                         if main_syscalls:
                             binding=dict(binding,number=79,
@@ -232,6 +244,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     if number==48:
                         assert reg(cpu,'x2')==binding['mode']
                         event['mode']=binding['mode']
+                        if file_call:event['return_pc']=hex(AID_FILE_PROFILE['return_pc'])
                     else:
                         size=AID_DIRECTORY_PROFILE['stat_buffer_size'];buffer=reg(cpu,'x2')
                         assert aid_directory and number==79

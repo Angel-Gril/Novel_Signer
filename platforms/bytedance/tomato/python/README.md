@@ -1,5 +1,27 @@
 # Tomato Python material
 
+`verify_vm9_native_171_file_check_20261118.py` continues through the generated
+cache file's ENOENT result under an explicit four-call profile. The added
+faccessat binds its exact site, outer cursor, path, arguments and return PC.
+Original code changes errno from 17 to 2, returns -1, produces false and
+writes byte zero to packed+16 while preserving the other 31 bytes. It then
+constructs a 64-byte empty state container, publishes that pointer as the
+state root and returns from state initialization. Existing Python
+`StateCallbacks` run on independent pages with declared inputs; selected
+false/errno/write projections and all 64 container bytes agree. Native memory
+does not seed the model; full state-VM or physical-stack equivalence is not
+claimed. Four cases and four independent public CLI native replays agree;
+eight old native rows, three actual policy negatives, four bad CLI calls,
+18 new instruction bindings, one bytecode word and 125 damaged-evidence
+rejections pass. JNI rows are unchanged; inherited service deltas explicitly
+include one faccessat, two futex, two memory-protection and one clock call.
+No provider is added. The observer stops before the next handler+8 load at
+native `+0x16f96c`, outer cursor `+0xfcd04`, destination virtual register 2.
+Real file/cache state, business restoration, actual JVM, ordinary six headers,
+whole requests, online acceptance and complete signing remain unverified.
+Use `--elf`, `--libc`, `--replay`. See the
+[file-check evidence](../evidence/vm9_native_171_file_check_20261118.json).
+
 `verify_vm9_native_171_cache_path_20261118.py` joins the original decoded
 default `def` constant to its StringObject construction/clone, original
 SHA-1 hexadecimal result, filename formatter and file-readability arguments.
