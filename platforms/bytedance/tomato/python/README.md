@@ -1,5 +1,26 @@
 # Tomato Python material
 
+`verify_vm9_native_171_context_load_20261118.py` continues original outer
+construction into the ordinary `0x171` request VM on the same CPU. It reuses
+the accepted stack evaluator JNI provider for explicit NULL class and NULL
+static method ID scenarios, across two image bases. The original evaluator
+returns zero; bytecode `+0xfae4c/0x10820418` then loads the constructed
+handler's `+0x50` member with original `+0x16f96c` and stores its payload in
+R2 at `+0x16f974`. The member count remains two and all 128 handler bytes
+remain unchanged. Each scenario retains 185881/185914 instruction observations,
+including provider boundaries, with the existing libc syscall boundaries
+explicitly recorded. Nine instructions, one bytecode word and 63 damaged
+evidence rejections are bound. The CLI supports `--elf`, `--libc`, `--replay`.
+The observer stops before the next bytecode fetch at `+0x16f978` and moves PC
+to the oracle sentinel; this is an observation terminal, not callback return.
+Existing outer continuation postconditions remain active. Inherited OS/JNI,
+virtual-thread and diagnostic services remain explicit; memory imports resolve
+to matching Bionic. These NULL scenarios do not establish a real JVM stack or
+complete service semantics. Packed-context first consumption, callback return,
+serialization, successful cleanup, whole-request differential, ordinary six
+headers and complete signing remain unverified. No Android action is included.
+See the [context load evidence](../evidence/vm9_native_171_context_load_20261118.json).
+
 `verify_vm9_native_171_constructed_graph_20261118.py` keeps the original
 outer constructor's output on the same Unicorn CPU, enters the ordinary
 wrapper with fresh synthetic CStrings, and stops before callback `+0x2830c4`.

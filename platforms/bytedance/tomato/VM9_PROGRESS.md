@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：构造出的 context 首次成员读取已执行
+
+同一 CPU 保留原版 outer 构造，再进入普通 `0x171` 请求 VM。复用既有
+`Services.jni`，只安装四个明确的 JNI 槽，覆盖 FindClass 返回 NULL 和
+static method ID 返回 NULL 两个合成场景；原版栈检查器均在 `+0x28bfc0`
+返回 0。两个基址共四组控制，JNI 结果没有替换原版 evaluator 或请求 VM。
+
+此后第一次观察到的 handler 区域读取位于字节码 `+0xfae4c/0x10820418`：
+原版 `+0x16f96c` 读取该次构造出的 `context+0x50`，`+0x16f974` 将成员
+payload 写入 R2。成员引用计数保持 2，handler 的 128 字节保持不变。
+两种场景分别保留 185881/185914 个 continuation 指令观察点，含 provider
+边界；既有 Bionic futex/mprotect 调用也显式记录。9 条指令、1 个字节码字
+和 63 项损坏证据拒绝受到验证器约束，支持固定双 ELF 的 CLI 重放。
+
+停止在下一次字节码获取 `+0x16f978` 之前，由观察器停止仿真并把 PC 置为
+oracle 的结束哨兵；这不是 callback 返回。outer 的现有 continuation 最终
+检查保留。沿用旧 OS/JNI/虚拟线程/诊断 helper 服务，memset/__cxa_atexit
+绑定匹配 Bionic。合成 NULL 场景不代表真实 JVM 栈检查成功；完整 service
+语义、packed context 的首次读取、callback 返回、序列化/成功清理、整请求
+差分、普通六头及完整 signer 仍未验证。没有 Android 操作或生产 signer 修改。
+见[首次 context 成员读取证据](evidence/vm9_native_171_context_load_20261118.json)。
+
 ## 2026-11-18：原版构造图已接到普通 `0x171` 回调选择
 
 在同一 Unicorn CPU 上完成既有 outer getter 的原版构造，再以新合成 CString

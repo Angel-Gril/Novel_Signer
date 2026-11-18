@@ -1,5 +1,18 @@
 # Checkpoint log
 
+2026-11-18：原版 outer 构造已在同一 CPU 上继续经过普通 `0x171` VM 的栈
+检查器，首次读取构造出的 handler 的 `+0x50` 成员并写入 R2。四组控制覆盖
+两个基址及显式 NULL class / NULL static ID 输入；复用既有 JNI Services，
+原版 evaluator 返回 0。读取位于 `+0xfae4c/0x10820418` 和原生 `+0x16f96c`，
+成员引用计数保持 2，128 字节 handler 不变。185881/185914 个指令观察点
+包括 provider 边界；既有 libc 系统调用被显式记录。9 条指令、1 个字节码字
+绑定及 63 项损坏证据拒绝通过。观察器在 `+0x16f978` 停止并设置结束哨兵，
+没有发生 callback 返回；现有 outer continuation 最终检查通过。合成 JNI
+场景、旧 OS/诊断服务和匹配 Bionic 的限制均保留。真实 JVM、完整 service
+语义、packed context 首次读取、序列化/成功清理、六头和完整 signer 仍未
+验证；生产 signer 和 Android 状态未修改。
+见[context 成员读取证据](../platforms/bytedance/tomato/evidence/vm9_native_171_context_load_20261118.json)。
+
 2026-11-18：既有原版 outer 构造输出已在同一 CPU 上接到普通 `0x171` 回调选择，
 停在 `+0x2830c4` 首指令之前。四组控制覆盖两个基址和 absent/sdk_30 属性；
 空普通缓存由原版 getter/引用复制填入同一 root，共享计数 1→2，guard 随后释放。
