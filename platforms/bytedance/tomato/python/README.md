@@ -1,5 +1,26 @@
 # Tomato Python material
 
+`verify_vm9_native_171_client_key_lookup_20261119.py` continues the original
+name constructor through matching-Bionic process destructor registration,
+static guard release and a NULL configuration lookup. The original writes
+the declared destructor/object/DSO words into its registration page, with
+two bound SVC 226 requests (same 4096-byte page, protection arguments 3/1).
+The wrapper stores status u32 zero and preserves the other 36 packed bytes.
+The guard publishes completion; the current synthetic request tree contains
+only `X-TEST: value`, so querying `X-BD-CLIENT-KEY` returns NULL. Its wrapper
+stores the actual result at packed+24 and preserves the other 24 bytes.
+Existing Python registration/guard/tree owners use fresh declared inputs,
+without native memory inputs. Four native cases, four independent public
+CLI replays, four exact old-name rows, four bad CLI requests, 16 additional
+instruction bindings and 101 damaged-evidence rejections pass. The name's
+trace/code prefix and the complete allocation ledger agree; service counts
+add only the two explicit libc SVCs. Read/main-SVC limits remain 2/4.
+This verifies selected registration, publication and missing-key behavior.
+It does not generate a key value, execute process exit, establish full
+Bionic/VM state equivalence, restore actual business state, produce ordinary
+six headers or verify complete signing. Use `--elf`, `--libc`, `--replay`.
+See the [missing-key lookup evidence](../evidence/vm9_native_171_client_key_lookup_20261119.json).
+
 `verify_vm9_native_171_client_key_name_20261119.py` joins the original masked
 ELF constant to the `X-BD-CLIENT-KEY` name, cold static guard acquisition and
 its StringObject construction. The decoder writes 15 bytes into an initially

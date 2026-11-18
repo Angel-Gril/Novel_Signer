@@ -171,7 +171,10 @@ class Scenario(previous.Scenario):
             assert u(self.state_owner+0x18)==self.node and raw(self.node,64)==previous.previous.empty_bytes()
             assert previous.previous.previous.output._cstring(cpu,self.prefix.source)==self.prefix.raw
             self.events.append('native constructor returned');self.finished=True
-            cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.name_boundary(cpu,state)
+
+    def name_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         frozen=json.loads(previous.EVIDENCE.read_text(encoding='utf-8'));previous.validate(frozen)

@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-19：client-key 名称构造后的析构登记、guard 发布与缺失键查询已连接。
+原版通过匹配 Bionic 的 `__cxa_atexit` 导出登记名称对象的析构函数，返回
+u32 零；对应析构函数、对象和 DSO 三个字实际写入登记页。原版发出两次
+精确绑定的内存保护请求后，释放同一个静态 guard，再用名称查询当前合成
+请求头树。树中仅有声明的 `X-TEST: value`，实际查询返回 NULL，参数块
+其余字节不变。独立 Python 模型使用新页面和相同声明输入，无原生快照。
+四组原生、公开 CLI 四组独立重放、四组旧名称入口回归、四种错误 CLI 和
+101 项损坏证据检查通过。原名称控制流与分配账本前缀一致，完整分配账本
+不变，服务仅增加两次已绑定的 libc SVC 226；handler/main-SVC 上限仍为
+2/4。本段没有 client-key 值、真实业务状态、六头输出或完整 signer。
+见[client-key 缺失键查询证据](../platforms/bytedance/tomato/evidence/vm9_native_171_client_key_lookup_20261119.json)。
+
 2026-11-19：已连接 `X-BD-CLIENT-KEY` 名称的原版解码、静态 guard 获取和
 StringObject 构造。原版从 `+0xf2724` / `+0xf27c0` 解码到 `+0x3e0f14`，
 实际写入 15 个字节，结尾零保留自初始零页面；独立 ELF 解码结果一致。
