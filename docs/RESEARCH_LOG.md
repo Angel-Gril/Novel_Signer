@@ -1,5 +1,16 @@
 # Checkpoint log
 
+2026-11-19：已连接缺失 client-key 查询后的 NULL 落槽与下一静态 guard
+预检查。原版保存 NULL 到 frame+1552；紧随其后的分支实际消费另一个
+guard 的低位，冷 guard 为零，继续准备其获取调用。函数指针绑定 ELF
+相对重定位，停止在下一调用字节码执行前。独立新页面上的既有 Python VM
+复现 15 条字节码，未使用原生内存输入。四组原生和四组独立公开 CLI 重放、
+四组旧查询入口回归、四种错误 CLI、18 条原生指令、16 个字节码字以及
+108 项损坏证据拒绝通过。上一查询证据行完整复现，分配、服务、JNI/SVC
+账本均不变，读取/SVC 限制保持 2/4。保存的 NULL 的后续消费、签名值、
+真实业务状态、普通六头和完整 signer 仍未验证。
+见[client-key 结果续接证据](../platforms/bytedance/tomato/evidence/vm9_native_171_client_key_result_20261119.json)。
+
 2026-11-19：client-key 名称构造后的析构登记、guard 发布与缺失键查询已连接。
 原版通过匹配 Bionic 的 `__cxa_atexit` 导出登记名称对象的析构函数，返回
 u32 零；对应析构函数、对象和 DSO 三个字实际写入登记页。原版发出两次

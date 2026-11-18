@@ -1,5 +1,24 @@
 # Tomato Python material
 
+`verify_vm9_native_171_client_key_result_20261119.py` continues the NULL
+lookup through its frame-local spill and the next static guard precheck.
+The branch consumes that other guard's low bit; it does not consume the
+saved lookup result. The original cold guard falls through and prepares
+its acquisition callback using a bound ELF GOT relocation. Observation
+stops before that callback's bytecode executes. Existing `vm_full.VM` runs
+the fifteen selected bytecodes on fresh declared pages at two bases, without
+native memory inputs. Six native loads, three frame stores, their selected
+adjacent bytes and the remaining virtual registers are checked. Four native
+cases reproduce the entire previous lookup row; allocation/service/JNI/SVC
+ledgers remain unchanged and read/main-SVC limits remain 2/4. Four independent
+public CLI replays, four exact old-lookup rows, four bad CLI requests,
+18 instruction bindings, 16 ELF bytecode words and 108 damaged-evidence
+rejections pass. Later consumption of the saved NULL, the next guard call,
+key values, actual business state, full VM equivalence, ordinary six headers,
+online acceptance and complete signing remain unverified. Use `--elf`,
+`--libc`, `--replay`. See the
+[lookup-result evidence](../evidence/vm9_native_171_client_key_result_20261119.json).
+
 `verify_vm9_native_171_client_key_lookup_20261119.py` continues the original
 name constructor through matching-Bionic process destructor registration,
 static guard release and a NULL configuration lookup. The original writes

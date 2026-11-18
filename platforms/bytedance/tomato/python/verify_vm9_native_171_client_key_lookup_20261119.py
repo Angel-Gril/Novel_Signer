@@ -181,7 +181,10 @@ class Scenario(previous.Scenario):
             assert previous.previous.previous.previous.output._cstring(cpu,self.prefix.source)==self.prefix.raw
             assert u(self.image+0x3D1558,1)==1 and u(context.outer.root_fixture.TLS+0x100,4)==2
             self.lookup_flow.append('NULL lookup returned and other packed bytes preserved');self.lookup_done=True
-            cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.lookup_boundary(cpu,state)
+
+    def lookup_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         assert self.lookup_done and self.finished and self.protections==[3,1]
