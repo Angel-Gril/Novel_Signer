@@ -1,5 +1,26 @@
 # Tomato Python material
 
+`verify_vm9_native_171_cache_path_20261118.py` joins the original decoded
+default `def` constant to its StringObject construction/clone, original
+SHA-1 hexadecimal result, filename formatter and file-readability arguments.
+Fresh ELF decoding and independent hashlib agree for this declared default.
+The formatter consumes the actual digest data pointer in `%s/%s%s`, after
+the directory helper has failed and the environment helper has returned.
+The 76-byte path retains the original double separator. The formatted object
+and its CString pointer reach the file check with mode 4 and errno 17.
+An observation sentinel stops before the BL at `+0x25de04`; the file check
+and a fourth main-image SVC have not executed. Existing profiles/providers
+are unchanged. Four cases at two bases and two NULL JNI scenarios reproduce
+exactly through the actual public CLI. 23 new instruction bindings, fresh
+ELF default decoding, 101 damaged-evidence rejections, three legacy entry
+checks and four real bad CLI calls pass. Complete service-count and libc-SVC
+rows match the previous directory cases. The independent formula does not
+consume native memory. This covers the selected default only, not other
+identities/paths, full guest digest/formatter stack equivalence, actual file
+state, restored business state, JVM identity, ordinary six headers, online
+acceptance or complete signing. Use `--elf`, `--libc`, `--replay`. See the
+[cache-path evidence](../evidence/vm9_native_171_cache_path_20261118.json).
+
 `verify_vm9_native_171_directory_20261118.py` continues the constructed aid
 request through directory handling under a separately selected profile. Three
 ordered main-image SVCs bind the original faccessat and two fstatat calls to
