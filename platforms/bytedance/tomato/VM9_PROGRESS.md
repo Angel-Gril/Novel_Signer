@@ -1,5 +1,33 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：目录查询、创建失败与 helper 返回已作局部 Python/原生对照
+
+在前一 aid/缓存控制之后，新增独立配置按顺序限定三次主镜像 SVC：一次原有
+faccessat 和两次 fstatat(79)。两次查询分别使用去掉尾斜线的缓存目录与
+`/data`；调用点、字节码、dirfd、flags、返回位置和原生栈内 128 字节缓冲区
+均核对。既有服务返回 -2，原版 errno 包装实际写入 2 并返回 -1，stat 缓冲区
+没有被修改。随后以 0755 请求创建 `/data`，既有 mkdir 服务设置 errno=17、
+返回 `0xffffffff`，原版目录 helper 实际返回 false。调用方在 `+0x25ef7c`
+仍继续，不据此直接结束请求；观察器在该指令执行前停止，没有 callback 或
+普通包装器返回。
+
+复用现有 `vm9_configuration_init.ensure_environment_directory`，以独立新页面、
+声明的静态路径和单独的模型栈运行。两次查询及 mkdir 的顺序/参数/返回、
+false、errno=17、31 字节临时路径投影和 stat 缓冲区未变均与原生匹配。
+模型输入没有复制原生内存；这不代表完整栈内存、其他配置或整请求等价。
+
+四组覆盖两基址和既有 NULL JNI 场景，每组 285393/285426 个 continuation
+观察点；guard 仍为 1，128 字节 handler 和源字符串不变。仅增加两次既有
+syscall_79 和一次既有 mkdir 调用，没有新增 OS/JNI/helper provider。
+30 条新增指令绑定，四组公开 CLI 独立重放、八组旧 aid/诊断结果整行一致、
+164 项损坏证据拒绝及四种错误 CLI 调用通过。两项实际原生负控制分别证明
+默认配置仍拒绝主镜像 SVC，旧 aid 配置仍拒绝首次目录查询，没有放宽旧边界。
+
+下一步核对目录 helper 返回后的缓存文件路径构造与文件检查。真实文件状态、
+目录创建成功、业务状态恢复、真实 JVM、普通六头、整请求差分、在线接受和
+完整 signer 仍未验证。
+见[目录错误路径与 Python 局部对照证据](evidence/vm9_native_171_directory_20261118.json)。
+
 ## 2026-11-18：合成 aid 越过空值诊断，并闭合首次缓存错误处理
 
 新配置只把新鲜 URL 改为合成 `?aid=1`，保持旧默认 URL 和全部旧 provider。

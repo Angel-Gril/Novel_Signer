@@ -25,6 +25,11 @@ AID_CACHE_PROFILE = dict(
     native_pc=0x271DBC, bytecode=0xFCA40, number=48,
     dirfd_u32=0xFFFFFF9C, pathname=b'/data/local/tmp/bdms/mssdk/ml/', mode=4, flags=0,
 )
+AID_DIRECTORY_PROFILE = dict(
+    name='synthetic_aid_absent_directory', URL=AID_CACHE_PROFILE['URL'],
+    stat_paths=(b'/data/local/tmp/bdms/mssdk/ml', b'/data'), stat_buffer_size=128,
+    stat_return_pc=0x272D68,
+)
 LOAD, STORE, STOP = 0x16F96C, 0x16F974, 0x16F978
 CURSOR, WORD = 0xFAE4C, 0x10820418
 EXPECTED = [
@@ -72,8 +77,9 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
            _request_profile=None):
     from unicorn import arm64_const as arm
     from capstone import Cs, CS_ARCH_ARM64, CS_MODE_ARM
-    assert _request_profile in (None, AID_CACHE_PROFILE['name']), 'unknown request profile'
-    aid_cache = _request_profile == AID_CACHE_PROFILE['name']
+    assert _request_profile in (None, AID_CACHE_PROFILE['name'], AID_DIRECTORY_PROFILE['name']), 'unknown request profile'
+    aid_cache = _request_profile is not None
+    aid_directory = _request_profile == AID_DIRECTORY_PROFILE['name']
     assert not aid_cache or _extension_factory is not None, 'aid cache profile requires an explicit observer'
     request_URL = AID_CACHE_PROFILE['URL'] if aid_cache else graph.inputs.URL
     _, main_loads, read_main = graph.inputs.load_elf(path)
@@ -207,16 +213,34 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     syscalls.append(dict(libc_pc=hex(local),number=number))
                 else:
                     binding=AID_CACHE_PROFILE
-                    assert aid_cache and not main_syscalls
+                    if aid_directory:
+                        assert len(main_syscalls)<=len(AID_DIRECTORY_PROFILE['stat_paths']), 'directory SVC count exceeded'
+                        if main_syscalls:
+                            binding=dict(binding,number=79,
+                                pathname=AID_DIRECTORY_PROFILE['stat_paths'][len(main_syscalls)-1])
+                    else:
+                        assert aid_cache and not main_syscalls
                     assert local==binding['native_pc'] and number==binding['number']
                     assert word(cpu,state['PC_slot'])==image+binding['bytecode']
                     assert reg(cpu,'x0')==binding['dirfd_u32']
                     assert outer.io.cstring(cpu,reg(cpu,'x1'))==binding['pathname']
-                    assert reg(cpu,'x2')==binding['mode'] and reg(cpu,'x3')==binding['flags']
-                    main_syscalls.append(dict(native_pc=hex(local),bytecode=hex(binding['bytecode']),
-                        number=number,dirfd_u32=binding['dirfd_u32'],mode=binding['mode'],flags=binding['flags'],
+                    assert reg(cpu,'x3')==binding['flags']
+                    event=dict(native_pc=hex(local),bytecode=hex(binding['bytecode']),
+                        number=number,dirfd_u32=binding['dirfd_u32'],flags=binding['flags'],
                         pathname_length=len(binding['pathname']),
-                        pathname_sha256=hashlib.sha256(binding['pathname']).hexdigest()))
+                        pathname_sha256=hashlib.sha256(binding['pathname']).hexdigest())
+                    if number==48:
+                        assert reg(cpu,'x2')==binding['mode']
+                        event['mode']=binding['mode']
+                    else:
+                        size=AID_DIRECTORY_PROFILE['stat_buffer_size'];buffer=reg(cpu,'x2')
+                        assert aid_directory and number==79
+                        assert outer.h.STACK<=buffer and buffer+size<=outer.h.STACK+outer.h.STACK_BYTES
+                        assert buffer==reg(cpu,'sp')+0x58
+                        assert reg(cpu,'x30')==image+AID_DIRECTORY_PROFILE['stat_return_pc']
+                        event.update(stat_buffer_in_native_stack=True,stat_buffer_size=size,
+                            stat_buffer_SP_offset=0x58,return_pc=hex(AID_DIRECTORY_PROFILE['stat_return_pc']))
+                    main_syscalls.append(event)
             trace.append([domain,local])
             assert len(trace)<400000,'continuation instruction bound'
             if offset==graph.CALLBACK:

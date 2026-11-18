@@ -1,5 +1,27 @@
 # Tomato Python material
 
+`verify_vm9_native_171_directory_20261118.py` continues the constructed aid
+request through directory handling under a separately selected profile. Three
+ordered main-image SVCs bind the original faccessat and two fstatat calls to
+exact sites, cursors, paths and arguments; stat buffers must be 128-byte native
+stack regions at the declared SP offset. Both queries return the inherited
+ENOENT result, original code stores errno 2 and returns -1, and each buffer
+remains unchanged. Existing mkdir receives `/data`, mode 0755, then sets errno
+17 and returns u32 -1. The original directory helper returns false to its
+caller. An observation sentinel stops before `+0x25ef7c`, with no request RET.
+The existing Python `ensure_environment_directory` runs on independent pages
+and a declared static path. Provider sequence, false result, errno 17 and the
+31-byte scratch projection match native observations; no native memory seeds
+the model. This is a selected projection, not complete physical-stack or
+whole-request equivalence. Four controls at two bases, 30 added instruction
+bindings, four public CLI native replays, eight unchanged old aid/diagnostic
+rows, 164 damaged-evidence rejections and four real bad CLI calls pass. Two
+native negative controls prove the default and old one-SVC profiles retain
+their rejection boundaries. Use `--elf`, `--libc`, `--replay`. Existing providers
+are unchanged. Real filesystem state, successful creation, restored business
+state, actual JVM identity, ordinary six headers and complete signing remain
+unverified. See the [directory evidence](../evidence/vm9_native_171_directory_20261118.json).
+
 `verify_vm9_native_171_aid_cache_20261118.py` uses a separately selected synthetic
 `?aid=1` / absent-cache profile. Four controls at two bases observe the original
 aid search, local length one and the non-equal branch to `+0xfc244`. Only one

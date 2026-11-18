@@ -1,5 +1,20 @@
 # Checkpoint log
 
+2026-11-18：普通合成 aid 请求已继续经过两次目录查询、一次既有 mkdir 服务和
+目录 helper 的原版 RET。新增配置只按顺序允许原有 faccessat 和两次精确绑定的
+fstatat；查询路径依次为去掉尾斜线的缓存目录与 `/data`，错误返回均为 -2。
+原版实际写 errno=2 并返回 -1；两次 128 字节 stat 缓冲区均保持原值。
+mkdir 以 0755 请求 `/data`，既有服务设置 errno=17、返回 32 位 -1；原版
+helper 返回 false，调用方仍继续。观察器在 `+0x25ef7c` 前停止，不是请求返回。
+现有 Python `ensure_environment_directory` 以独立页面和声明的静态路径运行，
+两次查询、mkdir、false、errno=17 及 31 字节临时路径投影与原生一致；未把
+原生快照用作模型输入，也未比较完整物理栈或整请求。两个基址、两种 NULL JNI
+共四组，30 条指令绑定、四组公开 CLI 重放、八组旧控制整行一致、164 项损坏
+证据拒绝、两项原生配置拒绝控制及四种错误 CLI 调用通过。guard 保持 1，
+handler 和源字符串不变，没有新增 provider。真实文件状态、目录创建成功、
+业务状态恢复、真实 JVM、普通六头和完整 signer 仍未验证。
+见[目录错误路径与 Python 局部对照证据](../platforms/bytedance/tomato/evidence/vm9_native_171_directory_20261118.json)。
+
 2026-11-18：新增独立的合成 `aid=1` / 缓存缺失配置。两基址、两种 NULL JNI
 共四组均由原版搜索取得 aid，局部长度变为 1，`+0xfc240` 走向 `+0xfc244`，
 停止前没有触发首次 `-8` 分支或诊断格式化。只允许原版 `+0x271dbc` 在
