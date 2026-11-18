@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-18：普通包装器经原版输入转换、`0x171` child 分发与 `+0x2830c4`
+包装器，已在 12 组合成控制上到达 VM `+0x168324` 首条指令之前。
+registry/fallback、空目标跳过、空 context 与已有 reader 路径均保留正确 context、
+模式及引用计数。包装器定义的打包/保存区域与五个 VM 参数寄存器匹配既有 Python
+caller；模式槽高 32 位保留预置字节。context 在打包块 `+0x20`，不能与 VM
+直接 `x3=image+0x35e690` 混用。新增 28 条指令、3 段代码、1 个 handler 虚表
+重定位绑定和 54 项损坏证据拒绝通过；公开 CLI 已逐项重建 12 组冻结结果。
+上游 fixture 仅提取共享构造。全部对象/输入仍是合成控制，wrapper 比较以已观察的
+局部边界状态为模型输入；未执行 VM prelude/字节码、callback 返回及成功清理。
+没有 Android 操作或新增 hook；真实六头、整请求差分和完整 signer 仍未完成。
+见[VM 入口交接证据](../platforms/bytedance/tomato/evidence/vm9_native_171_vm_handoff_20261118.json)。
+
 2026-11-18：普通包装器 `+0x27ed14` 的 32 组原版代码回放，经 `+0x27f84c` 构造
 URL/头树，再以 `0x171` 经 child 虚调用到达 `+0x27dd04` 入口。19 组在该入口
 之前停下，13 组返回零且临时分配全释放；URL/树引用计数为 2，输出槽为 FP-0x48，

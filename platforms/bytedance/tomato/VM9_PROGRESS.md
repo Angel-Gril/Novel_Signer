@@ -1,5 +1,29 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：普通 `0x171` 子分发已接到请求 VM 入口前
+
+从普通包装器 `+0x27ed14` 连续执行原版输入转换、child dispatcher `+0x27dd04`
+和回调包装器 `+0x2830c4`，在 VM 入口 `+0x168324` 首条指令之前停下。
+12 组合成控制覆盖两个基址、registry/fallback 选择、空 registry 目标跳过、
+空 context 和已有 7 个 reader 的无竞争路径。URL/头树引用计数在 callback 入口
+均为 3；context 来自所选 callback pair 的 `+8`，模式低 32 位保持 `0x171`。
+包装器的打包参数、保存帧及五个 VM 调用寄存器与既有 Python caller 模型一致；
+模式槽的高 32 位保留各控制预置的非零字节。打包 context 与 VM 直接 `x3` 的
+`image+0x35e690` 是不同参数，不能混用。
+
+公开 CLI 已绑定原版 Metasec/Bionic，并逐项重建全部 12 组冻结轨迹、堆和 effect
+摘要。除上游输入验证器的绑定外，新增 28 条精确指令、3 段代码和 handler 虚表
+`+0x68` 到 getter `+0x28509c` 的重定位绑定；54 项损坏证据拒绝检查通过。
+上游 fixture 构造仅提取为共享函数，原有 32 组控制和冻结证据保持不变。
+
+root/child/registry、context、TLS 和输入都是合成的；context 只带已知 handler
+虚表标记，完整状态和真实身份未恢复。局部 wrapper 比较使用原版 callback 边界
+状态作为模型输入，不是从新鲜输入开始的整请求差分。VM prelude/字节码执行、
+callback 返回、成功序列化/清理、真实业务执行、`0x171`/Java `0x138` 等价、
+普通 Cronet 六头、原签名运行时等价、完整 signer 和线上验签仍未验证。
+没有新增 Android 操作或 native/JNI hook。下一步核对普通模式的 VM prelude 和
+context 消费，再进入字节码路径。见[VM 入口交接证据](evidence/vm9_native_171_vm_handoff_20261118.json)。
+
 ## 2026-11-18：普通原生回调的输入转换已回放到 `0x171` child 入口
 
 在合成的已初始化 root/child 图上，从普通包装器 `+0x27ed14` 执行原版代码，

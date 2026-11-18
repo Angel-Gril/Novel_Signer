@@ -1,0 +1,598 @@
+{
+  "schema": "vm9-native-171-vm-handoff-20261118-v1",
+  "provenance": {
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "upstream_input_evidence": "vm9_native_171_inputs_20261118.json",
+    "independent_constructor_evidence": "vm9_outer_graph_object_provenance_20261028.json"
+  },
+  "boundary": {
+    "entry": "0x27ed14",
+    "input_function": "0x27f84c",
+    "child_dispatcher": "0x27dd04",
+    "callback": "0x2830c4",
+    "stop_before": "0x168324",
+    "bytecode": "0xf7720",
+    "mode": "0x171",
+    "registry_call": "0x27e478",
+    "fallback_call": "0x27e6a8",
+    "handler_vtable_slot": "0x68",
+    "handler_slot_getter": "0x28509c",
+    "callback_x3_source": "selected callback pair +0x08",
+    "fallback_pair_source": "child +0x20",
+    "packed_user_context_offset": "0x20",
+    "direct_VM_x3": "image +0x35e690",
+    "packed_mode": "low u32 at argument block +0x18; high u32 retains caller memory"
+  },
+  "claims": {
+    "synthetic_original_input_dispatch_and_wrapper_path_verified": true,
+    "native_mode_171_preserved_to_packed_VM_arguments": true,
+    "selected_pair_context_preserved": true,
+    "wrapper_defined_spans_match_existing_Python_model": true,
+    "observed_callback_boundary_state_used_as_local_wrapper_model_input": true,
+    "VM_entry_prelude_or_request_bytecode_executed": false,
+    "callback_return_or_success_cleanup_verified": false,
+    "live_root_child_callback_identity_verified": false,
+    "full_service_handler_state_verified": false,
+    "actual_business_arguments_or_callback_execution_verified": false,
+    "native_171_and_Java_138_VM_equivalence_verified": false,
+    "whole_request_native_Python_differential_verified": false,
+    "ordinary_cronet_six_head_chain_verified": false,
+    "complete_standalone_signer_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "providers": {
+    "synthetic": [
+      "malloc",
+      "realloc",
+      "free",
+      "strlen",
+      "memcpy",
+      "memmove",
+      "memset"
+    ],
+    "original_matching_Bionic": [
+      "pthread_mutex_lock",
+      "pthread_mutex_unlock",
+      "memcmp",
+      "strcmp"
+    ],
+    "internal_Metasec_helpers_substituted": false,
+    "allocation_failure_paths_exercised": false,
+    "mutex_contention_or_kernel_paths_exercised": false
+  },
+  "limits": [
+    "Root/child graph, registry nodes, opaque contexts, TLS, mutexes and input text are synthetic",
+    "The two context objects carry a known handler vtable tag only; their complete fields and semantic identity are not reconstructed",
+    "Only the first selected callback is entered; registry iteration after callback return and fallback after an empty callback result are not exercised",
+    "Matching Bionic runs uncontended mutex/comparison paths; explicit memory/allocation providers and their limitations are inherited from the input verifier",
+    "Execution stops before the first instruction at VM entry +0x168324; no VM table, bytecode handler or signer output is validated",
+    "The local wrapper comparison starts from observed callback-boundary memory/registers and compares defined packed/saved spans only",
+    "No native JNI hook, Android action, real request or network validation is added"
+  ],
+  "synthetic_memory_only": true,
+  "Android_execution": false,
+  "real_requests_or_connection_details_published": false,
+  "static_instruction_bindings": [
+    {
+      "offset": "0x27e438",
+      "mnemonic": "ldr",
+      "operands": "x8, [sp, #0x30]"
+    },
+    {
+      "offset": "0x27e444",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8]"
+    },
+    {
+      "offset": "0x27e468",
+      "mnemonic": "ldr",
+      "operands": "w2, [sp, #0x1c]"
+    },
+    {
+      "offset": "0x27e470",
+      "mnemonic": "ldr",
+      "operands": "x3, [x8, #8]"
+    },
+    {
+      "offset": "0x27e478",
+      "mnemonic": "blr",
+      "operands": "x9"
+    },
+    {
+      "offset": "0x27e660",
+      "mnemonic": "ldr",
+      "operands": "x8, [sp, #0x38]"
+    },
+    {
+      "offset": "0x27e66c",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x20]"
+    },
+    {
+      "offset": "0x27e670",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8]"
+    },
+    {
+      "offset": "0x27e694",
+      "mnemonic": "ldr",
+      "operands": "w2, [sp, #0x1c]"
+    },
+    {
+      "offset": "0x27e69c",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x20]"
+    },
+    {
+      "offset": "0x27e6a0",
+      "mnemonic": "ldr",
+      "operands": "x3, [x8, #8]"
+    },
+    {
+      "offset": "0x27e6a8",
+      "mnemonic": "blr",
+      "operands": "x9"
+    },
+    {
+      "offset": "0x2830c4",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x20]!"
+    },
+    {
+      "offset": "0x2830d0",
+      "mnemonic": "sub",
+      "operands": "sp, sp, #1, lsl #12"
+    },
+    {
+      "offset": "0x2830d4",
+      "mnemonic": "sub",
+      "operands": "sp, sp, #0x720"
+    },
+    {
+      "offset": "0x2830ec",
+      "mnemonic": "stp",
+      "operands": "x8, x0, [sp, #8]"
+    },
+    {
+      "offset": "0x283100",
+      "mnemonic": "str",
+      "operands": "w2, [sp, #0x20]"
+    },
+    {
+      "offset": "0x28310c",
+      "mnemonic": "str",
+      "operands": "x1, [sp, #0x18]"
+    },
+    {
+      "offset": "0x283114",
+      "mnemonic": "stp",
+      "operands": "x3, x9, [sp, #0x28]"
+    },
+    {
+      "offset": "0x28311c",
+      "mnemonic": "add",
+      "operands": "x2, x2, #0x230"
+    },
+    {
+      "offset": "0x283120",
+      "mnemonic": "add",
+      "operands": "x3, x3, #0x690"
+    },
+    {
+      "offset": "0x283124",
+      "mnemonic": "add",
+      "operands": "x1, sp, #8"
+    },
+    {
+      "offset": "0x283128",
+      "mnemonic": "xpaclri",
+      "operands": ""
+    },
+    {
+      "offset": "0x28312c",
+      "mnemonic": "stp",
+      "operands": "x8, x30, [sp, #0x38]"
+    },
+    {
+      "offset": "0x283130",
+      "mnemonic": "bl",
+      "operands": "#0x168324"
+    },
+    {
+      "offset": "0x28509c",
+      "mnemonic": "adrp",
+      "operands": "x0, #0x283000"
+    },
+    {
+      "offset": "0x2850a0",
+      "mnemonic": "add",
+      "operands": "x0, x0, #0xc4"
+    },
+    {
+      "offset": "0x2850a4",
+      "mnemonic": "ret",
+      "operands": ""
+    }
+  ],
+  "code_ranges": [
+    {
+      "start": "0x27dd04",
+      "end_exclusive": "0x27e798",
+      "sha256": "3ea2bc975c27833c4faca1f622423652b1201007415b58ded6ea5466de2182e7"
+    },
+    {
+      "start": "0x2830c4",
+      "end_exclusive": "0x28315c",
+      "sha256": "5f90c69ee9d1927c8052a833ddb8f2e4d52a301d6a2623e11cef3d1b15269bbc"
+    },
+    {
+      "start": "0x28509c",
+      "end_exclusive": "0x2850a8",
+      "sha256": "916c1cbf96c01d40ddf30d51f222018405441987fad0f66318c90cac0716fe87"
+    }
+  ],
+  "case_results": [
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "fallback",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 90
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9400",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "5a5a5a5a",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4650,
+      "trace_sha256": "211979822309308ff834edb32054dc4dd1b961c59a02cf1694bf48264a1f93c4",
+      "guest_heap_sha256": "e72f5f766fcc2aa8c1a16260a5d8ebe988cd19eb82aba950d0464b4cd4d5f2e5",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "registry",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 211
+      },
+      "call_site": "0x27e478",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9480",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "d3d3d3d3",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4476,
+      "trace_sha256": "eef9bb3ae7d12faf8f2fa9fd3a91d859169b93d1bfe3f0c4f97061bb91642df1",
+      "guest_heap_sha256": "22803e47e2627ae897e4d0a2b29e6d2d56a10ae870274cba2903fae175be2421",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "null_registry_fallback",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 128
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9400",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "80808080",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 5047,
+      "trace_sha256": "d9721ee4ed73b22d83c764dd1e1b9b9b6cdc8e814a4770ad5e5239ec89e15682",
+      "guest_heap_sha256": "e347eb1d3ffd9c63d2239152d589017d88292f8022536aa3c56424c41a799bec",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "null_then_registry",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 17
+      },
+      "call_site": "0x27e478",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9480",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "11111111",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4865,
+      "trace_sha256": "9254d22fe3cfe7729dee7566a6a8c18284e23b62d0f8d52d65f32e21b26df4bd",
+      "guest_heap_sha256": "addfd98f3755b24a9030be19b1ef861258b78acd91a48103f3334467fd1c2240",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "null_context",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 127
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": null,
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "7f7f7f7f",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4650,
+      "trace_sha256": "211979822309308ff834edb32054dc4dd1b961c59a02cf1694bf48264a1f93c4",
+      "guest_heap_sha256": "de556f02df2fafeb26f0d1228e082ea910f7aea5e2abc49dd8557c6a6a56bf93",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "readers7",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 226
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9400",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "e2e2e2e2",
+      "shared_readers_at_VM_entry": 8,
+      "mutex_events": 20,
+      "instructions_executed": 4650,
+      "trace_sha256": "211979822309308ff834edb32054dc4dd1b961c59a02cf1694bf48264a1f93c4",
+      "guest_heap_sha256": "1ef3b51b586348294b8183c6fd6c3edcab05781520b732e65fc9729a7edcc3e5",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "fallback",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 90
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9400",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "5a5a5a5a",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4620,
+      "trace_sha256": "2edeeb10c812fcb3d7532db4ac0fc2c30cf051898d1f0a139bf51dbb311abb76",
+      "guest_heap_sha256": "8353b1faa48f86d97d871837c878638042d95a5abc554d8f4daaa6b8edfe0002",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "registry",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 211
+      },
+      "call_site": "0x27e478",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9480",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "d3d3d3d3",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4446,
+      "trace_sha256": "04d71e6fa4f4718ff29cb036e96f0cd5b5174b96a0ef00f8b841e6bfb7a37fb3",
+      "guest_heap_sha256": "c309e60eba6ee325e13db0d81c2973fa9023d8d2bdba5df7d75c32d1f7d4a6b3",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "null_registry_fallback",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 128
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9400",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "80808080",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 5017,
+      "trace_sha256": "39539f7ada17350dfe49d1c857b6a8df60db832aaadbe0ee2dc150d2f96cb97e",
+      "guest_heap_sha256": "a1ef06985a8348e10cb3c5db40957071468bc9cd289b619d6827ae9fc954edbb",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "null_then_registry",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 17
+      },
+      "call_site": "0x27e478",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9480",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "11111111",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4835,
+      "trace_sha256": "9592ab0b3c5131cd9a93cba64e5adc9b436815ba72f9f95b0ad4719c856c6c86",
+      "guest_heap_sha256": "fe8783346156eccc416ee9309488f2696512e3b24833277b53c23f7268b3abbe",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "null_context",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 127
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": null,
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "7f7f7f7f",
+      "shared_readers_at_VM_entry": 1,
+      "mutex_events": 20,
+      "instructions_executed": 4620,
+      "trace_sha256": "2edeeb10c812fcb3d7532db4ac0fc2c30cf051898d1f0a139bf51dbb311abb76",
+      "guest_heap_sha256": "561b0440d2c8567e374b2db07dbd136e1c5a08662ae9e650676c1744d30f1715",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "readers7",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 226
+      },
+      "call_site": "0x27e6a8",
+      "native_mode": "0x171",
+      "callback_context_guest_offset": "0x9400",
+      "callback_url_reference_count": 3,
+      "callback_tree_reference_count": 3,
+      "mode_padding_hex": "e2e2e2e2",
+      "shared_readers_at_VM_entry": 8,
+      "mutex_events": 20,
+      "instructions_executed": 4620,
+      "trace_sha256": "2edeeb10c812fcb3d7532db4ac0fc2c30cf051898d1f0a139bf51dbb311abb76",
+      "guest_heap_sha256": "f451c7dcc0bfd1dc6094e44cd42592f9cc050b0f763bca2811cbe80c6c25020f",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true,
+      "mode_padding_preserved": true,
+      "semantic_inputs_preserved": true,
+      "executed_code_unchanged": true,
+      "VM_instructions_executed": 0,
+      "unexpected_external_or_legacy_calls": 0
+    }
+  ]
+}

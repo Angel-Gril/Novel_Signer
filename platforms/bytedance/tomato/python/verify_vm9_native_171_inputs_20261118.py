@@ -217,12 +217,38 @@ def verify_elf(data, path):
                 imports=len(IMPORTS), relative_relocations=1)
 
 
+def fixture_pages(image, control):
+    """Fresh synthetic warm input graph shared by bounded continuation probes."""
+    import verify_vm9_signer_objects as oracle
+    from vm9_allocator import _write_span
+    base = control['base']; tls = GUEST + 0xD000
+    pages = {page: bytearray(data) for page, data in image.items()}
+    pages.update(oracle.fresh_pages())
+    def write(address, value, size=8):
+        _write_span(pages, address, value.to_bytes(size, 'little'))
+    for field, off in (('first_hex', 0x1000), ('second_hex', 0x2000)):
+        _write_span(pages, GUEST+off, bytes.fromhex(control[field] or '')+b'\0')
+    write(GUEST+0x800, 0 if control['first_hex'] is None else GUEST+0x1000)
+    write(GUEST+0x808, 0 if control['second_hex'] is None else GUEST+0x2000)
+    write(tls+8, tls+0x200); _write_span(pages, tls+0x200, bytes(0x900))
+    write(tls+0x210, 137, 4); write(tls+0x28, 0xAB567823C091D200)
+    write(base+0x3E0960, 1, 1); write(base+0x3E0950, GUEST+0x3000); write(base+0x3E0958, 0)
+    write(GUEST+0x3018, GUEST+0x3100); write(GUEST+0x3100, base+0x35D5F0)
+    write(base+0x3DEDA0, 1, 1); write(base+0x3DEDA8, GUEST+0xA000)
+    for i in range(256): write(GUEST+0xA000+8*i, GUEST+0xB000)
+    _write_span(pages, GUEST+0xB000, bytes(0x30)); write(GUEST+0xB008, 0x4000, 4)
+    write(base+0x3D1680, 1, 1); write(base+0x3D1678, GUEST+0xB100)
+    write(GUEST+0xB100, GUEST+0xB200); _write_span(pages, GUEST+0xB200, bytes(0x88))
+    if control['delimiter_initialized']:
+        write(base+0x3E094C, 1, 4); _write_span(pages, base+0x3E0948, b'\r\n\0')
+    return pages
+
+
 def replay(path, libc, *, case_controls=None, on_case=None):
     from capstone import Cs, CS_ARCH_ARM64, CS_MODE_ARM
     from unicorn import arm64_const as arm
     import verify_vm9_signer_objects as oracle
     from verify_vm9_strings import Effects
-    from vm9_allocator import _write_span
     _, main_loads, read_main = load_elf(path)
     libc_elf, exports = libc_image(libc)
     libc_loads = [s for s in libc_elf.iter_segments() if s['p_type'] == 'PT_LOAD']
@@ -238,25 +264,7 @@ def replay(path, libc, *, case_controls=None, on_case=None):
     rows = []
     for control in selected:
         base = control['base']; tls = GUEST + 0xD000
-        pages = {page: bytearray(data) for page, data in images[base].items()}
-        pages.update(oracle.fresh_pages())
-        def write(address, value, size=8):
-            _write_span(pages, address, value.to_bytes(size, 'little'))
-        for field, off in (('first_hex', 0x1000), ('second_hex', 0x2000)):
-            _write_span(pages, GUEST+off, bytes.fromhex(control[field] or '')+b'\0')
-        write(GUEST+0x800, 0 if control['first_hex'] is None else GUEST+0x1000)
-        write(GUEST+0x808, 0 if control['second_hex'] is None else GUEST+0x2000)
-        write(tls+8, tls+0x200); _write_span(pages, tls+0x200, bytes(0x900))
-        write(tls+0x210, 137, 4); write(tls+0x28, 0xAB567823C091D200)
-        write(base+0x3E0960, 1, 1); write(base+0x3E0950, GUEST+0x3000); write(base+0x3E0958, 0)
-        write(GUEST+0x3018, GUEST+0x3100); write(GUEST+0x3100, base+0x35D5F0)
-        write(base+0x3DEDA0, 1, 1); write(base+0x3DEDA8, GUEST+0xA000)
-        for i in range(256): write(GUEST+0xA000+8*i, GUEST+0xB000)
-        _write_span(pages, GUEST+0xB000, bytes(0x30)); write(GUEST+0xB008, 0x4000, 4)
-        write(base+0x3D1680, 1, 1); write(base+0x3D1678, GUEST+0xB100)
-        write(GUEST+0xB100, GUEST+0xB200); _write_span(pages, GUEST+0xB200, bytes(0x88))
-        if control['delimiter_initialized']:
-            write(base+0x3E094C, 1, 4); _write_span(pages, base+0x3E0948, b'\r\n\0')
+        pages = fixture_pages(images[base], control)
         effects = Effects(blocks=())
         trace, handoffs, executed_code = [], [], {}
         external = Counter(); bionic_count = 0

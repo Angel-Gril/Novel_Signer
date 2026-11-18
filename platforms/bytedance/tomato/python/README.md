@@ -1,5 +1,24 @@
 # Tomato Python material
 
+`verify_vm9_native_171_vm_handoff_20261118.py` continues the original ordinary
+wrapper through input conversion, child dispatch and `+0x2830c4`, stopping
+before the first VM-entry instruction at `+0x168324`. Twelve synthetic cases
+cover two image bases, registry/fallback selection, null callback skipping,
+null context and an existing shared-reader count. The selected pair's context
+and mode `0x171` reach the packed arguments; URL/tree reference counts are
+three at callback entry. Defined wrapper spans and five VM call registers
+match the existing caller model using observed local callback state as input.
+Seeded upper mode-slot bytes survive. Packed context at `+0x20` differs from
+the direct VM `x3=image+0x35e690`. Context objects carry a known handler vtable
+tag only; their complete state and real identity are unverified.
+The default CLI rejects 54 damaged evidence records. Use
+`--elf <original-Metasec> --libc <matching-Bionic> --replay` to bind both sample
+digests and rebuild every retained result. Beyond upstream input bindings,
+this binds 28 instructions, three code ranges and one handler-vtable relative
+relocation. No Android action, new hook, VM prelude/bytecode, callback return
+or successful cleanup is exercised. Whole-request differential, native/Java
+mode equivalence, ordinary six heads and the complete signer remain unverified.
+
 `verify_vm9_native_171_inputs_20261118.py` executes the ordinary wrapper
 `+0x27ed14` through original input conversion and its native `0x171` virtual
 call, stopping before the first child-dispatcher instruction at `+0x27dd04`.
