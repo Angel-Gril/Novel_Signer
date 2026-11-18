@@ -1,5 +1,25 @@
 # Tomato Python material
 
+`verify_vm9_native_171_diagnostic_gates_20261118.py` observes both diagnostic
+gates without changing the upstream fixture, services or registry guard. Four
+controls reproduce the entire previous output row exactly. The synthetic URL
+has no query: two original case-insensitive searches for `&aid=` and `aid=`
+observe empty sources and return `0xffffffff`. Bytecode `+0xfc23c` reads a local
+string length of zero; `+0xfc240` branches to `+0xfc5cc/0x7f01fafb`, which
+actually stores R0 minus eight in R21. `+0xfc5dc` branches back to `+0xfc258`
+before the existing first formatter/insertion. Later `+0xfee08` reads the registry
+guard byte at `image+0x3d1558` as one, `+0xfee10` masks its low bit, and `+0xfee14` branches
+to `+0xfef5c` before the existing minus-eleven store. Both status writes are
+checked after completion; native comparison operands and three branch targets
+are observed. Thirteen added instruction bindings, eleven bytecode bindings,
+independent field decoding, four public CLI native replays, 117 damaged-evidence
+rejections and four actual negative CLI calls pass. Use `--elf`, `--libc`,
+`--replay`. Existing provider limits remain. These are direct branch conditions
+of synthetic inputs, not the complete cause of absent six headers. Real JVM
+identity, restored business state, whole-request equivalence, ordinary six
+headers and complete signing remain unverified. No Android or production signer
+changes. See the [diagnostic gate evidence](../evidence/vm9_native_171_diagnostic_gates_20261118.json).
+
 `verify_vm9_native_171_output_20261118.py` extends the constructed ordinary
 `0x171` request through callback return, serialization and the original wrapper
 RET. Four controls cover two bases and the existing NULL class/static-ID JNI
