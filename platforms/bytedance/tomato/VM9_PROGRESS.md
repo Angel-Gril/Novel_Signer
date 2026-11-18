@@ -1,5 +1,30 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：构造出的普通 `0x171` 诊断路径已返回并完成清理
+
+在同一 CPU 保留原版 outer 构造和此前的成员读取前缀，继续执行 callback、
+序列化及普通包装器 `+0x27ed6c` 的 RET，不再由观察器改写 PC 停止。
+两个基址、NULL class / NULL static ID 共四组控制，各保留
+357865/357898 个 continuation 指令观察点（含 provider 边界）。
+原版 `+0x282a68` 读取 service 的 `+0x52` 字节为 1，boolean wrapper
+实际写入 1。同一输出容器先插入 `X-Neptune` 的 `-8` 诊断值，再以 `-11`
+替换 value；保留第一次的 key，释放第二次的重复 key 和第一次的旧 value。
+最终 `-11` 来自 `+0xfef94/0x7ea0f97b`，本次源 R0 为 0。
+
+回调返回时输出树只有一个节点、引用计数为 1。四个被丢弃的字符串分配在
+回调返回前释放，最终树的十个分配在普通 RET 前释放，均按分配 epoch 和
+实际 free 调用核对。25 字节序列化结果与观察到的最终树一致，原生返回指针
+一致，独立返回缓冲区在 RET 时仍存活、由调用方持有。
+
+新增验证器绑定 14 条指令、8 个字节码字，213 项损坏证据拒绝、四组公开 CLI
+原生重放和四种错误 CLI 调用通过。旧成员读取验证器的四组默认重放仍逐项
+一致，63 项旧损坏证据检查通过。原生观察未初始化 Python signer 模型。
+沿用既有 OS/JNI、匹配 Bionic、三个延后执行的虚拟线程及两处诊断 helper
+服务，没有新增 provider。合成 NULL 场景和单个诊断头不代表真实 JVM 身份、
+签名成功或六头缺失原因已解释；普通 Cronet 六头、整请求 Python/原生差分、
+完整 service/context 语义和完整 signer 仍未验证。没有 Android 操作或生产
+signer 修改。见[诊断返回与清理证据](evidence/vm9_native_171_output_20261118.json)。
+
 ## 2026-11-18：构造出的 context 首次成员读取已执行
 
 同一 CPU 保留原版 outer 构造，再进入普通 `0x171` 请求 VM。复用既有

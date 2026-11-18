@@ -1,5 +1,29 @@
 # Tomato Python material
 
+`verify_vm9_native_171_output_20261118.py` extends the constructed ordinary
+`0x171` request through callback return, serialization and the original wrapper
+RET. Four controls cover two bases and the existing NULL class/static-ID JNI
+profiles. The upstream member-load prefix remains identical; no observation
+sentinel rewrites PC in this extension. The native service flag getter reads
+byte `+0x52 == 1`, and the boolean wrapper stores one. Two `X-Neptune`
+insertions format `-8` then `-11`: duplicate insertion keeps the original key,
+replaces its value, and releases the duplicate key and previous value. The
+final `-11` is observed at bytecode `+0xfef94/0x7ea0f97b`, with source R0 zero.
+Four discarded string allocations are freed before callback return; ten final
+tree allocations are freed before RET, checked by allocation epochs and actual
+free calls. The 25-byte serialization matches the final one-node tree; its
+return buffer remains live and caller-owned. Four public CLI native replays,
+213 damaged-evidence rejections, 14 added instruction bindings and eight
+bytecode bindings pass. The old default context-load CLI still reproduces all
+four rows and rejects 63 damaged controls. Four real negative CLI calls reject
+missing replay arguments and wrong ELF digests. Use `--elf`, `--libc`, `--replay`.
+Inherited OS/JNI, matching Bionic, deferred virtual threads and diagnostic
+helper substitutions remain explicit. This is diagnostic output under synthetic
+services: real JVM identity, the reason six headers are absent, complete service
+semantics, whole-request Python/native equivalence, ordinary six headers and a
+complete signer remain unverified. No Android or production signer changes.
+See the [diagnostic return evidence](../evidence/vm9_native_171_output_20261118.json).
+
 `verify_vm9_native_171_context_load_20261118.py` continues original outer
 construction into the ordinary `0x171` request VM on the same CPU. It reuses
 the accepted stack evaluator JNI provider for explicit NULL class and NULL

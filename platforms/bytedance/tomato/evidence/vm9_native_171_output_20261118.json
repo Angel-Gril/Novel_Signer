@@ -1,0 +1,4382 @@
+{
+  "schema": "vm9-native-171-output-20261118-v1",
+  "provenance": {
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "upstream": "vm9_native_171_context_load_20261118.json"
+  },
+  "claims": {
+    "original_callback_return_and_one_node_output_verified": true,
+    "original_serialization_and_ordinary_RET_verified": true,
+    "duplicate_X_Neptune_insertion_replaces_minus_8_with_minus_11": true,
+    "discarded_value_and_duplicate_key_lifetimes_verified": true,
+    "output_tree_allocation_epochs_and_free_calls_verified": true,
+    "returned_CString_is_live_caller_owned_allocation": true,
+    "native_diagnostic_status_minus_11_observed": true,
+    "successful_six_header_signing_verified": false,
+    "whole_request_native_Python_differential_verified": false,
+    "full_handler_or_live_Java_identity_verified": false,
+    "complete_standalone_signer_verified": false,
+    "Android_execution": false,
+    "online_acceptance_verified": false
+  },
+  "providers": {
+    "inherited_context_profile": {
+      "inherited_outer": {
+        "inherited_owner": "verify_vm9_outer_signer_native.py",
+        "actual_matching_Bionic_allocator": true,
+        "explicit_virtual_OS_and_JNI": true,
+        "virtual_threads_created": 3,
+        "virtual_thread_bodies_executed": false,
+        "diagnostic_helpers_substituted": [
+          "0x26c858",
+          "0x26c9d0"
+        ],
+        "Android_JVM_used": false,
+        "thread_id": 137,
+        "clock_seconds": 1791023800,
+        "clock_nanoseconds": 500000000,
+        "ordinary_inputs": "fresh synthetic CStrings in an isolated mapped page",
+        "root_child_context_or_cache_bytes_seeded_by_continuation": false
+      },
+      "JNI_owner": "verify_vm9_request_stack_evaluator_fresh_20261012.py:Services.jni",
+      "JNI_environment_adapter": "validate outer environment, translate only its ABI identity",
+      "JNI_slots": [
+        "0x30",
+        "0x388",
+        "0x720",
+        "0xb8"
+      ],
+      "main_import_names": [
+        "memset",
+        "__cxa_atexit"
+      ],
+      "main_import_targets": "resolved matching Bionic exports",
+      "permitted_libc_SVC_numbers": [
+        48,
+        56,
+        57,
+        63,
+        79,
+        80,
+        98,
+        167,
+        198,
+        214,
+        215,
+        222,
+        226,
+        233
+      ],
+      "scenarios": [
+        "NULL_class0",
+        "NULL_static_id"
+      ],
+      "stop": "observer stops after context store and moves PC to the oracle sentinel; no function return"
+    },
+    "inherited_stop_description_applies_to": "upstream default prefix only; extension continues naturally",
+    "new_OS_JNI_or_internal_helper_providers": [],
+    "original_ordinary_wrapper_RET": true,
+    "observation_sentinel_PC_rewrite": false,
+    "output_observer_owner": "verify_vm9_request_output_reference_20261026.py:_tree,_string,_cstring",
+    "scope": "synthetic constructed ordinary 0x171 NULL-JNI diagnostic output"
+  },
+  "instructions": [
+    {
+      "offset": "0x282a68",
+      "mnemonic": "ldrb",
+      "operands": "w0, [x0, #0x52]"
+    },
+    {
+      "offset": "0x282a6c",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x285c48",
+      "mnemonic": "blr",
+      "operands": "x8"
+    },
+    {
+      "offset": "0x285c4c",
+      "mnemonic": "and",
+      "operands": "w8, w0, #1"
+    },
+    {
+      "offset": "0x285c50",
+      "mnemonic": "strb",
+      "operands": "w8, [x19, #0x10]"
+    },
+    {
+      "offset": "0x27ed34",
+      "mnemonic": "bl",
+      "operands": "#0x27f84c"
+    },
+    {
+      "offset": "0x27ed38",
+      "mnemonic": "mov",
+      "operands": "x21, x0"
+    },
+    {
+      "offset": "0x27ed60",
+      "mnemonic": "mov",
+      "operands": "x0, x21"
+    },
+    {
+      "offset": "0x27ed6c",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x16db74",
+      "mnemonic": "str",
+      "operands": "x10, [x28, x15, lsl #3]"
+    },
+    {
+      "offset": "0x27e6ac",
+      "mnemonic": "sub",
+      "operands": "x1, x29, #0x58"
+    },
+    {
+      "offset": "0x2800fc",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x60]!"
+    },
+    {
+      "offset": "0x25bf3c",
+      "mnemonic": "sub",
+      "operands": "sp, sp, #0x80"
+    },
+    {
+      "offset": "0x248908",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x60]!"
+    }
+  ],
+  "bytecode_words": {
+    "0xfae48": "0x93500e18",
+    "0xfae4c": "0x10820418",
+    "0xfae64": "0x67e0c91",
+    "0xfc520": "0x67e0c91",
+    "0xfc5ac": "0x67e0c91",
+    "0xfef94": "0x7ea0f97b",
+    "0xfefbc": "0x67e0c91",
+    "0xff048": "0x67e0c91"
+  },
+  "case_results": [
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "absent",
+        "null_at": "class0"
+      },
+      "ordinary_wrapper_returned": true,
+      "callback_returned": true,
+      "original_outer_postconditions_passed": true,
+      "observation_PC_rewritten": false,
+      "member_prefix": {
+        "instruction_observations": 185881,
+        "trace_sha256": "1d7606db60de1ba2beb6c40d4d67d33b25253486f47f24c3507795762212b13e",
+        "code_sha256": "8618d4983e681a21f08d3c5700dd0474076561e15d06a022d6647b966019e613"
+      },
+      "first_context_read": {
+        "native_pc": "0x16f96c",
+        "bytecode": "0xfae4c",
+        "member_offset": "0x50",
+        "size": 8,
+        "base_is_constructed_handler": true,
+        "value_is_constructor_member_payload": true
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "NULL_or_false",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "evaluator_returns": [
+        {
+          "native_pc": "0x28bfc0",
+          "result": 0
+        }
+      ],
+      "flag_reads": [
+        {
+          "pc": "0x282a68",
+          "member_offset": "0x52",
+          "byte": 1,
+          "bytecode": "0xfae64"
+        }
+      ],
+      "packed_flag_boolean": 1,
+      "status_origin": {
+        "bytecode": "0xfef94",
+        "word": "0x7ea0f97b",
+        "source_R0": 0,
+        "signed_immediate": -11,
+        "native_value": -11
+      },
+      "insertion_sequence": [
+        {
+          "key": "X-Neptune",
+          "signed_int32": -8,
+          "bytecode": "0xfc5ac",
+          "formatter_text_length": 8,
+          "value_length": 11,
+          "value_sha256": "a1044d84eac2246ae4d65e06f16274e75fd0d79dd10871da2cceb6416f06b5d6"
+        },
+        {
+          "key": "X-Neptune",
+          "signed_int32": -11,
+          "bytecode": "0xff048",
+          "formatter_text_length": 8,
+          "value_length": 12,
+          "value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b"
+        }
+      ],
+      "final_tree_has_last_value_and_original_key": true,
+      "discarded_strings_freed_before_callback_return": true,
+      "discarded_string_allocations": {
+        "value_object": 24,
+        "value_buffer": 16,
+        "key_object": 24,
+        "key_buffer": 10
+      },
+      "discarded_string_free_order": [
+        "key_buffer",
+        "key_object",
+        "value_buffer",
+        "value_object"
+      ],
+      "tracked_allocation_lifetimes": {
+        "discarded_value_object": {
+          "size": 24,
+          "allocation_epoch": 552,
+          "free_epoch": 587
+        },
+        "discarded_value_buffer": {
+          "size": 16,
+          "allocation_epoch": 559,
+          "free_epoch": 586
+        },
+        "discarded_key_object": {
+          "size": 24,
+          "allocation_epoch": 582,
+          "free_epoch": 585
+        },
+        "discarded_key_buffer": {
+          "size": 10,
+          "allocation_epoch": 583,
+          "free_epoch": 584
+        },
+        "output_container": {
+          "size": 40,
+          "allocation_epoch": 522,
+          "free_epoch": 655
+        },
+        "output_counter": {
+          "size": 4,
+          "allocation_epoch": 525,
+          "free_epoch": 646
+        },
+        "output_controller": {
+          "size": 40,
+          "allocation_epoch": 523,
+          "free_epoch": 654
+        },
+        "output_sentinel": {
+          "size": 40,
+          "allocation_epoch": 524,
+          "free_epoch": 653
+        },
+        "output_node0": {
+          "size": 40,
+          "allocation_epoch": 567,
+          "free_epoch": 652
+        },
+        "output_pair0": {
+          "size": 16,
+          "allocation_epoch": 566,
+          "free_epoch": 651
+        },
+        "output_key0_object": {
+          "size": 24,
+          "allocation_epoch": 564,
+          "free_epoch": 648
+        },
+        "output_key0_buffer": {
+          "size": 10,
+          "allocation_epoch": 565,
+          "free_epoch": 647
+        },
+        "output_value0_object": {
+          "size": 24,
+          "allocation_epoch": 570,
+          "free_epoch": 650
+        },
+        "output_value0_buffer": {
+          "size": 16,
+          "allocation_epoch": 577,
+          "free_epoch": 649
+        }
+      },
+      "formatter_signed_int32": -11,
+      "formatter_text_length": 8,
+      "output_tree_node_count": 1,
+      "output_counter_at_callback_return": 1,
+      "output_keys": [
+        "X-Neptune"
+      ],
+      "output_value_length": 12,
+      "output_value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b",
+      "serialized_length": 25,
+      "serialized_sha256": "e3f893005b89e0a6feac1b8a1b7016a3bb7be514e4121884ad53d1e34497e00f",
+      "serializer_entries": 1,
+      "serialized_equals_observed_tree": true,
+      "wrapper_RET_matches_native_return": true,
+      "serialized_buffer_live_and_caller_owned": true,
+      "serialized_allocation_size": 26,
+      "tracked_output_allocations": {
+        "container": 40,
+        "counter": 4,
+        "controller": 40,
+        "sentinel": 40,
+        "node0": 40,
+        "pair0": 16,
+        "key0_object": 24,
+        "key0_buffer": 10,
+        "value0_object": 24,
+        "value0_buffer": 16
+      },
+      "tracked_output_blocks_freed_before_RET": 10,
+      "output_free_order": [
+        "counter",
+        "key0_buffer",
+        "key0_object",
+        "value0_buffer",
+        "value0_object",
+        "pair0",
+        "node0",
+        "sentinel",
+        "controller",
+        "container"
+      ],
+      "root_native_calls": [
+        {
+          "bytecode": "0xf7e84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7f08",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7fa0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7ffc",
+          "wrapper": "0x28589c",
+          "target": "0x291440"
+        },
+        {
+          "bytecode": "0xf8044",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf8078",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xf80a8",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf80f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf812c",
+          "wrapper": "0x2858ec",
+          "target": "0x24880c"
+        },
+        {
+          "bytecode": "0xf8178",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf82cc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8718",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf8750",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8774",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf879c",
+          "wrapper": "0x2859cc",
+          "target": "0x3ed5c640"
+        },
+        {
+          "bytecode": "0xf87bc",
+          "wrapper": "0x2859e0",
+          "target": "0x32a330"
+        },
+        {
+          "bytecode": "0xf87f0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8818",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8850",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8880",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf88cc",
+          "wrapper": "0x2859ec",
+          "target": "0x172ca4"
+        },
+        {
+          "bytecode": "0xf8c30",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8c6c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8d58",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8d94",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8fd0",
+          "wrapper": "0x285a80",
+          "target": "0x28bb5c"
+        },
+        {
+          "bytecode": "0xf919c",
+          "wrapper": "0x285a80",
+          "target": "0x28c0ec"
+        },
+        {
+          "bytecode": "0xf91c8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9204",
+          "wrapper": "0x285aa0",
+          "target": "0x25cdd4"
+        },
+        {
+          "bytecode": "0xf9224",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9984",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf99a4",
+          "wrapper": "0x285abc",
+          "target": "0x256ab0"
+        },
+        {
+          "bytecode": "0xf99c4",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9a08",
+          "wrapper": "0x285adc",
+          "target": "0x25bf14"
+        },
+        {
+          "bytecode": "0xf9a28",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xf9a58",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9b08",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf9b38",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xf9b68",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9b90",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9bac",
+          "wrapper": "0x28591c",
+          "target": "0x248f4c"
+        },
+        {
+          "bytecode": "0xf9bcc",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9bf4",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9c20",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xf9c40",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9c84",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf9cc0",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9cec",
+          "wrapper": "0x285b7c",
+          "target": "0x3edb5254"
+        },
+        {
+          "bytecode": "0xf9d08",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf9d38",
+          "wrapper": "0x285b9c",
+          "target": "0x248274"
+        },
+        {
+          "bytecode": "0xf9d5c",
+          "wrapper": "0x285bb0",
+          "target": "0x25c168"
+        },
+        {
+          "bytecode": "0xfaa50",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaaa8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab10",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab68",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfabd0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac28",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac90",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xface8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfad24",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xfad50",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfad74",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfada8",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfae64",
+          "wrapper": "0x285c3c",
+          "target": "0x282a68"
+        },
+        {
+          "bytecode": "0xfaec4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf1c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfafdc",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb044",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb09c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb0dc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb0fc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb138",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb180",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb1a4",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb604",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb1f8",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb224",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb250",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb6a4",
+          "wrapper": "0x285c80",
+          "target": "0x2481fc"
+        },
+        {
+          "bytecode": "0xfb6cc",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb6f0",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb714",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb748",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb768",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb788",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb7b8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb7d8",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb7f8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb828",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb848",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb868",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb894",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbc34",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc60",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc9c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd40",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbd70",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd94",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfbde4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe54",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe8c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbebc",
+          "wrapper": "0x285cd8",
+          "target": "0x248f5c"
+        },
+        {
+          "bytecode": "0xfbee4",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfbf00",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbf2c",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc10c",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfc130",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc168",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc18c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc1e0",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc218",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc2b0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc30c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc34c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc36c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfc4f0",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfc520",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfc540",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc55c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc584",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfc5ac",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xfec9c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfecbc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfece0",
+          "wrapper": "0x285f44",
+          "target": "0x25c150"
+        },
+        {
+          "bytecode": "0xfede0",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfee04",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfef88",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfefbc",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfefd8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfeff8",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xff020",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xff048",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xff074",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xff0a8",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff14c",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xff178",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xff1ac",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff1d8",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff210",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff258",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff294",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff2dc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff70c",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff79c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff7bc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff7dc",
+          "wrapper": "0x285b70",
+          "target": "0x25c01c"
+        },
+        {
+          "bytecode": "0xff7fc",
+          "wrapper": "0x285f9c",
+          "target": "0x25cf98"
+        },
+        {
+          "bytecode": "0xff830",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff8b0",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff8d0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff9f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffa24",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xffa60",
+          "wrapper": "0x285910",
+          "target": "0x32a264"
+        },
+        {
+          "bytecode": "0xffa8c",
+          "wrapper": "0x285b70",
+          "target": "0x25c12c"
+        },
+        {
+          "bytecode": "0xffaac",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffae0",
+          "wrapper": "0x285f60",
+          "target": "0x2914d0"
+        },
+        {
+          "bytecode": "0xffb48",
+          "wrapper": "0x285fb4",
+          "target": "0x28dc38"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 357865,
+      "continuation_trace_sha256": "dffaf05c66c2cf1d49901cd874dad170d981396f3dfc662f123fc1682291ad73",
+      "continuation_code_sha256": "fe3cd36d3d8e8187af77aced7fd956b662d7d1ae6e82ba8287dfa4cd5a69e7af",
+      "allocation_ledger_sha256": "04d898eabfb8f8c5ac0b297aa97678858c2133e8cb559e2be4d0e54ec609db04",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d"
+    },
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "absent",
+        "null_at": "static_id"
+      },
+      "ordinary_wrapper_returned": true,
+      "callback_returned": true,
+      "original_outer_postconditions_passed": true,
+      "observation_PC_rewritten": false,
+      "member_prefix": {
+        "instruction_observations": 185914,
+        "trace_sha256": "5755a053e2ab9fb4396ac698730bd1c503beca0e8009ff317ee3c5779bec0824",
+        "code_sha256": "181d25796811e94651c1c47e34d90d3a268e5ae17417bb6aec415ea29faba968"
+      },
+      "first_context_read": {
+        "native_pc": "0x16f96c",
+        "bytecode": "0xfae4c",
+        "member_offset": "0x50",
+        "size": 8,
+        "base_is_constructed_handler": true,
+        "value_is_constructor_member_payload": true
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "class_fixture",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x27186c"
+        },
+        {
+          "slot": "0x388",
+          "result": "NULL_or_false",
+          "caller": "0x28b758"
+        },
+        {
+          "slot": "0xb8",
+          "result": "NULL_or_false",
+          "caller": "0x28b798"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "evaluator_returns": [
+        {
+          "native_pc": "0x28bfc0",
+          "result": 0
+        }
+      ],
+      "flag_reads": [
+        {
+          "pc": "0x282a68",
+          "member_offset": "0x52",
+          "byte": 1,
+          "bytecode": "0xfae64"
+        }
+      ],
+      "packed_flag_boolean": 1,
+      "status_origin": {
+        "bytecode": "0xfef94",
+        "word": "0x7ea0f97b",
+        "source_R0": 0,
+        "signed_immediate": -11,
+        "native_value": -11
+      },
+      "insertion_sequence": [
+        {
+          "key": "X-Neptune",
+          "signed_int32": -8,
+          "bytecode": "0xfc5ac",
+          "formatter_text_length": 8,
+          "value_length": 11,
+          "value_sha256": "a1044d84eac2246ae4d65e06f16274e75fd0d79dd10871da2cceb6416f06b5d6"
+        },
+        {
+          "key": "X-Neptune",
+          "signed_int32": -11,
+          "bytecode": "0xff048",
+          "formatter_text_length": 8,
+          "value_length": 12,
+          "value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b"
+        }
+      ],
+      "final_tree_has_last_value_and_original_key": true,
+      "discarded_strings_freed_before_callback_return": true,
+      "discarded_string_allocations": {
+        "value_object": 24,
+        "value_buffer": 16,
+        "key_object": 24,
+        "key_buffer": 10
+      },
+      "discarded_string_free_order": [
+        "key_buffer",
+        "key_object",
+        "value_buffer",
+        "value_object"
+      ],
+      "tracked_allocation_lifetimes": {
+        "discarded_value_object": {
+          "size": 24,
+          "allocation_epoch": 552,
+          "free_epoch": 587
+        },
+        "discarded_value_buffer": {
+          "size": 16,
+          "allocation_epoch": 559,
+          "free_epoch": 586
+        },
+        "discarded_key_object": {
+          "size": 24,
+          "allocation_epoch": 582,
+          "free_epoch": 585
+        },
+        "discarded_key_buffer": {
+          "size": 10,
+          "allocation_epoch": 583,
+          "free_epoch": 584
+        },
+        "output_container": {
+          "size": 40,
+          "allocation_epoch": 522,
+          "free_epoch": 655
+        },
+        "output_counter": {
+          "size": 4,
+          "allocation_epoch": 525,
+          "free_epoch": 646
+        },
+        "output_controller": {
+          "size": 40,
+          "allocation_epoch": 523,
+          "free_epoch": 654
+        },
+        "output_sentinel": {
+          "size": 40,
+          "allocation_epoch": 524,
+          "free_epoch": 653
+        },
+        "output_node0": {
+          "size": 40,
+          "allocation_epoch": 567,
+          "free_epoch": 652
+        },
+        "output_pair0": {
+          "size": 16,
+          "allocation_epoch": 566,
+          "free_epoch": 651
+        },
+        "output_key0_object": {
+          "size": 24,
+          "allocation_epoch": 564,
+          "free_epoch": 648
+        },
+        "output_key0_buffer": {
+          "size": 10,
+          "allocation_epoch": 565,
+          "free_epoch": 647
+        },
+        "output_value0_object": {
+          "size": 24,
+          "allocation_epoch": 570,
+          "free_epoch": 650
+        },
+        "output_value0_buffer": {
+          "size": 16,
+          "allocation_epoch": 577,
+          "free_epoch": 649
+        }
+      },
+      "formatter_signed_int32": -11,
+      "formatter_text_length": 8,
+      "output_tree_node_count": 1,
+      "output_counter_at_callback_return": 1,
+      "output_keys": [
+        "X-Neptune"
+      ],
+      "output_value_length": 12,
+      "output_value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b",
+      "serialized_length": 25,
+      "serialized_sha256": "e3f893005b89e0a6feac1b8a1b7016a3bb7be514e4121884ad53d1e34497e00f",
+      "serializer_entries": 1,
+      "serialized_equals_observed_tree": true,
+      "wrapper_RET_matches_native_return": true,
+      "serialized_buffer_live_and_caller_owned": true,
+      "serialized_allocation_size": 26,
+      "tracked_output_allocations": {
+        "container": 40,
+        "counter": 4,
+        "controller": 40,
+        "sentinel": 40,
+        "node0": 40,
+        "pair0": 16,
+        "key0_object": 24,
+        "key0_buffer": 10,
+        "value0_object": 24,
+        "value0_buffer": 16
+      },
+      "tracked_output_blocks_freed_before_RET": 10,
+      "output_free_order": [
+        "counter",
+        "key0_buffer",
+        "key0_object",
+        "value0_buffer",
+        "value0_object",
+        "pair0",
+        "node0",
+        "sentinel",
+        "controller",
+        "container"
+      ],
+      "root_native_calls": [
+        {
+          "bytecode": "0xf7e84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7f08",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7fa0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7ffc",
+          "wrapper": "0x28589c",
+          "target": "0x291440"
+        },
+        {
+          "bytecode": "0xf8044",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf8078",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xf80a8",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf80f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf812c",
+          "wrapper": "0x2858ec",
+          "target": "0x24880c"
+        },
+        {
+          "bytecode": "0xf8178",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf82cc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8718",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf8750",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8774",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf879c",
+          "wrapper": "0x2859cc",
+          "target": "0x3ed5c640"
+        },
+        {
+          "bytecode": "0xf87bc",
+          "wrapper": "0x2859e0",
+          "target": "0x32a330"
+        },
+        {
+          "bytecode": "0xf87f0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8818",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8850",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8880",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf88cc",
+          "wrapper": "0x2859ec",
+          "target": "0x172ca4"
+        },
+        {
+          "bytecode": "0xf8c30",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8c6c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8d58",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8d94",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8fd0",
+          "wrapper": "0x285a80",
+          "target": "0x28bb5c"
+        },
+        {
+          "bytecode": "0xf919c",
+          "wrapper": "0x285a80",
+          "target": "0x28c0ec"
+        },
+        {
+          "bytecode": "0xf91c8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9204",
+          "wrapper": "0x285aa0",
+          "target": "0x25cdd4"
+        },
+        {
+          "bytecode": "0xf9224",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9984",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf99a4",
+          "wrapper": "0x285abc",
+          "target": "0x256ab0"
+        },
+        {
+          "bytecode": "0xf99c4",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9a08",
+          "wrapper": "0x285adc",
+          "target": "0x25bf14"
+        },
+        {
+          "bytecode": "0xf9a28",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xf9a58",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9b08",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf9b38",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xf9b68",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9b90",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9bac",
+          "wrapper": "0x28591c",
+          "target": "0x248f4c"
+        },
+        {
+          "bytecode": "0xf9bcc",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9bf4",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9c20",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xf9c40",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9c84",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf9cc0",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9cec",
+          "wrapper": "0x285b7c",
+          "target": "0x3edb5254"
+        },
+        {
+          "bytecode": "0xf9d08",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf9d38",
+          "wrapper": "0x285b9c",
+          "target": "0x248274"
+        },
+        {
+          "bytecode": "0xf9d5c",
+          "wrapper": "0x285bb0",
+          "target": "0x25c168"
+        },
+        {
+          "bytecode": "0xfaa50",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaaa8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab10",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab68",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfabd0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac28",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac90",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xface8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfad24",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xfad50",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfad74",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfada8",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfae64",
+          "wrapper": "0x285c3c",
+          "target": "0x282a68"
+        },
+        {
+          "bytecode": "0xfaec4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf1c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfafdc",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb044",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb09c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb0dc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb0fc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb138",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb180",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb1a4",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb604",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb1f8",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb224",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb250",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb6a4",
+          "wrapper": "0x285c80",
+          "target": "0x2481fc"
+        },
+        {
+          "bytecode": "0xfb6cc",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb6f0",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb714",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb748",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb768",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb788",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb7b8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb7d8",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb7f8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb828",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb848",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb868",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb894",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbc34",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc60",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc9c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd40",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbd70",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd94",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfbde4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe54",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe8c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbebc",
+          "wrapper": "0x285cd8",
+          "target": "0x248f5c"
+        },
+        {
+          "bytecode": "0xfbee4",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfbf00",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbf2c",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc10c",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfc130",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc168",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc18c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc1e0",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc218",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc2b0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc30c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc34c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc36c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfc4f0",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfc520",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfc540",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc55c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc584",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfc5ac",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xfec9c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfecbc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfece0",
+          "wrapper": "0x285f44",
+          "target": "0x25c150"
+        },
+        {
+          "bytecode": "0xfede0",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfee04",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfef88",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfefbc",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfefd8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfeff8",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xff020",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xff048",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xff074",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xff0a8",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff14c",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xff178",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xff1ac",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff1d8",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff210",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff258",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff294",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff2dc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff70c",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff79c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff7bc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff7dc",
+          "wrapper": "0x285b70",
+          "target": "0x25c01c"
+        },
+        {
+          "bytecode": "0xff7fc",
+          "wrapper": "0x285f9c",
+          "target": "0x25cf98"
+        },
+        {
+          "bytecode": "0xff830",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff8b0",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff8d0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff9f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffa24",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xffa60",
+          "wrapper": "0x285910",
+          "target": "0x32a264"
+        },
+        {
+          "bytecode": "0xffa8c",
+          "wrapper": "0x285b70",
+          "target": "0x25c12c"
+        },
+        {
+          "bytecode": "0xffaac",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffae0",
+          "wrapper": "0x285f60",
+          "target": "0x2914d0"
+        },
+        {
+          "bytecode": "0xffb48",
+          "wrapper": "0x285fb4",
+          "target": "0x28dc38"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 357898,
+      "continuation_trace_sha256": "67ba4fd56b37b2d66e3f87ac6139b01541160c6c5832feb8aa528c9f637f1e39",
+      "continuation_code_sha256": "5f24ca19e887617d255b0a0a7f9dbacb44a3a3a0a04cf39f256ffd13073446df",
+      "allocation_ledger_sha256": "04d898eabfb8f8c5ac0b297aa97678858c2133e8cb559e2be4d0e54ec609db04",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d"
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "absent",
+        "null_at": "class0"
+      },
+      "ordinary_wrapper_returned": true,
+      "callback_returned": true,
+      "original_outer_postconditions_passed": true,
+      "observation_PC_rewritten": false,
+      "member_prefix": {
+        "instruction_observations": 185881,
+        "trace_sha256": "1d7606db60de1ba2beb6c40d4d67d33b25253486f47f24c3507795762212b13e",
+        "code_sha256": "8618d4983e681a21f08d3c5700dd0474076561e15d06a022d6647b966019e613"
+      },
+      "first_context_read": {
+        "native_pc": "0x16f96c",
+        "bytecode": "0xfae4c",
+        "member_offset": "0x50",
+        "size": 8,
+        "base_is_constructed_handler": true,
+        "value_is_constructor_member_payload": true
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "NULL_or_false",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "evaluator_returns": [
+        {
+          "native_pc": "0x28bfc0",
+          "result": 0
+        }
+      ],
+      "flag_reads": [
+        {
+          "pc": "0x282a68",
+          "member_offset": "0x52",
+          "byte": 1,
+          "bytecode": "0xfae64"
+        }
+      ],
+      "packed_flag_boolean": 1,
+      "status_origin": {
+        "bytecode": "0xfef94",
+        "word": "0x7ea0f97b",
+        "source_R0": 0,
+        "signed_immediate": -11,
+        "native_value": -11
+      },
+      "insertion_sequence": [
+        {
+          "key": "X-Neptune",
+          "signed_int32": -8,
+          "bytecode": "0xfc5ac",
+          "formatter_text_length": 8,
+          "value_length": 11,
+          "value_sha256": "a1044d84eac2246ae4d65e06f16274e75fd0d79dd10871da2cceb6416f06b5d6"
+        },
+        {
+          "key": "X-Neptune",
+          "signed_int32": -11,
+          "bytecode": "0xff048",
+          "formatter_text_length": 8,
+          "value_length": 12,
+          "value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b"
+        }
+      ],
+      "final_tree_has_last_value_and_original_key": true,
+      "discarded_strings_freed_before_callback_return": true,
+      "discarded_string_allocations": {
+        "value_object": 24,
+        "value_buffer": 16,
+        "key_object": 24,
+        "key_buffer": 10
+      },
+      "discarded_string_free_order": [
+        "key_buffer",
+        "key_object",
+        "value_buffer",
+        "value_object"
+      ],
+      "tracked_allocation_lifetimes": {
+        "discarded_value_object": {
+          "size": 24,
+          "allocation_epoch": 552,
+          "free_epoch": 587
+        },
+        "discarded_value_buffer": {
+          "size": 16,
+          "allocation_epoch": 559,
+          "free_epoch": 586
+        },
+        "discarded_key_object": {
+          "size": 24,
+          "allocation_epoch": 582,
+          "free_epoch": 585
+        },
+        "discarded_key_buffer": {
+          "size": 10,
+          "allocation_epoch": 583,
+          "free_epoch": 584
+        },
+        "output_container": {
+          "size": 40,
+          "allocation_epoch": 522,
+          "free_epoch": 655
+        },
+        "output_counter": {
+          "size": 4,
+          "allocation_epoch": 525,
+          "free_epoch": 646
+        },
+        "output_controller": {
+          "size": 40,
+          "allocation_epoch": 523,
+          "free_epoch": 654
+        },
+        "output_sentinel": {
+          "size": 40,
+          "allocation_epoch": 524,
+          "free_epoch": 653
+        },
+        "output_node0": {
+          "size": 40,
+          "allocation_epoch": 567,
+          "free_epoch": 652
+        },
+        "output_pair0": {
+          "size": 16,
+          "allocation_epoch": 566,
+          "free_epoch": 651
+        },
+        "output_key0_object": {
+          "size": 24,
+          "allocation_epoch": 564,
+          "free_epoch": 648
+        },
+        "output_key0_buffer": {
+          "size": 10,
+          "allocation_epoch": 565,
+          "free_epoch": 647
+        },
+        "output_value0_object": {
+          "size": 24,
+          "allocation_epoch": 570,
+          "free_epoch": 650
+        },
+        "output_value0_buffer": {
+          "size": 16,
+          "allocation_epoch": 577,
+          "free_epoch": 649
+        }
+      },
+      "formatter_signed_int32": -11,
+      "formatter_text_length": 8,
+      "output_tree_node_count": 1,
+      "output_counter_at_callback_return": 1,
+      "output_keys": [
+        "X-Neptune"
+      ],
+      "output_value_length": 12,
+      "output_value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b",
+      "serialized_length": 25,
+      "serialized_sha256": "e3f893005b89e0a6feac1b8a1b7016a3bb7be514e4121884ad53d1e34497e00f",
+      "serializer_entries": 1,
+      "serialized_equals_observed_tree": true,
+      "wrapper_RET_matches_native_return": true,
+      "serialized_buffer_live_and_caller_owned": true,
+      "serialized_allocation_size": 26,
+      "tracked_output_allocations": {
+        "container": 40,
+        "counter": 4,
+        "controller": 40,
+        "sentinel": 40,
+        "node0": 40,
+        "pair0": 16,
+        "key0_object": 24,
+        "key0_buffer": 10,
+        "value0_object": 24,
+        "value0_buffer": 16
+      },
+      "tracked_output_blocks_freed_before_RET": 10,
+      "output_free_order": [
+        "counter",
+        "key0_buffer",
+        "key0_object",
+        "value0_buffer",
+        "value0_object",
+        "pair0",
+        "node0",
+        "sentinel",
+        "controller",
+        "container"
+      ],
+      "root_native_calls": [
+        {
+          "bytecode": "0xf7e84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7f08",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7fa0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7ffc",
+          "wrapper": "0x28589c",
+          "target": "0x291440"
+        },
+        {
+          "bytecode": "0xf8044",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf8078",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xf80a8",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf80f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf812c",
+          "wrapper": "0x2858ec",
+          "target": "0x24880c"
+        },
+        {
+          "bytecode": "0xf8178",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf82cc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8718",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf8750",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8774",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf879c",
+          "wrapper": "0x2859cc",
+          "target": "-0x770b1e89c0"
+        },
+        {
+          "bytecode": "0xf87bc",
+          "wrapper": "0x2859e0",
+          "target": "0x32a330"
+        },
+        {
+          "bytecode": "0xf87f0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8818",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8850",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8880",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf88cc",
+          "wrapper": "0x2859ec",
+          "target": "0x172ca4"
+        },
+        {
+          "bytecode": "0xf8c30",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8c6c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8d58",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8d94",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8fd0",
+          "wrapper": "0x285a80",
+          "target": "0x28bb5c"
+        },
+        {
+          "bytecode": "0xf919c",
+          "wrapper": "0x285a80",
+          "target": "0x28c0ec"
+        },
+        {
+          "bytecode": "0xf91c8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9204",
+          "wrapper": "0x285aa0",
+          "target": "0x25cdd4"
+        },
+        {
+          "bytecode": "0xf9224",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9984",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf99a4",
+          "wrapper": "0x285abc",
+          "target": "0x256ab0"
+        },
+        {
+          "bytecode": "0xf99c4",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9a08",
+          "wrapper": "0x285adc",
+          "target": "0x25bf14"
+        },
+        {
+          "bytecode": "0xf9a28",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xf9a58",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9b08",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf9b38",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xf9b68",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9b90",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9bac",
+          "wrapper": "0x28591c",
+          "target": "0x248f4c"
+        },
+        {
+          "bytecode": "0xf9bcc",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9bf4",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9c20",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xf9c40",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9c84",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf9cc0",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9cec",
+          "wrapper": "0x285b7c",
+          "target": "-0x770b18fdac"
+        },
+        {
+          "bytecode": "0xf9d08",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf9d38",
+          "wrapper": "0x285b9c",
+          "target": "0x248274"
+        },
+        {
+          "bytecode": "0xf9d5c",
+          "wrapper": "0x285bb0",
+          "target": "0x25c168"
+        },
+        {
+          "bytecode": "0xfaa50",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaaa8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab10",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab68",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfabd0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac28",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac90",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xface8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfad24",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xfad50",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfad74",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfada8",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfae64",
+          "wrapper": "0x285c3c",
+          "target": "0x282a68"
+        },
+        {
+          "bytecode": "0xfaec4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf1c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfafdc",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb044",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb09c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb0dc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb0fc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb138",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb180",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb1a4",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb604",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb1f8",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb224",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb250",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb6a4",
+          "wrapper": "0x285c80",
+          "target": "0x2481fc"
+        },
+        {
+          "bytecode": "0xfb6cc",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb6f0",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb714",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb748",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb768",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb788",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb7b8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb7d8",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb7f8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb828",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb848",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb868",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb894",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbc34",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc60",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc9c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd40",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbd70",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd94",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfbde4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe54",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe8c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbebc",
+          "wrapper": "0x285cd8",
+          "target": "0x248f5c"
+        },
+        {
+          "bytecode": "0xfbee4",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfbf00",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbf2c",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc10c",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfc130",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc168",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc18c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc1e0",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc218",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc2b0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc30c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc34c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc36c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfc4f0",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfc520",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfc540",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc55c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc584",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfc5ac",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xfec9c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfecbc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfece0",
+          "wrapper": "0x285f44",
+          "target": "0x25c150"
+        },
+        {
+          "bytecode": "0xfede0",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfee04",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfef88",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfefbc",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfefd8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfeff8",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xff020",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xff048",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xff074",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xff0a8",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff14c",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xff178",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xff1ac",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff1d8",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff210",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff258",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff294",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff2dc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff70c",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff79c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff7bc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff7dc",
+          "wrapper": "0x285b70",
+          "target": "0x25c01c"
+        },
+        {
+          "bytecode": "0xff7fc",
+          "wrapper": "0x285f9c",
+          "target": "0x25cf98"
+        },
+        {
+          "bytecode": "0xff830",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff8b0",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff8d0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff9f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffa24",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xffa60",
+          "wrapper": "0x285910",
+          "target": "0x32a264"
+        },
+        {
+          "bytecode": "0xffa8c",
+          "wrapper": "0x285b70",
+          "target": "0x25c12c"
+        },
+        {
+          "bytecode": "0xffaac",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffae0",
+          "wrapper": "0x285f60",
+          "target": "0x2914d0"
+        },
+        {
+          "bytecode": "0xffb48",
+          "wrapper": "0x285fb4",
+          "target": "0x28dc38"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 357865,
+      "continuation_trace_sha256": "dffaf05c66c2cf1d49901cd874dad170d981396f3dfc662f123fc1682291ad73",
+      "continuation_code_sha256": "fe3cd36d3d8e8187af77aced7fd956b662d7d1ae6e82ba8287dfa4cd5a69e7af",
+      "allocation_ledger_sha256": "04d898eabfb8f8c5ac0b297aa97678858c2133e8cb559e2be4d0e54ec609db04",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d"
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "absent",
+        "null_at": "static_id"
+      },
+      "ordinary_wrapper_returned": true,
+      "callback_returned": true,
+      "original_outer_postconditions_passed": true,
+      "observation_PC_rewritten": false,
+      "member_prefix": {
+        "instruction_observations": 185914,
+        "trace_sha256": "5755a053e2ab9fb4396ac698730bd1c503beca0e8009ff317ee3c5779bec0824",
+        "code_sha256": "181d25796811e94651c1c47e34d90d3a268e5ae17417bb6aec415ea29faba968"
+      },
+      "first_context_read": {
+        "native_pc": "0x16f96c",
+        "bytecode": "0xfae4c",
+        "member_offset": "0x50",
+        "size": 8,
+        "base_is_constructed_handler": true,
+        "value_is_constructor_member_payload": true
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "class_fixture",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x27186c"
+        },
+        {
+          "slot": "0x388",
+          "result": "NULL_or_false",
+          "caller": "0x28b758"
+        },
+        {
+          "slot": "0xb8",
+          "result": "NULL_or_false",
+          "caller": "0x28b798"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "evaluator_returns": [
+        {
+          "native_pc": "0x28bfc0",
+          "result": 0
+        }
+      ],
+      "flag_reads": [
+        {
+          "pc": "0x282a68",
+          "member_offset": "0x52",
+          "byte": 1,
+          "bytecode": "0xfae64"
+        }
+      ],
+      "packed_flag_boolean": 1,
+      "status_origin": {
+        "bytecode": "0xfef94",
+        "word": "0x7ea0f97b",
+        "source_R0": 0,
+        "signed_immediate": -11,
+        "native_value": -11
+      },
+      "insertion_sequence": [
+        {
+          "key": "X-Neptune",
+          "signed_int32": -8,
+          "bytecode": "0xfc5ac",
+          "formatter_text_length": 8,
+          "value_length": 11,
+          "value_sha256": "a1044d84eac2246ae4d65e06f16274e75fd0d79dd10871da2cceb6416f06b5d6"
+        },
+        {
+          "key": "X-Neptune",
+          "signed_int32": -11,
+          "bytecode": "0xff048",
+          "formatter_text_length": 8,
+          "value_length": 12,
+          "value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b"
+        }
+      ],
+      "final_tree_has_last_value_and_original_key": true,
+      "discarded_strings_freed_before_callback_return": true,
+      "discarded_string_allocations": {
+        "value_object": 24,
+        "value_buffer": 16,
+        "key_object": 24,
+        "key_buffer": 10
+      },
+      "discarded_string_free_order": [
+        "key_buffer",
+        "key_object",
+        "value_buffer",
+        "value_object"
+      ],
+      "tracked_allocation_lifetimes": {
+        "discarded_value_object": {
+          "size": 24,
+          "allocation_epoch": 552,
+          "free_epoch": 587
+        },
+        "discarded_value_buffer": {
+          "size": 16,
+          "allocation_epoch": 559,
+          "free_epoch": 586
+        },
+        "discarded_key_object": {
+          "size": 24,
+          "allocation_epoch": 582,
+          "free_epoch": 585
+        },
+        "discarded_key_buffer": {
+          "size": 10,
+          "allocation_epoch": 583,
+          "free_epoch": 584
+        },
+        "output_container": {
+          "size": 40,
+          "allocation_epoch": 522,
+          "free_epoch": 655
+        },
+        "output_counter": {
+          "size": 4,
+          "allocation_epoch": 525,
+          "free_epoch": 646
+        },
+        "output_controller": {
+          "size": 40,
+          "allocation_epoch": 523,
+          "free_epoch": 654
+        },
+        "output_sentinel": {
+          "size": 40,
+          "allocation_epoch": 524,
+          "free_epoch": 653
+        },
+        "output_node0": {
+          "size": 40,
+          "allocation_epoch": 567,
+          "free_epoch": 652
+        },
+        "output_pair0": {
+          "size": 16,
+          "allocation_epoch": 566,
+          "free_epoch": 651
+        },
+        "output_key0_object": {
+          "size": 24,
+          "allocation_epoch": 564,
+          "free_epoch": 648
+        },
+        "output_key0_buffer": {
+          "size": 10,
+          "allocation_epoch": 565,
+          "free_epoch": 647
+        },
+        "output_value0_object": {
+          "size": 24,
+          "allocation_epoch": 570,
+          "free_epoch": 650
+        },
+        "output_value0_buffer": {
+          "size": 16,
+          "allocation_epoch": 577,
+          "free_epoch": 649
+        }
+      },
+      "formatter_signed_int32": -11,
+      "formatter_text_length": 8,
+      "output_tree_node_count": 1,
+      "output_counter_at_callback_return": 1,
+      "output_keys": [
+        "X-Neptune"
+      ],
+      "output_value_length": 12,
+      "output_value_sha256": "1bf206240310d9ae694302bf0f50d0a9d6c49f980a6d56f665ae874d2914702b",
+      "serialized_length": 25,
+      "serialized_sha256": "e3f893005b89e0a6feac1b8a1b7016a3bb7be514e4121884ad53d1e34497e00f",
+      "serializer_entries": 1,
+      "serialized_equals_observed_tree": true,
+      "wrapper_RET_matches_native_return": true,
+      "serialized_buffer_live_and_caller_owned": true,
+      "serialized_allocation_size": 26,
+      "tracked_output_allocations": {
+        "container": 40,
+        "counter": 4,
+        "controller": 40,
+        "sentinel": 40,
+        "node0": 40,
+        "pair0": 16,
+        "key0_object": 24,
+        "key0_buffer": 10,
+        "value0_object": 24,
+        "value0_buffer": 16
+      },
+      "tracked_output_blocks_freed_before_RET": 10,
+      "output_free_order": [
+        "counter",
+        "key0_buffer",
+        "key0_object",
+        "value0_buffer",
+        "value0_object",
+        "pair0",
+        "node0",
+        "sentinel",
+        "controller",
+        "container"
+      ],
+      "root_native_calls": [
+        {
+          "bytecode": "0xf7e84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7f08",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7fa0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xf7ffc",
+          "wrapper": "0x28589c",
+          "target": "0x291440"
+        },
+        {
+          "bytecode": "0xf8044",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf8078",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xf80a8",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf80f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf812c",
+          "wrapper": "0x2858ec",
+          "target": "0x24880c"
+        },
+        {
+          "bytecode": "0xf8178",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf82cc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8718",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf8750",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8774",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf879c",
+          "wrapper": "0x2859cc",
+          "target": "-0x770b1e89c0"
+        },
+        {
+          "bytecode": "0xf87bc",
+          "wrapper": "0x2859e0",
+          "target": "0x32a330"
+        },
+        {
+          "bytecode": "0xf87f0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8818",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf8850",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8880",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf88cc",
+          "wrapper": "0x2859ec",
+          "target": "0x172ca4"
+        },
+        {
+          "bytecode": "0xf8c30",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8c6c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8d58",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xf8d94",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xf8fd0",
+          "wrapper": "0x285a80",
+          "target": "0x28bb5c"
+        },
+        {
+          "bytecode": "0xf919c",
+          "wrapper": "0x285a80",
+          "target": "0x28c0ec"
+        },
+        {
+          "bytecode": "0xf91c8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9204",
+          "wrapper": "0x285aa0",
+          "target": "0x25cdd4"
+        },
+        {
+          "bytecode": "0xf9224",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9984",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf99a4",
+          "wrapper": "0x285abc",
+          "target": "0x256ab0"
+        },
+        {
+          "bytecode": "0xf99c4",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xf9a08",
+          "wrapper": "0x285adc",
+          "target": "0x25bf14"
+        },
+        {
+          "bytecode": "0xf9a28",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xf9a58",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9b08",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xf9b38",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xf9b68",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9b90",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9bac",
+          "wrapper": "0x28591c",
+          "target": "0x248f4c"
+        },
+        {
+          "bytecode": "0xf9bcc",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xf9bf4",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xf9c20",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xf9c40",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xf9ad4",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xf9c84",
+          "wrapper": "0x285944",
+          "target": "0x32d3a0"
+        },
+        {
+          "bytecode": "0xf9cc0",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xf9cec",
+          "wrapper": "0x285b7c",
+          "target": "-0x770b18fdac"
+        },
+        {
+          "bytecode": "0xf9d08",
+          "wrapper": "0x28596c",
+          "target": "0x32d4f8"
+        },
+        {
+          "bytecode": "0xf9d38",
+          "wrapper": "0x285b9c",
+          "target": "0x248274"
+        },
+        {
+          "bytecode": "0xf9d5c",
+          "wrapper": "0x285bb0",
+          "target": "0x25c168"
+        },
+        {
+          "bytecode": "0xfaa50",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaaa8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab10",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfab68",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfabd0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac28",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfac90",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xface8",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfad24",
+          "wrapper": "0x2858bc",
+          "target": "0x25c324"
+        },
+        {
+          "bytecode": "0xfad50",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfad74",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfada8",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfae64",
+          "wrapper": "0x285c3c",
+          "target": "0x282a68"
+        },
+        {
+          "bytecode": "0xfaec4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf1c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfaf84",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfafdc",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb044",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb09c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfb0dc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb0fc",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb138",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb180",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb1a4",
+          "wrapper": "0x285c00",
+          "target": "0x27617c"
+        },
+        {
+          "bytecode": "0xfb604",
+          "wrapper": "0x285c1c",
+          "target": "0x2765c4"
+        },
+        {
+          "bytecode": "0xfb1f8",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb224",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb250",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfb6a4",
+          "wrapper": "0x285c80",
+          "target": "0x2481fc"
+        },
+        {
+          "bytecode": "0xfb6cc",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb6f0",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb714",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb748",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb768",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb788",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb7b8",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb7d8",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb7f8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb828",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfb848",
+          "wrapper": "0x285c94",
+          "target": "0x2487e8"
+        },
+        {
+          "bytecode": "0xfb868",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfb894",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbc34",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc60",
+          "wrapper": "0x285c5c",
+          "target": "0x248c1c"
+        },
+        {
+          "bytecode": "0xfbc9c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd40",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbd70",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbd94",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfbde4",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe54",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfbe8c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfbebc",
+          "wrapper": "0x285cd8",
+          "target": "0x248f5c"
+        },
+        {
+          "bytecode": "0xfbee4",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfbf00",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfbf2c",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc10c",
+          "wrapper": "0x285cf4",
+          "target": "0x2487b4"
+        },
+        {
+          "bytecode": "0xfc130",
+          "wrapper": "0x285d10",
+          "target": "0x248c54"
+        },
+        {
+          "bytecode": "0xfc168",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc18c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc1e0",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc218",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc2b0",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc30c",
+          "wrapper": "0x285888",
+          "target": "0x167e54"
+        },
+        {
+          "bytecode": "0xfc34c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc36c",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfc4f0",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfc520",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfc540",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfc55c",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfc584",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xfc5ac",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xfec9c",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfecbc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfece0",
+          "wrapper": "0x285f44",
+          "target": "0x25c150"
+        },
+        {
+          "bytecode": "0xfede0",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xfee04",
+          "wrapper": "0x28591c",
+          "target": "0x2481ac"
+        },
+        {
+          "bytecode": "0xfef88",
+          "wrapper": "0x285978",
+          "target": "0x256ed4"
+        },
+        {
+          "bytecode": "0xfefbc",
+          "wrapper": "0x285990",
+          "target": "0x248908"
+        },
+        {
+          "bytecode": "0xfefd8",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xfeff8",
+          "wrapper": "0x285928",
+          "target": "0x32a1f0"
+        },
+        {
+          "bytecode": "0xff020",
+          "wrapper": "0x2859a8",
+          "target": "0x248344"
+        },
+        {
+          "bytecode": "0xff048",
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c"
+        },
+        {
+          "bytecode": "0xff074",
+          "wrapper": "0x285aec",
+          "target": "0x25c188"
+        },
+        {
+          "bytecode": "0xff0a8",
+          "wrapper": "0x285aec",
+          "target": "0x25c180"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff14c",
+          "wrapper": "0x2858a8",
+          "target": "0x347f60"
+        },
+        {
+          "bytecode": "0xff178",
+          "wrapper": "0x285b28",
+          "target": "0x24c59c"
+        },
+        {
+          "bytecode": "0xff1ac",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff1d8",
+          "wrapper": "0x285b44",
+          "target": "0x2483e0"
+        },
+        {
+          "bytecode": "0xff210",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff238",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff258",
+          "wrapper": "0x285b54",
+          "target": "0x24c5b8"
+        },
+        {
+          "bytecode": "0xff118",
+          "wrapper": "0x285b08",
+          "target": "0x24c600"
+        },
+        {
+          "bytecode": "0xff294",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff2dc",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff70c",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff79c",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff7bc",
+          "wrapper": "0x28591c",
+          "target": "0x2484b8"
+        },
+        {
+          "bytecode": "0xff7dc",
+          "wrapper": "0x285b70",
+          "target": "0x25c01c"
+        },
+        {
+          "bytecode": "0xff7fc",
+          "wrapper": "0x285f9c",
+          "target": "0x25cf98"
+        },
+        {
+          "bytecode": "0xff830",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff8b0",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xff8d0",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xff9f4",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffa24",
+          "wrapper": "0x2858d0",
+          "target": "0x26c858"
+        },
+        {
+          "bytecode": "0xffa60",
+          "wrapper": "0x285910",
+          "target": "0x32a264"
+        },
+        {
+          "bytecode": "0xffa8c",
+          "wrapper": "0x285b70",
+          "target": "0x25c12c"
+        },
+        {
+          "bytecode": "0xffaac",
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0"
+        },
+        {
+          "bytecode": "0xffae0",
+          "wrapper": "0x285f60",
+          "target": "0x2914d0"
+        },
+        {
+          "bytecode": "0xffb48",
+          "wrapper": "0x285fb4",
+          "target": "0x28dc38"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "continuation_instruction_observations": 357898,
+      "continuation_trace_sha256": "67ba4fd56b37b2d66e3f87ac6139b01541160c6c5832feb8aa528c9f637f1e39",
+      "continuation_code_sha256": "5f24ca19e887617d255b0a0a7f9dbacb44a3a3a0a04cf39f256ffd13073446df",
+      "allocation_ledger_sha256": "04d898eabfb8f8c5ac0b297aa97678858c2133e8cb559e2be4d0e54ec609db04",
+      "publication_ledger_sha256": "bdf3633f74dce2f518f1506a5b94a94ecc2d28c092e13e0e52950beb3fc8586d"
+    }
+  ]
+}

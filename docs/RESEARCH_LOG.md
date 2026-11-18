@@ -1,5 +1,20 @@
 # Checkpoint log
 
+2026-11-18：同一 CPU 上原版构造出的普通 `0x171` 路径，已从成员读取继续到
+callback 返回、输出序列化和普通包装器 RET；扩展观察器没有改写停止 PC。
+四组、两个基址的合成 NULL JNI 控制各观察 357865/357898 条 continuation
+指令（含 provider 边界）。同一 `X-Neptune` 先插入 `-8`，后插入 `-11`；
+原版容器保留第一次 key、替换 value，并释放重复 key/旧 value。最终 `-11`
+在 `+0xfef94/0x7ea0f97b` 从源 R0=0 形成。四个丢弃分配在 callback 返回前
+释放，十个最终树分配在 RET 前释放；生命周期按 allocation epoch 核对。
+25 字节序列化与最终单节点树一致，原生返回指针一致，返回缓冲区仍存活。
+14 条指令、8 个字节码字绑定，213 项损坏证据拒绝、四组公开 CLI 原生重放及
+四种实际错误 CLI 调用通过；旧默认四组重放和 63 项损坏证据检查仍通过。
+沿用旧 OS/JNI/Bionic、虚拟线程和诊断 helper 服务，没有新增 provider 或
+Android 操作。诊断头不等于签名成功，也未解释六头缺失的完整原因；真实 JVM、
+完整 service/context、整请求差分、普通六头和完整 signer 仍未验证。
+见[诊断返回与清理证据](../platforms/bytedance/tomato/evidence/vm9_native_171_output_20261118.json)。
+
 2026-11-18：原版 outer 构造已在同一 CPU 上继续经过普通 `0x171` VM 的栈
 检查器，首次读取构造出的 handler 的 `+0x50` 成员并写入 R2。四组控制覆盖
 两个基址及显式 NULL class / NULL static ID 输入；复用既有 JNI Services，

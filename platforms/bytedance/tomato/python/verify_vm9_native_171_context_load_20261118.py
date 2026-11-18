@@ -63,7 +63,7 @@ def controls():
             for base in graph.BASES for profile in ('class0', 'static_id')]
 
 
-def replay(path, libc, *, on_case=None, case_controls=None):
+def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=None):
     from unicorn import arm64_const as arm
     from capstone import Cs, CS_ARCH_ARM64, CS_MODE_ARM
     _, main_loads, read_main = graph.inputs.load_elf(path)
@@ -76,7 +76,8 @@ def replay(path, libc, *, on_case=None, case_controls=None):
     rows = []
     for control in controls() if case_controls is None else case_controls:
         image = control['base']
-        state = dict(continued=False, request_started=False, stored=False)
+        state = dict(continued=False, request_started=False, stored=False, store_verified=False)
+        extension = None if _extension_factory is None else _extension_factory(control)
         service = stack.Services(image, {}, dict(null_at=control['null_at']))
         targets = {slot:graph.SCRATCH+0x800+i*16 for i,slot in enumerate(SLOTS)}
         trace, code, jni, reads, returns, syscalls = [], {}, [], [], [], []
@@ -117,6 +118,8 @@ def replay(path, libc, *, on_case=None, case_controls=None):
                 handler_bytes=bytes(cpu.mem_read(context,0x80)),
                 expected_payload=word(cpu,context+0x50),counter=word(cpu,context+0x58),
                 counter_before=word(cpu,word(cpu,context+0x58),4))
+            if extension is not None:
+                state['allocator_events_ref']=unused['allocator_events']
             assert not any(start<graph.SCRATCH+4096 and graph.SCRATCH<=end for start,end,_ in cpu.mem_regions())
             cpu.mem_map(graph.SCRATCH,4096)
             cpu.mem_write(graph.SCRATCH+0x100,graph.inputs.URL+b'\0')
@@ -150,18 +153,24 @@ def replay(path, libc, *, on_case=None, case_controls=None):
         def observe(cpu,pc):
             if not state['continued']: return
             offset=pc-image
-            if offset==STOP and state['stored']:
+            if extension is not None:
+                extension.observe(cpu,pc,state)
+            if offset==STOP and state['stored'] and not state['store_verified']:
                 destination=state['destination_register']
                 assert word(cpu,state['backing']+destination*8)==state['expected_payload']
                 assert word(cpu,state['PC_slot'])==image+CURSOR
                 assert bytes(cpu.mem_read(state['context'],0x80))==state['handler_bytes']
                 state['counter_after']=word(cpu,state['counter'],4)
                 state['store_verified']=True
-                # Observation-only terminal: preserve the real boundary separately.
-                # The callback has NOT returned. No native instruction is patched.
-                cpu.emu_stop()
-                cpu.reg_write(arm.UC_ARM64_REG_PC,outer.oracle.STOP)
-                return
+                if extension is None:
+                    # Default observation terminal; the callback has not returned.
+                    # No native instruction is patched.
+                    cpu.emu_stop()
+                    cpu.reg_write(arm.UC_ARM64_REG_PC,outer.oracle.STOP)
+                    return
+                extension.member_boundary(cpu,state,dict(
+                    instruction_observations=len(trace),trace_sha256=graph.digest(trace),
+                    code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             if pc in targets.values():
                 slot=next(slot for slot,target in targets.items() if pc==target)
                 trace.append(['JNI_provider',slot])
@@ -202,7 +211,7 @@ def replay(path, libc, *, on_case=None, case_controls=None):
                 assert state['evaluator_active'] and reg(cpu,'x0')==0
                 returns.append(dict(native_pc=hex(offset),result=0))
                 state['evaluator_active']=False
-            if offset==STORE and reads:
+            if offset==STORE and reads and not state['stored']:
                 assert not state['stored'] and reg(cpu,'x9')==state['expected_payload']
                 state['stored']=True
             if state['request_started'] and offset in (0x347F60,0x348410):
@@ -217,10 +226,20 @@ def replay(path, libc, *, on_case=None, case_controls=None):
             execution_observer=observe,continuation_memory_read_observer=read,
             continuation_memory_write_observer=writes,
             continuation_main_import_names=('memset','__cxa_atexit'),
+            _native_runner=None if extension is None else extension.native_runner,
             continuation_host_imports={target-image:(lambda cpu,slot=slot:call(cpu,slot))
                                        for slot,target in targets.items()})
         assert state['store_verified'] and len(reads)==len(returns)==1
         assert result['virtual_descriptors_not_executed']
+        if extension is not None:
+            row=extension.finish(result,state,dict(
+                context_reads=reads,evaluator_returns=returns,JNI_calls=jni,
+                libc_SVC_boundaries=syscalls,instruction_observations=len(trace),
+                trace_sha256=graph.digest(trace),
+                code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
+            rows.append(row)
+            if on_case is not None:on_case(row)
+            continue
         row=dict(control=control,observation_stop_before=hex(STOP),
             oracle_PC_is_observation_sentinel=True,original_outer_postconditions_passed=True,
             handler_sha256=hashlib.sha256(state['handler_bytes']).hexdigest(),
