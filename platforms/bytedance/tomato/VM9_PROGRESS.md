@@ -1,5 +1,25 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-18：普通 `0x171` 路径的通用 VM 初始化已执行并比较
+
+沿同一普通原生路径，从 `+0x27ed14` 经输入转换、child 分发和 callback 包装器，
+继续执行 VM `+0x168324..+0x1684ec` 的 115 条连续原版指令，在 `+0x1684f0`
+首条指令之前停止。四组控制使用两个基址，覆盖 fallback、registry、空 context
+和已有 7 个 reader 的状态。每组 32 个虚拟寄存器槽及其前方 PC 槽的 264 字节与
+既有 caller 模型一致；模型仍以观察到的局部 callback 状态为输入。前缀轨迹、
+allocation/mutex ledger、mode/context 和 wrapper 区域与对应入口控制一致。
+
+新增验证器 `verify_vm9_native_171_vm_prelude_20261118.py` 保留四组结果，绑定
+新增的通用 VM 代码段，支持原版 Metasec/Bionic 的 CLI 重放，并拒绝 34 项损坏
+证据。它通过显式 observation harness 延长停止位置；上游默认入口控制继续在
+VM 首指令之前停止。扩展回放的 VM 执行声明由新验证器单独负责，没有替换内部
+helper 或原版指令，也没有修改 signer 生产模型。
+
+VM 初始化执行不代表请求字节码执行。完整 context 状态、真实业务对象/参数、
+字节码分支、callback 返回、序列化与成功清理、普通六头和完整 signer 仍未验证。
+下一步定位 `0x171` 字节码首次消费 context/mode 的位置，恢复它依赖的真实状态。
+见[通用 VM 初始化证据](evidence/vm9_native_171_vm_prelude_20261118.json)。
+
 ## 2026-11-18：普通 `0x171` 子分发已接到请求 VM 入口前
 
 从普通包装器 `+0x27ed14` 连续执行原版输入转换、child dispatcher `+0x27dd04`

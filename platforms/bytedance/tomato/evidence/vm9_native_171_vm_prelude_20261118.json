@@ -1,0 +1,185 @@
+{
+  "schema": "vm9-native-171-vm-prelude-20261118-v1",
+  "provenance": {
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "upstream_handoff_evidence": "vm9_native_171_vm_handoff_20261118.json"
+  },
+  "boundary": {
+    "entry": "0x27ed14",
+    "callback": "0x2830c4",
+    "VM_entry": "0x168324",
+    "stop_before": "0x1684f0",
+    "mode": "0x171",
+    "bytecode": "0xf7720",
+    "compared_backing_words": 32,
+    "compared_PC_and_backing_bytes": 264
+  },
+  "claims": {
+    "synthetic_ordinary_native_path_through_generic_VM_prelude_verified": true,
+    "all_32_VM_backing_words_match_existing_model": true,
+    "observed_callback_boundary_state_used_as_model_input": true,
+    "original_code_and_internal_helpers_preserved": true,
+    "request_bytecode_executed": false,
+    "callback_return_or_success_cleanup_verified": false,
+    "full_context_state_or_live_object_identity_verified": false,
+    "whole_request_native_Python_differential_verified": false,
+    "native_171_and_Java_138_VM_equivalence_verified": false,
+    "actual_business_callback_execution_verified": false,
+    "ordinary_cronet_six_heads_verified": false,
+    "complete_standalone_signer_verified": false,
+    "original_signature_runtime_equivalence_verified": false,
+    "online_acceptance_verified": false
+  },
+  "limits": [
+    "All input and graph/provider limitations of the upstream handoff verifier remain applicable",
+    "Only two image bases and four selected graph/context profiles are retained",
+    "The model comparison starts at observed local callback state; it is not a fresh whole-request differential",
+    "Context objects carry a known handler vtable tag only; full state is not reconstructed or consumed by the generic prelude",
+    "Execution stops before +0x1684f0; no request bytecode handler, callback return, serialization or success cleanup executes",
+    "The shared reader remains held at the stop; concurrent readers/writers and Android runtime equivalence are unverified",
+    "No Android action, new hook, real request, connection detail or network validation is included"
+  ],
+  "providers": {
+    "synthetic": [
+      "malloc",
+      "realloc",
+      "free",
+      "strlen",
+      "memcpy",
+      "memmove",
+      "memset"
+    ],
+    "original_matching_Bionic": [
+      "pthread_mutex_lock",
+      "pthread_mutex_unlock",
+      "memcmp",
+      "strcmp"
+    ],
+    "internal_Metasec_helpers_substituted": false,
+    "allocation_failure_paths_exercised": false,
+    "mutex_contention_or_kernel_paths_exercised": false
+  },
+  "Android_execution": false,
+  "synthetic_memory_only": true,
+  "real_requests_or_connection_details_published": false,
+  "generic_VM_code_range": {
+    "start": "0x168324",
+    "end_exclusive": "0x1684f0",
+    "sha256": "02826d2be3d1cff4b3a860d369d9a9b0c6f018fbc34f5b9f4e333185fe4d89ad"
+  },
+  "case_results": [
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "fallback",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 90
+      },
+      "generic_VM_instructions_executed": 115,
+      "all_32_backing_words_and_PC_match": true,
+      "executed_code_unchanged": true,
+      "generic_VM_trace_sha256": "e1a0941316a8adde6d151b7e623dbe594855bc4e98ac8766c5fcc90f8956acb7",
+      "PC_and_backing_sha256": "3b3d5c66b01413695c17dfbc2df75da98cb642bf07ae09d28a9d75193e51c356",
+      "request_bytecode_instructions_executed": 0,
+      "prefix_instructions_executed": 4650,
+      "prefix_trace_sha256": "211979822309308ff834edb32054dc4dd1b961c59a02cf1694bf48264a1f93c4",
+      "guest_heap_sha256_at_prelude_stop": "e72f5f766fcc2aa8c1a16260a5d8ebe988cd19eb82aba950d0464b4cd4d5f2e5",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 1,
+      "callback_context_guest_offset": "0x9400",
+      "native_mode": "0x171",
+      "mode_padding_hex": "5a5a5a5a",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true
+    },
+    {
+      "control": {
+        "base": 268435456,
+        "profile": "registry",
+        "delimiter_initialized": false,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 211
+      },
+      "generic_VM_instructions_executed": 115,
+      "all_32_backing_words_and_PC_match": true,
+      "executed_code_unchanged": true,
+      "generic_VM_trace_sha256": "e1a0941316a8adde6d151b7e623dbe594855bc4e98ac8766c5fcc90f8956acb7",
+      "PC_and_backing_sha256": "e7583f7af2f8c981cb1be9040ecef2e507aaa6a25fe274df6ffa2a5f71d106ee",
+      "request_bytecode_instructions_executed": 0,
+      "prefix_instructions_executed": 4476,
+      "prefix_trace_sha256": "eef9bb3ae7d12faf8f2fa9fd3a91d859169b93d1bfe3f0c4f97061bb91642df1",
+      "guest_heap_sha256_at_prelude_stop": "22803e47e2627ae897e4d0a2b29e6d2d56a10ae870274cba2903fae175be2421",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 1,
+      "callback_context_guest_offset": "0x9480",
+      "native_mode": "0x171",
+      "mode_padding_hex": "d3d3d3d3",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "null_context",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 127
+      },
+      "generic_VM_instructions_executed": 115,
+      "all_32_backing_words_and_PC_match": true,
+      "executed_code_unchanged": true,
+      "generic_VM_trace_sha256": "e1a0941316a8adde6d151b7e623dbe594855bc4e98ac8766c5fcc90f8956acb7",
+      "PC_and_backing_sha256": "327fc75fef9bc8a0a9726541f1d675e96ccdcbd75d2716dcd3d7d104e861565e",
+      "request_bytecode_instructions_executed": 0,
+      "prefix_instructions_executed": 4620,
+      "prefix_trace_sha256": "2edeeb10c812fcb3d7532db4ac0fc2c30cf051898d1f0a139bf51dbb311abb76",
+      "guest_heap_sha256_at_prelude_stop": "561b0440d2c8567e374b2db07dbd136e1c5a08662ae9e650676c1744d30f1715",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 1,
+      "callback_context_guest_offset": null,
+      "native_mode": "0x171",
+      "mode_padding_hex": "7f7f7f7f",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true
+    },
+    {
+      "control": {
+        "base": 412316860416,
+        "profile": "readers7",
+        "delimiter_initialized": true,
+        "first_hex": "68747470733a2f2f6578616d706c652e696e76616c69642f70617468",
+        "second_hex": "782d746573740d0a76616c75650d0a",
+        "padding_byte": 226
+      },
+      "generic_VM_instructions_executed": 115,
+      "all_32_backing_words_and_PC_match": true,
+      "executed_code_unchanged": true,
+      "generic_VM_trace_sha256": "e1a0941316a8adde6d151b7e623dbe594855bc4e98ac8766c5fcc90f8956acb7",
+      "PC_and_backing_sha256": "327fc75fef9bc8a0a9726541f1d675e96ccdcbd75d2716dcd3d7d104e861565e",
+      "request_bytecode_instructions_executed": 0,
+      "prefix_instructions_executed": 4620,
+      "prefix_trace_sha256": "2edeeb10c812fcb3d7532db4ac0fc2c30cf051898d1f0a139bf51dbb311abb76",
+      "guest_heap_sha256_at_prelude_stop": "f451c7dcc0bfd1dc6094e44cd42592f9cc050b0f763bca2811cbe80c6c25020f",
+      "allocation_ledger_sha256": "5cb68aa611af84fe494e19439af2c1b2904ab59f30d9b93ed5015881e5e650ad",
+      "mutex_ledger_sha256": "11afb98b01999dbc351d45b446c2b2ec9dd5382317ea6ed18f4bc975b803a788",
+      "mutex_events": 20,
+      "shared_readers_at_stop": 8,
+      "callback_context_guest_offset": "0x9400",
+      "native_mode": "0x171",
+      "mode_padding_hex": "e2e2e2e2",
+      "wrapper_packed_and_saved_spans_match": true,
+      "wrapper_VM_call_registers_match": true
+    }
+  ]
+}

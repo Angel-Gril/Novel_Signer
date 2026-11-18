@@ -1,5 +1,14 @@
 # Checkpoint log
 
+2026-11-18：普通 `0x171` 路径已在四组合成控制上继续执行通用 VM 初始化的
+115 条连续原版指令，停在 `+0x1684f0` 之前。两个基址、registry/fallback、空
+context 和已有 reader 状态下，32 个虚拟寄存器槽及 PC 槽均匹配现有模型，
+对应前缀/分配/锁摘要保持一致。新增代码段绑定和 34 项损坏证据拒绝通过，公开
+CLI 支持固定双 ELF 重放。显式观察 harness 只延长测试停止位置，上游默认
+控制保持原边界；生产 signer 未修改。模型输入仍为局部原版 callback 状态，
+请求字节码、完整 context、返回/成功清理、真实六头和完整 signer 仍未验证。
+见[通用 VM 初始化证据](../platforms/bytedance/tomato/evidence/vm9_native_171_vm_prelude_20261118.json)。
+
 2026-11-18：普通包装器经原版输入转换、`0x171` child 分发与 `+0x2830c4`
 包装器，已在 12 组合成控制上到达 VM `+0x168324` 首条指令之前。
 registry/fallback、空目标跳过、空 context 与已有 reader 路径均保留正确 context、

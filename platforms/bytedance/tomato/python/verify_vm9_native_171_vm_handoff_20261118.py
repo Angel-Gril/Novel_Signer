@@ -165,7 +165,7 @@ def verify_elf(data,path):
                 handler_vtable_relative_relocations=1)
 
 
-def replay(path,libc,*,case_controls=None,on_case=None):
+def replay(path,libc,*,case_controls=None,on_case=None,_native_runner=None):
     from capstone import Cs,CS_ARCH_ARM64,CS_MODE_ARM
     from unicorn import arm64_const as arm
     import verify_vm9_signer_objects as oracle
@@ -259,7 +259,8 @@ def replay(path,libc,*,case_controls=None,on_case=None):
                 wrapper_matches.append(True)
         observed={(MUTEX+0x90,8):None}
         def writes(c,a,n): assert not any(a<end and start<a+n for start,end in spans),hex(a)
-        _,heap,default_alloc,locks=oracle.native(path,base,0x27ED14,[G+0x800,0,0],pages,libc=libc,
+        runner=oracle.native if _native_runner is None else _native_runner
+        _,heap,default_alloc,locks=runner(path,base,0x27ED14,[G+0x800,0,0],pages,libc=libc,
             real_singletons=True,real_mutexes=True,real_recursive_mutexes=True,real_diagnostics=True,
             real_jni_acquisition=True,real_jni_dispatch=True,stop_offset=0x168324,
             extra_registers={arm.UC_ARM64_REG_TPIDR_EL0:TLS},

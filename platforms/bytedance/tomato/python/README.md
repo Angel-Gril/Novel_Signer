@@ -1,5 +1,20 @@
 # Tomato Python material
 
+`verify_vm9_native_171_vm_prelude_20261118.py` extends the ordinary native path
+through 115 original generic VM instructions, stopping before `+0x1684f0`.
+Four synthetic controls cover two image bases, registry/fallback, null context
+and an existing shared-reader count. All 32 virtual-register backing words and
+their PC slot match the existing model from observed local callback state;
+prefix traces and allocation/mutex summaries match corresponding upstream
+controls. The default CLI rejects 34 damaged records. Use
+`--elf <original-Metasec> --libc <matching-Bionic> --replay` to rebuild the four
+retained results and bind the additional generic-VM code range. An explicit
+observation harness extends the stop without changing original helper bodies;
+the upstream default CLI retains its stop before VM entry. Request bytecode,
+full context state, callback return/cleanup, actual business execution, ordinary
+six heads and the complete signer remain unverified. Signer production code is
+unchanged.
+
 `verify_vm9_native_171_vm_handoff_20261118.py` continues the original ordinary
 wrapper through input conversion, child dispatch and `+0x2830c4`, stopping
 before the first VM-entry instruction at `+0x168324`. Twelve synthetic cases
