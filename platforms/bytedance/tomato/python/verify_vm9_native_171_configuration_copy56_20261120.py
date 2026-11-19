@@ -250,7 +250,10 @@ class Scenario(previous.Scenario):
             assert u(self.source_counter,4)==u(self.exit_counter,4)==1
             assert raw(state['context'],128)==state['handler_bytes'] and self.original_scope
             assert state['allocator_events_ref']==self.copy56_allocations
-            self.copy56_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.copy56_done=True;self.copy56_boundary(cpu,state)
+
+    def copy56_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         old=next(r for r in json.loads(previous.EVIDENCE.read_text())['case_results'] if r['control']==self.control)

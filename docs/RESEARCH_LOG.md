@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-20：suffix 调用准备及独立完整返回对照通过。当前请求原版七条
+字节码将 frame+2088 头部和实际 helper/wrapper 准备到 frame+2752 参数块，
+停在进入 wrapper 前。旧复制完整指令/代码/分配前缀一致，头部、padding、
+TLS/heap/表和计数引用保留，无服务/JNI/SVC 增量，原观察上限 400000/2/4
+保留。四组新声明 VM 执行真实 callback，复用现有 suffix owner 完整返回；
+四组原版 helper 与其语义 guest/image、输出、分配清理顺序及释放前字节
+一致，分配器/SDK/atoi0 为显式 fixture 输入，未采用原生快照，排除 physical
+stack/void X0。四组原生、新旧 CLI、四组独立 VM/原版 helper 及 CLI
+重放、四种错误 CLI、七条指令、七个 ELF 字及 166 项损坏证据拒绝通过。
+当前请求完整 suffix 返回、整请求等价、普通六头和完整 signer 仍未验证。
+见[suffix 证据](../platforms/bytedance/tomato/evidence/vm9_native_171_configuration_suffix_call_20261120.json)。
+
 2026-11-20：配置头部准备及原版 56 字节复制通过验收。原版 27 条字节码
 构造标量/字符串/seed/输出槽指针及 mode0 头部，保留最后四字节 padding，
 经原版 wrapper/import ABI 及已有 memcpy PLT provider 复制到 frame+2088，

@@ -1,5 +1,30 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_suffix_call_20261120.py` verifies seven
+original words preparing the frame+2088 header, helper +0x2869f0 and wrapper
++0x285e80 in packed frame+2752. Two loads, two eight-byte stores, selected and
+unselected registers, padding and the surrounding 8 KiB window are checked.
+The complete copy56 instruction/code/allocation prefix agrees before only
+copy56_active retires; original scope remains live. Current execution stops
+at +0x16aa48 before entering the wrapper, with no allocator/service/JNI/SVC
+delta and preserved header, old TLS/heap/tables and count1 references.
+Four separately declared VM cases execute the same words and actual request
+callback, reusing construct_request_suffix for complete non-NULL outputs.
+Four original suffix-helper controls from independent inputs match the actual
+callback's full semantic guest/image bytes, output slots, ordered ownership
+effects, pre-free payloads and live blocks. Allocator, initialized SDK, thread137
+and atoi0 remain explicit inputs from the existing suffix fixture; physical
+stack spills and void X0 are excluded. Native snapshots never seed Python.
+Four current native handoffs, four independent new CLI replays, four exact old
+copy rows, four declared VM/helper controls and CLI replays, four bad CLI calls,
+seven instruction bindings, seven ELF words and 166 damaged-evidence
+rejections pass. Limits remain 400000 observations, two handler reads and four
+main SVCs, with no new provider or Android execution. Complete current-request
+suffix return, numeric/whole-request equality, business/configuration provenance,
+ordinary six headers, online acceptance and complete signing remain unverified.
+Use `--elf`, `--libc`, `--replay`; see the
+[suffix call evidence](../evidence/vm9_native_171_configuration_suffix_call_20261120.json).
+
 `verify_vm9_native_171_configuration_copy56_20261120.py` binds 27 original
 words after the TLS store. They prepare the scalar/string/seed/output-pointer
 header at frame+4920, mode0 and preserved final four-byte padding, save three

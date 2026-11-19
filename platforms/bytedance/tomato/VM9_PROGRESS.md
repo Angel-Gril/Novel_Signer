@@ -1,5 +1,36 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-20：suffix 调用准备与独立完整返回对照已验证
+
+当前原版请求继续执行 `+0xfd698..+0xfd6b0` 七条字节码：把 R16 的
+frame+2088 头部地址写入 frame+2760，从 frame+1080 取得 `+0x2869f0`
+并写入 frame+2752，从 frame+416 取得 wrapper `+0x285e80`。
+两次读取、两次八字节参数写入、选定/未选定寄存器及 8 KiB 周边窗口
+均按原生指令契约核对；仅参数的 16 字节及单独核对的 VM 游标/backing
+变化。原头部、参数相邻 padding、旧 TLS/heap/表及两个 count1 引用保留。
+完整旧复制指令/代码/分配前缀一致后，仅结束 copy56_active 观察窗口，
+original_scope 保持执行。停在 `+0x16aa48` 调用 wrapper 前，无分配或
+服务/JNI/SVC 增量；当前请求尚未进入 suffix wrapper/body。
+
+独立新页面使用现有 suffix fixture 的声明输入，覆盖两基址、小/宽
+标量及两个 seed，执行同样七条字节码和真实 request callback 源码。
+callback 复用现有 construct_request_suffix，完整返回两个非空输出，
+头部和参数 padding 保留，寄存器及全部声明 frame 写入范围通过。
+另四组原版 `+0x2869f0` helper 从独立初始页运行，与该 callback 的
+完整语义 guest/image、输出槽、分配/释放/锁顺序、释放前 payload 和
+存活块逐项一致。分配器、初始化 SDK、thread137 和 atoi 返回 0 均为
+现有 fixture 的显式输入；原生快照不用于模型输入，physical stack
+spills 和 void X0 返回不在组件等价范围内。此组件对照不证明当前请求
+的数值、业务环境或完整 suffix 返回。
+
+四组原生调用准备、四组新 CLI、四组旧复制 CLI、四组独立 VM 与四组
+原版 suffix helper 对照及 CLI 重放、四种错误 CLI、七条指令绑定、
+七个 ELF 字及 166 项损坏证据拒绝通过。公开 trace 上限 400000、
+handler/main-SVC 上限 2/4 保留，无新 provider、设备运行或 guest 绕过。
+当前请求完整 suffix 返回、配置来源、整请求数值等价、普通六头、在线
+接受及完整 signer 仍未验证。
+见[suffix 调用与独立完整返回证据](evidence/vm9_native_171_configuration_suffix_call_20261120.json)。
+
 ## 2026-11-20：配置头部准备及原版 56 字节复制已验证
 
 原版消费 TLS setter 返回后执行 `+0xfd62c..+0xfd694` 的 27 条字节码。
