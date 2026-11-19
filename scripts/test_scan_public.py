@@ -41,6 +41,9 @@ class PublicScanTests(unittest.TestCase):
             ("platforms/README.md", FAKE_KEY, FAKE_KEY),
             ("docs/report.md", FAKE_KEY, FAKE_KEY),
             ("platforms/control.txt", "authorization=example-only-token", "example-only-token"),
+            ("platforms/control.txt", "sessionid=example-session-value", "example-session-value"),
+            ("platforms/control.txt", "Cookie: sid_guard=example-session-value", "example-session-value"),
+            ("platforms/control.txt", "Bearer example-token-value-1234", "example-token-value-1234"),
             ("platforms/broken.json", '{"token":"broken-fixture"', "broken-fixture"),
         ):
             with self.subTest(path=path, secret=secret):
