@@ -1,5 +1,29 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_owner_cleanup_20261119.py` checks the
+next retained configuration reference. R17/R18 match owner fields +160/+168
+and differ from the already released clone source reference. The original
+enters the warm scope, writes count2->1 as four bytes, preserves adjacent
+twelve bytes and takes the positive branch past deletion. A frame-held GOT
+slot pointer supplies the exit target; frame+2032 supplies the scope in R20.
+The original exits at +0xfd424 with X0=0, restoring the lock to 0x4000/owner0.
+Owner, reference pair, source, clone and payload stay intact; both counters
+end at one. Fresh Python VM pages execute 21 words including the scope-enter
+CALL at two bases, and the existing scoped-reference owner independently
+checks selected cleanup semantics on its own aligned stack. No native memory
+seeds either model. Only the completed prior cleanup observer retires after
+the entire accepted prefix agrees; original scope execution stays enabled.
+Four native controls, four independent CLI replays, four exact old-cleanup
+rows, four bad CLI requests, 17 instruction bindings, 22 bytecode words,
+two GOT relocations and 247 damaged-evidence rejections pass.
+Allocation/free, service, JNI and SVC ledgers remain unchanged, with limits
+of two handler reads/four main SVCs and no new providers or Android execution.
+The exit return is not consumed; the next word is +0xfd428. Deleting cleanup,
+full configuration provenance, business identity/state, key values, ordinary
+six headers, whole-request equivalence, online acceptance and complete
+signing remain unverified. Use `--elf`, `--libc`, `--replay`. See the
+[owner reference cleanup evidence](../evidence/vm9_native_171_configuration_owner_cleanup_20261119.json).
+
 `verify_vm9_native_171_configuration_cleanup_20261119.py` continues the
 original request after its configuration clone. It enters the existing warm
 diagnostic scope, reads the copied reference counter, stores only count2->1
