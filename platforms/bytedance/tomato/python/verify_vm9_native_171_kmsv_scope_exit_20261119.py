@@ -270,7 +270,10 @@ class Scenario(previous.Scenario):
             assert previous.previous.lookup.tree_projection(raw,self.image,self.container)==self.tree
             assert name.previous.previous.previous.output._cstring(cpu,self.prefix.source)==self.prefix.raw
             assert u(self.image+0x3D1558,1)==1 and u(context.outer.root_fixture.TLS+0x100,4)==2
-            self.exit_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.exit_done=True;self.exit_boundary(cpu,state)
+
+    def exit_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         data=json.loads(previous.EVIDENCE.read_text(encoding='utf-8'));previous.validate(data)

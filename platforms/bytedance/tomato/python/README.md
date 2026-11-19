@@ -1,5 +1,25 @@
 # Tomato Python material
 
+`verify_vm9_native_171_contained_reference_20261119.py` continues the
+original configuration reference getter through its scoped copy and unlock.
+Eight argument bytecodes match fresh declared Python VM inputs at two bases.
+The original getter reads the receiver's member at +24, clears the destination
+pair, reloads and copies the source under lock, then retains its u32 counter
+from 1 to 2. Adjacent counter/destination bytes, the receiver and selected
+source header are preserved. A missing slot in the warm table adds one
+48-byte entry, whose recursive lock is released before return. Existing
+Python scope/reference owners use fresh declared pages; no native snapshot
+seeds them. Full source-pair construction and business identity are unverified.
+The prior instruction/code/allocation prefix agrees; services, JNI and SVC
+ledgers stay unchanged, with read/main-SVC limits of 2/4. Four native cases,
+four independent CLI replays, four exact old-exit rows, four bad CLI requests,
+25 instruction bindings, nine bytecode words and 205 damaged-evidence
+rejections pass. Observation stops before consuming the getter return.
+Saved NULL business branches, real business state, KMSV/key values, complete
+request/VM equivalence, ordinary six headers, online acceptance and complete
+signing remain unverified. Use `--elf`, `--libc`, `--replay`. See the
+[reference-copy evidence](../evidence/vm9_native_171_contained_reference_20261119.json).
+
 `verify_vm9_native_171_kmsv_scope_exit_20261119.py` follows the original
 configuration counter retain and the matching diagnostic scope exit.
 The selected branch compares the configuration's counter pointer with zero;
