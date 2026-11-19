@@ -1,5 +1,29 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_cleanup_20261119.py` continues the
+original request after its configuration clone. It enters the existing warm
+diagnostic scope, reads the copied reference counter, stores only count2->1
+as four bytes, preserves the adjacent twelve bytes, takes the positive-count
+branch over deletion and executes the matching unlock. X0 is zero; the lock
+returns to state 0x4000/owner0, while the reference pair, source, clone and
+payload remain intact. Fresh Python VM pages exercise the argument, count
+and branch words with existing diagnostic owners at both image bases; an
+independent scoped-reference helper checks the selected cleanup semantics
+on its own aligned stack. No native memory seeds either model, and no
+physical stack identity is claimed. Completed observer windows retire only
+after the entire clone prefix agrees; original diagnostic execution stays
+enabled. Four native cases, four independent CLI replays, four exact old
+clone rows, four bad CLI calls, 17 instruction bindings, 25 bytecode words,
+two GOT relocations and 221 damaged-evidence rejections pass.
+Allocation/free, service, JNI and SVC ledgers are unchanged; read/main-SVC
+limits remain 2/4 with no new providers or Android execution. Observation
+stops before consuming the cleanup exit return; the next word is +0xfd390.
+Deleting cleanup, full configuration provenance, business state/identity,
+key values, ordinary six headers, whole-request equivalence, online
+acceptance and complete signing remain unverified. Use `--elf`, `--libc`,
+`--replay`. See the
+[configuration cleanup evidence](../evidence/vm9_native_171_configuration_cleanup_20261119.json).
+
 `verify_vm9_native_171_configuration_clone_20261119.py` continues the
 original request from the copied configuration reference into its string clone.
 Nine argument bytecodes match independent fresh Python VM pages at two bases;
