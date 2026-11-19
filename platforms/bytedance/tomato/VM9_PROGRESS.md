@@ -1,5 +1,37 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-20：TLS 读取后的算术与原版写回已验证
+
+原版消费此前 getter 返回，执行 `+0xfd5ec..+0xfd628` 的 16 条字节码。
+frame+1888 标量进入 R18，与旧 hash R17 和保留输入 R16 异或，进行
+64 位右旋 60，再取低 32 位并符号扩展；frame+2808 的 getter 旧值以
+有符号 32 位加载，异或后只把低四字节写入 frame+2784。当前原生旧值
+为 0，算术中间寄存器、旋转、符号扩展及写入宽度逐项按指令契约核对；
+这些观察值未用于 Python 模型输入，也未声称当前请求与独立模型数值相等。
+member 指针另存 frame+1528/+2776，GOT `+0x382ed8` 取得 setter
+`+0x27ed70`，frame+408 提供 wrapper `+0x285e70`，packed 在 frame+2768。
+
+wrapper 是直接尾调用，实际执行 setter 与 warm emutls，向同一个 TLS
+槽写入四字节，返回已有 TLS 指针；输入参数块不写入返回指针。TLS 相邻
+12 字节、输入参数的相邻 12 字节、getter 旧值、hash、clone、表、descriptor、
+线程数组及两个计数 1 引用均保留，无新分配、释放、唤醒或其他服务调用。
+完整旧 getter 指令/代码/分配前缀一致后，仅结束其已完成的观察窗口，原版
+scope 保持执行。停在消费 setter 返回前，下一字节码 `+0xfd62c`。
+
+独立声明页面用不同 hash、标量及 index8，覆盖 getter 旧值 0、0xffffffff、
+0x80000000。两基址共六组新 VM 执行相同 16 条字节码与真实 request
+callback 源码，并用直接表达式核对旋转/XOR 的结果、寄存器和写入范围。
+另六组原版 warm setter 对照使用声明的派生值，与真实 callback 的 guest、
+image、TLS、参数 padding 和无分配/唤醒行为一致，未使用原生快照。
+
+四组原生续跑、四组独立新 CLI、四组旧 getter CLI、六组新 VM 与六组
+原版 setter 及 CLI 重放、四种错误 CLI、17 条指令、16 个 ELF 字、
+一个 GOT 重定位和 201 项损坏证据拒绝通过。服务/JNI/libc/main
+SVC 账本不变，仍为最多两次 handler 读取和四次 main SVC，无新 provider
+或设备执行。完整配置来源、业务身份、当前请求数值/整请求等价、键值生成、
+普通六头、在线接受和完整 signer 仍未验证。
+见[TLS 算术与写回证据](evidence/vm9_native_171_configuration_tls_store_20261119.json)。
+
 ## 2026-11-19：暖线程数组中的 TLS 冷变量读取已验证
 
 原版执行 `+0xfd5bc..+0xfd5e8` 的 12 条字节码，member+8 标志按位

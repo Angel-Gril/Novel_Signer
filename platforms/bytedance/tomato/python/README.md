@@ -1,5 +1,31 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_tls_store_20261119.py` verifies 16
+original words after the TLS getter: scalar/hash/opaque-input XOR, ror64 by
+60, low32 sign extension, signed getter-word XOR and a four-byte packed input.
+The original tail-call wrapper invokes the actual setter/warm emutls and
+stores that uint32 into the existing TLS slot, returning its existing pointer.
+TLS and packed adjacent 12 bytes, prior getter word/hash/clone/tables,
+descriptor/array and both count1 references remain intact. Fresh declared VM
+pages instead use separate hash/scalar/index8 inputs and getter words zero,
+all bits and high bit; six VM cases execute the actual request callback source
+and check a direct arithmetic expression. Six original warm setter controls
+with declared derived words match the actual callback's guest/image/TLS bytes,
+packed padding and allocation/wake behavior. Native snapshots never seed
+Python, and current-request numeric equality is not claimed. Four native
+continuations, four independent new CLI replays, four exact old getter rows,
+six fresh setter controls and replays, four bad CLI calls, 17 instruction
+bindings, 16 words, one GOT relocation and 201 damaged-evidence
+rejections pass. The full prior instruction/code/allocation prefix agrees
+before only its completed getter observer retires; original scope stays live.
+Allocation/free and service/JNI/libc/main-SVC ledgers stay unchanged, with
+read/main-SVC limits 2/4, no new providers or Android run. Stop before consuming
+the setter return; next word +0xfd62c. Full configuration provenance, business
+identity, key generation, current-request/whole-request equality, ordinary six
+headers, online acceptance and complete signing remain unverified. Use
+`--elf`, `--libc`, `--replay`. See the
+[TLS store evidence](../evidence/vm9_native_171_configuration_tls_store_20261119.json).
+
 `verify_vm9_native_171_configuration_tls_20261119.py` verifies the original
 flags OR256 and a cold TLS variable in an initialized thread array. It executes
 12 words through the actual getter/emutls bodies: native index 0 becomes 5,

@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-20：TLS 读取后的算术与原版写回已验证。原版 16 条字节码的
+输入读取、XOR、右旋 60、32 位符号扩展及四字节参数写入通过指令检查；
+原版 setter/warm emutls 将实际值写回同一槽，返回已有指针，相邻字节及
+旧 hash/clone/表/两个计数 1 引用保留。无分配或服务/JNI/SVC 增量。
+独立声明三种 getter 值及不同输入，两基址六组新 VM/真实 callback，
+另六组原版 setter 对照和 CLI 重放通过，未使用原生快照，不声称当前
+请求数值与模型相等。四组原生、四组新 CLI、四组旧 getter CLI、四种
+错误 CLI、17 条指令、16 个 ELF 字、一个重定位及 201 项损坏
+证据拒绝通过。完整旧前缀一致，上限 2/4 保留。下一字节码 `+0xfd62c`；
+普通六头、整请求数值等价、在线接受及完整 signer 仍未验证。
+见[TLS 写回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_configuration_tls_store_20261119.json)。
+
 2026-11-19：暖线程数组中的 TLS 冷变量读取已验证。原版 flags OR256、
 旧 hash 参数保留、getter/emutls 实际执行，index 0→5，新增一次 19
 字节分配，四字节零值返回及相邻字节保留均通过。独立声明 index 0→8
