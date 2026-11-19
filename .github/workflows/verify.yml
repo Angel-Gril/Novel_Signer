@@ -21,6 +21,8 @@ jobs:
           python-version: '3.12'
       - name: Syntax / import gate
         run: python scripts/check_python.py
+      - name: Public-data scan regression tests
+        run: python -m unittest discover -s scripts -p test_scan_public.py
       - name: Public-data secret scan
         run: python scripts/scan_public.py
 

@@ -1,0 +1,57 @@
+"""Exercise the public scan in a temporary checkout with synthetic data."""
+import shutil
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+
+SCANNER = Path(__file__).with_name("scan_public.py").resolve()
+FAKE_KEY = "-----BEGIN PRIVATE KEY-----"
+
+
+class PublicScanTests(unittest.TestCase):
+    def run_scan(self, files):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+            scanner = root / "scripts" / SCANNER.name
+            scanner.parent.mkdir()
+            shutil.copyfile(SCANNER, scanner)
+            for name, body in files.items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(body, encoding="utf-8")
+            return subprocess.run(
+                [sys.executable, str(scanner)], cwd=root, capture_output=True, text=True,
+            )
+
+    def test_reports_accidental_public_material_without_printing_it(self):
+        for path, body, secret in (
+            ("platforms/evidence.json", '{"token":"example-only-token"}', "example-only-token"),
+            ("platforms/evidence.json", r'{"nested":["\u002d----BEGIN PRIVATE KEY-----"]}', FAKE_KEY),
+            ("platforms/README.md", FAKE_KEY, FAKE_KEY),
+            ("docs/report.md", FAKE_KEY, FAKE_KEY),
+            ("platforms/control.txt", "authorization=example-only-token", "example-only-token"),
+            ("platforms/broken.json", '{"token":"broken-fixture"', "broken-fixture"),
+        ):
+            with self.subTest(path=path, secret=secret):
+                result = self.run_scan({path: body})
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertIn(path, result.stdout)
+                self.assertNotIn(secret, result.stdout + result.stderr)
+
+    def test_allows_redacted_metadata_and_skips_ignored_files(self):
+        result = self.run_scan({
+            ".gitignore": "local/\n",
+            "local/private.json": '{"token":"example-only-token"}',
+            "platforms/evidence.json": '{"token_sha256":"f00d", "cookie":null}',
+            "README.md": "Public evidence records lengths and hashes.\n",
+        })
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("public scan passed", result.stdout)
+
+
+if __name__ == "__main__":
+    unittest.main()

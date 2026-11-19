@@ -39,11 +39,12 @@ material.
 
 ```bash
 python scripts/check_python.py
+python -m unittest discover -s scripts -p test_scan_public.py
 python scripts/scan_public.py
 cargo test --manifest-path platforms/bytedance/tomato/rust/Cargo.toml --locked
 ```
 
-All three run in CI (`verify` workflow). Pull requests that fail them will not be merged.
+These checks run in CI (`verify` workflow). Pull requests that fail them will not be merged.
 
 ## Layout rules
 
