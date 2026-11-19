@@ -1,5 +1,30 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_hash64_20261119.py` continues through
+the warm registry flag branch into the preserved clone's original uint64
+table hash. Guard bit0 is one, so cold initialization is skipped. Registry
+pointer reads, GOT target, clone argument and wrapper sources are bound.
+The original executes ten rounds using its immutable ELF table. Native
+operand observations verify pointer advances, table indices, shifted XORs
+and remaining counts; they never seed a Python model. X0 is stored as eight
+bytes at packed+16/frame+2832. Clone, table, owner and both count1 references
+stay intact. Fresh VM pages instead use declared clone bytes and a synthetic
+table; two fresh original helper controls with those same declared inputs
+match Python numeric results and declared guest arena bytes. Those independent inputs are
+not the current request's inputs: current-request numeric Python equality
+is not claimed. No standard CRC variant is assumed. Four native continuations,
+four independent CLI replays, four exact old-owner rows, two fresh declared
+helper controls and replays, four bad CLI calls, 30 instruction bindings,
+21 words, one new GOT relocation and 265 damaged-evidence rejections
+pass. The complete prior prefix agrees before its completed observer retires;
+original scope execution stays enabled. Allocation/free, service, JNI and
+SVC ledgers are unchanged with read/main-SVC limits 2/4 and no new providers
+or Android execution. The hash return is not consumed; next word +0xfd5bc.
+Cold initialization, full configuration provenance, business identity/state,
+key values, ordinary six headers, whole-request equivalence, online acceptance
+and complete signing remain unverified. Use `--elf`, `--libc`, `--replay`. See
+the [clone hash64 evidence](../evidence/vm9_native_171_configuration_hash64_20261119.json).
+
 `verify_vm9_native_171_configuration_owner_cleanup_20261119.py` checks the
 next retained configuration reference. R17/R18 match owner fields +160/+168
 and differ from the already released clone source reference. The original
