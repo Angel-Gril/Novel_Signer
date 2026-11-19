@@ -1,5 +1,18 @@
 # Checkpoint log
 
+2026-11-20：配置头部准备及原版 56 字节复制通过验收。原版 27 条字节码
+构造标量/字符串/seed/输出槽指针及 mode0 头部，保留最后四字节 padding，
+经原版 wrapper/import ABI 及已有 memcpy PLT provider 复制到 frame+2088，
+返回目标指针。源、目标相邻
+八字节、全部允许区间之外的 frame、旧 TLS/hash/clone/表和两个 count1
+引用保留；完整旧 setter 指令/代码/分配前缀一致，无新分配或服务/JNI/SVC。
+四组原生、四组新 CLI、四组旧 setter CLI、四组独立声明 VM 及 CLI 重放、
+四种错误 CLI、13 条指令、27 个复制 ELF 字、一个 frame 分配字、两个重定位及 213 项损坏
+证据拒绝通过。独立模型使用新声明页面，未采用当前原生快照，上限 2/4
+保留。下一字节码 `+0xfd698`；suffix、普通六头、整请求等价、在线接受和
+完整 signer 仍未验证。
+见[复制证据](../platforms/bytedance/tomato/evidence/vm9_native_171_configuration_copy56_20261120.json)。
+
 2026-11-20：TLS 读取后的算术与原版写回已验证。原版 16 条字节码的
 输入读取、XOR、右旋 60、32 位符号扩展及四字节参数写入通过指令检查；
 原版 setter/warm emutls 将实际值写回同一槽，返回已有指针，相邻字节及

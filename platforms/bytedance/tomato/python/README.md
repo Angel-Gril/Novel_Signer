@@ -1,5 +1,33 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_copy56_20261120.py` binds 27 original
+words after the TLS store. They prepare the scalar/string/seed/output-pointer
+header at frame+4920, mode0 and preserved final four-byte padding, save three
+pointers and pack a 56-byte memcpy to frame+2088. The original tail-call wrapper
+reaches the memcpy PLT entry; the existing oracle memory-import provider
+performs the copy and returns the destination in X0. Acceptance covers original
+argument preparation and wrapper/import ABI, not a Bionic memcpy body. Source, destination adjacent
+eight bytes, all 5 KiB frame bytes outside allowed write ranges, old TLS/hash,
+clone/tables and both count1 references remain intact. Six loads, 14 argument
+stores and selected/unselected registers are checked as native instruction
+contracts. The 8 KiB surrounding window also stays unchanged except its
+separately checked native cursor/register backing. Four fresh declared VM cases (two bases, small/wide scalars) execute
+the actual request callback on separate pages; no native snapshot seeds Python
+and no current-request numeric equality is claimed. Four native continuations,
+four independent new CLI replays, four exact old setter rows, four declared VM
+cases and CLI replays, four bad CLI calls, 13 instruction bindings, 27 words,
+one frame-allocation word, two memcpy relocations and 213 damaged-evidence rejections pass.
+The complete old instruction/code/allocation prefix agrees before retiring
+only store_active. Original scope remains live; copy56 observer fields are
+separate from earlier contained-reference copy fields. Allocation/service/JNI/
+libc/main-SVC ledgers stay unchanged, read/main-SVC caps remain 2/4, and no new
+provider or Android execution is introduced. Stop before consuming the copy
+return; next word +0xfd698. Suffix return, full configuration provenance,
+business identity, key generation, current/whole-request equality, ordinary
+six headers, online acceptance and complete signing remain unverified.
+Use `--elf`, `--libc`, `--replay`; see the
+[configuration copy evidence](../evidence/vm9_native_171_configuration_copy56_20261120.json).
+
 `verify_vm9_native_171_configuration_tls_store_20261119.py` verifies 16
 original words after the TLS getter: scalar/hash/opaque-input XOR, ror64 by
 60, low32 sign extension, signed getter-word XOR and a four-byte packed input.

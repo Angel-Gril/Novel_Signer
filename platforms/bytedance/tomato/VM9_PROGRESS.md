@@ -1,5 +1,35 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-20：配置头部准备及原版 56 字节复制已验证
+
+原版消费 TLS setter 返回后执行 `+0xfd62c..+0xfd694` 的 27 条字节码。
+frame+4920 的头部依次写入 R18 标量、frame+1912/+1928 的两个字符串
+指针、frame+4868 seed 指针、frame+4896/+4904 输出槽指针及四字节 mode0，
+最后四字节 padding 保留。三个指针另存 frame+1632/+1656/+1784；
+frame+4360 参数块包含 memcpy target、frame+2088 目标、frame+4920 源及
+长度 56。原版 wrapper `+0x2858a8` 尾调用 `+0x347f60`，沿用原验收器
+已有的 memcpy PLT provider 完成复制，验证原版参数准备及 wrapper/import ABI，
+X0 返回目标地址。复制后目标等于调用前源，源、目标前后各八字节及所有
+允许写入区间之外的 5 KiB frame 字节保留。另核对 8 KiB 周边窗口，
+仅独立校验的游标/寄存器 backing 可变；六次加载、14 次参数写入、选定及
+未选定寄存器均按原生指令契约核对，未用当前原生值给 Python 模型赋值。
+
+完整旧 TLS setter 的指令/代码/分配前缀一致后，仅结束 store_active
+观察窗口，original_scope 保持执行；新阶段使用独立 copy56 字段，避免
+与早期 contained-reference 的 copy 字段共用。旧 TLS、hash、clone、表、
+descriptor、线程数组及两个计数 1 引用保留，无新分配或服务/JNI/SVC 增量。
+两基址各 small/wide 声明标量，共四组独立 VM 从新页面执行相同字节码和
+真实 request callback 源码，核对头部、复制、padding、寄存器及全部 frame
+写入范围，不使用当前原生快照，不声称当前请求与独立模型数值相等。
+
+四组原生续跑、四组独立新 CLI、四组旧 setter CLI、四组声明 VM 及 CLI
+重放、四种错误 CLI、13 条指令、27 个复制 ELF 字、一个 frame 分配字、两个 memcpy 重定位与
+213 项损坏证据拒绝通过。最多两次 handler 读取、四次 main SVC，
+无新 provider 或设备执行。停在消费复制返回前，下一字节码 `+0xfd698`。
+suffix 返回、完整配置来源、业务身份、键值生成、当前请求数值/整请求等价、
+普通六头、在线接受及完整 signer 仍未验证。
+见[配置头部及复制证据](evidence/vm9_native_171_configuration_copy56_20261120.json)。
+
 ## 2026-11-20：TLS 读取后的算术与原版写回已验证
 
 原版消费此前 getter 返回，执行 `+0xfd5ec..+0xfd628` 的 16 条字节码。
