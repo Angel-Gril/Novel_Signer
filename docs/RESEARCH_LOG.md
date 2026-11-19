@@ -1,5 +1,14 @@
 # Checkpoint log
 
+2026-11-20：当前 suffix 实际入口与三组 lazy constant 初始化通过。
+原版 wrapper/body、selector、三次 decoder 调用及 release store 连接到
+现有 owner 的独立 ELF 结果，输入帧与旧状态/分配账本保留，无新服务。
+停在 `+0x286ce8`、字符串构造之前；完整返回尚未验证。两基址全部
+八种 warm flag 组合的 16 组原版/现有源码前缀对照、四组新旧 CLI、
+四种错误 CLI、13 条指令及 126 项损坏证据拒绝通过。原上限 400000/2/4
+保留，未将原生快照用作模型输入。普通六头与完整 signer 仍未闭合。
+见[常量证据](../platforms/bytedance/tomato/evidence/vm9_native_171_suffix_constants_20261120.json)。
+
 2026-11-20：suffix 调用准备及独立完整返回对照通过。当前请求原版七条
 字节码将 frame+2088 头部和实际 helper/wrapper 准备到 frame+2752 参数块，
 停在进入 wrapper 前。旧复制完整指令/代码/分配前缀一致，头部、padding、

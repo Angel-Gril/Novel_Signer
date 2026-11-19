@@ -1,5 +1,28 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-20：当前 suffix 入口与三组常量初始化已验证
+
+当前原版请求实际进入 wrapper `+0x285e80` 和 suffix `+0x2869f0`，
+按 ELF selector 表取得三组 source/destination/mask/flag，执行三个
+`+0x167e54` 解码调用和对应四字节 release store。三个目的窗口含
+padding/flag 与现有 suffix owner 的独立 ELF 页面结果一致；TP/canary、
+输入头部、8 KiB frame 周边、旧 TLS/heap/表和分配账本保持不变。
+完整已接受调用准备的指令、代码及分配前缀一致后才结束调用准备观察，
+original_scope 保持。停在 `+0x286ce8`，尚未执行后续 scratch 准备与
+`+0x248344` 字符串构造，未增加分配、服务、JNI 或 SVC。
+
+独立组件覆盖两基址和三个 warm flag 的全部八种组合，共 16 组。
+原版运行到同一停止点；Python 直接执行现有 construct_request_suffix
+中 selector/解码的源码前缀，复用原有 decoder，不复制另一份算法。
+完整语义 guest/image 字节及按 cold flag 选择的解码调用参数一致，
+warm 字节保留。模型输入是声明的 fixture/ELF，不来自当前原生帧。
+
+四组当前原生、新 CLI 和旧 suffix-call CLI、16 组独立组件及 CLI
+重放、四种错误 CLI、13 条指令绑定和 126 项损坏证据拒绝通过。
+公开上限仍为 400000/2/4，无新 provider 或 guest 绕过。当前完整
+suffix 返回、配置来源、整请求等价、普通六头、在线接受及完整 signer
+仍未验证。见[常量初始化证据](evidence/vm9_native_171_suffix_constants_20261120.json)。
+
 ## 2026-11-20：suffix 调用准备与独立完整返回对照已验证
 
 当前原版请求继续执行 `+0xfd698..+0xfd6b0` 七条字节码：把 R16 的

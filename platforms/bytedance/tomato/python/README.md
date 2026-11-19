@@ -1,5 +1,25 @@
 # Tomato Python material
 
+`verify_vm9_native_171_suffix_constants_20261120.py` enters the actual current
+suffix wrapper/body and checks three ELF selector/decoder calls and release
+flag stores. Constant destinations, padding and flags equal independently
+initialized ELF pages using the existing suffix owner's source prefix. The
+input frame, header, TP/canary, old TLS/heap/tables and allocation ledger are
+preserved. The complete accepted call instruction/code/allocation prefix is
+checked before retiring only its observer. Execution stops at +0x286ce8,
+before further scratch setup and the first string constructor; no allocator,
+service, JNI or SVC delta occurs. Sixteen independent native/source-prefix
+controls cover both bases and all eight warm-flag combinations, comparing
+full semantic guest/image bytes and cold-only decoder arguments. No native
+snapshot seeds the model and no duplicate decoder or provider is introduced.
+Four current controls, four new and four old CLI replays, sixteen component
+replays, four bad CLI calls, thirteen instruction bindings and 126 damaged
+evidence rejections pass. Bounds remain 400000 observations / two handler
+reads / four main SVCs. Current suffix return, configuration provenance,
+whole-request equality, ordinary six headers, online acceptance and complete
+signing remain unverified. Use `--elf`, `--libc`, `--replay`; see the
+[constant evidence](../evidence/vm9_native_171_suffix_constants_20261120.json).
+
 `verify_vm9_native_171_configuration_suffix_call_20261120.py` verifies seven
 original words preparing the frame+2088 header, helper +0x2869f0 and wrapper
 +0x285e80 in packed frame+2752. Two loads, two eight-byte stores, selected and

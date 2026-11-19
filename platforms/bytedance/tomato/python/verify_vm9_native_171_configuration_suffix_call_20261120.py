@@ -240,7 +240,10 @@ class Scenario(previous.Scenario):
                 if not any(start<=i<end for start,end in [(2752,2768)]+runtime))
             for a,b in self.suffix_call_preserved.items():assert bytes(cpu.mem_read(a,len(b)))==b
             assert state['allocator_events_ref']==self.suffix_call_allocations and self.original_scope
-            self.suffix_call_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.suffix_call_done=True;self.suffix_call_boundary(cpu,state)
+
+    def suffix_call_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         old=next(r for r in json.loads(previous.EVIDENCE.read_text())['case_results'] if r['control']==self.control)
