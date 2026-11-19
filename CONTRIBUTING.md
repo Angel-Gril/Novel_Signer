@@ -46,6 +46,9 @@ cargo test --manifest-path platforms/bytedance/tomato/rust/Cargo.toml --locked
 
 These checks run in CI (`verify` workflow). Pull requests that fail them will not be merged.
 
+After `git add`, run `python scripts/scan_public.py --staged` to check the exact contents
+of files changed in the Git index before committing. The default scan reads the working tree.
+
 ## Layout rules
 
 - Keep platforms separate: `platforms/bytedance/tomato`, `platforms/bytedance/douyin`,

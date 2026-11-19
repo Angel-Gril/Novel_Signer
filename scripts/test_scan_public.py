@@ -12,19 +12,26 @@ FAKE_KEY = "-----BEGIN PRIVATE KEY-----"
 
 
 class PublicScanTests(unittest.TestCase):
-    def run_scan(self, files):
+    def run_scan(self, files, *, staged=None, args=()):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             subprocess.run(["git", "init", "-q"], cwd=root, check=True)
             scanner = root / "scripts" / SCANNER.name
             scanner.parent.mkdir()
             shutil.copyfile(SCANNER, scanner)
-            for name, body in files.items():
-                path = root / name
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_text(body, encoding="utf-8")
+
+            def write_files(contents):
+                for name, body in contents.items():
+                    path = root / name
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text(body, encoding="utf-8")
+
+            if staged is not None:
+                write_files(staged)
+                subprocess.run(["git", "add", "--", *staged], cwd=root, check=True)
+            write_files(files)
             return subprocess.run(
-                [sys.executable, str(scanner)], cwd=root, capture_output=True, text=True,
+                [sys.executable, str(scanner), *args], cwd=root, capture_output=True, text=True,
             )
 
     def test_reports_accidental_public_material_without_printing_it(self):
@@ -49,6 +56,25 @@ class PublicScanTests(unittest.TestCase):
             "platforms/evidence.json": '{"token_sha256":"f00d", "cookie":null}',
             "README.md": "Public evidence records lengths and hashes.\n",
         })
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("public scan passed", result.stdout)
+
+    def test_staged_scan_detects_content_removed_only_from_worktree(self):
+        path = "docs/evidence space.json"
+        result = self.run_scan(
+            {path: '{"token_sha256":"f00d"}'},
+            staged={path: '{"token":"example-only-staged"}'}, args=("--staged",),
+        )
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn(f"{path}: credential field", result.stdout)
+        self.assertNotIn("example-only-staged", result.stdout + result.stderr)
+
+    def test_staged_scan_ignores_material_that_is_not_staged(self):
+        path = "platforms/README.md"
+        result = self.run_scan(
+            {path: FAKE_KEY, "docs/untracked.md": FAKE_KEY},
+            staged={path: "Public evidence.\n"}, args=("--staged",),
+        )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("public scan passed", result.stdout)
 

@@ -1,10 +1,12 @@
 """Small conservative scan for accidental private trial material."""
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
 import subprocess
+from collections.abc import Iterator
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,32 +57,85 @@ def scan_json(text: str, findings: set[str]) -> None:
             scan_text(value, findings)
 
 
-def main() -> int:
+def in_scope(path: Path) -> bool:
+    return path.parts[0] == "platforms" or path.suffix.lower() in {".json", ".md"}
+
+
+def worktree_files() -> Iterator[tuple[Path, bytes | None]]:
     files = subprocess.check_output(
         ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=ROOT,
     )
-    bad = []
     for name in sorted(set(files.split(b"\0")) - {b""}):
         path = Path(os.fsdecode(name))
-        suffix = path.suffix.lower()
-        if path.parts[0] != "platforms" and suffix not in {".json", ".md"}:
+        if not in_scope(path):
             continue
         source = ROOT / path
         if source.is_symlink() or not source.is_file():
             continue
-
-        findings = set()
         try:
-            contents = source.read_text(encoding="utf-8-sig")
-        except UnicodeDecodeError:
-            if suffix in {".json", ".md"}:
-                findings.add("invalid UTF-8")
+            contents = source.read_bytes()
         except OSError:
+            contents = None
+        yield path, contents
+
+
+def staged_files() -> Iterator[tuple[Path, bytes | None]]:
+    changes = subprocess.check_output([
+        "git", "diff", "--cached", "--raw", "-z", "--no-abbrev", "--no-renames",
+        "--no-color", "--diff-filter=AMT", "--ita-invisible-in-index", "--",
+    ], cwd=ROOT)
+    fields = changes.split(b"\0")[:-1]
+    blobs = []
+    for metadata, name in zip(fields[::2], fields[1::2], strict=True):
+        _, mode, _, oid, _ = metadata.split()
+        path = Path(os.fsdecode(name))
+        if in_scope(path) and mode in {b"100644", b"100755"}:
+            blobs.append((path, oid))
+    if not blobs:
+        return
+
+    # Request objects by hash so worktree edits and filename quoting cannot affect the scan.
+    with subprocess.Popen(
+        ["git", "cat-file", "--batch"], cwd=ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+    ) as git:
+        assert git.stdin is not None and git.stdout is not None
+        for path, oid in blobs:
+            git.stdin.write(oid + b"\n")
+            git.stdin.flush()
+            header = git.stdout.readline().split()
+            if len(header) != 3 or header[:2] != [oid, b"blob"]:
+                yield path, None
+                return
+            size = int(header[2])
+            contents = git.stdout.read(size)
+            if len(contents) != size or git.stdout.read(1) != b"\n":
+                yield path, None
+                return
+            yield path, contents
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--staged", action="store_true", help="scan files changed in the Git index")
+    args = parser.parse_args()
+    files = staged_files() if args.staged else worktree_files()
+
+    bad = []
+    for path, contents in files:
+        suffix = path.suffix.lower()
+        findings = set()
+        if contents is None:
             findings.add("unreadable file")
         else:
-            scan_text(contents, findings)
-            if suffix == ".json":
-                scan_json(contents, findings)
+            try:
+                text = contents.decode("utf-8-sig")
+            except UnicodeDecodeError:
+                if suffix in {".json", ".md"}:
+                    findings.add("invalid UTF-8")
+            else:
+                scan_text(text, findings)
+                if suffix == ".json":
+                    scan_json(text, findings)
 
         if findings:
             bad.append(f"{path.as_posix()}: {', '.join(sorted(findings))}")
