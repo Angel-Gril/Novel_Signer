@@ -1,5 +1,17 @@
 # Checkpoint log
 
+2026-11-19：暖线程数组中的 TLS 冷变量读取已验证。原版 flags OR256、
+旧 hash 参数保留、getter/emutls 实际执行，index 0→5，新增一次 19
+字节分配，四字节零值返回及相邻字节保留均通过。独立声明 index 0→8
+的 Python VM/真实 callback 与两组原版组件分别验证，未使用原生快照，
+不混同当前请求输入。修正旧夹具对 pthread key 状态页的选择，14 组
+旧 TLS 控制通过。四组原生、四组新 CLI、四组旧 hash CLI、两组声明
+输入原生 TLS 重放、四种错误 CLI、32 条指令、12 个 ELF 字、一个
+重定位及 261 项损坏证据拒绝通过。完整旧前缀一致，服务/JNI/
+SVC 账本不变，上限 2/4；下一字节码 `+0xfd5ec`。六头、整请求数值
+等价、在线接受和完整 signer 仍未验证。
+见[TLS 冷变量证据](../platforms/bytedance/tomato/evidence/vm9_native_171_configuration_tls_20261119.json)。
+
 2026-11-19：暖注册表分支与配置 clone 散列已验证。原版 guard bit0=1，
 跳过初始化，核对注册表指针读取关系并将 clone 传给 `+0x258be0`。
 实际十轮 ELF 表散列及八字节返回值写入通过指令契约检查；clone、表

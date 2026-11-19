@@ -1,5 +1,29 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_tls_20261119.py` verifies the original
+flags OR256 and a cold TLS variable in an initialized thread array. It executes
+12 words through the actual getter/emutls bodies: native index 0 becomes 5,
+one 19-byte allocation supplies block+8, and the zero uint32 result writes
+four bytes at frame+2808 while adjacent 12 bytes, prior hash, clone, tables
+and both count1 references stay intact. Fresh declared pages instead use
+counter7/index8, the actual request callback source and the existing TLS
+owner; two fresh VM cases and two original getter controls compare those
+declared semantics. Native snapshots never seed Python inputs, and the current
+and declared indices/hashes are not compared. The existing TLS native fixture
+now selects warm pthread key pages by completed once state, including a cold
+descriptor; all 14 old fixture cases pass. Four original continuations, four
+independent CLI replays, four exact old hash rows, two declared native TLS
+controls and replays, four bad CLI calls, 32 instructions, 12 words, one GOT
+relocation and 261 damaged-evidence rejections pass. The full prior
+instruction/code/allocation prefix agrees. Only the completed hash observer
+retires; original scope stays live. Service/JNI/libc/main-SVC ledgers and
+read/main-SVC limits 2/4 stay unchanged, with no new providers or Android run.
+The TLS return is not consumed; next word +0xfd5ec. Current-request hash numeric
+equality, complete TLS heap/physical stack equivalence, full provenance, key
+values, ordinary six headers, whole-request equivalence, online acceptance
+and complete signing remain unverified. Use `--elf`, `--libc`, `--replay`. See
+the [TLS evidence](../evidence/vm9_native_171_configuration_tls_20261119.json).
+
 `verify_vm9_native_171_configuration_hash64_20261119.py` continues through
 the warm registry flag branch into the preserved clone's original uint64
 table hash. Guard bit0 is one, so cold initialization is skipped. Registry

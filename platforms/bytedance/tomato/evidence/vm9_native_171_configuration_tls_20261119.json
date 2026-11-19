@@ -1,0 +1,2026 @@
+{
+  "schema": "vm9-native-171-configuration-tls-20261119-v1",
+  "claims": {
+    "retained_hash64_instruction_code_and_allocation_prefix_verified": true,
+    "completed_hash_observer_retired_after_full_prefix": true,
+    "original_scope_kept": true,
+    "original_flags_or256_and_selected_arguments_verified": true,
+    "original_TLS_getter_and_emutls_bodies_executed": true,
+    "cold_descriptor_in_warm_array_index_and_slot_verified": true,
+    "exactly_one_19_byte_allocation_verified": true,
+    "original_four_byte_return_and_padding_verified": true,
+    "fresh_declared_VM_executes_actual_request_callback_source": true,
+    "fresh_declared_TLS_model_and_two_original_controls_match": true,
+    "previous_hash_clone_table_and_count1_references_preserved": true,
+    "service_JNI_and_SVC_ledgers_unchanged": true,
+    "native_memory_used_as_Python_model_input": false,
+    "current_request_hash_numeric_Python_equality_verified": false,
+    "current_and_declared_TLS_indices_equal": false,
+    "new_OS_JNI_or_internal_helper_providers": false,
+    "current_whole_TLS_heap_or_physical_stack_equivalence_verified": false,
+    "TLS_return_consumed": false,
+    "complete_configuration_provenance_verified": false,
+    "real_business_state_or_JVM_identity_verified": false,
+    "KMSV_value_generated": false,
+    "client_key_value_generated": false,
+    "ordinary_Cronet_six_headers_verified": false,
+    "whole_request_equivalence_verified": false,
+    "callback_or_ordinary_wrapper_returned": false,
+    "complete_standalone_signer_verified": false,
+    "Android_execution": false,
+    "online_acceptance_verified": false
+  },
+  "providers": {
+    "inherited_hash64": {
+      "inherited_owner_cleanup": {
+        "inherited_cleanup": {
+          "inherited_clone": {
+            "inherited_reference": {
+              "inherited_scope_exit": {
+                "inherited_scope": {
+                  "inherited_KMSV": {
+                    "inherited_result": {
+                      "inherited_lookup": {
+                        "inherited_name": {
+                          "inherited_NULL_payload": {
+                            "inherited_file_check": {
+                              "inherited_cache_path": {
+                                "inherited_directory_profile": {
+                                  "inherited_context_profile": {
+                                    "inherited_outer": {
+                                      "inherited_owner": "verify_vm9_outer_signer_native.py",
+                                      "actual_matching_Bionic_allocator": true,
+                                      "explicit_virtual_OS_and_JNI": true,
+                                      "virtual_threads_created": 3,
+                                      "virtual_thread_bodies_executed": false,
+                                      "diagnostic_helpers_substituted": [
+                                        "0x26c858",
+                                        "0x26c9d0"
+                                      ],
+                                      "Android_JVM_used": false,
+                                      "thread_id": 137,
+                                      "clock_seconds": 1791023800,
+                                      "clock_nanoseconds": 500000000,
+                                      "ordinary_inputs": "fresh synthetic CStrings in an isolated mapped page",
+                                      "root_child_context_or_cache_bytes_seeded_by_continuation": false
+                                    },
+                                    "JNI_owner": "verify_vm9_request_stack_evaluator_fresh_20261012.py:Services.jni",
+                                    "JNI_environment_adapter": "validate outer environment, translate only its ABI identity",
+                                    "JNI_slots": [
+                                      "0x30",
+                                      "0x388",
+                                      "0x720",
+                                      "0xb8"
+                                    ],
+                                    "main_import_names": [
+                                      "memset",
+                                      "__cxa_atexit"
+                                    ],
+                                    "main_import_targets": "resolved matching Bionic exports",
+                                    "permitted_libc_SVC_numbers": [
+                                      48,
+                                      56,
+                                      57,
+                                      63,
+                                      79,
+                                      80,
+                                      98,
+                                      167,
+                                      198,
+                                      214,
+                                      215,
+                                      222,
+                                      226,
+                                      233
+                                    ],
+                                    "scenarios": [
+                                      "NULL_class0",
+                                      "NULL_static_id"
+                                    ],
+                                    "stop": "observer stops after context store and moves PC to the oracle sentinel; no function return"
+                                  },
+                                  "request_profile": "synthetic_aid_absent_directory",
+                                  "ordered_main_image_SVCs": [
+                                    {
+                                      "native_pc": "0x271dbc",
+                                      "bytecode": "0xfca40",
+                                      "number": 48,
+                                      "dirfd_u32": 4294967196,
+                                      "mode": 4,
+                                      "flags": 0,
+                                      "pathname_length": 30,
+                                      "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522"
+                                    },
+                                    {
+                                      "native_pc": "0x271dbc",
+                                      "bytecode": "0xfca40",
+                                      "number": 79,
+                                      "dirfd_u32": 4294967196,
+                                      "flags": 0,
+                                      "pathname_length": 29,
+                                      "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+                                      "stat_buffer_in_native_stack": true,
+                                      "stat_buffer_size": 128,
+                                      "stat_buffer_SP_offset": 88,
+                                      "return_pc": "0x272d68"
+                                    },
+                                    {
+                                      "native_pc": "0x271dbc",
+                                      "bytecode": "0xfca40",
+                                      "number": 79,
+                                      "dirfd_u32": 4294967196,
+                                      "flags": 0,
+                                      "pathname_length": 5,
+                                      "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+                                      "stat_buffer_in_native_stack": true,
+                                      "stat_buffer_size": 128,
+                                      "stat_buffer_SP_offset": 88,
+                                      "return_pc": "0x272d68"
+                                    }
+                                  ],
+                                  "main_image_SVC_maximum_calls": 3,
+                                  "mkdir_owner": "verify_vm9_outer_signer_native.py:case.mkdir",
+                                  "mkdir_calls_after_aid_boundary": 1,
+                                  "mkdir_errno": 17,
+                                  "mkdir_result_u32": 4294967295,
+                                  "new_OS_JNI_or_internal_helper_providers": [],
+                                  "Python_model_owner": "vm9_configuration_init.py:ensure_environment_directory",
+                                  "Python_input": "independent pages, declared static directory string and synthetic stack",
+                                  "stop_before": "0x25ef7c",
+                                  "stop_kind": "observation sentinel after directory helper RET; no request RET"
+                                },
+                                "original_default_identity_decoder": {
+                                  "source": "0xa4674",
+                                  "mask": "0xa4688",
+                                  "destination": "0x3ded4c"
+                                },
+                                "identity_scope": "original decoded default only",
+                                "independent_formula": "declared default identity, hashlib.sha1, declared directory/prefix/format",
+                                "stop_before": "0x25de04",
+                                "new_OS_JNI_or_internal_helper_providers": []
+                              },
+                              "request_profile": "synthetic_aid_absent_cache_file",
+                              "ordered_main_image_SVCs": [
+                                {
+                                  "native_pc": "0x271dbc",
+                                  "bytecode": "0xfca40",
+                                  "number": 48,
+                                  "dirfd_u32": 4294967196,
+                                  "mode": 4,
+                                  "flags": 0,
+                                  "pathname_length": 30,
+                                  "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522"
+                                },
+                                {
+                                  "native_pc": "0x271dbc",
+                                  "bytecode": "0xfca40",
+                                  "number": 79,
+                                  "dirfd_u32": 4294967196,
+                                  "flags": 0,
+                                  "pathname_length": 29,
+                                  "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+                                  "stat_buffer_in_native_stack": true,
+                                  "stat_buffer_size": 128,
+                                  "stat_buffer_SP_offset": 88,
+                                  "return_pc": "0x272d68"
+                                },
+                                {
+                                  "native_pc": "0x271dbc",
+                                  "bytecode": "0xfca40",
+                                  "number": 79,
+                                  "dirfd_u32": 4294967196,
+                                  "flags": 0,
+                                  "pathname_length": 5,
+                                  "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+                                  "stat_buffer_in_native_stack": true,
+                                  "stat_buffer_size": 128,
+                                  "stat_buffer_SP_offset": 88,
+                                  "return_pc": "0x272d68"
+                                },
+                                {
+                                  "native_pc": "0x271dbc",
+                                  "bytecode": "0xfca40",
+                                  "number": 48,
+                                  "dirfd_u32": 4294967196,
+                                  "flags": 0,
+                                  "pathname_length": 76,
+                                  "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+                                  "mode": 4,
+                                  "return_pc": "0x27308c"
+                                }
+                              ],
+                              "maximum_main_SVCs": 4,
+                              "additional_syscall_owner": "verify_vm9_outer_signer_native.py:case.syscall",
+                              "kernel_result": -2,
+                              "independent_model_owner": "vm9_state.py:StateCallbacks",
+                              "independent_model_input": "fresh pages, declared file path, declared synthetic packed arguments",
+                              "additional_inherited_libc_SVCs": [
+                                {
+                                  "libc_pc": "0x1bf1c",
+                                  "number": 98
+                                },
+                                {
+                                  "libc_pc": "0x1bf1c",
+                                  "number": 98
+                                },
+                                {
+                                  "libc_pc": "0x6a550",
+                                  "number": 226
+                                },
+                                {
+                                  "libc_pc": "0x6a550",
+                                  "number": 226
+                                }
+                              ],
+                              "service_count_deltas": {
+                                "syscall_48": 1,
+                                "syscall_98": 2,
+                                "syscall_226": 2,
+                                "clock": 1
+                              },
+                              "new_OS_JNI_or_internal_helper_providers": [],
+                              "stop_before": "0x16f96c",
+                              "outer_bytecode": "0xfcd04"
+                            },
+                            "handler_read_profile": {
+                              "name": "constructed_null_payload",
+                              "bytecode": 1035524,
+                              "member_offset": 8,
+                              "virtual_register": 2,
+                              "value": 0,
+                              "maximum_handler_reads": 2
+                            },
+                            "handler_reads": [
+                              {
+                                "native_pc": "0x16f96c",
+                                "bytecode": "0xfae4c",
+                                "member_offset": "0x50"
+                              },
+                              {
+                                "native_pc": "0x16f96c",
+                                "bytecode": "0xfcd04",
+                                "member_offset": "0x8",
+                                "size": 8,
+                                "virtual_register": 2,
+                                "value_u64": 0,
+                                "base_is_constructed_handler": true,
+                                "value_is_constructor_member_payload": true
+                              }
+                            ],
+                            "maximum_handler_reads": 2,
+                            "independent_model_owner": "vm_full.py:VM.run",
+                            "independent_model_input": "declared bytecode words and fresh synthetic handler/registers",
+                            "new_OS_JNI_or_internal_helper_providers": [],
+                            "stop_before": "0x16ee38",
+                            "next_bytecode": "0xfd064"
+                          },
+                          "maximum_handler_reads": 2,
+                          "maximum_main_SVCs": 4,
+                          "independent_model_owners": [
+                            "vm9_objects.py:decode_masked_bytes",
+                            "vm9_startup.py:acquire_serial_guard",
+                            "vm9_objects.py:construct_string_object"
+                          ],
+                          "independent_model_input": "fresh pages and declared ELF constant/zero guard/mutex/object",
+                          "decoder": {
+                            "decoder": "0x167e54",
+                            "byte_writer": "0x167e70",
+                            "source": "0xf2724",
+                            "mask": "0xf27c0",
+                            "destination": "0x3e0f14",
+                            "original_byte_stores": 15,
+                            "destination_initially_zero": true,
+                            "terminator_not_written": true
+                          },
+                          "guard_offset": "0x3e0cb0",
+                          "string_object_offset": "0x3e0c98",
+                          "mutex_offset": "0x3e2f40",
+                          "thread_id": 137,
+                          "new_OS_JNI_or_internal_helper_providers": [],
+                          "stop_before": "0x16aa4c",
+                          "outer_bytecode": "0xfd0d4"
+                        },
+                        "maximum_handler_reads": 2,
+                        "maximum_main_SVCs": 4,
+                        "independent_model_owners": [
+                          "vm9_callbacks.py:register_process_destructor",
+                          "vm9_startup.py:release_serial_guard",
+                          "vm9_registry.py:lookup_configuration_value"
+                        ],
+                        "independent_model_input": "fresh pages, declared initialized guard and one synthetic X-TEST/value tree",
+                        "actual_destructor_target": "matching Bionic .dynsym __cxa_atexit, not a main-image PLT alias",
+                        "additional_libc_SVCs": [
+                          {
+                            "libc_pc": "0x6a550",
+                            "number": 226
+                          },
+                          {
+                            "libc_pc": "0x6a550",
+                            "number": 226
+                          }
+                        ],
+                        "service_count_deltas": {
+                          "syscall_226": 2
+                        },
+                        "new_OS_JNI_or_internal_helper_providers": [],
+                        "stop_before": "0x16aa4c",
+                        "outer_bytecode": "0xfd140"
+                      },
+                      "maximum_handler_reads": 2,
+                      "maximum_main_SVCs": 4,
+                      "independent_model_owner": "vm_full.py:VM.run",
+                      "independent_model_input": "fresh declared frame/guard/registers and sixteen bound ELF words; CALL not executed",
+                      "pointer_origin": {
+                        "GOT_offset": "0x382cb8",
+                        "relocation_type": 1027,
+                        "addend": "0x32d3a0",
+                        "guard_section": "SHT_NOBITS"
+                      },
+                      "new_OS_JNI_or_internal_helper_providers": [],
+                      "stop_before": "0x16a5e8",
+                      "outer_bytecode": "0xfd180"
+                    },
+                    "maximum_handler_reads": 2,
+                    "maximum_main_SVCs": 4,
+                    "independent_model_owners": [
+                      "vm9_objects.py:decode_masked_bytes",
+                      "vm9_objects.py:construct_string_object",
+                      "vm9_startup.py:acquire_serial_guard",
+                      "vm9_startup.py:release_serial_guard",
+                      "vm9_callbacks.py:register_process_destructor",
+                      "vm9_registry.py:lookup_configuration_value"
+                    ],
+                    "independent_model_input": "fresh declared zero guard/mutex/object and singleton X-TEST/value tree",
+                    "decoder": {
+                      "decoder": "0x167e54",
+                      "byte_writer": "0x167e70",
+                      "source": "0xf2734",
+                      "mask": "0xf27b4",
+                      "destination": "0x3e0f28",
+                      "original_byte_stores": 9,
+                      "destination_initially_zero": true,
+                      "terminator_not_written": true
+                    },
+                    "guard_offset": "0x3e0cd0",
+                    "object_offset": "0x3e0cb8",
+                    "thread_id": 137,
+                    "matching_Bionic_export": "0x75254",
+                    "additional_libc_SVCs": [
+                      {
+                        "libc_pc": "0x6a550",
+                        "number": 226
+                      },
+                      {
+                        "libc_pc": "0x6a550",
+                        "number": 226
+                      }
+                    ],
+                    "allocation_delta": {
+                      "malloc": 1,
+                      "size": 10,
+                      "callsite": "0x248388"
+                    },
+                    "service_count_deltas": {
+                      "syscall_226": 2
+                    },
+                    "new_OS_JNI_or_internal_helper_providers": [],
+                    "stop_before": "0x16aa4c",
+                    "outer_bytecode": "0xfd228"
+                  },
+                  "maximum_handler_reads": 2,
+                  "maximum_main_SVCs": 4,
+                  "independent_model_owners": [
+                    "vm_full.py:VM.run",
+                    "vm9_diagnostics.py:enter_diagnostic_scope"
+                  ],
+                  "independent_model_input": "fresh declared frame, configuration member pointer and zero cold diagnostic pages",
+                  "diagnostic_execution": "existing real_diagnostics option deferred until +0x26c858 at outer+0xfd258",
+                  "previous_diagnostic_scopes_original_body_executed": false,
+                  "thread_id": 137,
+                  "allocation_deltas": {
+                    "malloc": 3,
+                    "sizes": [
+                      48,
+                      2048,
+                      48
+                    ],
+                    "callsite": "0x32a210"
+                  },
+                  "service_count_deltas": {},
+                  "new_OS_JNI_or_internal_helper_providers": [],
+                  "stop_before": "0x16aa4c",
+                  "outer_bytecode": "0xfd258"
+                },
+                "maximum_handler_reads": 2,
+                "maximum_main_SVCs": 4,
+                "independent_model_owners": [
+                  "vm_full.py:VM.run",
+                  "vm9_diagnostics.py:enter_diagnostic_scope",
+                  "vm9_diagnostics.py:leave_diagnostic_scope"
+                ],
+                "independent_model_input": "fresh declared configuration pointers, counter1, frame and independently constructed locked scope",
+                "allocation_deltas": {},
+                "service_count_deltas": {},
+                "new_OS_JNI_or_internal_helper_providers": [],
+                "stop_before": "0x16aa4c",
+                "outer_bytecode": "0xfd290"
+              },
+              "maximum_handler_reads": 2,
+              "maximum_main_SVCs": 4,
+              "independent_model_owners": [
+                "vm_full.py:VM.run",
+                "vm9_reference_scopes.py:copy_scoped_string_reference"
+              ],
+              "independent_model_input": "fresh declared receiver pair/count1, destination and warm table with missing selected slot",
+              "allocation_deltas": {
+                "malloc": 1,
+                "sizes": [
+                  48
+                ],
+                "callsite": "0x32a210"
+              },
+              "service_count_deltas": {},
+              "new_OS_JNI_or_internal_helper_providers": [],
+              "stop_before": "0x16aa4c",
+              "outer_bytecode": "0xfd2b4"
+            },
+            "maximum_handler_reads": 2,
+            "maximum_main_SVCs": 4,
+            "independent_model_owners": [
+              "vm_full.py:VM.run",
+              "vm9_objects.py:clone_string_object"
+            ],
+            "independent_model_input": "fresh declared frame and length10 string containing an embedded zero; independent payload bytes",
+            "compared_scope": "selected length, copy, terminator, allocation and preservation semantics; not equal source bytes",
+            "allocation_deltas": {
+              "malloc": 1,
+              "sizes": [
+                11
+              ],
+              "BL_offset": "0x248418",
+              "ledger_return_PC": "0x24841c"
+            },
+            "service_count_deltas": {},
+            "new_OS_JNI_or_internal_helper_providers": [],
+            "stop_before": "0x16aa4c",
+            "outer_bytecode": "0xfd2dc"
+          },
+          "maximum_handler_reads": 2,
+          "maximum_main_SVCs": 4,
+          "independent_model_owners": [
+            "vm_full.py:VM.run",
+            "vm9_reference_scopes.py:release_scoped_string_reference",
+            "vm9_diagnostics.py:enter_diagnostic_scope",
+            "vm9_diagnostics.py:leave_diagnostic_scope"
+          ],
+          "independent_model_input": "fresh declared count2, reference pair, frame, warm table and recursive mutex",
+          "allocation_deltas": {},
+          "service_count_deltas": {},
+          "new_OS_JNI_or_internal_helper_providers": [],
+          "retired_completed_observation_windows": [
+            "result_active",
+            "exit_active",
+            "copy_active",
+            "clone_active"
+          ],
+          "original_scope_kept": true,
+          "stop_before": "0x16aa4c",
+          "outer_bytecode": "0xfd38c"
+        },
+        "maximum_handler_reads": 2,
+        "maximum_main_SVCs": 4,
+        "independent_model_owners": [
+          "vm_full.py:VM.run",
+          "vm9_reference_scopes.py:release_scoped_string_reference",
+          "vm9_diagnostics.py:enter_diagnostic_scope",
+          "vm9_diagnostics.py:leave_diagnostic_scope"
+        ],
+        "independent_model_input": "fresh owner fields160/168, count2, sibling count1, frame, warm table and recursive mutex",
+        "allocation_deltas": {},
+        "service_count_deltas": {},
+        "new_OS_JNI_or_internal_helper_providers": [],
+        "retired_completed_observation_windows": [
+          "cleanup_active"
+        ],
+        "original_scope_kept": true,
+        "stop_before": "0x16aa4c",
+        "outer_bytecode": "0xfd424"
+      },
+      "maximum_handler_reads": 2,
+      "maximum_main_SVCs": 4,
+      "independent_model_owners": [
+        "vm_full.py:VM.run",
+        "vm9_objects.py:hash_string_object64"
+      ],
+      "independent_model_input": "fresh declared registry graph/guard1/clone bytes and synthetic uint64 table; no native snapshot",
+      "current_native_table": "matching immutable ELF table at +0x96548; observed native rounds only",
+      "current_request_numeric_hash_compared_to_Python": false,
+      "allocation_deltas": {},
+      "service_count_deltas": {},
+      "new_OS_JNI_or_internal_helper_providers": [],
+      "retired_completed_observation_windows": [
+        "owner_cleanup_active"
+      ],
+      "original_scope_kept": true,
+      "stop_before": "0x16aa4c",
+      "outer_bytecode": "0xfd5b8"
+    },
+    "maximum_handler_reads": 2,
+    "maximum_main_SVCs": 4,
+    "retired_completed_observation_windows": [
+      "hash_active"
+    ],
+    "original_scope_kept": true,
+    "independent_model_owners": [
+      "vm_full.py:VM.run",
+      "vm9_request_vm.py:_execute_request_vm_impl.callback",
+      "vm9_objects.py:get_emulated_tls_address"
+    ],
+    "current_and_declared_hashes_or_TLS_indices_compared": false,
+    "new_OS_JNI_or_internal_helper_providers": [],
+    "current_request_allocation_delta": {
+      "malloc": 1,
+      "bytes": 19
+    },
+    "service_count_deltas": {},
+    "stop_before": "0x16aa4c",
+    "outer_bytecode": "0xfd5e8"
+  },
+  "provenance": {
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "default_URL_sha256": "33fdbad7bffeeab054cc72dffc598ccbc0878cba3079ec9e117c179d64d9b499",
+    "synthetic_URL_sha256": "f6b4d932c07ae544918dc3b6ef22924de3cab7776450771de8f591abef2001a4"
+  },
+  "independent_model_projection": {
+    "TLS_index_before": 0,
+    "TLS_counter_before": 7,
+    "TLS_index_after": 8,
+    "TLS_counter_after": 8,
+    "result_u32": 0,
+    "allocation_sizes": [
+      19
+    ],
+    "TLS_pointer_is_block_plus8": true,
+    "actual_request_callback_executed": true,
+    "adjacent12_preserved": true,
+    "existing_array_other_bytes_preserved": true,
+    "declared_hash_hex": "0xd66dc6ae6f3ac6f4",
+    "native_snapshot_input": false
+  },
+  "independent_Python_VM_projection": [
+    {
+      "image_base": "0x122c0000",
+      "executed_bytecodes": [
+        "0xfd5bc",
+        "0xfd5c0",
+        "0xfd5c4",
+        "0xfd5c8",
+        "0xfd5cc",
+        "0xfd5d0",
+        "0xfd5d4",
+        "0xfd5d8",
+        "0xfd5dc",
+        "0xfd5e0",
+        "0xfd5e4",
+        "0xfd5e8"
+      ],
+      "declared_projection": {
+        "TLS_index_before": 0,
+        "TLS_counter_before": 7,
+        "TLS_index_after": 8,
+        "TLS_counter_after": 8,
+        "result_u32": 0,
+        "allocation_sizes": [
+          19
+        ],
+        "TLS_pointer_is_block_plus8": true,
+        "actual_request_callback_executed": true,
+        "adjacent12_preserved": true,
+        "existing_array_other_bytes_preserved": true,
+        "declared_hash_hex": "0xd66dc6ae6f3ac6f4",
+        "native_snapshot_input": false
+      },
+      "member_flags_after": 272,
+      "selected_registers_and_frame_writes_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "executed_bytecodes": [
+        "0xfd5bc",
+        "0xfd5c0",
+        "0xfd5c4",
+        "0xfd5c8",
+        "0xfd5cc",
+        "0xfd5d0",
+        "0xfd5d4",
+        "0xfd5d8",
+        "0xfd5dc",
+        "0xfd5e0",
+        "0xfd5e4",
+        "0xfd5e8"
+      ],
+      "declared_projection": {
+        "TLS_index_before": 0,
+        "TLS_counter_before": 7,
+        "TLS_index_after": 8,
+        "TLS_counter_after": 8,
+        "result_u32": 0,
+        "allocation_sizes": [
+          19
+        ],
+        "TLS_pointer_is_block_plus8": true,
+        "actual_request_callback_executed": true,
+        "adjacent12_preserved": true,
+        "existing_array_other_bytes_preserved": true,
+        "declared_hash_hex": "0xd66dc6ae6f3ac6f4",
+        "native_snapshot_input": false
+      },
+      "member_flags_after": 272,
+      "selected_registers_and_frame_writes_verified": true
+    }
+  ],
+  "independent_native_TLS_projection": [
+    {
+      "image_base": "0x122c0000",
+      "cold_descriptor_in_declared_warm_array": true,
+      "index_before": 0,
+      "counter_before": 7,
+      "index_after": 8,
+      "counter_after": 8,
+      "one_allocation_size": 19,
+      "result_u32": 0,
+      "guest_image_TLS_padding_and_effects_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "cold_descriptor_in_declared_warm_array": true,
+      "index_before": 0,
+      "counter_before": 7,
+      "index_after": 8,
+      "counter_after": 8,
+      "one_allocation_size": 19,
+      "result_u32": 0,
+      "guest_image_TLS_padding_and_effects_match": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "request_callback_source_sha256": "71cc2a724fae05b0f23385d3b6dfbd01940c922c4ad70f117952afee16e288b4",
+  "instructions": [
+    {
+      "offset": "0x16f96c",
+      "mnemonic": "ldr",
+      "operands": "x9, [x12, x13]"
+    },
+    {
+      "offset": "0x171268",
+      "mnemonic": "str",
+      "operands": "x15, [x17, x16]"
+    },
+    {
+      "offset": "0x2850a8",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x10]!"
+    },
+    {
+      "offset": "0x2850b0",
+      "mnemonic": "adrp",
+      "operands": "x0, #0x382000"
+    },
+    {
+      "offset": "0x2850b4",
+      "mnemonic": "add",
+      "operands": "x0, x0, #0x920"
+    },
+    {
+      "offset": "0x2850b8",
+      "mnemonic": "bl",
+      "operands": "#0x34377c"
+    },
+    {
+      "offset": "0x2850bc",
+      "mnemonic": "ldr",
+      "operands": "w0, [x0]"
+    },
+    {
+      "offset": "0x2850c4",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x343798",
+      "mnemonic": "ldar",
+      "operands": "x22, [x8]"
+    },
+    {
+      "offset": "0x34379c",
+      "mnemonic": "cbz",
+      "operands": "x22, #0x343800"
+    },
+    {
+      "offset": "0x343828",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x3e3000"
+    },
+    {
+      "offset": "0x343830",
+      "mnemonic": "add",
+      "operands": "x22, x9, #1"
+    },
+    {
+      "offset": "0x343838",
+      "mnemonic": "str",
+      "operands": "x22, [x8, #0x200]"
+    },
+    {
+      "offset": "0x34383c",
+      "mnemonic": "stlr",
+      "operands": "x22, [x9]"
+    },
+    {
+      "offset": "0x343854",
+      "mnemonic": "bl",
+      "operands": "#0x3485d0"
+    },
+    {
+      "offset": "0x343858",
+      "mnemonic": "cbnz",
+      "operands": "x0, #0x3437b0"
+    },
+    {
+      "offset": "0x3438ac",
+      "mnemonic": "ldr",
+      "operands": "x20, [x22, #0x10]!"
+    },
+    {
+      "offset": "0x3438b0",
+      "mnemonic": "cbnz",
+      "operands": "x20, #0x34391c"
+    },
+    {
+      "offset": "0x3438d8",
+      "mnemonic": "add",
+      "operands": "x0, x23, x21"
+    },
+    {
+      "offset": "0x3438dc",
+      "mnemonic": "bl",
+      "operands": "#0x347fd0"
+    },
+    {
+      "offset": "0x3438f0",
+      "mnemonic": "stur",
+      "operands": "x0, [x20, #-8]"
+    },
+    {
+      "offset": "0x343914",
+      "mnemonic": "bl",
+      "operands": "#0x347f20"
+    },
+    {
+      "offset": "0x343918",
+      "mnemonic": "str",
+      "operands": "x20, [x22]"
+    },
+    {
+      "offset": "0x343934",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x285e54",
+      "mnemonic": "stp",
+      "operands": "x30, x19, [sp, #-0x10]!"
+    },
+    {
+      "offset": "0x285e58",
+      "mnemonic": "mov",
+      "operands": "x19, x0"
+    },
+    {
+      "offset": "0x285e5c",
+      "mnemonic": "ldp",
+      "operands": "x8, x0, [x0]"
+    },
+    {
+      "offset": "0x285e60",
+      "mnemonic": "blr",
+      "operands": "x8"
+    },
+    {
+      "offset": "0x285e64",
+      "mnemonic": "str",
+      "operands": "w0, [x19, #0x10]"
+    },
+    {
+      "offset": "0x285e68",
+      "mnemonic": "ldp",
+      "operands": "x30, x19, [sp], #0x10"
+    },
+    {
+      "offset": "0x285e6c",
+      "mnemonic": "ret",
+      "operands": ""
+    },
+    {
+      "offset": "0x16aa4c",
+      "mnemonic": "ldp",
+      "operands": "x5, x1, [x29, #-0x90]"
+    }
+  ],
+  "bytecode_words": [
+    {
+      "offset": "0xfd5bc",
+      "word": "0x8b4aba0f"
+    },
+    {
+      "offset": "0xfd5c0",
+      "word": "0x88c00218"
+    },
+    {
+      "offset": "0xfd5c4",
+      "word": "0x8400230"
+    },
+    {
+      "offset": "0xfd5c8",
+      "word": "0x83772618"
+    },
+    {
+      "offset": "0xfd5cc",
+      "word": "0x8b781418"
+    },
+    {
+      "offset": "0xfd5d0",
+      "word": "0x88c8001a"
+    },
+    {
+      "offset": "0xfd5d4",
+      "word": "0x89900418"
+    },
+    {
+      "offset": "0xfd5d8",
+      "word": "0x9b70b89a"
+    },
+    {
+      "offset": "0xfd5dc",
+      "word": "0x8b48b89a"
+    },
+    {
+      "offset": "0xfd5e0",
+      "word": "0xa3460a18"
+    },
+    {
+      "offset": "0xfd5e4",
+      "word": "0x5c19b11"
+    },
+    {
+      "offset": "0xfd5e8",
+      "word": "0x67e0c91"
+    }
+  ],
+  "case_results": [
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "absent",
+        "null_at": "class0"
+      },
+      "retained_hash64_prefix_verified": true,
+      "retained_prefix_instruction_observations": 359914,
+      "retained_prefix_trace_sha256": "2f6fff0771296366e7685938f68f8fbd62c0916f7d7069a7bc7d4056505dccf6",
+      "retained_prefix_code_sha256": "8b926ac5f509c38926f60ed3413206e42365d9c7723dad75c8516ddad6116a9a",
+      "retired_completed_observers": [
+        "hash_active"
+      ],
+      "original_scope_kept": true,
+      "executed_bytecodes": [
+        "0xfd5bc",
+        "0xfd5c0",
+        "0xfd5c4",
+        "0xfd5c8",
+        "0xfd5cc",
+        "0xfd5d0",
+        "0xfd5d4",
+        "0xfd5d8",
+        "0xfd5dc",
+        "0xfd5e0",
+        "0xfd5e4",
+        "0xfd5e8"
+      ],
+      "native_loads": [
+        {
+          "bytecode": "0xfd5c0",
+          "offset": 8,
+          "destination": 1,
+          "source": "member"
+        },
+        {
+          "bytecode": "0xfd5c8",
+          "offset": 4856,
+          "destination": 16,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5cc",
+          "offset": 2832,
+          "destination": 17,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5d4",
+          "offset": 528,
+          "destination": 1,
+          "source": "ELF GOT"
+        },
+        {
+          "bytecode": "0xfd5e0",
+          "offset": 1224,
+          "destination": 4,
+          "source": "frame"
+        }
+      ],
+      "native_stores": [
+        {
+          "cursor_bytecode": "0xfd5d4",
+          "destination": "member",
+          "offset": 8,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5dc",
+          "destination": "frame",
+          "offset": 2800,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5e0",
+          "destination": "frame",
+          "offset": 2792,
+          "size": 8
+        }
+      ],
+      "native_result_writes": [
+        {
+          "native_pc": "0x285e64",
+          "bytecode": "0xfd5e8",
+          "frame_offset": 2808,
+          "size": 4,
+          "value_u32": 0
+        }
+      ],
+      "selected_TLS_projection": {
+        "member_flags_offset": 8,
+        "member_flags_before": 16,
+        "member_flags_after": 272,
+        "flag_store_size": 8,
+        "R16_source_frame_offset": 4856,
+        "R17_source_frame_offset": 2832,
+        "R17_preserves_actual_hash": true,
+        "GOT_slot_offset": "0x382e90",
+        "wrapper_frame_offset": 1224,
+        "wrapper_offset": "0x285e54",
+        "target_offset": "0x2850a8",
+        "packed_frame_offset": 2792,
+        "result_frame_offset": 2808,
+        "result_size": 4,
+        "result_u32": 0,
+        "adjacent12_preserved": true,
+        "TLS_control_offset": "0x382920",
+        "TLS_size": 4,
+        "TLS_alignment": 4,
+        "TLS_template_NULL": true,
+        "native_index_before": 0,
+        "native_counter_before": 4,
+        "native_index_after": 5,
+        "native_counter_after": 5,
+        "warm_once_state": 2,
+        "existing_array_capacity": 14,
+        "new_slot_was_NULL": true,
+        "allocation_sizes": [
+          19
+        ],
+        "allocation_callsite": "0x3438e0",
+        "TLS_pointer_is_block_plus8": true,
+        "new_TLS_variable_zero_initialized": true,
+        "existing_array_other_bytes_preserved": true,
+        "both_reference_counts_one": true,
+        "previous_hash_and_clone_and_table_preserved": true
+      },
+      "allocation_prefix_sha256": "a54a23f5411e870cc29f4bf1ab0b4cfba54fee9c5621288446f3fe06718f23d0",
+      "allocation_ledger_sha256": "62cd0b894a1eeeefbd5ef4a2ed2462b77fe77f9317c556f0b80d925d80e634db",
+      "allocation_event_projection": [
+        {
+          "action": "alloc",
+          "size": 19,
+          "callsite": "0x3438e0",
+          "pointer_owns_TLS_variable": true
+        }
+      ],
+      "allocator_counts": {
+        "malloc": 445,
+        "free": 181,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 9,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 10,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 18,
+        "property_find": 1,
+        "syscall_48": 4,
+        "syscall_79": 4,
+        "mkdir_exists": 2
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "NULL_or_false",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522",
+          "mode": 4
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 29,
+          "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 5,
+          "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 76,
+          "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+          "mode": 4,
+          "return_pc": "0x27308c"
+        }
+      ],
+      "continuation_instruction_observations": 361080,
+      "continuation_trace_sha256": "45f30eca7a800dc5ce2216fe26b85dba367593a09f46c1f09c40a3b520f16add",
+      "continuation_code_sha256": "1a6286afdec9901dcd1caabb91c07e595709fd6dc7d7a7eb76f08194d69a4149",
+      "observation_stop_before": "0x16aa4c",
+      "outer_bytecode": "0xfd5e8",
+      "callback_or_ordinary_RET_seen": false
+    },
+    {
+      "control": {
+        "base": 304873472,
+        "property_profile": "absent",
+        "null_at": "static_id"
+      },
+      "retained_hash64_prefix_verified": true,
+      "retained_prefix_instruction_observations": 359947,
+      "retained_prefix_trace_sha256": "e762b6ffc6a4f55179fd5a5b675b455b40282d67a4abde9cf68afcda6d34920f",
+      "retained_prefix_code_sha256": "32e2c3f329e3762eacffd060e62947e6bbf9236ba18b7ff3bb0109e65e2e18c4",
+      "retired_completed_observers": [
+        "hash_active"
+      ],
+      "original_scope_kept": true,
+      "executed_bytecodes": [
+        "0xfd5bc",
+        "0xfd5c0",
+        "0xfd5c4",
+        "0xfd5c8",
+        "0xfd5cc",
+        "0xfd5d0",
+        "0xfd5d4",
+        "0xfd5d8",
+        "0xfd5dc",
+        "0xfd5e0",
+        "0xfd5e4",
+        "0xfd5e8"
+      ],
+      "native_loads": [
+        {
+          "bytecode": "0xfd5c0",
+          "offset": 8,
+          "destination": 1,
+          "source": "member"
+        },
+        {
+          "bytecode": "0xfd5c8",
+          "offset": 4856,
+          "destination": 16,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5cc",
+          "offset": 2832,
+          "destination": 17,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5d4",
+          "offset": 528,
+          "destination": 1,
+          "source": "ELF GOT"
+        },
+        {
+          "bytecode": "0xfd5e0",
+          "offset": 1224,
+          "destination": 4,
+          "source": "frame"
+        }
+      ],
+      "native_stores": [
+        {
+          "cursor_bytecode": "0xfd5d4",
+          "destination": "member",
+          "offset": 8,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5dc",
+          "destination": "frame",
+          "offset": 2800,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5e0",
+          "destination": "frame",
+          "offset": 2792,
+          "size": 8
+        }
+      ],
+      "native_result_writes": [
+        {
+          "native_pc": "0x285e64",
+          "bytecode": "0xfd5e8",
+          "frame_offset": 2808,
+          "size": 4,
+          "value_u32": 0
+        }
+      ],
+      "selected_TLS_projection": {
+        "member_flags_offset": 8,
+        "member_flags_before": 16,
+        "member_flags_after": 272,
+        "flag_store_size": 8,
+        "R16_source_frame_offset": 4856,
+        "R17_source_frame_offset": 2832,
+        "R17_preserves_actual_hash": true,
+        "GOT_slot_offset": "0x382e90",
+        "wrapper_frame_offset": 1224,
+        "wrapper_offset": "0x285e54",
+        "target_offset": "0x2850a8",
+        "packed_frame_offset": 2792,
+        "result_frame_offset": 2808,
+        "result_size": 4,
+        "result_u32": 0,
+        "adjacent12_preserved": true,
+        "TLS_control_offset": "0x382920",
+        "TLS_size": 4,
+        "TLS_alignment": 4,
+        "TLS_template_NULL": true,
+        "native_index_before": 0,
+        "native_counter_before": 4,
+        "native_index_after": 5,
+        "native_counter_after": 5,
+        "warm_once_state": 2,
+        "existing_array_capacity": 14,
+        "new_slot_was_NULL": true,
+        "allocation_sizes": [
+          19
+        ],
+        "allocation_callsite": "0x3438e0",
+        "TLS_pointer_is_block_plus8": true,
+        "new_TLS_variable_zero_initialized": true,
+        "existing_array_other_bytes_preserved": true,
+        "both_reference_counts_one": true,
+        "previous_hash_and_clone_and_table_preserved": true
+      },
+      "allocation_prefix_sha256": "a54a23f5411e870cc29f4bf1ab0b4cfba54fee9c5621288446f3fe06718f23d0",
+      "allocation_ledger_sha256": "62cd0b894a1eeeefbd5ef4a2ed2462b77fe77f9317c556f0b80d925d80e634db",
+      "allocation_event_projection": [
+        {
+          "action": "alloc",
+          "size": 19,
+          "callsite": "0x3438e0",
+          "pointer_owns_TLS_variable": true
+        }
+      ],
+      "allocator_counts": {
+        "malloc": 445,
+        "free": 181,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 9,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 10,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 18,
+        "property_find": 1,
+        "syscall_48": 4,
+        "syscall_79": 4,
+        "mkdir_exists": 2
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "class_fixture",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x27186c"
+        },
+        {
+          "slot": "0x388",
+          "result": "NULL_or_false",
+          "caller": "0x28b758"
+        },
+        {
+          "slot": "0xb8",
+          "result": "NULL_or_false",
+          "caller": "0x28b798"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522",
+          "mode": 4
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 29,
+          "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 5,
+          "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 76,
+          "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+          "mode": 4,
+          "return_pc": "0x27308c"
+        }
+      ],
+      "continuation_instruction_observations": 361113,
+      "continuation_trace_sha256": "5cea2bcd9ef55e57682eb86e9ea6afc43a009c0fee31ba2224df161c91403399",
+      "continuation_code_sha256": "03f39aa089c95e3d7d18944218cf4b63d9608c4f59e71fa4087bc157ba0dcd87",
+      "observation_stop_before": "0x16aa4c",
+      "outer_bytecode": "0xfd5e8",
+      "callback_or_ordinary_RET_seen": false
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "absent",
+        "null_at": "class0"
+      },
+      "retained_hash64_prefix_verified": true,
+      "retained_prefix_instruction_observations": 359914,
+      "retained_prefix_trace_sha256": "2f6fff0771296366e7685938f68f8fbd62c0916f7d7069a7bc7d4056505dccf6",
+      "retained_prefix_code_sha256": "8b926ac5f509c38926f60ed3413206e42365d9c7723dad75c8516ddad6116a9a",
+      "retired_completed_observers": [
+        "hash_active"
+      ],
+      "original_scope_kept": true,
+      "executed_bytecodes": [
+        "0xfd5bc",
+        "0xfd5c0",
+        "0xfd5c4",
+        "0xfd5c8",
+        "0xfd5cc",
+        "0xfd5d0",
+        "0xfd5d4",
+        "0xfd5d8",
+        "0xfd5dc",
+        "0xfd5e0",
+        "0xfd5e4",
+        "0xfd5e8"
+      ],
+      "native_loads": [
+        {
+          "bytecode": "0xfd5c0",
+          "offset": 8,
+          "destination": 1,
+          "source": "member"
+        },
+        {
+          "bytecode": "0xfd5c8",
+          "offset": 4856,
+          "destination": 16,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5cc",
+          "offset": 2832,
+          "destination": 17,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5d4",
+          "offset": 528,
+          "destination": 1,
+          "source": "ELF GOT"
+        },
+        {
+          "bytecode": "0xfd5e0",
+          "offset": 1224,
+          "destination": 4,
+          "source": "frame"
+        }
+      ],
+      "native_stores": [
+        {
+          "cursor_bytecode": "0xfd5d4",
+          "destination": "member",
+          "offset": 8,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5dc",
+          "destination": "frame",
+          "offset": 2800,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5e0",
+          "destination": "frame",
+          "offset": 2792,
+          "size": 8
+        }
+      ],
+      "native_result_writes": [
+        {
+          "native_pc": "0x285e64",
+          "bytecode": "0xfd5e8",
+          "frame_offset": 2808,
+          "size": 4,
+          "value_u32": 0
+        }
+      ],
+      "selected_TLS_projection": {
+        "member_flags_offset": 8,
+        "member_flags_before": 16,
+        "member_flags_after": 272,
+        "flag_store_size": 8,
+        "R16_source_frame_offset": 4856,
+        "R17_source_frame_offset": 2832,
+        "R17_preserves_actual_hash": true,
+        "GOT_slot_offset": "0x382e90",
+        "wrapper_frame_offset": 1224,
+        "wrapper_offset": "0x285e54",
+        "target_offset": "0x2850a8",
+        "packed_frame_offset": 2792,
+        "result_frame_offset": 2808,
+        "result_size": 4,
+        "result_u32": 0,
+        "adjacent12_preserved": true,
+        "TLS_control_offset": "0x382920",
+        "TLS_size": 4,
+        "TLS_alignment": 4,
+        "TLS_template_NULL": true,
+        "native_index_before": 0,
+        "native_counter_before": 4,
+        "native_index_after": 5,
+        "native_counter_after": 5,
+        "warm_once_state": 2,
+        "existing_array_capacity": 14,
+        "new_slot_was_NULL": true,
+        "allocation_sizes": [
+          19
+        ],
+        "allocation_callsite": "0x3438e0",
+        "TLS_pointer_is_block_plus8": true,
+        "new_TLS_variable_zero_initialized": true,
+        "existing_array_other_bytes_preserved": true,
+        "both_reference_counts_one": true,
+        "previous_hash_and_clone_and_table_preserved": true
+      },
+      "allocation_prefix_sha256": "a54a23f5411e870cc29f4bf1ab0b4cfba54fee9c5621288446f3fe06718f23d0",
+      "allocation_ledger_sha256": "62cd0b894a1eeeefbd5ef4a2ed2462b77fe77f9317c556f0b80d925d80e634db",
+      "allocation_event_projection": [
+        {
+          "action": "alloc",
+          "size": 19,
+          "callsite": "0x3438e0",
+          "pointer_owns_TLS_variable": true
+        }
+      ],
+      "allocator_counts": {
+        "malloc": 445,
+        "free": 181,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 9,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 10,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 18,
+        "property_find": 1,
+        "syscall_48": 4,
+        "syscall_79": 4,
+        "mkdir_exists": 2
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "NULL_or_false",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522",
+          "mode": 4
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 29,
+          "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 5,
+          "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 76,
+          "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+          "mode": 4,
+          "return_pc": "0x27308c"
+        }
+      ],
+      "continuation_instruction_observations": 361080,
+      "continuation_trace_sha256": "45f30eca7a800dc5ce2216fe26b85dba367593a09f46c1f09c40a3b520f16add",
+      "continuation_code_sha256": "1a6286afdec9901dcd1caabb91c07e595709fd6dc7d7a7eb76f08194d69a4149",
+      "observation_stop_before": "0x16aa4c",
+      "outer_bytecode": "0xfd5e8",
+      "callback_or_ordinary_RET_seen": false
+    },
+    {
+      "control": {
+        "base": 512646729728,
+        "property_profile": "absent",
+        "null_at": "static_id"
+      },
+      "retained_hash64_prefix_verified": true,
+      "retained_prefix_instruction_observations": 359947,
+      "retained_prefix_trace_sha256": "e762b6ffc6a4f55179fd5a5b675b455b40282d67a4abde9cf68afcda6d34920f",
+      "retained_prefix_code_sha256": "32e2c3f329e3762eacffd060e62947e6bbf9236ba18b7ff3bb0109e65e2e18c4",
+      "retired_completed_observers": [
+        "hash_active"
+      ],
+      "original_scope_kept": true,
+      "executed_bytecodes": [
+        "0xfd5bc",
+        "0xfd5c0",
+        "0xfd5c4",
+        "0xfd5c8",
+        "0xfd5cc",
+        "0xfd5d0",
+        "0xfd5d4",
+        "0xfd5d8",
+        "0xfd5dc",
+        "0xfd5e0",
+        "0xfd5e4",
+        "0xfd5e8"
+      ],
+      "native_loads": [
+        {
+          "bytecode": "0xfd5c0",
+          "offset": 8,
+          "destination": 1,
+          "source": "member"
+        },
+        {
+          "bytecode": "0xfd5c8",
+          "offset": 4856,
+          "destination": 16,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5cc",
+          "offset": 2832,
+          "destination": 17,
+          "source": "frame"
+        },
+        {
+          "bytecode": "0xfd5d4",
+          "offset": 528,
+          "destination": 1,
+          "source": "ELF GOT"
+        },
+        {
+          "bytecode": "0xfd5e0",
+          "offset": 1224,
+          "destination": 4,
+          "source": "frame"
+        }
+      ],
+      "native_stores": [
+        {
+          "cursor_bytecode": "0xfd5d4",
+          "destination": "member",
+          "offset": 8,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5dc",
+          "destination": "frame",
+          "offset": 2800,
+          "size": 8
+        },
+        {
+          "cursor_bytecode": "0xfd5e0",
+          "destination": "frame",
+          "offset": 2792,
+          "size": 8
+        }
+      ],
+      "native_result_writes": [
+        {
+          "native_pc": "0x285e64",
+          "bytecode": "0xfd5e8",
+          "frame_offset": 2808,
+          "size": 4,
+          "value_u32": 0
+        }
+      ],
+      "selected_TLS_projection": {
+        "member_flags_offset": 8,
+        "member_flags_before": 16,
+        "member_flags_after": 272,
+        "flag_store_size": 8,
+        "R16_source_frame_offset": 4856,
+        "R17_source_frame_offset": 2832,
+        "R17_preserves_actual_hash": true,
+        "GOT_slot_offset": "0x382e90",
+        "wrapper_frame_offset": 1224,
+        "wrapper_offset": "0x285e54",
+        "target_offset": "0x2850a8",
+        "packed_frame_offset": 2792,
+        "result_frame_offset": 2808,
+        "result_size": 4,
+        "result_u32": 0,
+        "adjacent12_preserved": true,
+        "TLS_control_offset": "0x382920",
+        "TLS_size": 4,
+        "TLS_alignment": 4,
+        "TLS_template_NULL": true,
+        "native_index_before": 0,
+        "native_counter_before": 4,
+        "native_index_after": 5,
+        "native_counter_after": 5,
+        "warm_once_state": 2,
+        "existing_array_capacity": 14,
+        "new_slot_was_NULL": true,
+        "allocation_sizes": [
+          19
+        ],
+        "allocation_callsite": "0x3438e0",
+        "TLS_pointer_is_block_plus8": true,
+        "new_TLS_variable_zero_initialized": true,
+        "existing_array_other_bytes_preserved": true,
+        "both_reference_counts_one": true,
+        "previous_hash_and_clone_and_table_preserved": true
+      },
+      "allocation_prefix_sha256": "a54a23f5411e870cc29f4bf1ab0b4cfba54fee9c5621288446f3fe06718f23d0",
+      "allocation_ledger_sha256": "62cd0b894a1eeeefbd5ef4a2ed2462b77fe77f9317c556f0b80d925d80e634db",
+      "allocation_event_projection": [
+        {
+          "action": "alloc",
+          "size": 19,
+          "callsite": "0x3438e0",
+          "pointer_owns_TLS_variable": true
+        }
+      ],
+      "allocator_counts": {
+        "malloc": 445,
+        "free": 181,
+        "gc": 2,
+        "flush": 3
+      },
+      "service_counts": {
+        "syscall_214": 1,
+        "syscall_222": 4,
+        "syscall_167": 3,
+        "syscall_226": 9,
+        "syscall_56": 5,
+        "syscall_80": 1,
+        "syscall_215": 2,
+        "syscall_63": 2,
+        "syscall_57": 4,
+        "clock": 10,
+        "virtual_pthread_create": 3,
+        "destructor_registration": 5,
+        "syscall_98": 18,
+        "property_find": 1,
+        "syscall_48": 4,
+        "syscall_79": 4,
+        "mkdir_exists": 2
+      },
+      "JNI_calls": [
+        {
+          "slot": "0x30",
+          "result": "class_fixture",
+          "caller": "0x28b720",
+          "name_length": 16,
+          "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x27186c"
+        },
+        {
+          "slot": "0x388",
+          "result": "NULL_or_false",
+          "caller": "0x28b758"
+        },
+        {
+          "slot": "0xb8",
+          "result": "NULL_or_false",
+          "caller": "0x28b798"
+        },
+        {
+          "slot": "0x720",
+          "result": "NULL_or_false",
+          "caller": "0x28b7a8"
+        }
+      ],
+      "libc_SVC_boundaries": [
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x1bf1c",
+          "number": 98
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        },
+        {
+          "libc_pc": "0x6a550",
+          "number": 226
+        }
+      ],
+      "main_image_SVC_boundaries": [
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 30,
+          "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522",
+          "mode": 4
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 29,
+          "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 79,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 5,
+          "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+          "stat_buffer_in_native_stack": true,
+          "stat_buffer_size": 128,
+          "stat_buffer_SP_offset": 88,
+          "return_pc": "0x272d68"
+        },
+        {
+          "native_pc": "0x271dbc",
+          "bytecode": "0xfca40",
+          "number": 48,
+          "dirfd_u32": 4294967196,
+          "flags": 0,
+          "pathname_length": 76,
+          "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+          "mode": 4,
+          "return_pc": "0x27308c"
+        }
+      ],
+      "continuation_instruction_observations": 361113,
+      "continuation_trace_sha256": "5cea2bcd9ef55e57682eb86e9ea6afc43a009c0fee31ba2224df161c91403399",
+      "continuation_code_sha256": "03f39aa089c95e3d7d18944218cf4b63d9608c4f59e71fa4087bc157ba0dcd87",
+      "observation_stop_before": "0x16aa4c",
+      "outer_bytecode": "0xfd5e8",
+      "callback_or_ordinary_RET_seen": false
+    }
+  ]
+}

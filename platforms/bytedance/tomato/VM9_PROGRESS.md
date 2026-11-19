@@ -1,5 +1,37 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-19：暖线程数组中的 TLS 冷变量读取已验证
+
+原版执行 `+0xfd5bc..+0xfd5e8` 的 12 条字节码，member+8 标志按位
+OR256，从 0x10 变成 0x110；frame+4856 和旧 hash frame+2832 分别
+进入 R16/R17。GOT `+0x382e90` 解析为 getter `+0x2850a8`，
+frame+1224 提供 wrapper `+0x285e54`，packed 在 frame+2792。
+实际执行 getter 和 emutls `+0x34377c`：size/alignment=4/4、空模板、
+descriptor index=0，旧 global index=4，线程数组已初始化且容量为 14。
+原版把 index/counter 更新为 5，新槽原为 NULL，仅在 `+0x3438e0`
+增加一次 19 字节 malloc；变量指针是 block+8，四字节初值为 0。
+wrapper 将该值以四字节写到 packed+16/frame+2808，相邻 12 字节、
+旧 hash、clone、表和两个计数 1 引用均保留。完整旧 hash 指令、代码、
+分配前缀一致后，仅结束已完成的 hash 观察窗口，原版 scope 保持执行。
+
+独立声明的 Python 页面使用 global index=7，结果 index=8，与当前
+原生 index=5 明确分开；复用真实 request callback 源码和既有 TLS
+模型，两基址新 VM 均执行这 12 条字节码。另两组使用同样声明输入
+运行原版 getter，与 Python 的 guest、image、TLS 字节和分配顺序
+相等；未用原生快照提供模型输入。修正旧 TLS 原生夹具的状态页选择：
+按 pthread once 完成状态保留 key 状态页，覆盖“数组已热、变量仍冷”
+的组合，避免遗漏状态页后产生额外 128 字节数组分配；其 14 组旧控制
+全部回归通过。
+
+四组原生续跑、四组独立新 CLI、四组旧 hash CLI、两组声明输入原生
+TLS 对照及 CLI 重放、四种错误 CLI、32 条指令、12 个 ELF 字、一个
+GOT 重定位和 261 项损坏证据拒绝通过。服务/JNI/libc SVC/
+main SVC 账本不变，上限仍为 2 次读取/4 次 main SVC，无新 provider
+或设备执行。停在消费 `+0xfd5e8` 返回前，下一字节码 `+0xfd5ec`。
+当前请求 hash 数值对照、完整 TLS 堆/物理栈等价、配置来源、业务身份、
+键值生成、普通六头、整请求、在线接受及完整 signer 仍未验证。
+见[TLS 冷变量读取证据](evidence/vm9_native_171_configuration_tls_20261119.json)。
+
 ## 2026-11-19：暖注册表分支与配置 clone 散列已验证
 
 原版清零 frame+4896/+4904 的临时指针对，读取 frame+1712 提供的

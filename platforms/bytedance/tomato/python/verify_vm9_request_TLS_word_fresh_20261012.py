@@ -43,7 +43,8 @@ def native(library,libc,base,p,model):
         assert number==98
         wakes.append([cpu.reg_read(getattr(arm,'UC_ARM64_REG_X'+str(i))) for i in range(3)]);return 0
     inputs={page:data for page,data in p.items() if not dependency.root.LIBC_BASE<=page<<12<dependency.root.LIBC_BASE+0x200000}
-    if int.from_bytes(_read_span(p,base+CONTROL+16,8),'little'):
+    # pthread key state can be warm while this variable's index is still zero.
+    if int.from_bytes(_read_span(p,base+0x3E31F8,4),'little')==2:
         for offset in (0xDE000,0xE0000):inputs[(dependency.root.LIBC_BASE+offset)>>12]=p[(dependency.root.LIBC_BASE+offset)>>12]
     observed={(page<<12,4096):None for page in p if base<=page<<12<base+0x400000}
     observed[dependency.root.TLS,0xB00]=None
