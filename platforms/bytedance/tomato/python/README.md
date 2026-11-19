@@ -1,5 +1,28 @@
 # Tomato Python material
 
+`verify_vm9_native_171_configuration_clone_20261119.py` continues the
+original request from the copied configuration reference into its string clone.
+Nine argument bytecodes match independent fresh Python VM pages at two bases;
+the ELF-relative target, frame sources, packed arguments, unselected registers
+and neighboring bytes are bound. The original clone reads length 10, allocates
+11 bytes, copies the declared length, appends zero and returns its new payload.
+Source header/payload, copied reference/count, lock table and destination
+neighbors are preserved. The allocator ledger records return PC +0x24841c;
+the actual allocation BL is +0x248418. Existing Python string ownership uses
+fresh declared content with an embedded zero. Selected copy/allocation and
+preservation semantics agree; native and model input bytes are independent.
+Full configuration value construction and business identity remain unverified.
+Four native cases, four independent CLI replays, four exact old-reference
+rows, four bad CLI requests, 22 instruction bindings, ten bytecode words and
+181 damaged-evidence rejections pass. The complete old instruction,
+code and allocation prefix agrees. One 11-byte allocation is added; service,
+JNI and SVC ledgers stay unchanged with read/main-SVC limits of 2/4.
+Observation stops before consuming the clone return. Saved NULL business
+branches, actual business state, KMSV/key values, ordinary six headers,
+whole-request equivalence, online acceptance and complete signing remain
+unverified. Use `--elf`, `--libc`, `--replay`. See the
+[configuration clone evidence](../evidence/vm9_native_171_configuration_clone_20261119.json).
+
 `verify_vm9_native_171_contained_reference_20261119.py` continues the
 original configuration reference getter through its scoped copy and unlock.
 Eight argument bytecodes match fresh declared Python VM inputs at two bases.

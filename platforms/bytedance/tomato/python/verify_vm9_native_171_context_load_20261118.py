@@ -258,6 +258,13 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
                         instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
+                if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD2B4):
+                    assert 'contained_reference_prefix' not in state
+                    observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
+                    state['contained_reference_prefix']=dict(
+                        JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
+                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 extension.observe(cpu,pc,state)
             if offset==STOP and state['stored'] and not state['store_verified']:
                 destination=state['destination_register']
@@ -389,6 +396,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 **({'kmsv_lookup_prefix':state['kmsv_lookup_prefix']} if 'kmsv_lookup_prefix' in state else {}),
                 **({'kmsv_scope_prefix':state['kmsv_scope_prefix']} if 'kmsv_scope_prefix' in state else {}),
                 **({'kmsv_scope_exit_prefix':state['kmsv_scope_exit_prefix']} if 'kmsv_scope_exit_prefix' in state else {}),
+                **({'contained_reference_prefix':state['contained_reference_prefix']} if 'contained_reference_prefix' in state else {}),
                 trace_sha256=graph.digest(trace),
                 code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             rows.append(row)
