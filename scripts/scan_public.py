@@ -11,13 +11,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TEXT_RULES = {
-    "device identifier": re.compile(r"device[_-]?id\s*[:=]\s*['\"][0-9]{10,}", re.I),
+    "device identifier": re.compile(r"device[_-]?id\s*[:=]\s*['\"]?[0-9]{10,}", re.I),
     "credential assignment": re.compile(r"(?:x-)?(?:ss-req-ticket|rticket|token|authorization)\s*[:=]", re.I),
     "session cookie assignment": re.compile(
         r"(?:session[_-]?id|sid[_-]?guard|uid[_-]?tt|passport[_-]?csrf[_-]?token)\s*[:=]",
         re.I,
     ),
     "bearer credential": re.compile(r"\bbearer\s+[A-Za-z0-9._~+/-]{16,}={0,2}", re.I),
+    "cookie header": re.compile(
+        r"^\s*(?:set-cookie|cookie)\s*:\s*[^\r\n]*\b[A-Za-z][A-Za-z0-9_-]{1,}\s*=", re.I | re.M,
+    ),
     "private key marker": re.compile(r"BEGIN (?:(?:[A-Z0-9]+ )*PRIVATE|RSA|EC|OPENSSH) KEY", re.I),
 }
 JSON_CREDENTIAL_FIELDS = {

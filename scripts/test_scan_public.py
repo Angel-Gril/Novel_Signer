@@ -43,6 +43,8 @@ class PublicScanTests(unittest.TestCase):
             ("platforms/control.txt", "authorization=example-only-token", "example-only-token"),
             ("platforms/control.txt", "sessionid=example-session-value", "example-session-value"),
             ("platforms/control.txt", "Cookie: sid_guard=example-session-value", "example-session-value"),
+            ("platforms/control.txt", "Cookie: ttwid=example-cookie-value", "example-cookie-value"),
+            ("platforms/control.txt", "device_id=12345678901", "12345678901"),
             ("platforms/control.txt", "Bearer example-token-value-1234", "example-token-value-1234"),
             ("platforms/broken.json", '{"token":"broken-fixture"', "broken-fixture"),
         ):
