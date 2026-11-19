@@ -321,6 +321,13 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
                         instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
+                if (null_payload and offset==0x286CE8 and word(cpu,state['PC_slot'])==image+0xFD6B0):
+                    assert 'suffix_constants_prefix' not in state
+                    observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
+                    state['suffix_constants_prefix']=dict(
+                        JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
+                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 extension.observe(cpu,pc,state)
             if offset==STOP and state['stored'] and not state['store_verified']:
                 destination=state['destination_register']
@@ -461,6 +468,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 **({'configuration_tls_store_prefix':state['configuration_tls_store_prefix']} if 'configuration_tls_store_prefix' in state else {}),
                 **({'configuration_copy56_prefix':state['configuration_copy56_prefix']} if 'configuration_copy56_prefix' in state else {}),
                 **({'configuration_suffix_call_prefix':state['configuration_suffix_call_prefix']} if 'configuration_suffix_call_prefix' in state else {}),
+                **({'suffix_constants_prefix':state['suffix_constants_prefix']} if 'suffix_constants_prefix' in state else {}),
                 trace_sha256=graph.digest(trace),
                 code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             rows.append(row)

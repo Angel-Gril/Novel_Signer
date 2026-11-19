@@ -1,5 +1,29 @@
 # Tomato Python material
 
+`verify_vm9_native_171_suffix_digest_20261120.py` verifies current original
+scratch/header reads, constant string construction, mode-zero raw MD5,
+reference assignment and temporary release. Native digest bytes obey the MD5
+relation to source bytes within that same execution; they never seed Python.
+The count transitions 1 to 2 to 1, with exactly five allocations of sizes
+17/24/17/48/4 and no frees. One diagnostic slot is created from the digest
+object index: the new mutex, exact pointer slot, all other table bytes, old
+guard/global state and eight balanced lock events are checked. Input/frame,
+source, old non-diagnostic heap/TLS/constants remain preserved. The complete
+accepted constant-stage instruction/code/allocation prefix agrees before only
+its observer retires. Execution stops at +0x286e10 before the next sized string
+and version word, with no new service/JNI/SVC. Sixteen independent component
+controls at two bases execute the existing suffix source prefix with declared
+length/mode/warm/NULL cases, matching full semantic guest/image, selected
+scratch objects and ordered effects/pre-free/live-block state. Physical spills
+and void X0 are excluded. Four current controls, four new and four old CLI
+replays, sixteen component replays, four bad CLI calls, thirteen instruction
+bindings and 156 damaged-evidence rejections pass. No duplicate owner/provider
+or native-snapshot model input is introduced; limits remain 400000/2/4.
+Current suffix return, configuration provenance, whole-request equality,
+ordinary six headers, online acceptance and complete signer remain unverified.
+Use `--elf`, `--libc`, `--replay`; see the
+[digest evidence](../evidence/vm9_native_171_suffix_digest_20261120.json).
+
 `verify_vm9_native_171_suffix_constants_20261120.py` enters the actual current
 suffix wrapper/body and checks three ELF selector/decoder calls and release
 flag stores. Constant destinations, padding and flags equal independently

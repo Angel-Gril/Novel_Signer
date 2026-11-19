@@ -1,5 +1,34 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-20：当前 suffix 字符串与原始 MD5 引用生命周期已验证
+
+当前原版请求继续 scratch/frame 头部读取，调用 `+0x248344` 构造
+16 字节常量字符串。mode 0 调用 `+0x25874c` 生成 16 字节原始 MD5
+引用，经过 `+0x162620` 赋值和 `+0x15e1a8` 临时引用释放，计数按
+1→2→1 变化。摘要字节与同一次原生执行的源内容按 MD5 关系核对；
+这属于原生对象契约，不将当前内容用作独立 Python 模型输入。
+
+新增分配严格为 17/24/17/48/4 字节，无释放。48 字节分配建立一个
+诊断锁表项：原版按新摘要对象地址取索引，只写对应八字节槽；新锁
+对象内容、其余 2040 字节、旧全局锁/guard 及八次成对锁操作均核对。
+输入头部、8 KiB frame、源对象/内容、旧非诊断 heap/TLS/常量保留。
+完整已接受常量阶段的指令/代码/分配前缀一致后才结束其观察窗口，
+original_scope 保持，无新增服务/JNI/SVC。停在 `+0x286e10`，尚未进入
+后续 sized string、版本字读取或完整 suffix 返回。
+
+独立组件覆盖两基址及八种声明输入：长度 0/7/32、mode 1、mode 1
+短常量、mode 全位、warm 常量和 NULL 摘要源，共 16 组。直接执行
+现有 suffix owner 到 mode 分支结束的源码前缀，与原版的完整语义
+ guest/image、选定 scratch 对象、分配/释放/锁顺序、释放前字节和
+存活块一致；physical spills/void X0 不在等价范围内。复用已有
+objects/reference/digest/diagnostics owner，未新增 provider 或复制算法。
+
+四组当前原生、新 CLI 和旧常量 CLI、16 组独立组件及 CLI 重放、
+四种错误 CLI、13 条指令绑定及 156 项损坏证据拒绝通过。执行上限
+400000/2/4 保留。当前完整 suffix 返回、配置来源、整请求等价、普通
+六头、在线接受和完整 signer 仍未验证。
+见[字符串与摘要证据](evidence/vm9_native_171_suffix_digest_20261120.json)。
+
 ## 2026-11-20：当前 suffix 入口与三组常量初始化已验证
 
 当前原版请求实际进入 wrapper `+0x285e80` 和 suffix `+0x2869f0`，

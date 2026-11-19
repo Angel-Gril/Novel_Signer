@@ -1,5 +1,14 @@
 # Checkpoint log
 
+2026-11-20：当前 suffix 常量字符串、原始 MD5、引用赋值/临时释放通过。
+原版 scratch/header 参数和 16 字节字符串/摘要，引用计数 1→2→1、
+五次 17/24/17/48/4 字节分配、诊断表单槽/新锁对象及八次平衡锁操作
+全部核对；其余旧状态保留，无新服务/JNI/SVC。停在 `+0x286e10`。
+两基址八种声明输入的 16 组原版/现有源码前缀对照、四组新旧 CLI、
+四种错误 CLI、13 条指令及 156 项损坏证据拒绝通过。当前原生字节
+仅核对原生契约，不输入 Python 模型。普通六头与完整 signer 尚未闭合。
+见[摘要证据](../platforms/bytedance/tomato/evidence/vm9_native_171_suffix_digest_20261120.json)。
+
 2026-11-20：当前 suffix 实际入口与三组 lazy constant 初始化通过。
 原版 wrapper/body、selector、三次 decoder 调用及 release store 连接到
 现有 owner 的独立 ELF 结果，输入帧与旧状态/分配账本保留，无新服务。

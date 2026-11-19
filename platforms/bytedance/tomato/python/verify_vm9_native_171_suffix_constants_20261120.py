@@ -173,7 +173,10 @@ class Scenario(previous.Scenario):
             assert raw(self.scope_frame,0x2000)==self.constants_before_frame
             for a,b in self.constants_preserved.items():assert raw(a,len(b))==b
             assert state['allocator_events_ref']==self.constants_before_allocations and self.original_scope
-            self.constants_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.constants_done=True;self.constants_boundary(cpu,state)
+
+    def constants_boundary(self,cpu,state):
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         old=next(r for r in json.loads(previous.EVIDENCE.read_text())['case_results'] if r['control']==self.control)
