@@ -1349,3 +1349,15 @@ standalone signer 和线上 header acceptance 继续未完成。详见
 没有 Cronet 栈帧或 Cronet 入口事件。该窗口继续只闭合 OkHttp 路径覆盖，不提升为
 Cronet 六头链、standalone signer、整请求差分或线上验签。详见
 `platforms/bytedance/tomato/evidence/vm9_networkparams_runtime_fresh_20261107.json`。
+
+2026-11-20：在当前原版 `0x171` suffix digest continuation 上继续到第五个
+main-image SVC 前，保持 400000 指令窗、2 次 handler read、4 个 main-image
+SVC 的既有上限。捕获停于 `+0x271dbc`，syscall 169；现场 `x0=sp+8`、
+`x1=NULL`、`x8=0xa9`、`LR=image+0x272924`。pinned ELF 静态绑定验证了
+`+0x271d9c..+0x271dcc` 的 syscall thunk 和 `+0x272920..+0x272954` 的
+调用/返回路径，确认 169 是 `gettimeofday`，并解析成功时读取 timeval 秒、
+失败时选择 `-1` 及可选输出写回。真实 ELF/Bionic 新捕获、replay 和 10 项
+篡改证据拒绝通过。证据只闭合 SVC 前现场与静态返回路径关系；handler 和
+动态返回、suffix 返回、完整配置、普通 Cronet 六头、完整 signer 与线上验签
+仍未验证。详见
+`platforms/bytedance/tomato/evidence/vm9_native_171_gettimeofday_return_20261120.json`。

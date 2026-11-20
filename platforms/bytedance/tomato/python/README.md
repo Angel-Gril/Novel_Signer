@@ -1,5 +1,18 @@
 # Tomato Python material
 
+`verify_vm9_native_171_post_digest_svc_boundary_20261120.py` continues the
+accepted original digest execution and freezes the first unpermitted main-image
+SVC boundary. It keeps the four-SVC, two-handler-read and 400000-instruction
+limits, and stops before the fifth SVC handler. Fresh ELF/Bionic replay binds
+syscall 169 to the pinned `gettimeofday` thunk and statically links its caller's
+`LR`, timeval pointer (`sp+8`) and NULL timezone to the return instructions.
+The success/error result selection and optional output store are static ELF
+semantics; the syscall return is not dynamically executed. Current suffix
+return, configuration provenance, ordinary Cronet six headers, online
+acceptance and complete standalone signer remain unverified. Use `--elf`,
+`--libc`, `--replay`; see the
+[gettimeofday boundary evidence](../evidence/vm9_native_171_gettimeofday_return_20261120.json).
+
 `verify_vm9_native_171_suffix_digest_20261120.py` verifies current original
 scratch/header reads, constant string construction, mode-zero raw MD5,
 reference assignment and temporary release. Native digest bytes obey the MD5

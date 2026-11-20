@@ -1,5 +1,24 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-20：gettimeofday SVC 与静态返回路径已绑定
+
+在既有原版 suffix continuation 上继续执行，观察窗为 367931 / 91729 条
+指令，均低于 400000 上限。请求在第五个 main-image SVC `+0x271dbc`
+前停止；前四个 SVC、最多两次 handler read 的限制未变，handler 未进入。
+现场为 syscall 169（`gettimeofday`），`x0=sp+8` 指向 timeval、`x1=NULL`，
+返回地址为 image `+0x272924`。
+
+新增 pinned ELF 指令绑定覆盖 syscall thunk `+0x271d9c..+0x271dcc` 和
+调用/返回路径 `+0x272920..+0x272954`。thunk 将 `0x192` 减 `0xe9` 得到
+`x8=0xa9`；静态路径在成功时取 `[sp+8].tv_sec`，错误时选 `-1`，并在
+非空输出指针时写回。该步骤闭合 SVC 前现场到静态返回路径的关联；SVC
+handler、动态返回、当前 suffix 返回和完整配置来源仍未验证。
+
+真实 ELF/Bionic 捕获、全新 replay 和 10 项损坏证据拒绝均通过。证据为
+[gettimeofday 返回路径绑定](evidence/vm9_native_171_gettimeofday_return_20261120.json)，
+复现器为[边界验证脚本](python/verify_vm9_native_171_post_digest_svc_boundary_20261120.py)。
+普通 Cronet 六头链、完整 standalone signer、线上验签和 Android 实时闭环仍未完成。
+
 ## 2026-11-20：当前 suffix 字符串与原始 MD5 引用生命周期已验证
 
 当前原版请求继续 scratch/frame 头部读取，调用 `+0x248344` 构造

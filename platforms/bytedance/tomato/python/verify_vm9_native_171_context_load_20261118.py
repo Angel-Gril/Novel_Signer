@@ -110,6 +110,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
         service = stack.Services(image, {}, dict(null_at=control['null_at']))
         targets = {slot:graph.SCRATCH+0x800+i*16 for i,slot in enumerate(SLOTS)}
         trace, code, jni, reads, returns, syscalls, main_syscalls = [], {}, [], [], [], [], []
+        trace_window_start=[0];closed_trace_windows=[]
 
         def reg(cpu, name):
             return cpu.reg_read(getattr(arm,'UC_ARM64_REG_'+name.upper()))
@@ -194,6 +195,10 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
         def observe(cpu,pc):
             if not state['continued']: return
             offset=pc-image
+            if extension is not None:
+                pre_observe=getattr(extension,'pre_observe',None)
+                if pre_observe is not None and pre_observe(cpu,pc,state):
+                    return
             if (null_payload and offset==LOAD and reg(cpu,'x12')==state['context']
                     and word(cpu,state['PC_slot'])==image+NULL_PAYLOAD_READ_PROFILE['bytecode']):
                 assert len(reads)==1 and 'second_handler_read_prefix' not in state
@@ -406,8 +411,11 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                         event.update(stat_buffer_in_native_stack=True,stat_buffer_size=size,
                             stat_buffer_SP_offset=0x58,return_pc=hex(AID_DIRECTORY_PROFILE['stat_return_pc']))
                     main_syscalls.append(event)
+            if state.pop('start_new_instruction_window',False):
+                closed_trace_windows.append(len(trace)-trace_window_start[0])
+                trace_window_start[0]=len(trace)
             trace.append([domain,local])
-            assert len(trace)<400000,'continuation instruction bound'
+            assert len(trace)-trace_window_start[0]<400000,'continuation instruction-window bound'
             if offset==graph.CALLBACK:
                 assert reg(cpu,'x2')==0x171 and reg(cpu,'x3')==state['context']
                 assert all(word(cpu,word(cpu,reg(cpu,'x'+str(i))+8),4)==3 for i in (0,1))
@@ -451,6 +459,8 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 context_reads=reads,evaluator_returns=returns,JNI_calls=jni,
                 libc_SVC_boundaries=syscalls,instruction_observations=len(trace),
                 main_image_SVC_boundaries=main_syscalls,
+                **({'instruction_observation_windows':closed_trace_windows+[len(trace)-trace_window_start[0]]}
+                   if closed_trace_windows else {}),
                 **({'second_handler_read_prefix':state['second_handler_read_prefix']} if null_payload else {}),
                 **({'null_branch_prefix':state['null_branch_prefix']} if 'null_branch_prefix' in state else {}),
                 **({'client_key_name_prefix':state['client_key_name_prefix']} if 'client_key_name_prefix' in state else {}),

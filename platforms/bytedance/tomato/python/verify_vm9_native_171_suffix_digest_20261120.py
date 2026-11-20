@@ -103,6 +103,35 @@ def providers():
 class Scenario(previous.Scenario):
     def __init__(self,c):
         super().__init__(c);self.digest_active=False;self.digest_done=False;self.digest_calls=[]
+        self.continue_to_svc=False;self.svc_boundary=None;self.digest_boundary_seen=False
+
+    def stop_before_svc(self,cpu,pc,state):
+        assert self.digest_boundary_seen and self.digest_done
+        raw=lambda a,n:bytes(cpu.mem_read(a,n))
+        u=lambda a,n=8:int.from_bytes(raw(a,n),'little')
+        off=pc-self.image
+        assert off in (0x271DBC,0x286EC8) and raw(pc,4)==bytes.fromhex('010000d4')
+        regs={f'x{i}':hex(cpu.reg_read(getattr(arm,'UC_ARM64_REG_X'+str(i)))) for i in range(12)}
+        regs.update({f'x{i}':hex(cpu.reg_read(getattr(arm,'UC_ARM64_REG_X'+str(i)))) for i in (24,25,26,29,30)})
+        sp=cpu.reg_read(arm.UC_ARM64_REG_SP)
+        stack=raw(sp,0x80)
+        self.svc_boundary=dict(
+            kind='first_unpermitted_main_image_svc' if off==0x271DBC else 'target_suffix_svc',
+            pc_offset=hex(off),instruction=raw(pc,4).hex(),svc_number=cpu.reg_read(arm.UC_ARM64_REG_X8),
+            svc_args=[hex(cpu.reg_read(getattr(arm,'UC_ARM64_REG_X'+str(i)))) for i in range(4)],
+            pc_slot=hex(state['PC_slot']),
+            pc_slot_value=hex(u(state['PC_slot'])),registers=regs,sp=hex(sp),
+            stack_window_offset='0x0',stack_window_size=len(stack),
+            stack_window_sha256=hashlib.sha256(stack).hexdigest(),
+            post_digest_instructions=[hex(x) for x in (0x286E10,0x286E74,0x286E84,0x286E98,0x286E9C,0x286EA4,0x286EC8)],
+            native_memory_used_as_python_model_input=False)
+        cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+
+    def pre_observe(self,cpu,pc,state):
+        if self.continue_to_svc and self.digest_boundary_seen and pc-self.image in (0x271DBC,0x286EC8):
+            self.stop_before_svc(cpu,pc,state)
+            return True
+        return False
 
     def constants_boundary(self,cpu,state):
         data=json.loads(previous.EVIDENCE.read_text());previous.validate(data)
@@ -138,6 +167,9 @@ class Scenario(previous.Scenario):
 
     def observe(self,cpu,pc,state):
         self.scope_state=state
+        off=pc-self.image
+        if self.continue_to_svc and self.digest_boundary_seen:
+            return
         if not self.digest_active:
             super().observe(cpu,pc,state)
             if not self.digest_active:return
@@ -162,7 +194,8 @@ class Scenario(previous.Scenario):
             constant=E-0x110;payload=u(constant+16)
             assert u(constant)==self.image+0x34F5F8 and u(constant+8,4)==17 and u(constant+12,4)==16
             assert reg(0)==payload and raw(payload,17)==raw(self.image+0x3E0FF0,17)
-        if off in (0x27E6AC,0x27ED6C,0x286E74):raise AssertionError('unexpected post-digest execution')
+        if off in (0x27E6AC,0x27ED6C) or (off==0x286E74 and not self.continue_to_svc):
+            raise AssertionError('unexpected post-digest execution')
         if off==STOP:
             assert self.digest_calls==list(map(hex,CALLS)) and self.digest_count_two_seen
             obj=u(E-0x120);counter=u(E-0x120+8)
@@ -197,16 +230,32 @@ class Scenario(previous.Scenario):
             assert self.digest_lock_events==[('lock',self.copy_global+8),('unlock',self.copy_global+8)]+[
                 (operation,entry+8) for _ in range(3) for operation in ('lock','unlock')]
             assert self.original_scope
-            self.digest_done=True;cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
+            self.digest_done=True
+            if self.continue_to_svc:
+                self.digest_boundary_seen=True
+                state['start_new_instruction_window']=True
+                self.digest_active=False
+            else:
+                cpu.emu_stop();cpu.reg_write(arm.UC_ARM64_REG_PC,context.outer.oracle.STOP)
 
     def finish(self,result,state,proof):
         old=next(r for r in json.loads(previous.EVIDENCE.read_text())['case_results'] if r['control']==self.control)
         prefix=proof['suffix_constants_prefix'];assert self.digest_done
         assert result['allocator_events'][:len(self.digest_allocations)]==self.digest_allocations
         counts=dict(old['allocator_counts']);counts['malloc']+=5
-        assert result['actual_allocator_counts']==counts and result['explicit_service_counts']==old['service_counts']
+        if self.continue_to_svc:
+            assert proof['main_image_SVC_boundaries']==old['main_image_SVC_boundaries']
+            assert proof['libc_SVC_boundaries']==old['libc_SVC_boundaries'] and proof['JNI_calls']==old['JNI_calls']
+            post_digest_events=result['allocator_events'][len(self.digest_allocations):]
+            post_digest_services=result['explicit_service_counts']
+            service_delta={key:post_digest_services.get(key,0)-old['service_counts'].get(key,0)
+                for key in set(post_digest_services)|set(old['service_counts'])}
+            assert all(value>=0 for value in service_delta.values())
+        else:
+            assert result['actual_allocator_counts']==counts and result['explicit_service_counts']==old['service_counts']
+            post_digest_events=[];post_digest_services=old['service_counts'];service_delta={}
         for k in ('JNI_calls','libc_SVC_boundaries','main_image_SVC_boundaries'):assert proof[k]==old[k]
-        return dict(control=self.control,retained_constants_prefix_verified=True,
+        row=dict(control=self.control,retained_constants_prefix_verified=True,
             retained_prefix_instruction_observations=prefix['instruction_observations'],retained_prefix_trace_sha256=prefix['trace_sha256'],
             retained_prefix_code_sha256=prefix['code_sha256'],retired_completed_observers=['constants_active'],original_scope_kept=True,
             original_direct_calls=self.digest_calls,current_mode=0,constant_string_length=16,raw_MD5_length=16,
@@ -218,6 +267,21 @@ class Scenario(previous.Scenario):
             main_image_SVC_boundaries=proof['main_image_SVC_boundaries'],continuation_instruction_observations=proof['instruction_observations'],
             continuation_trace_sha256=proof['trace_sha256'],continuation_code_sha256=proof['code_sha256'],
             observation_stop_before=hex(STOP),outer_bytecode=hex(previous.previous.CALL),current_native_suffix_return_verified=False)
+        if self.continue_to_svc:
+            assert self.svc_boundary is not None
+            row.update(svc_boundary=self.svc_boundary,observation_stop_before_svc=self.svc_boundary['pc_offset'],
+                entered_svc_handler=False,handler_read_count_delta=0,main_image_svc_count_delta=0,
+                instruction_observation_windows=proof['instruction_observation_windows'],
+                total_continuation_instruction_observations=proof['instruction_observations'],
+                post_digest_instruction_observations=proof['instruction_observation_windows'][-1],
+                public_instruction_window_limit=400000,post_digest_allocator_event_count=len(post_digest_events),
+                post_digest_allocator_events_sha256=graph.digest(post_digest_events),
+                post_digest_allocator_counts=result['actual_allocator_counts'],
+                post_digest_service_counts=post_digest_services,post_digest_service_delta=service_delta,
+                main_image_svc_count_at_boundary=len(proof['main_image_SVC_boundaries']),
+                required_main_image_svc_limit=4,
+                target_suffix_svc_reached=self.svc_boundary['pc_offset']=='0x286ec8')
+        return row
 
 
 def replay(path,libc,*,case_controls=None):
@@ -225,6 +289,16 @@ def replay(path,libc,*,case_controls=None):
         s=Scenario(c);s.path=path;return s
     return context.replay(path,libc,case_controls=case_controls,_extension_factory=create,
         _request_profile=previous.previous.name.previous.previous.PROFILE['name'],_handler_read_profile=context.NULL_PAYLOAD_READ_PROFILE['name'])
+
+
+def boundary_replay(path,libc,*,case_controls=None):
+    def create(c):
+        s=Scenario(c);s.path=path;s.continue_to_svc=True;return s
+    rows=context.replay(path,libc,case_controls=case_controls,_extension_factory=create,
+        _request_profile=previous.previous.name.previous.previous.PROFILE['name'],_handler_read_profile=context.NULL_PAYLOAD_READ_PROFILE['name'])
+    for row in rows:
+        assert row.get('svc_boundary') is not None
+    return rows
 
 
 def verify_images(path,libc):
@@ -289,7 +363,10 @@ def negatives(data):
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--elf',type=Path);ap.add_argument('--libc',type=Path);ap.add_argument('--replay',action='store_true')
+    ap.add_argument('--svc-boundary',action='store_true',help='run one existing control and stop before svc #0')
     args=ap.parse_args()
+    if args.svc_boundary and (not args.elf or not args.libc):ap.error('--svc-boundary requires --elf and --libc')
+    if args.svc_boundary and args.replay:ap.error('--svc-boundary cannot be combined with --replay')
     if args.replay and (not args.elf or not args.libc):ap.error('--replay requires --elf and --libc')
     data=json.loads(EVIDENCE.read_text());validate(data)
     result=dict(retained_suffix_digest_cases=len(data['case_results']),damaged_evidence_rejected=negatives(data),
@@ -300,6 +377,12 @@ def main():
         assert independent_controls(args.elf,args.libc)==data['independent_projection']
         assert replay(args.elf,args.libc)==data['case_results']
         result.update(original_code_cases_replayed=4,fresh_declared_native_digest_controls_replayed=16)
+    if args.svc_boundary:
+        controls=context.controls()[:1]
+        rows=boundary_replay(args.elf,args.libc,case_controls=controls)
+        assert len(rows)==1 and rows[0]['entered_svc_handler'] is False
+        assert rows[0]['handler_read_count_delta']==0 and rows[0]['main_image_svc_count_delta']==0
+        result.update(svc_boundary_control=rows[0])
     print(json.dumps(result))
 
 
