@@ -85,6 +85,17 @@ class Environment:
         return 0
     def syscall(self,cpu,number,observed):
         fields = [cpu.reg_read(register) for register in fixture.REGS]
+        if number == 169:
+            # The native request continuation reaches gettimeofday with the
+            # timeval in x0 and a NULL timezone in x1. Keep this provider
+            # deliberately narrow: one fixed, explicit guest result and no
+            # host clock access; syscall argument registers beyond x1 are
+            # caller state and are not part of this two-argument ABI.
+            assert fields[0] != 0 and fields[1] == 0
+            self.calls.append(['gettimeofday', fields[0], fields[1]])
+            cpu.mem_write(fields[0], (1791023800).to_bytes(8, 'little') +
+                          (500000).to_bytes(8, 'little'))
+            return 0
         if number == 214: return self.brk(None,fields[0])
         if number == 222:
             assert fields[0] == 0 and fields[2:] == [3,0x22,0xFFFFFFFF,0]

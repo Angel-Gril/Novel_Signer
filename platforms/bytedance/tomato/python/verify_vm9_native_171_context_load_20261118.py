@@ -82,6 +82,52 @@ def controls():
             for base in graph.BASES for profile in ('class0', 'static_id')]
 
 
+class _TraceAccumulator:
+    """Keep graph.digest's JSON bytes while allowing a large trace to drain."""
+
+    def __init__(self):
+        self.items = []
+        self._hash = None
+        self.count = 0
+
+    @staticmethod
+    def _encode(item):
+        return json.dumps(item, separators=(',', ':'), sort_keys=True).encode()
+
+    def append(self, item):
+        if self._hash is None:
+            self.items.append(item)
+        else:
+            if self.count:
+                self._hash.update(b',')
+            self._hash.update(self._encode(item))
+        self.count += 1
+
+    def compact(self):
+        if self._hash is not None:
+            return
+        self._hash = hashlib.sha256(b'[')
+        for index, item in enumerate(self.items):
+            if index:
+                self._hash.update(b',')
+            self._hash.update(self._encode(item))
+        self.items.clear()
+
+    def digest(self, extra=()):
+        if self._hash is None:
+            return graph.digest(self.items + list(extra))
+        digest = self._hash.copy()
+        for index, item in enumerate(extra, self.count):
+            if index:
+                digest.update(b',')
+            digest.update(self._encode(item))
+        digest.update(b']')
+        return digest.hexdigest()
+
+    def __len__(self):
+        return self.count
+
+
 def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=None,
            _request_profile=None, _handler_read_profile=None):
     from unicorn import arm64_const as arm
@@ -108,9 +154,19 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
         state = dict(continued=False, request_started=False, stored=False, store_verified=False)
         extension = None if _extension_factory is None else _extension_factory(control)
         service = stack.Services(image, {}, dict(null_at=control['null_at']))
-        targets = {slot:graph.SCRATCH+0x800+i*16 for i,slot in enumerate(SLOTS)}
-        trace, code, jni, reads, returns, syscalls, main_syscalls = [], {}, [], [], [], [], []
+        target_slots=tuple(SLOTS)+tuple(getattr(extension,'extra_jni_slots',()))
+        assert len(set(target_slots))==len(target_slots)
+        targets = {slot:graph.SCRATCH+0x800+i*16 for i,slot in enumerate(target_slots)}
+        trace, code, jni, reads, returns, syscalls, main_syscalls = _TraceAccumulator(), {}, [], [], [], [], []
         trace_window_start=[0];closed_trace_windows=[]
+
+        def trace_digest(extra=()):
+            return trace.digest(extra)
+
+        def maybe_compact_trace():
+            if extension is not None and getattr(extension, 'compact_trace_requested', False):
+                trace.compact()
+                extension.compact_trace_requested = False
 
         def reg(cpu, name):
             return cpu.reg_read(getattr(arm,'UC_ARM64_REG_'+name.upper()))
@@ -120,7 +176,48 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
 
         def call(cpu, slot):
             args = tuple(reg(cpu,'x'+str(i)) for i in range(stack.COUNTS[slot]))
-            assert args[0] == outer.io.GUEST+0x7800 and state['evaluator_active']
+            late_handler = (getattr(extension, 'late_jni', None)
+                            if extension is not None else None)
+            if late_handler is not None:
+                handled, result = late_handler(cpu, slot, args, state)
+                if handled:
+                    return result
+            if args[0] != outer.io.GUEST+0x7800 or not state.get('evaluator_active',False):
+                pc=reg(cpu,'pc');lr=reg(cpu,'x30')
+                dispatcher=None
+                if extension is not None:
+                    counts=getattr(extension,'_post_syscall_pc_counts',{})
+                    dispatcher=dict(
+                        observed_pc_counts={hex(offset):count for offset,count in counts.items()
+                                            if offset in (0x16855C,0x16D8B8,0x16974C)},
+                        distinct_dispatch_states=len(getattr(extension,'_post_syscall_dispatch_state_counts',{})),
+                        first_stream_cursor=(hex(extension._post_syscall_cursor_first)
+                            if getattr(extension,'_post_syscall_cursor_first',None) is not None else None),
+                        last_stream_cursor=(hex(extension._post_syscall_cursor_last)
+                            if getattr(extension,'_post_syscall_cursor_last',None) is not None else None),
+                        monotonic_cursor_steps=getattr(extension,'_post_syscall_cursor_monotonic_steps',None),
+                        bound_pc_state=getattr(extension,'_post_syscall_dispatch_stop',None))
+                diagnostic=dict(
+                    slot=hex(slot),args=[hex(value) for value in args],
+                    expected_env=hex(outer.io.GUEST+0x7800),
+                    interface_table_pointer=hex(word(cpu,outer.io.GUEST+0x7800)),
+                    pc=hex(pc),pc_offset=hex(pc-image) if image<=pc<image+0x400000 else None,
+                    lr=hex(lr),lr_offset=hex(lr-image) if image<=lr<image+0x400000 else None,
+                    evaluator_active=state.get('evaluator_active',False),
+                    evaluator_return_pc=(hex(state['evaluator_return_pc'])
+                        if state.get('evaluator_return_pc') is not None else None),
+                    request_started=state.get('request_started',False),
+                    PC_slot=(hex(state['PC_slot']) if state.get('PC_slot') is not None else None),
+                    PC_slot_value=(hex(word(cpu,state['PC_slot'])) if state.get('PC_slot') is not None else None),
+                    instruction_observations=len(trace),
+                    main_image_svc_count=len(main_syscalls),
+                    last_main_image_svc=main_syscalls[-1] if main_syscalls else None,
+                    last_libc_svc=syscalls[-1] if syscalls else None,
+                    gettimeofday_entered=(getattr(extension,'_gettimeofday_entered',None)
+                        if extension is not None else None),
+                    dispatcher_diagnostics=dispatcher)
+                raise AssertionError('continuation JNI provider contract violation: '+
+                                     json.dumps(diagnostic,sort_keys=True))
             result = service.jni(stack.G+0xF600+slot//2, (stack.h.ENV,*args[1:]),
                 lambda a,n:bytes(cpu.mem_read(a,n)), cpu.mem_write)
             assert result in (0, stack.h.CLS)
@@ -168,11 +265,19 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
 
         def read(cpu,address,size):
             if not state['continued']: return
+            if extension is not None and getattr(extension,'suppress_handler_read_observation',False): return
+            if null_payload and len(reads)>=NULL_PAYLOAD_READ_PROFILE['maximum_handler_reads']:
+                return
             context=state['context']
             if address<context+0x80 and context<address+size:
                 if null_payload and reads:
                     profile=NULL_PAYLOAD_READ_PROFILE
-                    assert len(reads)==1 and reg(cpu,'pc')==image+LOAD, 'second handler read count or site'
+                    assert len(reads)==1 and reg(cpu,'pc')==image+LOAD, (
+                        f"second handler read count or site: reads={len(reads)} "
+                        f"pc={hex(reg(cpu,'pc'))} expected={hex(image+LOAD)} "
+                        f"address={hex(address)} size={size} context={hex(context)} "
+                        f"x12={hex(reg(cpu,'x12'))} x13={hex(reg(cpu,'x13'))} "
+                        f"x14={hex(reg(cpu,'x14'))} first={reads!r}")
                     assert word(cpu,state['PC_slot'])==image+profile['bytecode']
                     assert address==context+profile['member_offset'] and size==8
                     assert reg(cpu,'x12')==context and reg(cpu,'x13')==profile['member_offset']
@@ -198,6 +303,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
             if extension is not None:
                 pre_observe=getattr(extension,'pre_observe',None)
                 if pre_observe is not None and pre_observe(cpu,pc,state):
+                    maybe_compact_trace()
                     return
             if (null_payload and offset==LOAD and reg(cpu,'x12')==state['context']
                     and word(cpu,state['PC_slot'])==image+NULL_PAYLOAD_READ_PROFILE['bytecode']):
@@ -207,7 +313,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 state['second_handler_read_prefix']=dict(
                     context_reads=list(reads),evaluator_returns=list(returns),JNI_calls=list(jni),
                     libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                    instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',LOAD]]),
+                    instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',LOAD]]),
                     code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())]))
             if (null_payload and offset==0x16EE38 and word(cpu,state['PC_slot'])==image+0xFD064):
                 assert 'null_branch_prefix' not in state
@@ -215,7 +321,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 state['null_branch_prefix']=dict(
                     context_reads=list(reads),evaluator_returns=list(returns),JNI_calls=list(jni),
                     libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                    instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                    instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                     code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
             if extension is not None:
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD0D4):
@@ -223,14 +329,14 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['client_key_name_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD140):
                     assert 'client_key_lookup_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['client_key_lookup_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]),
                         client_key_name_prefix=state['client_key_name_prefix'])
                 if (null_payload and offset==0x16A5E8 and word(cpu,state['PC_slot'])==image+0xFD180):
@@ -238,7 +344,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['client_key_result_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]),
                         client_key_lookup_prefix=state['client_key_lookup_prefix'])
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD228):
@@ -246,7 +352,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['kmsv_lookup_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]),
                         client_key_result_prefix=state['client_key_result_prefix'])
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD258):
@@ -254,84 +360,84 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['kmsv_scope_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD290):
                     assert 'kmsv_scope_exit_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['kmsv_scope_exit_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD2B4):
                     assert 'contained_reference_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['contained_reference_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD2DC):
                     assert 'configuration_clone_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_clone_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD38C):
                     assert 'configuration_cleanup_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_cleanup_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD424):
                     assert 'configuration_owner_cleanup_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_owner_cleanup_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD5B8):
                     assert 'configuration_hash64_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_hash64_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD5E8):
                     assert 'configuration_tls_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_tls_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD628):
                     assert 'configuration_tls_store_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_tls_store_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA4C and word(cpu,state['PC_slot'])==image+0xFD694):
                     assert 'configuration_copy56_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_copy56_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x16AA48 and word(cpu,state['PC_slot'])==image+0xFD6B0):
                     assert 'configuration_suffix_call_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['configuration_suffix_call_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 if (null_payload and offset==0x286CE8 and word(cpu,state['PC_slot'])==image+0xFD6B0):
                     assert 'suffix_constants_prefix' not in state
                     observed_code=dict(code);observed_code[('metasec',offset)]=read_main(offset,4).hex()
                     state['suffix_constants_prefix']=dict(
                         JNI_calls=list(jni),libc_SVC_boundaries=list(syscalls),main_image_SVC_boundaries=list(main_syscalls),
-                        instruction_observations=len(trace)+1,trace_sha256=graph.digest(trace+[['metasec',offset]]),
+                        instruction_observations=len(trace)+1,trace_sha256=trace_digest([['metasec',offset]]),
                         code_sha256=graph.digest([[*site,raw] for site,raw in sorted(observed_code.items())]))
                 extension.observe(cpu,pc,state)
             if offset==STOP and state['stored'] and not state['store_verified']:
@@ -348,7 +454,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                     cpu.reg_write(arm.UC_ARM64_REG_PC,outer.oracle.STOP)
                     return
                 extension.member_boundary(cpu,state,dict(
-                    instruction_observations=len(trace),trace_sha256=graph.digest(trace),
+                    instruction_observations=len(trace),trace_sha256=trace_digest(),
                     code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             if pc in targets.values():
                 slot=next(slot for slot,target in targets.items() if pc==target)
@@ -415,7 +521,12 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 closed_trace_windows.append(len(trace)-trace_window_start[0])
                 trace_window_start[0]=len(trace)
             trace.append([domain,local])
-            assert len(trace)-trace_window_start[0]<400000,'continuation instruction-window bound'
+            window_observations=len(trace)-trace_window_start[0]
+            window_limit=getattr(extension,'instruction_window_limit',400000)
+            if window_observations>=window_limit:
+                diagnostic=getattr(extension,'instruction_window_diagnostics',None)
+                detail='; '+diagnostic() if diagnostic is not None else ''
+                raise AssertionError('continuation instruction-window bound'+detail)
             if offset==graph.CALLBACK:
                 assert reg(cpu,'x2')==0x171 and reg(cpu,'x3')==state['context']
                 assert all(word(cpu,word(cpu,reg(cpu,'x'+str(i))+8),4)==3 for i in (0,1))
@@ -448,6 +559,12 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
             execution_observer=observe,continuation_memory_read_observer=read,
             continuation_memory_write_observer=writes,
             continuation_main_import_names=('memset','__cxa_atexit'),
+            continuation_references=(getattr(extension,'continuation_references',())
+                                     if extension is not None else ()),
+            continuation_reference_types=(getattr(extension,'continuation_reference_types',{})
+                                          if extension is not None else {}),
+            unmapped_observer=(getattr(extension,'observe_unmapped',None)
+                               if extension is not None else None),
             _native_runner=None if extension is None else extension.native_runner,
             continuation_host_imports={target-image:(lambda cpu,slot=slot:call(cpu,slot))
                                        for slot,target in targets.items()})
@@ -479,7 +596,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
                 **({'configuration_copy56_prefix':state['configuration_copy56_prefix']} if 'configuration_copy56_prefix' in state else {}),
                 **({'configuration_suffix_call_prefix':state['configuration_suffix_call_prefix']} if 'configuration_suffix_call_prefix' in state else {}),
                 **({'suffix_constants_prefix':state['suffix_constants_prefix']} if 'suffix_constants_prefix' in state else {}),
-                trace_sha256=graph.digest(trace),
+                trace_sha256=trace_digest(),
                 code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())])))
             rows.append(row)
             if on_case is not None:on_case(row)
@@ -493,7 +610,7 @@ def replay(path, libc, *, on_case=None, case_controls=None, _extension_factory=N
             evaluator_returns=returns,JNI_calls=jni,
             libc_SVC_boundaries=syscalls,
             continuation_instruction_observations=len(trace),
-            continuation_trace_sha256=graph.digest(trace),
+            continuation_trace_sha256=trace_digest(),
             continuation_code_sha256=graph.digest([[*site,raw] for site,raw in sorted(code.items())]),
             allocator_counts=result['actual_allocator_counts'],service_counts=result['explicit_service_counts'],
             allocation_ledger_sha256=graph.digest(result['allocator_events']),

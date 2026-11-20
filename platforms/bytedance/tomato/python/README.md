@@ -13,6 +13,19 @@ acceptance and complete standalone signer remain unverified. Use `--elf`,
 `--libc`, `--replay`; see the
 [gettimeofday boundary evidence](../evidence/vm9_native_171_gettimeofday_return_20261120.json).
 
+`verify_vm9_native_171_gettimeofday_dynamic_20261121.py` continues one
+class0 control through the explicit syscall 169 provider and the observed
+gettimeofday return/caller instructions. It preserves the four inherited
+main-image SVC boundaries while recording the dynamic fifth syscall. The next
+native boundary is `+0x288648` (`blr x8`); replay stops before executing its
+indirect target and records the matching object first word and function
+pointer. The class0 path observes two late synthetic JNI calls and does not
+reach the Java dispatcher before this boundary. This remains synthetic
+Unicorn evidence: no ART/JVM execution, current suffix return, ordinary
+Cronet six headers, online acceptance or complete standalone signer is
+claimed. Use `--elf`, `--libc`, `--capture` or `--replay`; see the
+[dynamic gettimeofday evidence](../evidence/vm9_native_171_gettimeofday_dynamic_20261121.json).
+
 `verify_vm9_native_171_suffix_digest_20261120.py` verifies current original
 scratch/header reads, constant string construction, mode-zero raw MD5,
 reference assignment and temporary release. Native digest bytes obey the MD5
