@@ -41,7 +41,9 @@ see the [cold once report](platforms/bytedance/tomato/REQUEST_JNI_COLD_ONCE.md).
 
 ```text
 python scripts/check_python.py
-cargo check --manifest-path platforms/bytedance/tomato/rust/Cargo.toml
+python -m unittest discover -s scripts -p test_scan_public.py
+python scripts/scan_public.py
+cargo test --manifest-path platforms/bytedance/tomato/rust/Cargo.toml --locked
 ```
 
 GitHub Actions runs the same checks, a public-data secret scan, and publishes `docs/` with GitHub Pages.
