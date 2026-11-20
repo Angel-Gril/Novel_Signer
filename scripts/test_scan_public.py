@@ -1,4 +1,5 @@
 """Exercise the public scan in a temporary checkout with synthetic data."""
+import json
 import shutil
 import subprocess
 import sys
@@ -63,6 +64,46 @@ class PublicScanTests(unittest.TestCase):
         })
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("public scan passed", result.stdout)
+
+    def test_json_session_fields_are_rejected_without_printing_values(self):
+        path = "platforms/session evidence.json"
+        secret = "example-only-session-value"
+        for field in (
+            "sid_guard", "sid-guard", "sidguard", "SID_GUARD",
+            "uid_tt", "uid-tt", "uidtt",
+            "passport_csrf_token", "passport-csrf-token", "passportcsrftoken",
+        ):
+            body = json.dumps({"nested": [{field: secret}]})
+            for staged in (False, True):
+                with self.subTest(field=field, staged=staged):
+                    result = self.run_scan(
+                        {path: '{"cookie":null}' if staged else body},
+                        staged={path: body} if staged else None,
+                        args=("--staged",) if staged else (),
+                    )
+                    self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                    self.assertIn(f"{path}: credential field", result.stdout)
+                    self.assertNotIn(secret, result.stdout + result.stderr)
+
+    def test_allows_redacted_json_session_fields(self):
+        fields = {
+            "sid_guard": None,
+            "uid_tt": "",
+            "passport_csrf_token": " ",
+            "sid_guard_sha256": "f00d",
+            "uid_tt_length": 24,
+            "passport_csrf_token_sha256": "f00d",
+        }
+        path = "platforms/session evidence.json"
+        for staged in (False, True):
+            with self.subTest(staged=staged):
+                body = json.dumps(fields)
+                result = self.run_scan(
+                    {path: body}, staged={path: body} if staged else None,
+                    args=("--staged",) if staged else (),
+                )
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertIn("public scan passed", result.stdout)
 
     def test_staged_scan_detects_content_removed_only_from_worktree(self):
         path = "docs/evidence space.json"

@@ -26,6 +26,8 @@ TEXT_RULES = {
 JSON_CREDENTIAL_FIELDS = {
     "authorization", "token", "access-token", "refresh-token", "cookie", "set-cookie",
     "sessionid", "session-id", "rticket", "ss-req-ticket", "x-ss-req-ticket",
+    "sid-guard", "sidguard", "uid-tt", "uidtt",
+    "passport-csrf-token", "passportcsrftoken",
 }
 
 
