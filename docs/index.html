@@ -23,7 +23,7 @@
   <table>
     <thead><tr><th>Platform</th><th>Evidence</th><th>Current result</th></tr></thead>
     <tbody>
-      <tr><td>Tomato / ByteDance</td><td>Live chain verified</td><td><code>device_register → registerkey → directory → reader/full → AES-CBC</code> succeeds with the Java/Unidbg bridge. Current Medusa parameterization remains explicitly incomplete.</td></tr>
+      <tr><td>Tomato / ByteDance</td><td>Bridge-only live chain</td><td><code>device_register → registerkey → directory → reader/full → AES-CBC</code> has accepted bridge samples. The independent current Helios/Medusa signer remains unverified and unavailable in the default Rust build.</td></tr>
       <tr><td>Douyin / ByteDance</td><td>Static/community analysis</td><td>Four-god algorithms are documented; Helios/Medusa for 23.3.0+ were not independently verified here.</td></tr>
       <tr><td>Qidian</td><td>No usable sample in this workspace</td><td>No claim is made about Qidian endpoints or signatures.</td></tr>
     </tbody>

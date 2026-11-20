@@ -6,7 +6,7 @@ This site is the reviewable index for the platform-separated reports.
 
 | Platform | Evidence level | Current result |
 | --- | --- | --- |
-| Tomato / ByteDance | Live chain verified; current Medusa parameterization incomplete | `device_register → registerkey → directory → reader/full → AES-CBC` succeeds with the Java/Unidbg bridge. |
+| Tomato / ByteDance | Bridge-only live chain; current signer unavailable in default Rust | `device_register → registerkey → directory → reader/full → AES-CBC` has accepted bridge samples; the independent current Helios/Medusa signer remains unverified. |
 | Douyin / ByteDance | Static/community analysis | Four-god algorithms are documented; Helios/Medusa for 23.3.0+ were not independently verified here. |
 | Qidian | No usable sample in this workspace | No claim is made about Qidian endpoints or signatures. |
 

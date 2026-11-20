@@ -8,7 +8,11 @@ pub fn khronos(timestamp_seconds: u64) -> String {
 
 /// Verified pure-Rust legacy/auxiliary headers. These headers are not enough
 /// for the current reading server; Helios + current Medusa remain required.
-pub fn legacy_headers(query: &str, timestamp_seconds: u64, device_id: &str) -> BTreeMap<String, String> {
+pub fn legacy_headers(
+    query: &str,
+    timestamp_seconds: u64,
+    device_id: &str,
+) -> BTreeMap<String, String> {
     let mut out = BTreeMap::new();
     out.insert("X-Khronos".into(), khronos(timestamp_seconds));
     out.insert(
@@ -26,9 +30,27 @@ pub fn legacy_headers(query: &str, timestamp_seconds: u64, device_id: &str) -> B
     out
 }
 
-pub fn current_headers(_query: &str, _timestamp_seconds: u64) -> Result<BTreeMap<String, String>, CapabilityError> {
+pub fn current_headers(
+    _query: &str,
+    _timestamp_seconds: u64,
+) -> Result<BTreeMap<String, String>, CapabilityError> {
     Err(CapabilityError {
         component: "current Tomato header set",
         reason: "X-Helios and current X-Medusa are not independently available in the default no-JVM crate",
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn current_headers_never_fall_back_to_legacy_headers() {
+        let error = current_headers("query=三体", 1_700_000_000)
+            .expect_err("current signing must stay unavailable until independently verified");
+
+        assert_eq!(error.component, "current Tomato header set");
+        assert!(error.reason.contains("X-Helios"));
+        assert!(error.reason.contains("X-Medusa"));
+    }
 }
