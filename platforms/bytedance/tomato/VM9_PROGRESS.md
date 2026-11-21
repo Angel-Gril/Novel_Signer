@@ -1,21 +1,27 @@
 # Current VM9 progress checkpoint
 
-## 2026-11-21：随机 getter callback 与原包装器写回已动态验证
+## 2026-11-21：随机 getter callback、包装器写回及 VM 返回点已动态验证
 
 在上一项 `gettimeofday` 原版 continuation 上继续到 `+0x288648` 的 `blr x8`。
 本次 guard 为 warm（`image+0x3dedb0 = 1`），其对象首字与间接目标都指向
 `+0x26cc8c`。同一 Unicorn CPU 执行了原生 getter，并动态进入匹配 Bionic
 `rand` PLT `+0x348020`；getter 返回后，原包装器在 `+0x28864c` 写入 `W0`
 至对象 `+8`。写回值与返回寄存器一致，相邻 4 字节填充未变。捕获在
-`+0x288650` epilogue 前停止，未返回 interpreter。getter canary 在
+第一次捕获停在 `+0x288650` epilogue 前；随后独立续跑执行原包装器的
+`ldp +0x288650` / `ret +0x288654`，动态抵达保存的 caller `+0x16aa4c`
+并在首条 caller 指令前停止。该返回地址是 VM dispatch 恢复区；本轮尚未执行
+该指令、下一条 AST callback 或后续清理。getter canary 在
 `+0x26cca4` 保存、于下一指令边界 `+0x26cca8` 核对；未将原生内存作为
 Python 模型输入，也未增加时钟或随机 provider。
 
-证据标记为 **Sample verified**：固定 ELF/Bionic 的原生模拟捕获、证据自校验
-（5 项篡改拒绝）和确定性 replay 通过。它只闭合此 callback/getter/结果槽契约，
-不表示当前 suffix 已返回，也不代表 Cronet 六头、完整 standalone signer、
-Android 实机执行或线上接受。见[随机 callback 证据](evidence/vm9_native_171_random_callback_dynamic_20261121.json)
-与[复现器](python/verify_vm9_native_171_random_callback_dynamic_20261121.py)。
+证据标记为 **Sample verified**：固定 ELF/Bionic 的原生模拟捕获、两份证据的
+篡改校验（5 项与 6 项）和同源确定性 replay 通过。它闭合随机
+callback/getter/结果槽及包装器返回 VM dispatch 点，不表示 caller body、下一 AST
+callback、清理流程或当前 suffix 已返回，也不代表 Cronet 六头、完整 standalone
+signer、Android 实机执行或线上接受。见[随机 callback 证据](evidence/vm9_native_171_random_callback_dynamic_20261121.json)、
+[包装器返回证据](evidence/vm9_native_171_random_wrapper_return_dynamic_20261121.json)
+及对应的[getter 验证器](python/verify_vm9_native_171_random_callback_dynamic_20261121.py)、
+[返回验证器](python/verify_vm9_native_171_random_wrapper_return_dynamic_20261121.py)。
 
 ## 2026-11-20：gettimeofday SVC 与静态返回路径已绑定
 

@@ -6,11 +6,21 @@ The pinned ELF target is `+0x26cc8c`; the matching Bionic `rand` PLT is called
 on the same Unicorn CPU, then the original wrapper writes the returned `W0` to
 the callback object's `+8` slot at `+0x28864c`. The result slot matches the
 return register and adjacent padding is preserved. Canary comparison occurs
-after the native prologue saves it. Capture stops before wrapper epilogue and
-does not claim interpreter return, current suffix return, ordinary Cronet six
-headers, Android execution, online acceptance or a complete signer. Evidence
-is [here](../evidence/vm9_native_171_random_callback_dynamic_20261121.json);
+after the native prologue saves it. The initial capture stops before wrapper
+epilogue; the follow-on replay below independently continues that boundary.
+This does not claim caller-body execution, current suffix return, ordinary
+Cronet six headers, Android execution, online acceptance or a complete signer.
+Evidence is [here](../evidence/vm9_native_171_random_callback_dynamic_20261121.json);
 run the verifier with `--elf`, `--libc`, `--capture` or `--replay`.
+
+`verify_vm9_native_171_random_wrapper_return_dynamic_20261121.py` continues the
+same warm native callback through the original `ldp/ret` epilogue and confirms
+return to VM dispatch address `+0x16aa4c`, stopping before its first instruction.
+Both records reject damaged variants and replay deterministically. It does not
+execute the caller body, the next AST callback, cleanup or the current suffix
+return; ordinary Cronet headers, Android execution, online acceptance and a
+complete signer remain unverified. See the
+[wrapper return evidence](../evidence/vm9_native_171_random_wrapper_return_dynamic_20261121.json).
 
 `verify_vm9_native_171_post_digest_svc_boundary_20261120.py` continues the
 accepted original digest execution and freezes the first unpermitted main-image

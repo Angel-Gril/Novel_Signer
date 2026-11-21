@@ -2,13 +2,16 @@
 
 2026-11-21：**Sample verified**：当前原生 `+0x288648` 回调目标为
 `+0x26cc8c` 随机 getter，warm guard 为 1。同一 Unicorn CPU 动态执行
-原生 getter 和匹配 Bionic `rand` PLT `+0x348020`；原包装器随后在
+原生 getter和匹配 Bionic `rand` PLT `+0x348020`；原包装器随后在
 `+0x28864c` 将返回 `W0` 写入对象 `+8`，填充保持不变。canary 在
-`+0x26cca4` 保存后于 `+0x26cca8` 核验；停在 `+0x288650` epilogue 前。
-5 项篡改证据拒绝，验证器 replay 与捕获完全一致；无新增时钟/随机 provider，
-原生内存未作 Python 模型输入。当前 suffix 返回、普通 Cronet 六头、完整 signer、
-Android 实机和线上接受仍未验证。见[callback 证据](../platforms/bytedance/tomato/evidence/vm9_native_171_random_callback_dynamic_20261121.json)
-及[验证器](../platforms/bytedance/tomato/python/verify_vm9_native_171_random_callback_dynamic_20261121.py)。
+`+0x26cca4` 保存后于 `+0x26cca8` 核验。续跑执行包装器 `ldp/ret`
+（`+0x288650/+0x288654`），到达 VM dispatch 恢复点 `+0x16aa4c`，并停在
+该 caller 指令之前。两份证据分别拒绝 5 项和 6 项篡改；捕获与 replay 完全一致；
+无新增时钟/随机 provider，原生内存未作 Python 模型输入。caller body、下一 AST
+callback、清理、suffix 返回、普通 Cronet 六头、完整 signer、Android 实机和线上
+接受仍未验证。见[callback 证据](../platforms/bytedance/tomato/evidence/vm9_native_171_random_callback_dynamic_20261121.json)、
+[VM 返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_random_wrapper_return_dynamic_20261121.json)
+及[验证器](../platforms/bytedance/tomato/python/verify_vm9_native_171_random_wrapper_return_dynamic_20261121.py)。
 
 2026-11-20：当前 suffix 常量字符串、原始 MD5、引用赋值/临时释放通过。
 原版 scratch/header 参数和 16 字节字符串/摘要，引用计数 1→2→1、
