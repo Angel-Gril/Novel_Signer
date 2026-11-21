@@ -1,5 +1,17 @@
 # Tomato Python material
 
+`verify_vm9_native_171_random_callback_dynamic_20261121.py` continues the
+accepted gettimeofday dynamic prefix through its warm indirect random getter.
+The pinned ELF target is `+0x26cc8c`; the matching Bionic `rand` PLT is called
+on the same Unicorn CPU, then the original wrapper writes the returned `W0` to
+the callback object's `+8` slot at `+0x28864c`. The result slot matches the
+return register and adjacent padding is preserved. Canary comparison occurs
+after the native prologue saves it. Capture stops before wrapper epilogue and
+does not claim interpreter return, current suffix return, ordinary Cronet six
+headers, Android execution, online acceptance or a complete signer. Evidence
+is [here](../evidence/vm9_native_171_random_callback_dynamic_20261121.json);
+run the verifier with `--elf`, `--libc`, `--capture` or `--replay`.
+
 `verify_vm9_native_171_post_digest_svc_boundary_20261120.py` continues the
 accepted original digest execution and freezes the first unpermitted main-image
 SVC boundary. It keeps the four-SVC, two-handler-read and 400000-instruction
