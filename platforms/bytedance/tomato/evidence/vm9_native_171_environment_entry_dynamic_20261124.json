@@ -1,0 +1,611 @@
+{
+  "schema": "vm9-native-171-environment-entry-dynamic-20261124-v1",
+  "claims": {
+    "evidence_label": "Sample verified",
+    "complete_parent_case_equal": true,
+    "original_helper_entry_and_nested_VM_defined_frame_observed": true,
+    "original_helper_and_wrapper_return_observed_under_declared_services": true,
+    "actual_unsigned_W_result_and_exact_four_byte_writeback_verified": true,
+    "initialized_virtual_slots_compared": [
+      0,
+      4,
+      5,
+      6,
+      7,
+      29,
+      31
+    ],
+    "retained_live_JSON_bytes_preserved": true,
+    "controlled_acquisition_is_not_original_JNI_body": true,
+    "decoded_contents_or_content_hashes_exported": false,
+    "native_snapshot_used_to_initialize_Python_VM": false,
+    "complete_standalone_signer_verified": false,
+    "real_ART_JVM_execution": false,
+    "Android_execution": false,
+    "complete_physical_ABI_verified": false,
+    "online_acceptance_verified": false
+  },
+  "providers": {
+    "parent_evidence_sha256": "ee6b8754fcfcda5c21392681e631c78bf67b3a903a6fcba0a5e7531d46593b45",
+    "new_providers": [],
+    "new_import_bindings": [],
+    "acquisition": "inherited controlled provider: output[0:8]=declared env, tail preserved, X0=0; native body bypassed",
+    "real_jni_acquisition": false,
+    "real_jni_dispatch": false,
+    "JNI_dispatch": "stop before a branch to +26e70c; reject unexpected provider entry",
+    "SVC_policy": "stop before new SVC execution",
+    "unknown_branch_policy": "stop before executable-domain escape",
+    "maximum_observations": 120000,
+    "maximum_nested_calls": 16,
+    "original_ART_or_JVM_execution_verified": false
+  },
+  "source_fingerprints": {
+    "verifier_sha256": "33e263ed59addfa1b46cfec1906afbc168374273f78f2a0462c33bb2c92448b6",
+    "parent_verifier_sha256": "54d3621265e85d5d0314bc340dff5d190b7f863be09a92080388a420ba0b8de1",
+    "parent_chain_sha256": "4bfbe0636b283a6c7cb1dc9b4c76b4167dbf3b75fcba4bb3851ad32679e23569",
+    "frame_fixture_sha256": "a023e25257af816f1f8d2924a4b6d2cdd12b641892603480641d85560a8fcaad",
+    "return_fixture_sha256": "b84d6f78554b08241d53332aea4f423ec169f25df25a38ff57824990a43270d0",
+    "environment_model_sha256": "5abf3ccf82564ed0afff3793bfe14791ba287ffd53025cce45e0b7eb2762a7d5",
+    "caller_model_sha256": "1dd0b9246c990c06a0baa42f4d47f1755c0d5c276337e4e58ab3a7dac3e63e32",
+    "native_oracle_sha256": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f"
+  },
+  "parent_evidence_sha256": "ee6b8754fcfcda5c21392681e631c78bf67b3a903a6fcba0a5e7531d46593b45",
+  "case_result": {
+    "parent_case_equal": true,
+    "parent_case_sha256": "aeae79caf79a1ed31ad00e8816de38134d3ecf16b0c875877a134b2e2357bfc2",
+    "instruction_observations": 15291,
+    "instruction_trace_sha256": "ac58905216d567c6c5ca07525c032516041e7d02fef0d79aabb5bdad7869794b",
+    "observed_code_sha256": "06713a5114aed487cca5b0fa7dcfe755ec28d4657abc00dd126a1cba86f363de",
+    "entries": [
+      {
+        "kind": "helper_entry",
+        "index": 6,
+        "PC": "0x204e50",
+        "SP": "0x7004b920",
+        "original_wrapper_frame_verified": true
+      },
+      {
+        "kind": "before_nested_VM_entry",
+        "index": 28,
+        "PC": "0x204ea8",
+        "local_SP": "0x7004b420",
+        "bytecode_offset": "0x8a040",
+        "callback_sentinel_offset": "0x2050e4",
+        "original_X0_X4_and_three_defined_descriptor_words_equal": true,
+        "TLS_canary_copy_equal": true,
+        "undefined_result_word_compared": false
+      },
+      {
+        "kind": "nested_VM_defined_registers",
+        "index": 144,
+        "PC": "0x1684f0",
+        "VM_state_address": "0x7004b7d0",
+        "register_backing_address": "0x7004b7d8",
+        "initialized_virtual_slots": [
+          0,
+          4,
+          5,
+          6,
+          7,
+          29,
+          31
+        ],
+        "defined_slot_relations_verified": true,
+        "other_virtual_register_values_exported": false
+      },
+      {
+        "kind": "nested_VM_returned_to_helper",
+        "index": 14390,
+        "PC": "0x204eac",
+        "result_value_exported": false,
+        "result_hash_exported": false
+      }
+    ],
+    "callbacks": [
+      {
+        "index": 1,
+        "depth": 0,
+        "descriptor_address": "0x7004cc50",
+        "wrapper_offset": "0x28863c",
+        "target_offset": "0x204e50",
+        "VM_state_address": "0x7004d360",
+        "VM_cursor_offset": "0x10a528",
+        "SP": "0x7004b930",
+        "callee_saved_sha256": "1dfcf39e697485c9789eaf1f5667782d682043ac2a66bc54fafb8587c49e2af9",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "return_index": 14402,
+        "caller_SP_and_callee_saved_restored": true,
+        "unsigned_X0_equals_nested_VM_result": true,
+        "exact_four_byte_result_store_and_padding_preserved": true
+      },
+      {
+        "index": 6462,
+        "depth": 1,
+        "descriptor_address": "0x7004b718",
+        "wrapper_offset": "0x205058",
+        "target_offset": "0x26edc4",
+        "VM_state_address": "0x7004b7d0",
+        "VM_cursor_offset": "0x8a254",
+        "SP": "0x7004b2a0",
+        "callee_saved_sha256": "c33bc880cbceebdc527796c2f465a3d77e5a8f5303b58a67065f39e155071506",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "implementation": "inherited controlled JNI acquisition provider",
+        "native_acquisition_body_executed": false,
+        "return_index": 6467,
+        "caller_SP_and_callee_saved_restored": true
+      },
+      {
+        "index": 9276,
+        "depth": 1,
+        "descriptor_address": "0x7004b700",
+        "wrapper_offset": "0x205064",
+        "target_offset": "0x248344",
+        "VM_state_address": "0x7004b7d0",
+        "VM_cursor_offset": "0x8a394",
+        "SP": "0x7004b2a0",
+        "callee_saved_sha256": "c33bc880cbceebdc527796c2f465a3d77e5a8f5303b58a67065f39e155071506",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "return_index": 9432,
+        "caller_SP_and_callee_saved_restored": true
+      },
+      {
+        "index": 10315,
+        "depth": 1,
+        "descriptor_address": "0x7004b6e0",
+        "wrapper_offset": "0x205074",
+        "target_offset": "0x26e9e0",
+        "VM_state_address": "0x7004b7d0",
+        "VM_cursor_offset": "0x8a3c4",
+        "SP": "0x7004b2a0",
+        "callee_saved_sha256": "c33bc880cbceebdc527796c2f465a3d77e5a8f5303b58a67065f39e155071506",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "return_index": 11810,
+        "caller_SP_and_callee_saved_restored": true
+      },
+      {
+        "index": 12551,
+        "depth": 1,
+        "descriptor_address": "0x7004b6d0",
+        "wrapper_offset": "0x205094",
+        "target_offset": "0x2484b8",
+        "VM_state_address": "0x7004b7d0",
+        "VM_cursor_offset": "0x8a3ec",
+        "SP": "0x7004b2a0",
+        "callee_saved_sha256": "c33bc880cbceebdc527796c2f465a3d77e5a8f5303b58a67065f39e155071506",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "return_index": 12704,
+        "caller_SP_and_callee_saved_restored": true
+      },
+      {
+        "index": 15291,
+        "depth": 0,
+        "descriptor_address": "0x7004ca20",
+        "wrapper_offset": "0x288854",
+        "target_offset": "0x261350",
+        "VM_state_address": "0x7004d360",
+        "VM_cursor_offset": "0x10a558",
+        "SP": "0x7004b930",
+        "callee_saved_sha256": "1dfcf39e697485c9789eaf1f5667782d682043ac2a66bc54fafb8587c49e2af9",
+        "VM_call_executed": false,
+        "wrapper_entered": false,
+        "target_entered": false,
+        "returned": false
+      }
+    ],
+    "completed_callbacks": 5,
+    "helper_returned": true,
+    "stop_reason": "next_outer_VM_call_before_execution",
+    "boundary": {},
+    "protected_JSON_write_observations": 0,
+    "new_allocator_events": [
+      [
+        "alloc",
+        8,
+        325944080,
+        "0x248388"
+      ],
+      [
+        "free",
+        325944080
+      ]
+    ],
+    "allocator_aux_events": [],
+    "native_write_observations": 1214,
+    "actual_allocator_counts": {
+      "malloc": 612,
+      "free": 278,
+      "gc": 3,
+      "flush": 4
+    },
+    "explicit_service_counts": {
+      "syscall_214": 1,
+      "syscall_222": 4,
+      "syscall_167": 3,
+      "syscall_226": 9,
+      "syscall_56": 6,
+      "syscall_80": 1,
+      "syscall_215": 2,
+      "syscall_63": 2,
+      "syscall_57": 4,
+      "clock": 11,
+      "virtual_pthread_create": 3,
+      "destructor_registration": 6,
+      "syscall_98": 18,
+      "property_find": 1,
+      "syscall_48": 4,
+      "syscall_79": 4,
+      "mkdir_exists": 2,
+      "syscall_169": 1
+    },
+    "new_SVCs": [],
+    "controlled_JNI_effects": [
+      {
+        "kind": "inherited controlled JNI acquisition provider",
+        "entry_index": 6466,
+        "return_index": 6467,
+        "write_width": 8,
+        "output_pair_address": "0x7004b748",
+        "output_pair_tail_preserved": true,
+        "environment_matches_declared_control": true,
+        "declared_status_x0": 0,
+        "descriptor_preserved": true,
+        "native_acquisition_body_executed": false,
+        "real_ART_JVM_execution": false
+      }
+    ],
+    "new_providers": [],
+    "decoded_contents_and_hashes_exported": false,
+    "native_snapshot_used_as_VM_model_input": false,
+    "complete_standalone_signer_verified": false,
+    "online_acceptance_verified": false
+  },
+  "case_result_sha256": "9c7344fa6f272f53f8f6bde100445b42c33db9fca77f654fe2ae9f71bc9542d7",
+  "component_controls": {
+    "frames": [
+      {
+        "image_base": "0x122c0000",
+        "case": "normal",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "patterned_stack",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "relocated_stack",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "TLS_spill_alias",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "normal",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "patterned_stack",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "relocated_stack",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "TLS_spill_alias",
+        "actual_wrapper_and_helper_entry_executed": true,
+        "five_VM_arguments_equal": true,
+        "complete_caller_frame_and_32_virtual_words_equal": true,
+        "guest_payload_equal": true,
+        "undefined_result_and_padding_preserved": true,
+        "native_snapshot_input": false,
+        "complete_helper_VM_verified": false
+      }
+    ],
+    "returns": [
+      {
+        "image_base": "0x122c0000",
+        "case": "zero",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "max_W",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "patterned_stack",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_page_packed",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "TLS_frame_alias",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "result_alias_wrapper_x19",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "zero",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "max_W",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "patterned_stack",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_page_packed",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "TLS_frame_alias",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "result_alias_wrapper_x19",
+        "original_new_wrapper_returned": true,
+        "all_seven_physical_return_values_equal": true,
+        "complete_declared_guest_and_stack_bytes_equal": true,
+        "packed_W_result_and_padding_equal": true,
+        "native_snapshot_input": false
+      }
+    ],
+    "caller_guards": [
+      {
+        "case": "unaligned_stack",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "underflow_stack",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "tagged_return",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "wide_saved_word",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "unknown_helper",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_TLS",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_frame",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_bytecode",
+        "rejected": true,
+        "all_pages_unchanged": true
+      }
+    ],
+    "wrapper_guards": [
+      {
+        "case": "wrong_target",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_packed",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "tagged_return",
+        "rejected": true,
+        "all_pages_unchanged": true
+      }
+    ],
+    "return_guards": [
+      {
+        "case": "unknown_wrapper",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "bool_wrapper",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "wrong_helper",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "unaligned_stack",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_frame",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_TLS",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "canary_mismatch",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "old_helper_LR",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "tagged_wrapper_LR",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_result",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "wrong_exit_pc",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "wrong_exit_word",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "old_exit_target",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "unknown_exit_wrapper",
+        "rejected": true,
+        "all_pages_unchanged": true
+      }
+    ]
+  }
+}

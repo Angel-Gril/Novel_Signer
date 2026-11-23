@@ -2904,3 +2904,53 @@ target 为环境辅助入口 `+0x204e50`；VM call、wrapper 和 target 均未�
 hash 保持。1447 个前序基线文件字节不变，仅追加研究日志及新文件属性；689 个平台
 Python 文件编译和 Rust 现有四项测试通过。本检查点未额外执行完整 `--replay` CLI；
 扫描器单元测试的临时 Git 创建权限限制仍存在，本轮未重跑，不记为通过。
+
+### 2026-11-24：环境辅助函数真实入口、嵌套 VM 与外层返回
+
+**Sample verified**：当前受控路径从 `+0x28863c -> +0x204e50` 进入辅助函数，执行
+独立嵌套 VM 后返回外层 VM。不能将这一结果扩大为真实 Android/JVM：内部
+`+0x205058 -> +0x26edc4` 明确沿用既有受控 JNI 获取服务，仅写 output pair 的
+前八字节、保留后八字节并返回声明的 status=0，原始获取函数体未执行。
+
+新窗口 6 到达 helper 入口，SP 为 `0x7004b920`；28 在 `+0x204ea8` 核对调用
+`+0x168324` 的实际 X0-X4、三个已定义 descriptor word、`0x500` 字节局部 frame
+及 TLS canary。字节码为 `+0x8a040`，callback sentinel 为 `+0x2050e4`。144 在
+`+0x1684f0` 核对独立 VM state `0x7004b7d0`、backing `0x7004b7d8` 与七个明确
+初始化的槽 0/4/5/6/7/29/31；其他槽和尚未写入的 result word 不填零、不解释或导出。
+
+外层调用内观察到四个内部回调：受控 JNI 获取、`+0x248344` 字符串构造、
+`+0x26e9e0` 日志函数，以及 `+0x2484b8` 基础析构。四次均返回，嵌套 callback
+SP 为 `0x7004b2a0`；独立 frame 栈避免将内部的共享 VM return PC 误认为外层返回。
+本次未观察到 decode-wrapper 调用，不据缓存路径推断其他冷分支已覆盖。
+
+14390 在 `+0x204eac` 回到辅助函数的返回段，此时 result local 仍有效，读取其
+四字节结果用于内存中关系核对。14402 回到外层 VM，核对 unsigned X0 与该 word
+相等，packed +8 仅写四字节，其他 44 字节、SP 和 X19-X29 保持。不在 helper frame
+结束后重新解码 local result。已有 JSON wrapper、counter、根、两个节点及 owned
+key 全程受保护，停止时逐字节保持；原生写入观察器未记录对这些存活区域的写入。
+
+共 15291 个观察点，完成一个外层辅助调用及四个内部回调。新增 8 字节分配一次并
+匹配释放，没有新增 GC/flush、SVC、JNI 分派或 provider；受控获取服务的再次使用
+单独记录。malloc/free/gc/flush 为 612/278/3/4。减去实际新增分配事件后，完整前序
+两字段 case 逐字段相等；原有源码、模型和冻结证据未改写，新状态经 70 个前序类
+检查无意外重名。解码内容、临时分配内容、辅助结果值及其摘要、寄存器转储不导出。
+
+15291 停在 cursor `+0x10a558` 的下一个外层 VM call 前，目标为
+`+0x288854 -> +0x261350`；call、wrapper 和 target 均未执行。辅助结果经转换进入
+第三个 JSON 数值节点的逐值关系尚未核对。整个辅助路径的实际返回已在本次受控
+样本中观察到，原来的返回段夹具仅用于独立的 epilogue 对照，不再代替入口验证。
+
+8 项双基址完整 caller frame/32 个 backing word/五个 VM 参数对照和 12 项返回段
+对照，以及 8/3/14 项 caller、wrapper 和 return 拒绝及回滚检查通过。另有九项
+合成分支、provider、SVC 和保留存储边界检查；合成检查不代替原生执行。见
+[环境辅助入口证据](../platforms/bytedance/tomato/evidence/vm9_native_171_environment_entry_dynamic_20261124.json)。
+
+完整独立 Python/Rust signer、真实 ART/JVM/Android、完整物理 ABI 与线上接受仍未验证。
+
+规范 `--capture --compare-case` 和默认离线校验通过，公开 case 与独立原生探针逐字段
+一致，20 项组件结果及 25 项拒绝检查也与独立运行一致。18 项损坏证据拒绝、九项
+边界检查、四种错误 CLI 参数及冻结覆盖拒绝检查通过；拒绝覆盖前后源码和证据 hash
+不变。1449 个前序基线文件字节保持，基线内仅追加研究日志和新文件属性规则；690
+个平台 Python 文件编译及 Rust 现有四项测试通过。本检查点未额外执行完整
+`--replay` CLI；扫描器单元测试仍受已确认的临时 Git 创建权限限制，本轮未重跑，
+不记为通过。
