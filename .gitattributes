@@ -129,3 +129,5 @@ platforms/bytedance/tomato/python/verify_vm9_native_171_json_field_flow_dynamic_
 platforms/bytedance/tomato/evidence/vm9_native_171_json_field_flow_dynamic_20261124.json -text
 platforms/bytedance/tomato/python/verify_vm9_native_171_environment_entry_dynamic_20261124.py text eol=lf
 platforms/bytedance/tomato/evidence/vm9_native_171_environment_entry_dynamic_20261124.json -text
+platforms/bytedance/tomato/python/verify_vm9_native_171_post_environment_fields_dynamic_20261124.py text eol=lf
+platforms/bytedance/tomato/evidence/vm9_native_171_post_environment_fields_dynamic_20261124.json -text
