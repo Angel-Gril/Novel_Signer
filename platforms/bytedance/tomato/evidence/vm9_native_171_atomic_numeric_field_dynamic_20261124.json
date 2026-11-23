@@ -1,0 +1,923 @@
+{
+  "schema": "vm9-native-171-atomic-numeric-field-dynamic-20261124-v1",
+  "claims": {
+    "evidence_label": "Sample verified",
+    "complete_post_environment_parent_case_equal": true,
+    "receiver_provenance_relations_observed": true,
+    "actual_LDAR_address_and_u32_return_verified": true,
+    "unsigned_zero_extension_and_exact_binary64_observed": true,
+    "fifth_JSON_numeric_node_verified": true,
+    "old_nodes_and_owned_keys_preserved_except_append_links": true,
+    "new_node_and_key_allocations_live": true,
+    "current_native_values_used_only_for_relations": true,
+    "native_snapshot_used_to_initialize_VM_model": false,
+    "scalar_values_or_hashes_exported": false,
+    "key_contents_or_hashes_exported": false,
+    "concurrent_acquire_release_semantics_verified": false,
+    "real_ART_JVM_execution": false,
+    "Android_execution": false,
+    "complete_physical_ABI_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_acceptance_verified": false
+  },
+  "providers": {
+    "parent_evidence_sha256": "8989a748bdfada012f44ffb21923c9df2c2d1b7ef3e9558b2f83e6b8cf45a696",
+    "new_providers": [],
+    "new_import_bindings": [],
+    "maximum_callbacks": 2,
+    "maximum_observations": 60000,
+    "admitted_new_callbacks": [
+      [
+        "0x28887c",
+        "0x256f58"
+      ],
+      [
+        "0x288854",
+        "0x261350"
+      ]
+    ],
+    "atomic_source_offset": "0x138",
+    "receiver_observed_prefix_width": 316,
+    "atomic_memory_contract": "serial observation only",
+    "new_SVC_and_JNI_dispatch_policy": "stop before execution",
+    "unknown_callback_policy": "stop before VM call",
+    "inherited_original_JNI_acquisition_body_executed": false,
+    "inherited_JNI_provider": "controlled eight-byte env write; original body bypassed",
+    "existing_serial_getter_unsigned_conversion_and_numeric_models_reused": true,
+    "component_allocations": "existing explicit synthetic services; no native snapshots as model input"
+  },
+  "source_fingerprints": {
+    "verifier_sha256": "a5d3a2c22519709ae654ea5d162e5f53210bdf74bd5b3fd5e5e6af4168c29db2",
+    "parent_verifier_sha256": "f317f6a6ab34a9e9fbed5edf8bf074adea347516880dd7b8a2aa89892ef7c8d8",
+    "parent_chain_sha256": "7f105d8a0f7a8724400e8b24911ed8ccac1cfcedd03c1baf10cb19c54aeb26c0",
+    "atomic_fixture_sha256": "20b03185b5cfc3b4a419769140c80ba8112b467046a101964bf14717ee482b6c",
+    "unsigned_fixture_sha256": "c7b49b351d73f1ab481d2dbcb1470eb5b857df5eb6cddf2a46741af451d94dfe",
+    "numeric_fixture_sha256": "496de117014ffedcd59ae09b2d8bbcb1db531d71b8be48309bc4de5611ec3dcd",
+    "unsigned_VM_model_sha256": "1a15e21e6654525462b8c8525998f62412d7854eb6fdbb4c993e5f10a38179ec",
+    "callback_model_sha256": "bd33bedb2dbc60b7a2cc83185aefe14bfea6b4cd4a1263750b1e96eee90abd03",
+    "native_oracle_sha256": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f"
+  },
+  "parent_evidence_sha256": "8989a748bdfada012f44ffb21923c9df2c2d1b7ef3e9558b2f83e6b8cf45a696",
+  "case_result": {
+    "parent_case_equal": true,
+    "parent_case_sha256": "0b231975f84470db501fdd198f687f3fbdb945c12605dfa13cc1c4908621f093",
+    "field_relation": {
+      "label": "serial_atomic_u32",
+      "source": {
+        "receiver_address": "0x136e0000",
+        "known_pointer_relations": [
+          "hash_registry_root",
+          "_tree_receiver",
+          "_u32_receiver"
+        ],
+        "containing_live_allocations": [
+          {
+            "address": "0x136e0000",
+            "size": 320,
+            "receiver_offset": 0
+          }
+        ],
+        "receiver_equals_JSON_root": false,
+        "source_offset": "0x138",
+        "source_width": 4,
+        "source_value_or_hash_exported": false,
+        "actual_X0_receiver_and_wrapper_return_equal": true,
+        "actual_LDAR_address_equal": true,
+        "unsigned_X0_and_exact_four_byte_store_equal": true,
+        "descriptor_padding_and_receiver_bytes_preserved": true,
+        "retained_JSON_objects_and_keys_preserved": true,
+        "no_allocation_or_free_effects": true,
+        "serial_observation_only": true,
+        "concurrent_acquire_release_semantics_verified": false
+      },
+      "conversion": {
+        "source_address": "0x7004d388",
+        "load_site": "0x17079c",
+        "source_low_u32_equal": true,
+        "window": "atomic_suffix",
+        "index": 657,
+        "convert_site": "0x1707ac",
+        "unsigned_zero_extension_equal": true,
+        "exact_binary64_equal": true,
+        "destination_address": "0x7004d378",
+        "store_site": "0x1707f8",
+        "stored_binary64_equal": true
+      },
+      "argument": {
+        "descriptor_address": "0x7004ca20",
+        "prior_child_count": 4,
+        "initial_JSON_wrapper_verified": true,
+        "binary64_equals_conversion": true,
+        "key_contents_or_hashes_exported": false,
+        "window": "atomic_suffix",
+        "index": 1030,
+        "actual_X0_X1_D0_equal": true
+      },
+      "node": {
+        "address": "0x136df340",
+        "root_address": "0x136df280",
+        "prior_child_count": 4,
+        "new_live_node_and_key_allocations": true,
+        "binary64_equals_source_conversion": true,
+        "int32_saturation_equal": true,
+        "copied_key_equal": true,
+        "old_nodes_and_owned_keys_preserved_except_append_links": true,
+        "root_wrapper_and_counter_preserved": true,
+        "one_byte_success_store_and_other_descriptor_bytes_preserved": true,
+        "window": "atomic_suffix",
+        "index": 1858
+      },
+      "node_verified": true,
+      "scalar_values_exported": false,
+      "scalar_hashes_exported": false
+    },
+    "instruction_observations": 2845,
+    "instruction_trace_sha256": "fc522d73c7d23c23e6602ab0442db7f78a3d161f616cbe711c7cdd0731545ee2",
+    "observed_code_sha256": "fce5940b672d8c02d620fc5e738b0917a94968634a13e7381885770abc5cf873",
+    "callbacks": [
+      {
+        "index": 1,
+        "descriptor_address": "0x7004ca08",
+        "descriptor_width": 48,
+        "wrapper_offset": "0x28887c",
+        "target_offset": "0x256f58",
+        "VM_cursor_offset": "0x10a760",
+        "SP": "0x7004b930",
+        "callee_saved_sha256": "1dfcf39e697485c9789eaf1f5667782d682043ac2a66bc54fafb8587c49e2af9",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "return_index": 12,
+        "caller_SP_and_callee_saved_restored": true
+      },
+      {
+        "index": 1030,
+        "descriptor_address": "0x7004ca20",
+        "descriptor_width": 48,
+        "wrapper_offset": "0x288854",
+        "target_offset": "0x261350",
+        "VM_cursor_offset": "0x10a798",
+        "SP": "0x7004b930",
+        "callee_saved_sha256": "1dfcf39e697485c9789eaf1f5667782d682043ac2a66bc54fafb8587c49e2af9",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "return_index": 1858,
+        "caller_SP_and_callee_saved_restored": true
+      },
+      {
+        "index": 2845,
+        "descriptor_address": "0x7004ca20",
+        "descriptor_width": 48,
+        "wrapper_offset": "0x288854",
+        "target_offset": "0x261350",
+        "VM_cursor_offset": "0x10a7d0",
+        "SP": "0x7004b930",
+        "callee_saved_sha256": "1dfcf39e697485c9789eaf1f5667782d682043ac2a66bc54fafb8587c49e2af9",
+        "VM_call_executed": false,
+        "wrapper_entered": false,
+        "target_entered": false,
+        "returned": false
+      }
+    ],
+    "completed_callbacks": 2,
+    "stop_reason": "callback_budget_before_next_call",
+    "new_allocator_events": [
+      [
+        "alloc",
+        64,
+        325972800,
+        "0x2493fc"
+      ],
+      [
+        "alloc",
+        4,
+        325944096,
+        "0x249198"
+      ]
+    ],
+    "allocator_aux_events": [],
+    "native_write_observations": 280,
+    "actual_allocator_counts": {
+      "malloc": 618,
+      "free": 278,
+      "gc": 3,
+      "flush": 4
+    },
+    "explicit_service_counts": {
+      "syscall_214": 1,
+      "syscall_222": 4,
+      "syscall_167": 3,
+      "syscall_226": 9,
+      "syscall_56": 6,
+      "syscall_80": 1,
+      "syscall_215": 2,
+      "syscall_63": 2,
+      "syscall_57": 4,
+      "clock": 11,
+      "virtual_pthread_create": 3,
+      "destructor_registration": 6,
+      "syscall_98": 18,
+      "property_find": 1,
+      "syscall_48": 4,
+      "syscall_79": 4,
+      "mkdir_exists": 2,
+      "syscall_169": 1
+    },
+    "new_providers": [],
+    "new_SVCs": [],
+    "new_JNI_effects": [],
+    "scalar_values_or_hashes_exported": false,
+    "key_contents_or_hashes_exported": false,
+    "native_snapshot_used_as_VM_model_input": false,
+    "complete_standalone_signer_verified": false,
+    "online_acceptance_verified": false
+  },
+  "case_result_sha256": "f92378a21c557e143f8faeab460f0d98ed669d11f88a59a2a5f0f555ae8e6711",
+  "component_controls": {
+    "atomic_getter": [
+      {
+        "image_base": "0x122c0000",
+        "case": "zero",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "one",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "highbit",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "allones",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "mixed",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_packed",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_output",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "result_alias_field",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "field_at_page_end",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "zero",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "one",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "highbit",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "allones",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "mixed",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_packed",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_output",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "result_alias_field",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "field_at_page_end",
+        "steps": 10,
+        "original_atomic_getter_returned": true,
+        "complete_declared_guest_and_image_bytes_equal": true,
+        "unsigned_W0_and_exact_four_byte_store_equal": true,
+        "packed_receiver_and_padding_preserved": true,
+        "old_locked_field_distinguished": true,
+        "no_allocator_mutex_JNI_or_syscall_effects": true,
+        "native_snapshot_input": false,
+        "concurrent_acquire_release_semantics_verified": false,
+        "physical_spills_and_PAC_compared": false
+      }
+    ],
+    "unsigned_conversion": [
+      {
+        "image_base": "0x122c0000",
+        "case": "zero",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "zero",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "signbit",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "signbit",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "u32max",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "u32max",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "high_mixed",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "high_mixed",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "zero",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "zero",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "signbit",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "signbit",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "u32max",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "u32max",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "high_mixed",
+        "guest_backing": false,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "high_mixed",
+        "guest_backing": true,
+        "steps": 253,
+        "original_unsigned_conversion_and_exit_returned": true,
+        "all_32_registers_equal": true,
+        "guest_payload_and_defined_backing_equal": true,
+        "high_source_bits_ignored": true,
+        "exact_uint32_to_double_bits_equal": true,
+        "no_allocator_or_native_service_effects": true,
+        "native_snapshot_input": false,
+        "complete_float_family_verified": false
+      }
+    ],
+    "fifth_node_append": [
+      {
+        "image_base": "0x122c0000",
+        "prior_children": 4,
+        "value_profile": "zero",
+        "steps": 146,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "prior_children": 4,
+        "value_profile": "one",
+        "steps": 146,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "prior_children": 4,
+        "value_profile": "signbit",
+        "steps": 142,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "prior_children": 4,
+        "value_profile": "u32max",
+        "steps": 142,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "prior_children": 4,
+        "value_profile": "zero",
+        "steps": 146,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "prior_children": 4,
+        "value_profile": "one",
+        "steps": 146,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "prior_children": 4,
+        "value_profile": "signbit",
+        "steps": 142,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "prior_children": 4,
+        "value_profile": "u32max",
+        "steps": 142,
+        "original_wrapper_and_numeric_append_returned": true,
+        "guest_image_and_all_declared_payload_bytes_equal": true,
+        "ordered_allocation_free_effects_equal": true,
+        "one_byte_result_and_padding_equal": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      }
+    ],
+    "atomic_guards": [
+      {
+        "case": "wrong_target",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "unmapped_packed",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "partial_target",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_receiver_word",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_field",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "partial_field",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_result",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "partial_result",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "unaligned_stack",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "invalid_stack",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "unaligned_field",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "wrapped_field",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "packed_stack_alias",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "field_stack_alias",
+        "rejected": true,
+        "all_pages_unchanged": true
+      }
+    ],
+    "unsigned_conversion_guards": [
+      {
+        "operation": 0,
+        "rejected": true,
+        "registers_PC_and_all_pages_unchanged": true
+      },
+      {
+        "operation": 29,
+        "rejected": true,
+        "registers_PC_and_all_pages_unchanged": true
+      },
+      {
+        "operation": 31,
+        "rejected": true,
+        "registers_PC_and_all_pages_unchanged": true
+      },
+      {
+        "operation": 32,
+        "rejected": true,
+        "registers_PC_and_all_pages_unchanged": true
+      },
+      {
+        "operation": 37,
+        "rejected": true,
+        "registers_PC_and_all_pages_unchanged": true
+      },
+      {
+        "operation": 38,
+        "rejected": true,
+        "registers_PC_and_all_pages_unchanged": true
+      }
+    ]
+  }
+}
