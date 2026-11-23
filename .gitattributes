@@ -125,3 +125,5 @@ platforms/bytedance/tomato/python/verify_vm9_native_171_post_crc_base_string_des
 platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_base_string_destructor_return_dynamic_20261123.json -text
 platforms/bytedance/tomato/python/verify_vm9_native_171_json_suffix_window_dynamic_20261124.py text eol=lf
 platforms/bytedance/tomato/evidence/vm9_native_171_json_suffix_window_dynamic_20261124.json -text
+platforms/bytedance/tomato/python/verify_vm9_native_171_json_field_flow_dynamic_20261124.py text eol=lf
+platforms/bytedance/tomato/evidence/vm9_native_171_json_field_flow_dynamic_20261124.json -text
