@@ -1,5 +1,30 @@
 # Tomato Python material
 
+`verify_vm9_native_171_post_crc_base_string_destructor_return_dynamic_20261123.py`
+binds the next base destructor to the previously constructed pair destination.
+**Sample verified**: the argument is the 42-byte temporary at `0x7004d1d8`,
+with a 64-byte payload at `0x136df280`. The original `+0x2884cc -> +0x2484b8`
+path frees only that payload through matching Bionic free, entered at 16 and
+returned at 147. Stores at 147/150 clear the pointer and reset scalar storage;
+148/151 verify their completion, including the former length sentinel -221.
+Return at 154 restores SP and X19-X29. The stack object's storage is not freed,
+and its fields are omitted from return onward. No payload bytes or payload
+content hashes are exported. The full scope-leave parent result stays equal.
+Canonical capture with `--compare-case` matches the independent ELF/Bionic
+probe in every case field. Default offline validation, 16 component controls
+and 15 damaged-evidence checks pass. The full `--replay` CLI was not run for
+this checkpoint.
+
+The 888-point interval ends at VM cursor `+0x10a464`, before wrapper
+`+0x28883c` selects `+0x261404`, the JSON-reference construction/parsing entry.
+This is distinct from numeric append at `+0x261350`. The existing empty-JSON
+helper covers NULL source and empty-object prefixes; the actual next source,
+output reference and parser branch remain unverified, and that call has not
+executed. Existing `destroy_string_object(delete_object=False)` supplies the
+component semantics. Complete VM return, standalone signing and online
+acceptance remain open. See the
+[temporary-string cleanup evidence](../evidence/vm9_native_171_post_crc_base_string_destructor_return_dynamic_20261123.json).
+
 `verify_vm9_native_171_post_crc_scope_leave_return_dynamic_20261123.py`
 continues the retained request through `+0x288540 -> +0x26c9d0` and the
 matching Bionic unlock. **Sample verified**: observations 42/45 show owner

@@ -2779,3 +2779,31 @@ payload/字段后返回，后者还会尾调用 object operator delete。不能�
 CLI 均通过，第二次 ELF/Bionic 执行所得完整 JSON 与冻结证据逐字段相等。
 完整 VM 返回、独立 Python/Rust signer、真实 Android 和线上接受仍未验证。见
 [诊断锁释放证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_scope_leave_return_dynamic_20261123.json)。
+
+### 2026-11-23：拼接临时字符串的基础析构与 JSON 边界
+
+**Sample verified**：下一基础析构参数与早先拼接构造的 destination 完全一致，
+是栈上 `0x7004d1d8` 的 42 字节临时字符串，payload 位于 `0x136df280`，
+capacity 为 64。原版 `+0x2884cc -> +0x2484b8` 只释放 payload，未进入删除
+析构 `+0x2484fc` 或 object operator delete。匹配 Bionic free 在 16 进入、
+147 返回，随后清空 payload pointer；150 重置 scalar storage，151 核对
+capacity=0、原 length 字段为析构 sentinel -221。154 返回 VM，SP、X19-X29
+和 packed descriptor 保持。对象存储未被 free，生命周期结束后不再解码字段；
+后续 storage hash 仅描述未类型化存储。payload 内容和内容摘要始终不导出。
+
+本段 888 个观察点将 cursor 从 `+0x10a43c` 推进到 `+0x10a464`。新增一次
+payload free，无新增 malloc、GC/flush 或 SVC；前序完整 scope-leave serializer
+仍逐字段相等，其他被保留对象、缓存和已释放诊断锁保持。基础语义沿用既有
+`destroy_string_object(delete_object=False)`，没有新建算法 owner。
+
+下一 wrapper `+0x28883c` 的目标是 `+0x261404`，即 JSON 引用构造／解析入口，
+并非 `+0x261350` 的数值追加。既有 empty-JSON 模型只覆盖 NULL source 和空对象
+前缀；本次尚未证明实际 source、hidden-X8 output 或 parser 分支，调用保持未执行。
+完整 VM 返回、独立 signer、真实 Android 和线上接受仍未验证。见
+[临时字符串基础析构证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_base_string_destructor_return_dynamic_20261123.json)。
+
+规范 `--capture --compare-case` 与独立 ELF/Bionic 探针的完整 case 逐字段相等，
+默认离线校验、16 项双基址原版／模型对照和 15 项损坏证据拒绝检查通过。前序
+源码与冻结证据字节保持不变；4 种错误 CLI 参数、冻结覆盖拒绝和拒绝前后 hash
+不变检查通过。687 个平台 Python 文件编译、工作区公共扫描通过。本检查点未
+执行完整 `--replay` CLI；不把两次原生 case 对照扩大为完整独立 signer 验收。
