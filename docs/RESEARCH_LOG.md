@@ -1,5 +1,28 @@
 # Checkpoint log
 
+2026-11-21：**Sample verified**：同一 Unicorn CPU 执行已解析的
+`+0x32a444` 共享读锁回调。原版锁/解锁 helper 正常返回，接收对象 `+0x88`
+的四字节读者数 0→1，观察的 `0x90` 字节对象内其余字节完全保留。
+核对原生 canary 保存、SP 与 X19-X29 恢复及原版 `ret`，回到
+`+0x16aa4c` 并停在本次 caller 指令执行之前；分配、服务、JNI 与 SVC
+账本相对旧解析边界不变。23 项损坏证据拒绝通过，捕获与 fresh 原生重放
+逐字段完全一致。未把原生内存作为 Python
+模型输入，也未新增 provider；既有共享读锁模型仍由 `vm9_objects` 持有。
+本次仅覆盖无竞争分支，等待/写者分支、物理 PAC 验证、后续 VM 执行、完整
+suffix 返回、完整 signer、Android 实机与线上接受均未验证。见
+[回调返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_shared_reader_return_dynamic_20261121.json)
+及[验证器](../platforms/bytedance/tomato/python/verify_vm9_native_171_shared_reader_return_dynamic_20261121.py)。
+
+2026-11-21：**Sample verified**：随机 getter 包装器返回后，当前原生 VM 从
+`+0x16aa4c` 恢复，857 次指令观察到达下一 `+0x16aa48 blr x8`，目标为
+`+0x2885e0`。续跑该三指令跳板，在 `+0x2885e8 br x1` 前解析出
+descriptor 首字为 `+0x32a444`，第二字与实际 X0 参数一致；尚未执行该目标。
+两份冻结证据分别拒绝 6/8 项篡改，解析边界的 fresh 原生重放与旧证据完全相同。
+该边界仍使用既有 OS/JNI 控制，不证明 suffix 返回、完整 signer、普通 Cronet
+六头、Android 实机或线上接受。见[下一调用证据](../platforms/bytedance/tomato/evidence/vm9_native_171_next_vm_indirect_call_dynamic_20261121.json)、
+[回调解析证据](../platforms/bytedance/tomato/evidence/vm9_native_171_resolve_next_vm_callback_dynamic_20261121.json)
+及[解析验证器](../platforms/bytedance/tomato/python/verify_vm9_native_171_resolve_next_vm_callback_dynamic_20261121.py)。
+
 2026-11-21：**Sample verified**：当前原生 `+0x288648` 回调目标为
 `+0x26cc8c` 随机 getter，warm guard 为 1。同一 Unicorn CPU 动态执行
 原生 getter和匹配 Bionic `rand` PLT `+0x348020`；原包装器随后在
@@ -1374,3 +1397,1385 @@ SVC 的既有上限。捕获停于 `+0x271dbc`，syscall 169；现场 `x0=sp+8`�
 动态返回、suffix 返回、完整配置、普通 Cronet 六头、完整 signer 与线上验签
 仍未验证。详见
 `platforms/bytedance/tomato/evidence/vm9_native_171_gettimeofday_return_20261120.json`。
+
+2026-11-21：从 `+0x16aa4c` 的 VM 恢复点继续执行诊断回调 wrapper
+`+0x288530` 和目标 `+0x26c858`。24 字节 descriptor 将目标、对象和输入字
+`0x136d9140` 绑定；61 个目标指令观察点后回到 `+0x16aa4c`，停止在恢复指令
+之前。24 字节对象仅计数字段从 `0x40906d13` 变为 `0x40916d13`，malloc 增量
+为 1，显式 service、JNI、libc SVC 和 main-image SVC 账本不变。冻结 evidence、
+16 项篡改拒绝及 fresh replay 已通过。该边界未覆盖后续清理和 suffix 返回；
+完整 standalone signer、普通 Cronet 六头、Android 与线上验收仍未验证。详见
+`platforms/bytedance/tomato/evidence/vm9_native_171_diagnostic_scope_entry_dynamic_20261121.json`。
+
+同一原生回放从 `+0x16aa4c` 继续观察 1168 个 VM 指令，在 `+0x16aa48`
+执行 `blr x8 -> +0x288540`，descriptor 三条指令解析到 diagnostic cleanup
+目标 `+0x26c9d0`。目标参数与前一 scope-entry callback 更新的对象一致；记录停在
+清理 body 之前。此 continuation 未增加 malloc、explicit service、JNI 或 libc/main
+SVC 账本，冻结 evidence 和 18 项篡改拒绝通过。清理 body 和之后的 VM continuation
+仍未闭合，完整 signer、普通 Cronet 六头和线上验收仍未验证。详见
+`platforms/bytedance/tomato/evidence/vm9_native_171_diagnostic_cleanup_entry_dynamic_20261121.json`。
+
+继续执行同一 scope 的原生 cleanup body `+0x26c9d0`，记录 50 条目标与匹配
+Bionic 指令以及 `+0x16aa4c` 的返回边界；该恢复指令执行前停止。mutex 在 `+0x347f10` 执行
+pthread unlock，状态/owner 从 `0x4001/137` 恢复到 `0x4000/0`；24 字节 scope
+对象及其摘要保持不变，X0 返回零。allocator、explicit service、JNI、libc SVC
+及 main-image SVC 账本均无增量；冻结 evidence、16 项篡改拒绝和 fresh replay 通过。
+恢复后的 VM 指令、suffix 返回及完整 standalone signer 仍未验证。详见
+`platforms/bytedance/tomato/evidence/vm9_native_171_diagnostic_cleanup_return_dynamic_20261121.json`。
+
+2026-11-22：沿用 20261121 捕获批次，从诊断 cleanup 返回继续，通过
+`+0x16aa48 -> +0x2885e0 -> +0x32a4fc` 执行共享读锁释放。descriptor 选择的
+receiver 与先前 acquire 相同；`+0x88` 的 reader count 从 1 减为 0，观察的
+`0x90` 字节对象除计数字段外保持不变，释放后完整字节恢复到 acquire 之前。
+原版 lock/unlock helpers 执行，mutex、SP 与 X19-X29 恢复，X0=0 返回
+`+0x16aa4c`，观察在该恢复指令执行前停止。allocator、explicit service、JNI、
+libc/main-image SVC 账本无增量。冻结验证和 27 项篡改拒绝通过，fresh replay
+与冻结 evidence 完全一致。证据覆盖当前单一 class0 control；未将原生
+快照输入 Python 模型。writer/signal/wait、physical PAC、后续 VM、suffix 返回、
+完整 signer、普通 Cronet 六头及线上验收仍未验证。见
+[共享读锁释放证据](../platforms/bytedance/tomato/evidence/vm9_native_171_shared_reader_release_dynamic_20261121.json)。
+
+2026-11-22：共享读锁释放后的同一原生 continuation 已完成八次 callback：
+`+0x32a444 → +0x26c858 → +0x26c9d0 → +0x32a4fc → +0x257804 →
++0x257880 → +0x248344 → +0x26c858`。该实际顺序由原版 VM 调度确定，
+没有套用既有独立 second-VM fixture 的下一目标。reader count 再次 `0→1→0`，
+两次 getter 的 X0 均为零；六种 wrapper 字节、32 字节 descriptor 观察窗、
+目标参数、输出及相邻 padding、SP/X19-X29 恢复均受到 verifier 约束。
+该段记录 8566 个指令观察点，包含最终尚未执行的 `+0x16aa4c` 返回边界；
+trace/code 摘要和八次调用/返回索引已冻结。新增 48、1 字节的两次 malloc，
+没有 free、explicit service、JNI（含 late JNI）、Java dispatch 或 libc/main-image
+SVC 增量。冻结 capture、113 项篡改拒绝及三种错误 CLI 调用检查通过；独立
+fresh ELF/Bionic replay 与冻结 JSON 完全一致，649 个 Python 文件编译、公共
+扫描及 diff 空白检查通过。
+最后一个 scope 的 cleanup、后续 VM/suffix 返回、完整 signer、普通 Cronet 六头、
+Android 和线上验收仍未覆盖；仍为单一合成 class0 control，原生快照未作为
+Python 模型输入。见
+[后续八次 callback 证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_reader_callbacks_dynamic_20261122.json)。
+
+2026-11-22：在前八次 callback 的调用记录、trace/code 摘要及分配前缀完全一致后，
+同一 CPU 继续完成 16 次 callback：先退出上一边界留下的 scope，再完成七组
+scope 进入/退出，并执行一次 `+0x2633a4` getter。getter 的 X0=0，同时 16 字节
+输出写入两个非零 word；未据此提升为实际业务值或完整构造来源。VM 调用游标从
+`+0x1070a4` 推进到 `+0x10766c`，记录 18689 个指令观察点，包含最终未执行的
+`+0x16aa4c` 返回边界。全部调用恢复 SP/X19-X29；scope 的选中 mutex 状态/owner
+按 `0x4000/0 → 0x4001/137 → 0x4000/0` 配对，scope padding、表项其他字节和
+2048 字节 diagnostic table 保持预期。allocator（含完整事件序列）、explicit
+service、JNI（含 late JNI）、Java dispatch、libc/main-image SVC 账本无增量。
+冻结 capture、207 项篡改拒绝和三种错误 CLI 调用通过；独立 fresh ELF/Bionic
+replay 与冻结 JSON 完全一致。650 个 Python 文件编译、公共扫描和 diff 检查通过。
+该观察 scope 在最终停点已关闭；后续 VM、suffix 返回、完整 signer、普通 Cronet
+六头、Android 与线上验收仍未覆盖。继续使用单一合成 class0 control，原生快照
+未作为 Python 模型输入。见
+[后续 scope 配对证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_reader_scope_cycles_dynamic_20261122.json)。
+
+2026-11-22：从已关闭的 scope-cycle 边界继续，原版 VM 的 32 次后续 callback
+完整返回，游标从 `+0x10769c` 推进到 `+0x108bb8`。观察到 guard 获取/释放、
+格式化、五次复制、StringObject 构造/析构和配置读取。十种 wrapper 的代码字节、
+descriptor、目标参数、输出字段及 padding、调用/返回索引均绑定；每次返回恢复
+SP/X19-X29，reader count 为 0。新增段包含 45352 个指令观察点，最后停在
+`+0x16aa4c` 恢复指令执行前。malloc 增加 12 次、free 增加 7 次，完整新增
+分配/释放事件受摘要约束；explicit service 仅析构注册增加 1 次。
+Java-dispatch 入口观察到一次 `0x01000011` 调用，沿用既有显式 NULL-result
+provider，未执行真实 ART/JVM；early/late JNI、libc/main-image SVC 账本无增量。
+五次 memcpy 的长度为 16/16/16/48/192 字节，源/目标摘要及源字节保留通过；
+该导入由既有内存 provider 处理，不计作 native Bionic memcpy body 验证。
+冻结 capture、350 项篡改拒绝和三种错误 CLI 参数检查通过；独立 fresh ELF/Bionic
+replay 与冻结 JSON 逐字段一致。651 个 Python 文件编译、公共扫描及 diff 空白
+检查通过。未新增 provider，原生快照未作为 Python 模型输入；单一合成 class0
+control、完整业务/heap 等价、suffix 返回、完整 signer、普通 Cronet 六头、Android
+及线上验收的限制均保留。见
+[后续配置读取与清理证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_scope_configuration_dynamic_20261122.json)。
+
+2026-11-22：从配置阶段的 `+0x16aa4c` 继续，同一原生执行完成 26 次后续
+callback，随后在 `+0x288648 blr x8` 前停止。新增段有 28561 个指令观察点，
+包含未执行的最终 BLR；实际 VM 调用游标为 `+0x108bdc..+0x10963c`。
+七种 wrapper 字节、32 字节 descriptor、目标参数、输出与 padding、调用/
+返回索引受约束，26 次返回均恢复 SP/X19-X29。两组共享读锁完成 `0→1→0`，
+接收对象其余字节保留。原版时间 helper 将既有显式 clock provider 的
+timespec 转换为微秒、毫秒、无符号秒 `1791023800`，中间值已核对。
+malloc/free 各增加 5 次，新增分配大小为 `33/33/33/33/48`；explicit service
+仅 clock 增加 1 次，JNI、late JNI、Java dispatch、libc/main-image SVC
+账本不变。上一配置段的 callback、指令/代码摘要、PC 窗与完整新增分配
+事件必须逐项匹配冻结证据后才允许进入新段。
+
+末次 VM 调用选择 `+0x28863c` wrapper，但当前合成 class0 control 的
+descriptor 首字与 X8 均为零。前三条 wrapper 指令执行后，保存的 caller
+frame、`SP-16`、X0/X19 与 descriptor 关系、descriptor 保留均核对；在
+第四条 BLR 执行前沿用既有拒绝策略停止。未执行回调目标、`+0x28864c`
+结果写入或回调返回，未为 NULL 填造目标。早期独立 second-VM fixture 在
+同一字节码游标通过 ELF ABS64 元数据绑定过 getpid/getppid（既有报告
+6.185 节）；这是追踪当前 descriptor 首字来源的线索，不能直接替代本次
+执行的导入来源证据，也不能据此宣称真实 Android app 存在空回调或崩溃。
+冻结 capture、254 项篡改拒绝、三种错误 CLI 参数与冻结证据覆盖拒绝通过。
+独立 fresh ELF/Bionic replay 与冻结 JSON 逐字段一致，652 个 Python 文件
+编译、包含新增证据的公共扫描及 diff 空白检查通过。
+未新增 provider，未将原生快照输入 Python 模型；physical PAC、当前 suffix
+返回、完整 signer、普通 Cronet 六头、Android 与线上验收仍未验证。见
+[配置后回调边界证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_configuration_callback_boundary_dynamic_20261122.json)。
+
+2026-11-22：已将上一 NULL 回调现场绑定到当前执行的 getpid 导入来源。
+原 ELF `.rela.dyn` 的符号 20、ABS64 类型 257、零 addend 将 `+0x3833b0`
+指向匹配 Bionic 的 getpid `+0x1fe6c`。原版 VM 在字节码 `+0x109628` 经
+`+0x16f96c` 读取该槽，`+0x16f974` 写入虚拟寄存器 1；字节码 `+0x10962c`
+经 `+0x171240` 读取同一寄存器，再由 `+0x171268` 写入 descriptor 首字。
+后一个双字节码操作的现场游标已前进到 `+0x109630`；verifier 分别记录
+逻辑字节码起点与现场游标，避免漏记写入。两次读取/两次写入的指令字节、
+地址、寄存器值与观察索引均受约束。
+
+本次 control 在先前 26 次回调返回后，仅绑定该八字节 ABS64 槽；相邻
+getppid 槽仍为零，公共 ELF loader 保持原样。descriptor 完全由原版 VM
+构造。此前 26 个 callback 记录与直到旧间接调用前的 28561 个指令观察点、
+代码摘要均与冻结前缀相同，末次 descriptor 仅解析后的函数首字不同。
+匹配 Bionic getpid 读取零 PID 缓存后走 libc `+0x6b030` 的 syscall 172，
+使用明确的合成返回值 `919`。原版 wrapper 将 W0 写入 descriptor+8，
+`+12` 起的 padding 与其余字节保留，SP/X19-X29 恢复后回到 `+0x16aa4c`，
+停在恢复指令执行之前。新增回调段共 16 个观察点，包含该未执行的最终
+VM 边界；观察的 48 字节 TLS 与零 PID 缓存保留。分配、继承的 service、
+JNI 与 SVC 账本不变，新增的一次 libc SVC 172 在独立账本明确记录；
+不代表总 SVC 数不变，也没有读取宿主 PID。
+
+独立 fresh ELF/Bionic replay 与冻结 JSON 逐字段一致；三种错误 CLI 参数、
+冻结证据覆盖拒绝、653 个 Python 文件编译、包含新增证据的公共扫描和
+diff 空白检查通过。
+
+冻结 capture 和 52 项篡改拒绝通过；独立组件的原始 wrapper/Bionic 冷
+getpid 路径与 16 点 continuation 检查通过。未将原生快照输入 Python 模型。
+getppid、完整动态链接、后续 VM/suffix 返回、完整 signer、普通 Cronet 六头、
+Android、physical PAC 与线上验收仍未验证。见
+[getpid 导入与返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_getpid_import_return_dynamic_20261122.json)。
+
+2026-11-22：从 getpid 的 `+0x16aa4c` 返回边界续跑，十二次后续 callback
+返回后，确认下一空回调来自 getppid 的 ABS64 槽 `+0x3833b8`。ELF
+`.rela.dyn` 符号 59、类型 257、零 addend 绑定匹配 Bionic `+0x6a36c`。
+新 control 在核对 getpid 前缀的指令路径、trace/code 摘要、binding、两次
+读取/两次写入、syscall 172 和返回字段后，只绑定 getppid；已有 getpid
+绑定保持不变。原版 VM 在字节码 `+0x109b2c` 读取该导入，经虚拟寄存器
+1，由逻辑字节码 `+0x109b30` 写入 descriptor，现场游标为 `+0x109b34`。
+这条当前执行的来源链受到指令字节、地址、值与观察索引约束，未直接
+改写 descriptor，也未改公共 loader。
+
+新增段完整返回十三次 callback，包含两组 reader `0→1→0` 与四组
+diagnostic entry/exit；每次调用核对 wrapper、descriptor 参数、输出及
+padding 和 SP/X19-X29 恢复。getppid 原生主体执行 libc `+0x6a370` 的
+syscall 173，使用显式合成 parent PID `17`；原版 wrapper 将先前测试
+PID `919` 的四字节结果字段改为 `17`，相邻 padding 保留。该段共 13291
+个指令观察点，包含最终未执行的 `+0x16aa4c` 恢复指令；reader count 为 0。
+新增 48 字节 malloc 一次、无 free，新增分配事件受精确约束。继承的
+service/JNI/SVC 账本不变，syscall 172 与新增的 173 分别入账；未读取
+宿主进程信息，未把原生快照输入 Python 模型。
+
+冻结 capture、143 项篡改拒绝、三种错误 CLI 参数与冻结证据覆盖拒绝通过。
+独立 fresh ELF/Bionic replay 与冻结 JSON 逐字段一致；654 个 Python 文件
+编译、包含新增证据的公共扫描与 diff 空白检查通过。本次仍覆盖一个合成
+class0 control。后续 VM/suffix 返回、完整 signer、
+普通 Cronet 六头、Android、physical PAC 和线上验收仍未验证。见
+[getppid 导入与返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_getppid_import_return_dynamic_20261122.json)。
+
+2026-11-22：从 getppid 返回边界继续，原版 VM 在游标 `+0x109b60` 调用
+`+0x28876c -> +0x204f58`。当前 cold cache `+0x3da090` 从零变为合成
+TPIDR_EL0 值 `0x7000a000`；原版 MRS 和 `+0x205020` 八字节 store 实际
+执行，相邻八字节保留。wrapper 将完整 X64 写入 descriptor+8，输出之外
+的 descriptor 字节、SP 与 X19-X29 均核对。原版 `+0x20513c` helper 两次
+将 LR 增加 12/20 字节，分别到 `+0x204f88/+0x20501c`；应被跳过的伪造
+栈指令没有执行。getppid 前缀的 13 个 callback、指令/code 摘要、binding、
+descriptor 来源、syscall 172/173 及新增分配事件必须先匹配冻结证据。
+
+新增段含 2269 个指令观察点，停在下一次 `+0x16aa48 blr x8` 执行前，
+该时刻 VM 游标为 `+0x109bbc`，wrapper 为 `+0x288788`，目标为 JNI
+environment acquisition `+0x26edc4`。descriptor 和 wrapper 字节已绑定，
+16 字节输出 pair 已映射；目标参数只按 wrapper 静态解释，未宣称动态
+调用成立。该 VM call、wrapper、目标主体与 JNI provider 均未执行。
+分配、service、JNI、SVC 及显式 syscall 172/173 账本无增量；未新增
+provider 或导入绑定，未把原生快照作为 Python 模型输入。
+
+冻结 capture 与 46 项篡改拒绝通过；独立 fresh 原生 fixture 也核对了
+helper 的 LR 调整、跳过路径、cold cache 与 X64 结果。单一合成 class0
+control、后续 JNI 获取、VM/suffix 返回、完整 signer、普通 Cronet 六头、
+Android、physical PAC 与线上验收的限制保留。见
+[线程指针与 JNI 前边界证据](../platforms/bytedance/tomato/evidence/vm9_native_171_thread_pointer_before_jni_dynamic_20261122.json)。
+
+本阶段独立 fresh ELF/Bionic replay 与冻结 JSON 逐字段一致。655 个 Python
+文件编译、包含新增证据的公共扫描、三种错误 CLI 参数、冻结证据覆盖拒绝与
+diff 空白检查通过。
+
+2026-11-22：从线程指针阶段的 JNI 调用前边界继续，先核对前缀的 2269 点
+trace/code 摘要、getppid receipt、线程指针 callback、cache store、helper
+返回和未执行 JNI descriptor。原版 VM BLR 与 `+0x288788` 三条 tail wrapper
+指令执行；两次八字节 descriptor 读取与实际目标入口参数 `X0=0x7004d1d8`
+均核对。沿用现有 `verify_vm9_signer_objects.native` 的 acquisition provider：
+它把合成环境 `0x70007800` 写到输出 pair 前八字节，返回 X0=0 并转向 LR。
+原生 `+0x26edc4` 主体未执行，也没有真实 ART/JVM；入口 hook 观察点不能
+作为主体执行证据。输出 pair 后八字节仍为 `0xffffff2300000000`，未将它
+解释为有效 TLS owner。descriptor、SP 和 X19-X29 保持原值。
+
+该段共 1887 个观察点，含共享起始 BLR、被 provider 替代的目标入口和最后
+未执行的 VM BLR。保存完整 PC 路径与 observed code，离线重新构造 trace
+摘要。下一游标 `+0x109c44` 选择 `+0x288794 -> +0x282b84`，descriptor
+`0x7004caf8`；该调用未执行，下一 X0 只作静态解释。线程 cache 和输出 pair
+在下一边界仍保留；无新增 allocation，继承的 service、JNI、SVC、显式
+syscall 172/173 账本不变，本次 acquisition provider 单独入账。未新增
+provider、导入绑定或原生快照驱动的 Python 语义模型。
+
+8 项独立原版 wrapper/provider 对照覆盖两基址、跨页 pair、零和非零环境值，
+核对完整 payload 内存及后八字节保留。本次仍是合成 class0 control，原生
+acquisition、后续 VM/suffix 返回、完整 signer、普通 Cronet 六头、Android、
+physical PAC 与线上验收仍未验证。见
+[JNI provider 返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_jni_provider_return_dynamic_20261122.json)。
+
+冻结 capture、48 项篡改拒绝和独立 fresh ELF/Bionic replay 通过，重放与冻结
+JSON 逐字段一致。656 个 Python 文件编译、公共扫描、三种错误 CLI 参数、
+冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从 JNI provider 返回阶段的调用前边界继续，先核对其 1887 点
+完整 observation path、code/trace 摘要、wrapper 两次读取、provider event
+和下一 descriptor。原版 `+0x288794 -> +0x282b84` 执行，receiver 为
+`0x136f3000`，在 +0x98 取出 owner `0x136d38d0`，scope 位于调用前
+SP-0x50。匹配 Bionic 的原版 pthread_mutex_lock/unlock 主体执行；原版
+两次 16 位 atomic store 使 `owner+8` 从 `0→1→0`，观察的全部 16 字节
+最终恢复。`+0x282bc4` 的八字节读取发生在 mutex state=1 时；原版
+`+0x15f778` 从 scope+8 读取保存的 owner 后解锁。
+
+当前字段和返回结果为零，wrapper 在 `+0x2887a4` 将完整 X64 写入
+`descriptor+16`，相邻字节、scope padding、SP 和 X19-X29 均核对。
+callback 在观察点 88 返回；本段 1804 点在下一 VM BLR 前停止，实际
+游标 `+0x109de8` 选择 `+0x2885d0 -> +0x248344` 字符串构造，descriptor
+为 `0x7004ccc0`。该调用、wrapper、目标均未执行；下一参数只作静态解释。
+无新增分配，继承的 service、JNI、SVC 与显式 syscall 172/173 账本不变，
+本次两项 mutex call/body entry 及两次 store 单独记录。未新增 provider、
+导入绑定或原生快照驱动的 Python 语义模型。
+
+8 项独立原版代码对照覆盖两基址、高 64 位结果、value/mutex 别名，以及
+mutex 改变 receiver+0x98 时仍使用保存 owner 解锁；核对持锁读取、完整结果、
+padding 和寄存器恢复。前缀 JNI acquisition 仍为显式合成 provider，原生
+获取主体、真实 JVM、后续 VM/suffix 返回、完整 signer、普通 Cronet 六头、
+Android、physical PAC 和线上验收仍未验证。见
+[加锁指针返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_locked_pointer_return_dynamic_20261122.json)。
+
+冻结 capture、54 项篡改拒绝、无参数离线校验与独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。657 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从原版加锁 getter 后的字符串构造边界继续，先核对其 1804 点
+完整路径、code/trace 摘要、原生 lock/unlock、持锁读取、scope owner 读取、
+两次 mutex store 与下一 descriptor。原版 `+0x2885d0 -> +0x248344` 执行，
+实际参数为 object `0x7004d1d8`、source `0x126a12f0`。输入长 32 字节，
+原版构造器写入 vtable、capacity=33、length=32；匹配 Bionic 的 malloc
+入口执行并返回 `0x136d4020`，原版八字节 store 写入 payload pointer。
+继承的 strlen/memcpy 是显式 host provider，未宣称执行其 Bionic 主体；
+memcpy 复制包含结尾 NUL 的 33 字节，after-write observer 的时序单独记录。
+
+callback 在第 157 个观察点返回，源和 payload 的含 NUL 摘要一致，object
+之后八字节、descriptor、SP 与 X19-X29 保留。新增段共 771 点，在游标
+`+0x109e08` 的 VM BLR 前停止；下一 `+0x2887b0 -> +0x256b84` 树指针查询
+尚未执行，receiver/query 参数仅作静态解释。新增一次 33 字节分配，原因位置
+`+0x248388`；malloc 计数增一，free/GC/flush 与继承的 service、JNI、SVC、
+显式 syscall 172/173 账本不变。未新增 provider、导入绑定或原生快照驱动
+的 Python 语义模型。
+
+12 项独立原版代码对照覆盖两基址、空字符串、NULL source、分配失败、跨页
+object 和 embedded NUL，核对完整 payload 内存、padding 与寄存器恢复；
+独立用例的合成 allocator 已明确标注。前缀 JNI acquisition 仍为合成
+provider；原生获取主体、真实 JVM、后续 VM/suffix 返回、完整 signer、
+普通 Cronet 六头、Android、physical PAC 和线上验收仍未验证。见
+[字符串构造返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_string_constructor_return_dynamic_20261122.json)。
+
+冻结 capture、53 项篡改拒绝、默认离线校验和独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。658 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从字符串构造返回后的树查询边界继续，先核对前缀 771 点完整
+路径、code/trace 摘要、原版对象写入、Bionic 33 字节分配和显式 strlen/
+memcpy provider。原版 `+0x2887b0 -> +0x256b84` 接收 receiver `0x136e0000`
+和 query `0x7004d1d8`，在 shared-reader 保护下调用 `+0x25c168` 查找。
+当前 lookup 返回 NULL，走原版零结果分支，未执行 found-value X64 load；
+没有把未执行分支写成当前 control 的动态结果。
+
+reader count 经 `0→1→0` 恢复，read-mode flag 原值为 1，原版 store 再写 1。
+四次匹配 Bionic 的原版 mutex 调用及四次 16 位 atomic store 保护计数更新；
+查找期间逻辑 reader 保持活动，mutex 已释放。scope 从保存的 reader 指针
+释放后，wrapper 在 `+0x2887c4` 把完整八字节零写入 descriptor+24。query
+对象/payload、树 header、reader 相邻字节、scope padding、SP 和 X19-X29
+均核对，callback 在第 323 个观察点返回。
+
+新增段共 987 点，在下一 VM BLR 前停止；游标 `+0x109e30` 选择
+`+0x2884cc -> +0x2484b8` 字符串析构，参数只作静态解释，该调用、wrapper
+及目标均未执行。分配、service、JNI、SVC 与显式 syscall 172/173 账本无
+增量，新增 reader/mutex/store 事件另行记录。未新增 provider、导入绑定或
+原生快照驱动的 Python 语义模型。
+
+16 项独立原版代码对照覆盖两基址、空/缺失查询、NULL value、零/高 X64、
+既有 readers、reader-count/value 别名与跨页 value，核对 reader 活动期间
+读取、释放之后写回。前缀合成 JNI acquisition、真实 JVM、后续 VM/suffix
+返回、完整 signer、普通 Cronet 六头、Android、physical PAC 和线上验收
+的限制保留。见
+[树指针返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_tree_pointer_return_dynamic_20261122.json)。
+
+冻结 capture、58 项篡改拒绝、默认离线校验与独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。659 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从树查询返回后的字符串析构边界继续，先核对前缀 987 点完整
+路径、code/trace 摘要、NULL lookup、reader/mutex 写入、scope 释放及下一
+描述符。原版 `+0x2884cc -> +0x2484b8` 接收 `0x7004d1d8`，确认对象仍
+持有此前 malloc(33) 返回的 `0x136d4020`，payload 摘要也与原构造记录一致。
+继承的 free 导入路由进入匹配 Bionic 原版入口 `+0x1bac0`，返回后新增一次
+free 账本事件。原版指令重写 vtable、清零 payload 指针，再由 D0 写入 ELF
+空描述符的原始八字节 `0000000023ffffff`；未把该 opaque 状态解释成普通
+零长度字符串。对象相邻字节、descriptor、SP 与 X19-X29 保留。
+
+callback 在观察点 154 返回；void 析构器的 X0 只记录现场值，不解释为成功
+状态。本段共 2374 点，在游标 `+0x109ea8` 的下一 VM BLR 前停止，选择
+`+0x2884cc -> +0x2481ac` 默认 StringObject 构造，下一参数只作静态解释。
+该调用、wrapper 和目标主体均未执行。free 计数增一，malloc/GC/flush、
+继承的 service、JNI、SVC 与显式 syscall 172/173 账本不变。未新增 provider、
+导入绑定或原生快照驱动的 Python 语义模型。
+
+12 项独立原版代码对照覆盖两基址、NULL payload、跨页 object、free 期间
+修改对象、非默认空描述符及 payload/object 别名，核对完整 guest payload
+与寄存器恢复；独立用例的合成 free observer 已单独声明。前缀合成 JNI
+acquisition、真实 JVM、后续 VM/suffix 返回、完整 signer、普通 Cronet 六头、
+Android、physical PAC 和线上验收的限制保留。见
+[字符串析构返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_string_destructor_return_dynamic_20261122.json)。
+
+冻结 capture、49 项篡改拒绝、默认离线校验与独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。660 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从析构返回边界继续，先核对前缀 2374 点完整路径、code/trace
+摘要、原版 free、payload 指针清零和 ELF 原始描述符恢复。原版
+`+0x2884cc -> +0x2481ac` 默认构造接收对象 `0x7004d118`，先写 vtable 与
+ELF 初始描述符 `0800000000000000`，再沿继承的 malloc 导入路由进入匹配
+Bionic 原版主体。malloc(8) 返回 `0x136d82c0`，原版八字节 store 写入指针，
+单字节 store 写入 NUL，其余七字节保留。首字节原本即为零，写入事实仍由
+原版指令轨迹与 store observer 核对，没有仅凭相同内存内容推断写入。
+
+callback 在观察点 148 返回，X0 保留分配结果，不另解释为成功状态；对象
+相邻八字节、descriptor、SP 与 X19-X29 保留。新增段共 804 点，在游标
+`+0x109ecc` 的下一 VM BLR 前停止；下一次仍选择同一默认构造器，对象为
+`0x7004d130`。下一参数仅作静态解释，该次调用尚未执行。malloc 计数增一，
+free/GC/flush 与继承的 service、JNI、SVC、显式 syscall 172/173 账本不变。
+未新增 provider、导入绑定或原生快照驱动的 Python 语义模型。
+
+18 项独立原版代码对照覆盖两基址、分配失败、跨页 object/payload、
+descriptor/object/payload 别名与自定义初始描述符，核对声明的 0xa000 字节
+guest payload 范围、写入顺序/宽度与寄存器恢复；该内存比较不含原生栈和
+合成线程指针区域。失败分支只清零 32 位 capacity，保留自定义
+length；对照使用的合成 malloc provider 单独声明。前缀合成 JNI acquisition、
+真实 JVM、后续 VM/suffix 返回、完整 signer、普通 Cronet 六头、Android、
+physical PAC 和线上验收的限制保留。见
+[默认字符串构造返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_default_string_constructor_return_dynamic_20261122.json)。
+
+冻结 capture、56 项篡改拒绝、默认离线校验与独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。661 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从 `+0x109ecc` 的第二次默认字符串构造继续，先核对前缀
+804 点完整路径、code/trace 摘要、原版 malloc 事件、对象写入及下一描述符。
+复用已冻结 owner 的 read/store/return 观察逻辑，原版
+`+0x2884cc -> +0x2481ac` 再次执行，目标对象为 `0x7004d130`。匹配 Bionic
+malloc(8) 返回 `0x136d82d0`；原版指令写 vtable、初始描述符、payload
+指针与单字节 NUL。分配返回时八字节原本均为零，单字节写入仍单独记录；
+没有把该现场描述成构造器清零整个分配区。相邻字节、descriptor、SP 与
+X19-X29 保留，X0 只记录分配结果。
+
+首对象 `0x7004d118` 的 24 字节有效区域及其 `0x136d82c0` 的八字节
+payload，在第二段开始、返回和停止时均与前证据一致；新段持续拒绝任何
+覆盖这两个区域的写入。该对象的后继对象已进入初始化，保护范围按有效
+对象宽度明确记录。
+
+新段同为 804 点，callback 在观察点 148 返回。游标 `+0x109ef0` 选择
+第三次默认构造，对象 `0x7004d148`；下一参数仅作静态解释，该次调用
+尚未执行。malloc 计数从 580 增至 581；free/GC/flush、继承的 service、
+JNI、SVC 与显式 syscall 172/173 账本不变。未新增 provider、导入绑定或
+原生快照驱动的 Python 语义模型。
+
+22 项独立原版代码对照包含继承的 18 项 fresh 用例，以及两基址上的四项
+相邻首对象保护/第二次分配失败检查；合成 malloc provider 单独声明。
+内存比较覆盖声明的 0xa000 字节 guest payload，不含原生栈与合成线程
+指针区域。前缀合成 JNI acquisition、真实 JVM、后续 VM/suffix 返回、
+完整 signer、普通 Cronet 六头、Android、physical PAC 和线上验收的限制
+保留。见
+[第二次默认字符串构造返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_second_default_string_constructor_return_dynamic_20261122.json)。
+
+冻结 capture、65 项篡改拒绝、默认离线校验与独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。662 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从 `+0x109ef0` 的第三次默认字符串构造继续，先核对前缀
+804 点路径、code/trace 摘要、原版分配、对象写入、首对象保护记录与下一
+descriptor。复用冻结 owner 的 read/store/return 观察逻辑，原版
+`+0x2884cc -> +0x2481ac` 接收 `0x7004d148`，匹配 Bionic malloc(8) 返回
+`0x136d82d8`。vtable、初始描述符、payload 指针和单字节 NUL 写入均记录；
+分配返回时八字节已为零，未把现场解释成构造器清零整个分配区。callback
+在观察点 148 返回，object 相邻字节、descriptor、SP 与 X19-X29 保留，
+X0 只记录分配结果。
+
+前两个对象 `0x7004d118`、`0x7004d130` 的各 24 字节有效区域，以及
+`0x136d82c0`、`0x136d82d0` 的各八字节 payload，在新段开始、返回和停止
+时均与前证据一致。整个新段持续拒绝覆盖这四个范围的写入。旧阶段观察
+状态在完成原样核对后退役，当前构造的读取、写入和返回观察复用冻结实现。
+
+新增段共 3232 点，在游标 `+0x10a178` 的下一 VM BLR 前停止；下一调用
+切换为 `+0x2885d0 -> +0x248344` 带 source 参数的构造器。下一 descriptor
+为 `0x7004ccc0`，X0=`0x7004d1d8`、X1=`0x126a1330` 只作静态解释；
+该次调用、wrapper 和目标均未执行，16 字节 wrapper 与 156 字节原版
+constructor 另行固定。malloc 计数从 581 增至 582，free/GC/flush、继承
+service、JNI、SVC 与显式 syscall 172/173 账本不变。未新增 provider、
+导入绑定或原生快照驱动的 Python 语义模型。
+
+26 项独立原版代码对照包含继承的 22 项 fresh 用例和两基址上的四项
+双对象保护/分配失败检查；合成 malloc provider 单独声明。内存比较覆盖
+声明的 0xa000 字节 guest payload，不含原生栈与合成线程指针区域。
+前缀合成 JNI acquisition、真实 JVM、后续 VM/suffix 返回、完整 signer、
+普通 Cronet 六头、Android、physical PAC 和线上验收的限制保留。见
+[第三次默认字符串构造返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_third_default_string_constructor_return_dynamic_20261122.json)。
+
+冻结 capture、73 项篡改拒绝、默认离线校验与独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。663 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从 `+0x10a178` 的带 source 参数构造继续，先核对前缀 3232
+点路径、code/trace 摘要、原版分配、对象写入、前两对象保护记录及下一
+descriptor。原版 `+0x2885d0 -> +0x248344` 接收对象 `0x7004d1d8` 与
+source `0x126a1330`，NUL 前长度为 32。匹配 Bionic malloc(33) 返回
+`0x136d4020`，复用此前释放地址；分配返回时的 33 字节摘要仍为旧 payload
+摘要。继承的 host memcpy 复制含 NUL 的新源，after-write observer 记录
+新 source/payload 摘要一致；原版 Bionic strlen/memcpy 主体仍未执行。
+
+复用冻结 source-constructor owner 的对象写入、服务、copy-effect 与返回
+观察逻辑。vtable、capacity=33、length=32、payload 指针四次 store、
+对象相邻八字节、source、SP 与 X19-X29 均核对；新增完整 48 字节
+descriptor 写保护及返回比较，覆盖 `0x7004ccc0` 全块。前三个对象各 24
+字节有效区域和各八字节 payload，在开始、返回与停止时均与前证据一致；
+整个新段持续拒绝覆盖这六个范围的写入。未向 Python 语义模型提供原生
+内存快照，也未新增 provider 或导入绑定。
+
+callback 在观察点 157 返回，新段共 783 点，在游标 `+0x10a198` 的下一
+VM BLR 前停止。下一选择 `+0x28874c -> +0x256a18` u32 树查询，descriptor
+为 `0x7004cb30`；receiver=`0x136e0000`、query=`0x7004d1d8` 仅作静态
+解释，该次调用尚未执行。32 字节 wrapper 与 152 字节 getter 范围另行
+固定。malloc 从 582 增至 583；free/GC/flush、继承 service、JNI、SVC、
+显式 syscall 172/173 与 late-JNI/Java-dispatch 账本不变。
+
+16 项独立原版代码对照包含原带参构造 owner 的 12 项 fresh 用例和两基址
+上的四项三对象保护/分配失败检查；合成 malloc 及 host strlen/memcpy 边界
+均明确声明。内存比较限于声明的 0xa000 字节 guest payload，不含原生栈和
+合成线程指针区域。前缀合成 JNI acquisition、真实 JVM、后续 VM/suffix
+返回、完整 signer、普通 Cronet 六头、Android、physical PAC 和线上验收
+的限制保留。见
+[默认构造后带参字符串构造返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_defaults_string_constructor_return_dynamic_20261122.json)。
+
+冻结 capture、68 项篡改拒绝、默认离线校验与独立 fresh ELF/Bionic replay
+通过，重放与冻结 JSON 逐字段一致。664 个 Python 文件编译、公共扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）和 diff 空白检查通过。
+
+2026-11-22：从 `+0x10a198` 的 u32 树查询继续，先核对前缀 783 点路径、
+code/trace 摘要、原版对象写入、显式 host strlen/memcpy 效果、完整
+descriptor 与三对象保护记录。原版 `+0x28874c -> +0x256a18` 接收
+receiver=`0x136e0000`、query=`0x7004d1d8`，在 receiver+8 的配置树中查找。
+当前 lookup 返回 NULL，原版 getter 选择 `0xa985f`，未执行 found-value
+W32 load；没有将该结果解释成空树或声称读取了 found 分支。
+
+reader count 经 `0→1→0` 恢复，既有 read-mode flag 再写 1。四次匹配
+Bionic 的原版 mutex 调用保护 count 更新；查找时逻辑 reader 活动，mutex
+已释放。scope 的 vtable/reader/status 写入、释放期间 retained-reader
+读取与 mutex 半字写入分别记录。观察点 513 完成 reader 释放，523 才在
+descriptor+24 写入四字节 W0，保留其后高四字节与其余 padding。低字原本
+即为 `0xa985f`，store 事实仍由原版指令及写事件单独确认。
+
+query 的 24 字节有效对象和含 NUL 的 33 字节 payload，以及前三个对象
+各 24 字节与各八字节 payload，在新段持续写保护下保持不变。返回时还
+核对 query 相邻字节、40 字节 tree header、0x98 字节 reader、scope
+padding、SP 和 X19-X29。callback 在观察点 526 返回，新段共 1190 点。
+游标 `+0x10a1c0` 的下一次 query 析构 `+0x2884cc -> +0x2484b8` 尚未
+执行，X0=`0x7004d1d8` 仅作静态解释。
+
+新段只到达继承的 mutex PLT 路由，原版对应 Bionic 主体已观察。allocator、
+继承 service、JNI、SVC、显式 syscall 172/173 与 late-JNI/Java-dispatch
+账本不变；未新增 provider、导入绑定或原生快照驱动的 Python 语义模型。
+24 项独立原版代码对照覆盖两基址、NULL lookup/value、零/最大/高位 W32、
+既有 readers、跨页 value、packed output 别名与 reader-count/scope 字段
+别名，核对 reader 活动期间四字节读取、释放后写回及 padding 保留。
+声明的 0xa000 字节 guest payload 与额外 24 字节 scope 完整比较，其他
+原生栈和合成线程指针区域不在比较范围。前缀合成 JNI acquisition、真实
+JVM、后续 VM/suffix 返回、完整 signer、普通 Cronet 六头、Android、
+physical PAC 和线上验收的限制保留。见
+[默认构造后 u32 树查询证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_defaults_u32_lookup_return_dynamic_20261122.json)。
+
+冻结 capture、24 项独立原版代码对照、74 项篡改拒绝、默认离线校验与
+独立 fresh ELF/Bionic replay 通过，重放与冻结 JSON 逐字段一致。665 个
+Python 文件编译、公共扫描、三种错误 CLI 参数、冻结覆盖拒绝（证据 hash
+不变）、源码指纹匹配与空白检查通过。
+
+
+
+2026-11-22：从 `+0x10a1c0` 的 query 析构继续，先逐项重验冻结 u32
+lookup 的 1190 点路径、code/trace 摘要、reader 读写、四次匹配 Bionic
+mutex 调用、W32 descriptor 写入及四个字符串保护记录。原版
+`+0x2884cc -> +0x2484b8` 接收对象 `0x7004d1d8`，释放原 33 字节
+payload `0x136d4020`。观察点 15 进入继承的 free PLT，16 进入匹配
+Bionic free，147 返回；allocator ledger 仅新增一次 free，计数变为
+268，其余 malloc/gc/flush 不变。
+
+三次原版八字节写入依次恢复 vtable、在 free 返回后清零指针，并从
+ELF `+0x6e208` 恢复空描述符。两次原版读取、三个 store、query 相邻
+八字节、完整 48 字节当前 descriptor、SP 与 X19-X29 均核对；此前
+u32 结果的完整 48 字节 descriptor 在析构返回前保持不变。前三个默认
+字符串的各 24 字节对象及各八字节 payload 在本段持续写保护下保持
+完整，直到下一调用边界。void 析构返回的 X0 仅记录为附带寄存器值。
+
+callback 在观察点 154 返回，新段共 734 点。下一次 VM 调用停在
+`+0x10a1e0`，选择 `+0x2886b0 -> +0x25bd8c`；尚未执行的包装器保留
+X0=`0x7004cbe8` descriptor，并将输出对象 `0x7004d178` 放入 X8。
+完整 20 字节 wrapper 与目标入口 16 字节已固定，未执行该调用。
+
+复用既有析构 owner 的 12 项独立原版代码对照，覆盖两基址、NULL
+payload、跨页对象、free 时改写对象、定制空描述符及 payload/object
+别名，完整比较声明的 0xa000 字节 guest payload，明确使用合成 free
+observer。其他原生栈和合成线程指针区域不在比较范围。主路径只到达
+继承的 free PLT，未新增 provider、导入绑定或原生快照驱动的 Python
+语义模型；service/JNI/SVC、显式 syscall 172/173 与 late-JNI/Java-dispatch
+账本不变。前缀合成 JNI acquisition、真实 JVM、后续 VM/suffix 返回、
+完整 signer、普通 Cronet 六头、Android、physical PAC 与线上验收仍
+未验证。见
+[u32 查询后 query 析构证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_u32_query_destructor_return_dynamic_20261122.json)。
+
+冻结 capture、12 项独立原版代码对照、56 项篡改拒绝、默认离线校验与
+独立 fresh ELF/Bionic replay 通过，重放与冻结 JSON 逐字段一致。666 个
+Python 文件编译、公共扫描、三种错误 CLI 参数、冻结覆盖拒绝（证据 hash
+不变）、源码指纹匹配与空白检查通过。
+
+2026-11-22：从 `+0x10a1e0` 继续进入 identifier 缓存 getter
+`+0x2886b0 -> +0x25bd8c`，先重验冻结 query 析构的 734 点路径、
+code/trace 摘要、free 调用与原版对象写入、descriptor 完整性及三个
+默认字符串保护记录。wrapper 的 X0 保留 packed descriptor
+`0x7004cbe8`，X8 接收输出引用 `0x7004d178`。
+
+当前为冷缓存路径。原版匹配 Bionic 的两次分配分别为 48 和 16 字节，
+得到普通互斥量 `0x136d4020` 与空 cache pair `0x136d73a0`；前者复用
+刚释放的 query payload 地址。两个缓存初始化 guard 已发布，输出引用
+由原版指令清零。新段共 1147 点，在 `+0x255d38` 调用 fopen 的 BL 前
+停止，尚未执行 PLT `+0x348460` 或任何 fopen/fread/fclose 主体。解码
+path/mode 的长度为 12/2，公开记录只保留含 NUL 摘要。
+
+停止时 output 与 cache pair 均为空，当前 cache mutex 仍持有，seed
+guard 仍 pending；未声称 identifier 已生成、发布、callback 已返回、
+scope 已释放或寄存器已恢复。完整 48 字节 descriptor、cache globals
+与原版写宽核对，前三个默认字符串各 24 字节对象与各八字节 payload
+在本段持续写保护下保持完整。allocator 仅新增两次 malloc，计数变为
+585，free/gc/flush 不变；继承 service/JNI/SVC、显式 syscall 172/173、
+late-JNI/Java-dispatch 账本保持。未新增 provider 或导入绑定。停点选在
+caller 的 BL，避免继承的 PLT 路由覆盖观察器设置的停止 PC。
+
+既有 identifier owner 的 44 项 fresh 原版/Python 对照覆盖两基址的
+32 项 cache 与 12 项 formatter 场景；固定显式 seed 文件服务只用于
+这些独立组件对照。另有 19 项页回滚检查，范围不含外部 provider 效果。
+比较声明的 image pages、guest payload 与明确的 outer-scope/formatter
+scratch，不比较其他 physical spills 与 PAC；不向模型灌入 native
+快照。serialized guard、继承 gettid/OS/JNI provider 仍为显式边界；
+真实 JVM、本前缀完整 identifier 生成、后续 VM/suffix 返回、完整 signer、
+Android、physical PAC 与线上接受仍未验证。见
+[identifier seed-open 边界证据](../platforms/bytedance/tomato/evidence/vm9_native_171_identifier_seed_open_boundary_dynamic_20261122.json)。
+
+冻结 capture、44 项 fresh 原版/Python 对照、19 项组件页回滚检查及
+44 项篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，
+重放与冻结 JSON 逐字段一致。667 个 Python 文件编译、公共扫描、三种
+错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹匹配与空白
+检查通过。当前 fopen 调用、identifier 生成及完整 signer 的边界保持。
+
+2026-11-22：从 `+0x255d38` 原版 fopen BL 继续，先逐项重验冻结的
+1147 点 seed-open 路径、code/trace 摘要、缓存对象、guard、descriptor
+与三个默认字符串保护记录。继承的导入路由进入匹配 Bionic 原版
+fopen `+0x57cd8`。`libc+0x6a6a0` 的 openat SVC 使用原 pathname、
+AT_FDCWD、flags=0、mode=0；既有虚拟 OS 对非 `/proc/stat` 路径返回
+-2。原版 errno 四字节写入变为 2，已选 static FILE 的 acquired flag
+以四字节清零，观察点 303 返回 NULL；没有新增文件或熵 provider。
+
+FILE 为 `0x510e5bb8`，extension 为 `0x510e54d0`，分别核对 0x98 与
+0x68 字节。seed initializer 在观察点 308 返回 W0=`0xffffffff`
+（signed32 -1），但 caller 随后仍以两次原版单字节 store 发布 seed
+guard。16 字节 seed 保持全零并受持续写保护；完整 descriptor、此前
+三个默认对象及 payload、空 output/cache pair 和持有中的 cache mutex
+分别核对。当前主镜像 allocator ledger/counts 不变，服务计数只新增
+一次 syscall-56，libc SVC ledger 只追加该原版 SVC；其余 JNI、main
+SVC、syscall 172/173、late-JNI/Java-dispatch 账本保持。
+
+新段共 381 点，停在 `+0x25bd1c` 调用 formatter `+0x255d84` 的 BL 前。
+本路径没有执行 fread/fclose 或 formatter；已核对 fopen 与 seed
+initializer 的栈返回，外层 identifier callback 仍在进行。
+
+16 项 fresh 原版/Python readonly FILE 对照覆盖两基址的打开/重复打开、
+失败、fd 零值/边界/溢出、binary 与非法 mode；另有 27 项组件拒绝检查，
+仅回滚 guest pages、mapping records 与 cursor，不回滚外部 provider
+效果。对照使用独立构造的输入与既有 FILE owner，比较声明的 stdio、
+global/TLS/guest/mapping 字节及有序 OS 效果，不将原生快照送入 Python
+语义模型。继承 virtual OS/TLS/JNI 与 serialized guard 的限制保留；
+成功的熵访问、本次 identifier 生成、完整 VM 返回、独立 signer、
+Android/PAC 与线上接受仍未验证。见
+[seed-open 失败证据](../platforms/bytedance/tomato/evidence/vm9_native_171_identifier_seed_open_failure_dynamic_20261122.json)。
+
+冻结 capture、16 项原版/Python FILE 对照、27 项组件回滚检查及 43 项
+篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放
+与冻结 JSON 逐字段一致。668 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹匹配与空白检查
+通过。当前 formatter 调用和完整 signer 的未验证边界保留。
+
+2026-11-22：从 `+0x25bd1c` 的 formatter BL 继续，先重验冻结 seed-open
+失败段的 381 点路径、code/trace、fopen/seed return、errno/FILE/guard
+写入与保护记录。原版 `+0x255d84` 完成 template/alphabet lazy 解码，
+两次进入 `+0x255ec0`。四次八字节 state store 后状态仍全零；两次
+八字节 scratch store 也保留零。37 次原版单字节 store 生成 36 字符与
+结尾 NUL，核对长度、含 NUL 的摘要及完整 64 字节窗口的剩余区域；
+不公开 identifier 或 seed 原始字节，写事件只保留位置/宽度/观察点。
+
+formatter 在观察点 1139 返回，SP 与 X19-X29 恢复。X0 只作为附带
+寄存器值观察，不解释为成功码。新段共 1140 点，停在 `+0x25bd24`
+调用 `+0x32a1f0` 的 BL 前，X0=24；该分配未执行。三个默认对象与
+payload、完整 descriptor、cache 对象/guard、输出引用与 errno 持续
+写保护，allocator ledger/counts、继承 service/JNI/SVC/late dispatch
+账本保持；未新增 provider 或导入绑定。外层 identifier callback 与
+cache 发布仍未完成。
+
+14 项 fresh 原版/Python formatter 对照覆盖两基址上的六组既有
+template/alphabet/seed/output 场景与显式全零 seed 场景；核对声明的
+guest image/payload 与 scratch 内存。另有 19 项既有组件页回滚检查，
+外部 provider 效果不在回滚范围。未把原生快照用作 Python 语义模型
+输入。成功熵读取、当前 identifier 对象构造/发布、完整 VM 返回、
+独立 signer、真实 JVM/Android/PAC 与线上接受仍未验证。见
+[identifier formatter 返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_identifier_formatter_return_dynamic_20261122.json)。
+
+冻结 capture、14 项原版/Python formatter 对照、19 项组件页回滚检查与
+35 项篡改拒绝通过；默认离线校验和独立 fresh ELF/Bionic replay 通过，
+重放与冻结 JSON 逐字段一致。669 个 Python 文件编译、公共工作树扫描、
+三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹匹配与
+空白检查通过；4 项 Rust 单元测试通过。扫描器回归测试因沙箱禁止创建
+临时 `.git` fixture 未能完成，本轮该测试集保持未验证。当前下一次分配、
+identifier 对象构造/发布和完整 signer 的未验证边界保留。
+
+2026-11-23：从 `+0x25bd24` 的 operator new BL 继续，先重验冻结
+formatter 段的 1140 点路径、code/trace、两次 state advance、输出摘要、
+写入位置/宽度与保护记录。原版 operator new 经匹配 Bionic malloc 分配
+24 字节字符串对象 `0x136d9640`；原版 `+0x248344` 构造函数再分配
+37 字节 payload `0x136d4050`。四次原版对象写入的宽度依次为 8/4/4/8，
+核对 vtable、capacity=37、length=36 和 payload 指针。继承的 host
+strlen/memcpy provider 测量并复制含 NUL 的 formatter 输出，逐字节相等；
+原版 Bionic strlen/memcpy 主体未执行。不公开 identifier/seed 原始字节
+或写事件的字节值，公开证据只保留位置、长度与摘要。
+
+构造函数在观察点 293 返回，SP 与 X19-X29 恢复。新段共 295 点，停在
+`+0x25bd3c` 调用 `+0x1625a4` 的 BL 前，X0 指向 temporary reference
+`0x7004b8c0`，X1 指向新字符串；该引用构造调用尚未执行。三个默认
+对象及 payload、完整 descriptor、cache globals/mutex/pair、输出引用、
+完整 64 字节 formatter 源窗口和 errno 持续写保护。allocator 只新增
+24/37 字节两次 malloc，malloc 总计 587；free/gc/flush 与继承的
+service/JNI/SVC、syscall 172/173、late-JNI/Java-dispatch 账本保持。
+未新增 provider 或导入绑定，外层 identifier callback 与 cache 发布
+仍未完成。
+
+14 项 fresh 原版/Python 对照覆盖两基址的六组既有字符串构造场景与
+operator new 成功场景，组件分配器明确为合成 provider；9 项既有
+string-wrapper 拒绝检查核对 guest-page 回滚，外部 provider 效果不在
+回滚范围。未将原生快照送入 Python 语义模型。引用构造、cache 发布、
+成功熵访问、完整 VM 返回、独立 signer、真实 JVM/Android/PAC 与线上
+接受仍未验证。见
+[identifier 字符串构造返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_identifier_string_constructor_return_dynamic_20261123.json)。
+
+冻结 capture、14 项原版/Python 对照、9 项组件页回滚检查及 42 项篡改
+拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放与
+冻结 JSON 逐字段一致。670 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹匹配与空白检查
+通过。此前冻结证据和语义 owner 的基线 hash 保持不变。当前引用构造
+调用、cache 发布和完整 signer 的未验证边界保留。
+
+2026-11-23：从 `+0x25bd3c` 的引用构造 BL 继续，先逐项重验冻结
+字符串构造段的 295 点路径、code/trace、两次分配、原版对象写入、
+继承 memcpy 效果、栈返回与保护记录。原版 `+0x1625a4` 清空临时
+pair，进入诊断 scope，写入字符串指针并创建四字节引用计数。诊断
+table 的槽 100 起初为空，原版 48 字节分配创建递归互斥量
+`0x136d4080`；scope 进入时 state=0x4001、owner=137，退出后恢复
+state=0x4000、owner=0。既有 guard、global lock 与 table 保留，仅
+该 table 槽被写入；global lock 前后摘要相同。
+
+引用构造在观察点 1474 返回，identifier factory 在 1483 返回；前者
+核对 SP 与 X19-X29，后者依据其真实保存帧及未改寄存器核对完整
+恢复，SP 从 `0x7004b850` 恢复为 `0x7004b8b0`。临时引用
+`0x7004b8c0` 指向字符串 `0x136d9640`，计数块 `0x136d82e0` 为 1。
+新段共 1485 点，停在 `+0x25be18` 调用输出赋值 `+0x162620` 的 BL
+前。该赋值、temporary release 和 cache 发布均未执行；output/cache
+pair 仍为空，cache mutex 仍持有，外层 getter 尚未返回。X0 为附带
+寄存器值，不解释为字符串或计数结果。
+
+前三个默认对象及 payload、完整 descriptor、新字符串对象与含 NUL
+payload、formatter 源窗口、cache 状态和 errno 持续写保护。仅新增
+48/4 字节两次 malloc，总计 589；free/gc/flush 和继承 service/JNI/SVC、
+syscall 172/173、late-JNI/Java-dispatch 账本不变。未新增 provider 或
+导入绑定；不公开 identifier/seed 原始字节、初始化前的引用/计数值
+或写事件值。
+
+8 项 fresh 原版/Python 对照覆盖两基址、冷/热诊断锁与普通/NULL
+字符串输入，比较声明的 image pages、guest payload、scope 字节及
+有序分配/锁效果；分配器和线程 id 服务为显式组件 provider。4 项
+既有引用构造拒绝检查核对 guest-page 回滚，外部 provider 效果不在
+回滚范围。未将原生快照送入 Python 语义模型。输出赋值、临时引用
+释放、cache 发布、完整 getter/VM 返回、独立 signer、真实 JVM/
+Android/PAC 与线上接受仍未验证。见
+[identifier 引用与工厂返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_identifier_reference_factory_return_dynamic_20261123.json)。
+
+冻结 capture、8 项原版/Python 对照、4 项组件页回滚检查及 45 项篡改
+拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放与
+冻结 JSON 逐字段一致。671 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹匹配与空白检查
+通过。此前冻结证据和语义 owner 的基线 hash 保持不变。当前外层输出
+赋值、cache 发布和完整 signer 的未验证边界保留。
+
+2026-11-23：从 `+0x25be18` 继续，先重验冻结 reference/factory 段的
+1485 点路径、code/trace、引用与计数写入、诊断锁、工厂返回及保护记录。
+原版 `+0x162620` 将临时引用赋给输出，计数由 1 增至 2；`+0x15e1a8`
+释放临时拥有权，计数降回 1，但 temporary pair 的字节不清零。原版
+`+0x1633b0` 将输出 pair 发布到 cache，计数再增至 2。输出与 cache
+同指字符串 `0x136d9640` 和 counter `0x136d82e0`；临时引用生命周期
+已经结束，不能因其残留 pair 字节而继续算作一个拥有者。
+
+cache mutex 在观察点 622 解锁，getter `+0x25bd8c` 在 631 返回，
+wrapper `+0x2886b0` 在 633 返回。对照原版保存的 caller frame 与未变
+寄存器，SP、X19-X29 均恢复。新段共 633 点，停在 VM continuation
+`+0x16aa4c` 指令之前，尚未恢复执行 VM。X0 是附带寄存器值，实际
+对象结果通过输出引用核对。三个诊断锁进出循环复用既有 entry；未新增
+分配或释放，allocator、service/JNI/SVC、syscall 172/173、late-JNI/
+Java-dispatch 账本保持，未新增 provider 或导入绑定。
+
+前三个默认对象与 payload、完整 descriptor、新字符串对象及含 NUL
+payload、identifier globals 和 errno 持续写保护。后续函数合法复用
+formatter 旧栈窗口，因此该窗口仅记录摘要，不再作为存活 payload
+写保护；不公开 identifier/seed 原始字节或写事件值。
+
+16 项 fresh 原版/Python cache 对照覆盖两基址上的八组既有场景，包括
+冷/热缓存、seed-open 失败、零 seed、输出别名和跨页输出；19 项既有
+拒绝检查核对 guest-page 回滚，外部 provider 效果不在回滚范围。文件、
+分配及线程服务为显式组件 provider，未将原生快照送入 Python 语义
+模型。后续 VM 执行、成功熵访问、完整独立 signer、真实 JVM/Android/
+PAC 与线上接受仍未验证。见
+[identifier 缓存发布证据](../platforms/bytedance/tomato/evidence/vm9_native_171_identifier_cache_publication_dynamic_20261123.json)。
+
+冻结 capture、16 项原版/Python 对照、19 项组件页回滚检查及 43 项篡改
+拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放与
+冻结 JSON 逐字段一致。672 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹匹配与空白检查
+通过。此前冻结证据和语义 owner 的基线 hash 保持不变。本次 identifier
+缓存发布与 callback 返回已闭合；后续 VM 指令、完整独立 signer 与
+线上验收仍未验证。
+
+2026-11-23：从 `+0x16aa4c` 恢复原版 VM，先重验冻结 identifier
+publication 段的 633 点路径、code/trace、三次计数变更、输出/cache pair、
+锁释放、callback 返回与保护记录。新段共 686 点，VM cursor 从
+`+0x10a1e0` 前进至 `+0x10a208`，停在下一次 `+0x16aa48` 调用前。
+两个边界的 SP 与 X19-X29 摘要相同。三个默认字符串及 payload、新
+identifier 对象及 payload、输出/cache pair、counter、cache mutex、
+相关 globals 与 errno 持续写保护；输出与 cache 仍共享同一 pair，
+计数为 2，cache mutex 保持未持有，errno 为 2。allocator、继承的
+service/JNI/SVC、syscall 172/173 与 late-JNI/Java-dispatch 账本不变。
+未新增 provider 或导入绑定。
+
+下一份 48 字节 packed descriptor 位于 `0x7004cda8`，与旧调用区不同。
+原版 wrapper `+0x288508` 的完整 28 字节表明：从 descriptor 读取
+target `+0x32a1f0` 和 X64 size=24，再把返回指针写入 descriptor+16
+（`0x7004cdb8`）。wrapper 与 target 入口代码均已固定；该 VM 调用、
+wrapper、分配和结果写回尚未执行。公开记录只保留 descriptor 摘要与
+已定义的参数/地址，不公开原始 descriptor、identifier/seed 或写事件值。
+VM 的参数区写入按位置和宽度记录，仍存活的字符串与缓存持续受保护。
+
+复用现有分配 wrapper owner，20 项 fresh 原版/Python 组件对照覆盖
+两基址上的十组场景：零/一/24/4097/uint64 最大 size、高指针、跨页
+输入/结果、provider 改写和 packed alias。组件 malloc 为显式合成
+provider；9 项既有拒绝检查核对 guest-page 回滚，外部 provider 效果
+不在回滚范围。组件独立执行不代表本次主路径分配已经执行；未将原生
+快照送入 Python 语义模型。独立 Python VM continuation、成功熵读取、
+后续 VM 返回、完整独立 signer、原生 NULL/new-handler/throw、真实
+JVM/Android/PAC 与线上接受仍未验证。见
+[identifier 后 VM 边界证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_identifier_vm_boundary_dynamic_20261123.json)。
+
+冻结 capture、20 项原版/Python 分配对照、9 项组件页回滚检查及 42 项
+篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放
+与冻结 JSON 逐字段一致。673 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹匹配与空白检查
+通过。此前冻结证据和语义 owner 的基线 hash 保持不变。当前下一次
+分配、后续 VM 返回、完整独立 signer 和线上验收的未验证边界保留。
+
+2026-11-23：重验 identifier 后冻结的 686 点 VM 路径，在现有仿真输入下
+继续执行 `+0x16aa48` 分配调用。原版 wrapper `+0x288508` 从 packed
+descriptor 读取 operator new `+0x32a1f0` 与 size=24；观察点 14 经
+PLT `+0x347fd0`，15 进入匹配 Bionic 的原始 malloc `libc+0x1bb08`。
+138 返回指针 `0x136d9660`，143 在 `+0x288518` 写入 descriptor+16
+（`0x7004cdb8`），144 核对写回完成。146 返回 VM continuation
+`+0x16aa4c`，对照调用前 SP 与 X19-X29 摘要均恢复，输入与 descriptor
+尾部摘要保持。本次主路径使用继承的真实 Bionic 分配器，没有新增
+malloc provider 或导入绑定。
+
+新段共 681 点，VM cursor 从 `+0x10a208` 前进到 `+0x10a228`，停在
+下一次 `+0x16aa48` 调用前。新的 48 字节 descriptor 在 `0x7004cdf8`；
+完整 12 字节 wrapper `+0x2884cc` 将 target `+0x2481ac` 与对象地址
+`0x136d9660` 取出，然后尾调用。该次 VM 调用、wrapper 与 target
+均未执行。新分配内容仅保留摘要，未将未初始化内存解释成有效字段。
+
+三个默认字符串及 payload、identifier 对象及含 NUL payload、输出/
+cache pair、counter、cache mutex、相关 globals 与 errno 持续写保护，
+没有重叠写入；引用计数保持 2，cache mutex 未持有，errno 保持 2。
+只新增一次 24 字节 alloc 事件，malloc 589→590，free/gc/flush 不变；
+service/JNI/SVC、syscall 172/173 与 late-JNI/Java-dispatch 账本不变。
+公开记录只包含摘要、长度、已定义指针/标量及写入位置/宽度，不公开
+identifier/seed、descriptor 或分配原始字节，不将原生快照送入 Python
+语义模型。
+
+复用现有 allocation callback owner，20 项两基址 fresh 原版/Python
+组件对照使用显式合成 malloc；9 项拒绝检查核对 guest-page 回滚，外部
+provider 效果仍不在回滚范围。这些组件对照未建立独立 owning allocator
+一致性。原生 NULL/new-handler/throw、独立 Python VM continuation、
+成功熵读取、剩余 VM 返回、完整 signer、真实 JVM/Android/PAC 与线上
+接受仍未验证。见
+[identifier 后分配返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_identifier_allocation_return_dynamic_20261123.json)。
+
+冻结 capture、20 项原版/Python 分配对照、9 项组件页回滚检查及 50 项
+篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放
+与冻结 JSON 逐字段一致。674 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹、LF/属性规则与
+空白检查通过。11 个前序冻结证据和语义 owner 的基线 hash 保持不变。
+当前闭合到 24 字节分配结果写回、callback 返回及下一次 VM 调用前；
+下一 target `+0x2481ac`、剩余 VM、完整独立 signer 与线上接受仍未验证。
+
+2026-11-23：先重验冻结的 681 点 identifier 后分配段，再执行
+`+0x2884cc -> +0x2481ac` 默认 StringObject 构造，目标是刚分配的
+24 字节堆对象 `0x136d9660`。原版构造器读取 ELF `+0x6e168` 的
+初始 descriptor，写入 vtable `+0x34f5f8`、capacity=8、length=0，
+经继承的真实匹配 Bionic malloc 申请 8 字节 payload。观察点 141
+返回地址 `0x136d82e8`，随后写入对象的 payload 指针，并只写一字节
+NUL；其余七字节保持写入前摘要。147 在 `+0x2481f8` 返回，148 到达
+VM `+0x16aa4c`，SP 与 X19-X29 摘要均恢复，packed descriptor 保持。
+X0 只作为观察到的 payload 指针记录，不解释为独立构造成功状态。
+
+新段共 858 点，VM cursor 从 `+0x10a228` 前进至 `+0x10a250`，停在
+下一次 `+0x16aa48` 调用前。48 字节 descriptor 在 `0x7004cd80`；
+完整 16 字节 wrapper `+0x288530` 将 scope 地址 `0x7004d1d8` 放入
+X0，新 StringObject 地址 `0x136d9660` 放入 X1，再尾调用诊断入口
+`+0x26c858`。此调用、wrapper 与 target 均未执行，参数只作静态投影。
+
+此前三个默认字符串及 payload、identifier 对象及含 NUL payload、
+输出/cache pair、counter、cache mutex、相关 globals 与 errno 持续
+写保护，没有重叠写入；callback 返回后将新堆对象及完整八字节 payload
+加入保护范围。计数仍为 2、cache mutex 未持有、errno 为 2。只新增
+一次八字节 alloc 事件，malloc 590→591，free/gc/flush 与继承的
+service/JNI/SVC、syscall 172/173、late-JNI/Java-dispatch 账本不变。
+未新增 provider 或导入绑定。公开记录只包含摘要、长度、已定义字段
+和写入位置/宽度，不公开 identifier/seed、packed descriptor 或分配
+原始内容，不把未初始化内存解释成有效字段。
+
+复用既有默认构造观察 owner 的 18 项原版布局/写宽/SP 检查，以及
+consumer 语义 owner 的 8 项两基址 fresh 原版/Python 对照，覆盖正常、
+NULL 分配、跨页对象及 packed alias；这些组件使用显式合成 malloc。
+12 项既有 consumer-family 拒绝检查核对 guest-page 回滚，外部 provider
+效果不在回滚范围。原生快照未作为 Python 语义模型输入。独立 owning
+allocator 一致性、真实 Bionic NULL 分支、独立 Python VM、成功熵读取、
+剩余 VM 返回、完整 signer、真实 JVM/Android/PAC 与线上接受仍未验证。
+见 [identifier 后堆字符串构造证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_identifier_heap_string_constructor_return_dynamic_20261123.json)。
+
+冻结 capture、18 项原版布局检查、8 项原版/Python 对照、12 项组件页
+回滚检查与 54 项篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic
+replay 通过，重放与冻结 JSON 逐字段一致。675 个 Python 文件编译、
+公共扫描、三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码
+指纹、LF/属性规则与空白检查通过。15 个前序证据和 owner 的基线 hash
+保持不变。本次闭合到堆字符串默认构造返回及下一 VM 调用前；诊断
+scope `+0x26c858`、剩余 VM、完整独立 signer 与线上接受仍未验证。
+
+2026-11-23：重验冻结的 858 点堆字符串构造段，继续执行
+`+0x288530 -> +0x26c858` 诊断入口，输入为新 StringObject 地址
+`0x136d9660`，scope 在 `0x7004d1d8`。地址选出 bucket 102，table slot
+`0x136f8330` 原为空。原版全局 mutex 加锁后，经匹配 Bionic malloc
+分配 48 字节 entry `0x136d40b0`，构造递归 mutex 并发布到该槽。
+global mutex 随后恢复未持有状态，再经原版 Bionic pthread_mutex_lock
+持有新 entry；状态为 `0x4001`、owner=137，scope 的 W32 lock result
+从初始化值 -233 更新为 0。scope+12 的四字节 padding 摘要保持。
+
+390 在 `+0x26c98c` 返回，391 到达 VM continuation `+0x16aa4c`，
+SP 与 X19-X29 恢复，packed descriptor 保持。新段共 947 点，VM cursor
+从 `+0x10a250` 前进到 `+0x10a270`，停在下一次 `+0x16aa48` 调用前。
+下一 descriptor 位于 `0x7004cda8`，完整 28 字节 wrapper `+0x288508`
+选择 operator new `+0x32a1f0`、size=4，预期结果槽为 `0x7004cdb8`。
+该次调用、wrapper、分配与结果写回均未执行。新诊断 mutex 在停止点
+仍持有，尚未执行该 entry 的解锁，scope 的完整生命周期仍未闭合。
+
+既有三个默认字符串、identifier 字符串、新堆字符串及各 payload、
+输出/cache pair、counter、cache mutex、相关 globals 和 errno 持续
+写保护；另外保护 identifier 的旧 100 号 entry 及已初始化 guard。
+table 除 102 号槽外摘要保持，只记录该槽的一次八字节发布。callback
+返回后将 active scope 和 held entry 加入保护范围。引用计数仍为 2，
+cache mutex 未持有，errno 为 2。只增加一次 48 字节 alloc 事件，malloc
+591→592，其他 allocator、service/JNI/SVC、syscall 172/173 及 late-JNI/
+Java-dispatch 账本不变，未新增 provider 或导入绑定。公开记录只保留
+摘要、长度、已定义字段及写位置/宽度，不公开原始 identifier/seed、
+packed descriptor、padding 或分配内容。
+
+14 项两基址 fresh 原版/Python 对照覆盖七组场景，在既有六组之外补入
+全局表已初始化而目标槽为空的路径；组件 allocation 为显式合成 provider，
+原版匹配 Bionic mutex body 执行。7 项既有拒绝检查核对 guest-page 回滚，
+外部 allocator 效果不在回滚范围；原生快照不作为 Python 语义模型输入。
+完整 scope 生命周期、竞争/宿主并发、独立 owning allocator 一致性、
+独立 Python VM、剩余 VM 返回、完整 signer、真实 JVM/Android/PAC 与
+线上接受仍未验证。见
+[identifier 后诊断入口证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_identifier_diagnostic_scope_entry_dynamic_20261123.json)。
+
+冻结 capture、14 项原版/Python 对照、7 项组件页回滚检查及 62 项篡改
+拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放与
+冻结 JSON 逐字段一致。676 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹、静态范围唯一性、
+LF/属性规则与空白检查通过。23 个前序证据和 owner 的基线 hash 保持。
+本次闭合诊断入口返回及下一次 VM 调用前；停止点仍持有 102 号递归锁，
+下一次四字节分配、该 scope 的完整生命周期、剩余 VM、完整独立 signer
+与线上接受仍未验证。
+
+2026-11-23：重验冻结的 947 点诊断入口段，在持有 102 号递归 mutex
+的状态下执行下一次 `+0x288508 -> +0x32a1f0`，size=4。继承的原版
+匹配 Bionic malloc 返回 `0x136d82f0`；观察点 143 在 `+0x288518`
+写入 packed descriptor+16（`0x7004cdb8`），144 核对写回完成。146
+返回 VM continuation `+0x16aa4c`，SP 与 X19-X29 恢复，输入 16 字节
+与 descriptor 尾部摘要保持。
+
+观察点 584 的 `+0x17208c: str w11, [x12, x10]` 对新分配执行一次
+四字节写入。585 在 `+0x172090` 核对写入完成，初始化值为 1，随后
+把该四字节区域加入写保护。该 VM 内部观察点不导出 GP 寄存器，只保留
+已验证的初始化谓词、位置/宽度和摘要；未初始化的分配内容仅记录摘要。
+新段共 1009 点，VM cursor 从 `+0x10a270` 经 `+0x10a284` 前进至
+`+0x10a29c`，停在下一次 VM 调用前。新的 48 字节 descriptor 位于
+`0x7004cd70`，完整 12 字节 wrapper `+0x288540` 将 scope 地址
+`0x7004d1d8` 作为 X0 传给 `+0x26c9d0`。该解锁调用、wrapper 与
+target 尚未执行，诊断 scope 的完整生命周期仍未闭合。
+
+既有字符串及 payload、输出/cache pair、identifier counter、cache
+mutex、相关 globals 与 errno 持续保护；另外保护 active scope、held
+entry、完整诊断表、global lock 及两个全局指针字段。102 号 entry 保持
+`0x4001`、owner=137，scope result=0，100 号 identifier entry 保持。
+旧 packed 调用区为可复用参数存储，不作为存活对象保护。只增加一次
+四字节 alloc 事件，malloc 592→593，其他 allocator 与继承的
+service/JNI/SVC、syscall 172/173、late-JNI/Java-dispatch 账本不变。
+没有新增 provider 或导入绑定，不公开原始 identifier/seed、packed
+descriptor、未初始化内容或每次写入的寄存器值。
+
+复用既有 20 项分配 wrapper 原版/Python 对照，新增两基址明确 size=4
+的对照，共 22 项；组件 malloc 为显式合成 provider。9 项既有拒绝检查
+核对 guest-page 回滚，外部 provider 效果不在回滚范围；不将原生快照
+作为 Python 语义模型输入。后续解锁、完整 scope 生命周期、独立 owning
+allocator 一致性、原生 NULL/new-handler/throw、独立 Python VM、剩余
+VM 返回、完整 signer、真实 JVM/Android/PAC 与线上接受仍未验证。见
+[诊断后四字节分配证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_diagnostic_small_allocation_return_dynamic_20261123.json)。
+
+冻结 capture、22 项原版/Python 分配对照、9 项组件页回滚检查及 62 项
+篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放
+与冻结 JSON 逐字段一致。677 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹、内部寄存器过滤、
+静态范围唯一性、LF/属性规则和空白检查通过。25 个前序证据和 owner
+的基线 hash 保持。本次闭合四字节分配、结果写回和 VM W32 初始化；
+停止点仍持有诊断锁，下一 scope 解锁、完整生命周期、剩余 VM、完整
+独立 signer 与线上接受仍未验证。
+
+2026-11-23：重验冻结的 1009 点四字节分配/初始化段，执行
+`+0x288540 -> +0x26c9d0` 清理当前诊断 scope。scope result=0，原版
+tail branch 进入匹配 Bionic `pthread_mutex_unlock`。观察点 41 在
+`libc+0x68e48` 通过四字节 store 清除 owner，44 在 `libc+0x68e54`
+通过半字 release store 将状态从 `0x4001` 改为 `0x4000`。42 和 45
+分别核对两个步骤，内部 GP 寄存器不导出。55 返回 VM continuation
+`+0x16aa4c`，SP 与 X19-X29 恢复，packed descriptor 保持。
+
+scope storage 与四字节 padding 摘要在返回前保持；返回时结束该 scope
+生命周期，后续不再解码其对象字段，只保留栈存储的地址和摘要，允许
+VM 合法复用。bucket 102 的 entry `0x136d40b0` 仍保留在进程表中，
+mutex owner=0、state=`0x4000`。entry 的 vtable/tail 在解锁过程中保护，
+返回后将已释放的 header 也加入保护。这闭合当前样本的诊断进入/离开
+配对，不表示进程拥有的诊断 entry 被析构或释放。
+
+既有字符串及 payload、输出/cache pair、identifier counter、cache
+mutex、globals、errno、完整诊断表、global lock、其他 entry 和新四字节
+word 持续保护。word 保持为 1。没有新增分配或释放，allocator 与继承的
+service/JNI/SVC、syscall 172/173、late-JNI/Java-dispatch 账本不变，未
+增加 provider 或导入绑定。新段共 921 点，VM cursor 从 `+0x10a29c`
+前进至 `+0x10a2c8`，停在下一次调用前。
+
+下一 descriptor 位于 `0x7004ca78`，完整 20 字节 wrapper `+0x28880c`
+选择 formatter `+0x248908`，目标为新堆 StringObject；记录 format 指针，
+packed W2 只保留宽度和摘要，标注其向 X2 零扩展，不公开实际格式串、
+变参值、identifier/seed、packed descriptor 或写入值。该调用、wrapper
+与 formatter 均未执行，静态参数投影不代表格式化行为已验证。
+
+16 项两基址 fresh 原版/Python leave 对照覆盖零/高位 input、跨页 scope、
+正常释放、递归计数、非零 saved result、空 entry 和 owner 不匹配。使用
+独立 Python 构造的组件状态，实际 leave wrapper 执行；leave 不分配或
+释放。6 项拒绝检查核对 guest-page 回滚，外部 observer 效果不在回滚
+范围，原生快照不作为 Python 语义输入。竞争/宿主并发、完整物理 stack/
+返回 ABI、独立 Python VM、剩余 VM 返回、完整 signer、真实 JVM/Android/
+PAC 与线上接受仍未验证。见
+[诊断 scope 离开返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_diagnostic_scope_leave_return_dynamic_20261123.json)。
+
+冻结 capture、16 项原版/Python leave 对照、6 项组件页回滚检查及 60 项
+篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，重放
+与冻结 JSON 逐字段一致。678 个 Python 文件编译、公共扫描、三种错误
+CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码指纹、scope 生命周期
+字段与内部解锁寄存器过滤、静态范围唯一性、LF/属性规则和空白检查通过。
+27 个前序证据和 owner 的基线 hash 保持。本次闭合诊断 scope 解锁及
+返回 VM；停止点位于 formatter `+0x248908` 调用前，后续格式化、剩余
+VM 返回、完整独立 signer、真实 JVM/Android/PAC 与线上接受仍未验证。
+
+2026-11-23：重验冻结的 921 点诊断 scope 离开段，执行完整 20 字节
+wrapper `+0x28880c -> +0x248908`。实际 W2 在 formatter 入口保持四字节
+操作数并零扩展；原版匹配 Bionic `vsnprintf` 经 `+0x347f70` 执行一次。
+观察点 2276 返回 VM continuation `+0x16aa4c`，SP 与 X19-X29 恢复，
+48 字节 packed descriptor 在返回前保持。新堆 StringObject `0x136d9660`
+的长度从 0 变为 6，容量保持 8，payload 仍为 `0x136d82e8`，包含终止
+NUL。校验器要求同次运行的 W2 十进制转换与目标长度和 payload 摘要一致，
+不导出实际 W2、格式串或明文。该关系检查不表示完整 GP/FP 变参帧或
+清理后的物理 X0 返回 ABI 已有原版/Python 等价证明。
+
+新增 16、8、32 字节三次分配，随后释放这三个临时块；主路径仍走继承的
+原版匹配 Bionic allocator。malloc 593→596、free 268→271，gc/flush
+保持。继承的 service/JNI/SVC、syscall 172/173、late-JNI/Java-dispatch
+账本均不变，没有增加 provider 或导入绑定。既有字符串、payload、输出/
+cache pair、counter、已初始化 word、诊断表和 locks/entries 持续保护，
+target vtable 没有写入。callback 返回后把已格式化对象及完整 payload
+capacity 加入保护。已结束生命周期的诊断 scope 不再解码，packed 参数
+存储在返回后允许合法复用。
+
+新段共 3156 点，VM cursor 从 `+0x10a2c8` 前进到 `+0x10a2f4`，停在
+下一次调用前。下一 descriptor 位于 `0x7004ca98`；完整 28 字节 wrapper
+`+0x2887f0` 选择 `+0x248780`，该 VM call、wrapper 与 target 均未执行。
+只保留 descriptor 摘要和静态路由，不推断下一次 clone/append 已完成。
+不公开原始 identifier/seed、packed descriptor、分配内容、padding、
+每次写入值或寄存器转储。
+
+20 项两基址 fresh 原版/Python 对照覆盖 signed/unsigned、W2 截断、
+percent/literal/empty 格式、长字符串、跨页 packed 输入和 format/output
+alias。组件采用显式合成 allocator 效果，匹配 Bionic printf 实际执行；
+12 项拒绝检查核对 guest-page 回滚，外部 provider 效果不在回滚范围。
+原生快照不作为语义模型输入。独立 owning allocator 一致性、原生失败/
+throw 路径、完整物理 stack/GP/FP/PAC ABI、竞争/宿主并发、独立 Python VM、
+剩余 VM 返回、完整 signer、真实 JVM/Android 与线上接受仍未验证。见
+[诊断后 formatter 返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_diagnostic_formatter_return_dynamic_20261123.json)。
+
+冻结 capture、20 项原版/Python formatter 对照、12 项组件页回滚检查及
+62 项篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，
+重放与冻结 JSON 逐字段一致，同次运行的 W2 转换与目标 payload 关系
+断言通过。679 个 Python 文件编译、公共扫描、三种错误 CLI 参数、冻结
+覆盖拒绝（证据 hash 不变）、源码指纹、退休 scope 与原始格式/变参/
+寄存器过滤、静态范围唯一性、LF/属性规则和空白检查通过。34 个前序
+证据和 owner 的基线 hash 保持。本次闭合 formatter 调用、Bionic printf、
+临时块清理和返回 VM；下一次 `+0x2887f0 -> +0x248780` clone/append
+尚未执行，剩余 VM 返回、完整独立 signer 与线上接受仍未验证。
+
+2026-11-23：重验冻结的 3156 点 formatter 段，执行完整 28 字节
+hidden-X8 wrapper `+0x2887f0 -> +0x248780`。X0 选择 36 字节 identifier，
+X1 选择六字节格式化 StringObject，X8 指定目标 `0x7004d1d8`。这正是已
+结束生命周期的诊断 scope 栈存储；新对象构造前只记录其地址、宽度和
+存储摘要，不再解释旧 scope 字段，也不解码尚未构造的目标字段。
+
+原版 `+0x2483e0` 在观察点 166 返回后，新 StringObject 的 length=36、
+capacity=37、payload=`0x136d40e0`，payload 含 NUL 的摘要与第一个输入
+一致。随后 tail branch 进入 `+0x246ba0` 追加第二个输入。629 返回
+wrapper `+0x288804`，status W0=0，目标 length=42、capacity=64，
+payload=`0x136df280`，包含终止 NUL；同次运行的关系断言要求其内容严格
+等于第一个输入后接第二个输入。631 返回 VM continuation `+0x16aa4c`，
+SP 与 X19-X29 恢复，packed descriptor 在 callback 返回前保持。
+
+clone 增加一次显式 37 字节 malloc。追加时观察到 `+0x348320` 请求将
+该 payload realloc 为 64 字节，实际进入匹配 Bionic `libc+0x1bb88`。
+校验器分别核对 `+0x2469c4` 的返回指针、`+0x2469ec` 的八字节 pointer
+写回和 `+0x2469f0` 的四字节 capacity 写回；这些过渡点不解码已退休的
+旧 payload。继承的事件账本只增加那一次显式 malloc，malloc 596→597、
+free 仍为 271，gc/flush 保持；该账本不枚举 realloc 内部分配/释放，
+不能据此声称独立 owning allocator 等价。realloc 的移动与字段写回另行
+记录。service/JNI/SVC、syscall 172/173、late-JNI/Java-dispatch 账本
+不变，没有新增 provider 或导入绑定。
+
+两个源对象及其 payload、其余既有字符串、输出/cache pair、counter、
+已初始化 word、诊断表和 locks/entries 持续保护；callback 返回后把新
+目标及当前完整 payload capacity 加入保护。新段共 1624 点，VM cursor
+从 `+0x10a2f4` 前进到 `+0x10a324`，停在下一次 VM 调用前。下一 descriptor
+为 `0x7004cab8`，完整 32 字节 wrapper `+0x2887d0` 选择 MD5 reference
+helper `+0x25874c`；该 VM call、wrapper 与 target 尚未执行，不推断其
+输入消费或摘要结果。原始字符串、identifier/seed、packed descriptor、
+分配内容、padding、逐次写值和寄存器转储均不公开。
+
+复用 16 项原版/Python 两基址对照，增加两个独立构造的 36＋6 字节
+场景，共 18 项，覆盖 binary/empty、输入输出 alias、合成分配/增长失败
+和跨页输出。8 项拒绝检查核对 guest-page 回滚，外部 provider 效果不在
+回滚范围；组件 allocator 为显式合成服务，原生快照不进入语义模型。
+完整物理 stack/GP/FP/PAC ABI、独立 owning allocator、原生失败/throw、
+竞争/宿主并发、独立 Python VM、剩余 VM 返回、完整 signer、真实
+JVM/Android 与线上接受仍未验证。见
+[formatter 后 clone/append 返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_formatter_pair_return_dynamic_20261123.json)。
+
+冻结 capture、18 项原版/Python clone/append 对照、8 项组件页回滚检查及
+81 项篡改拒绝通过；默认离线校验与独立 fresh ELF/Bionic replay 通过，
+重放与冻结 JSON 逐字段一致，包含第 594 点的 realloc 返回指针，以及
+第 599、600 点的 pointer/capacity 写回核对。680 个 Python 文件编译、
+公共扫描、三种错误 CLI 参数、冻结覆盖拒绝（证据 hash 不变）、源码
+指纹、目标构造生命周期与退休 scope 检查、原始字符串/寄存器过滤、
+静态范围唯一性、LF/属性规则和空白检查通过。37 个前序证据和 owner
+的基线 hash 保持。本次闭合 36＋6 字节的顺序拼接、realloc 移动及
+返回 VM；下一次 MD5 reference helper `+0x25874c` 尚未执行，剩余 VM
+返回、完整独立 signer 与线上接受仍未验证。
+
+2026-11-23：重验冻结的 1624 点 clone/append 段，执行完整 32 字节
+hidden-X8 wrapper `+0x2887d0 -> +0x25874c`。实际来源仍为前一步的
+42 字节 StringObject `0x7004d1d8`；wrapper 读取一个字节 flag 并零扩展，
+本样本选择十六进制分支。观察点 74 进入真正的 MD5 计算入口 `+0x243c34`，
+871 在 `+0x258608` 返回，16 字节结果与同次运行输入的独立 MD5 计算一致。
+`+0x243bdc` 是计算内部的结果字节写入点，不是函数入口。原始输入、
+raw digest 和最终摘要文本不导出，只记录长度、摘要及关系谓词。
+
+临时引用位于 `0x7004b8c8`，construct 返回时 count=1；输出 pair
+`0x7004c560` 在观察点 5175 赋值返回时 count=2，5369 临时引用释放
+返回后输出 count=1。临时引用生命周期结束后只保留其存储地址和摘要，
+不再解码其字段。输出在实际发布前不作为有效引用解码。结果 StringObject
+为 `0x136d9680`，counter 为 `0x136d8300`，payload 为 `0x136df180`，
+length=32、capacity=64，含终止 NUL。5392 返回 VM continuation
+`+0x16aa4c`，SP 与 X19-X29 恢复，不把物理 X0 偶然值当作模型返回 ABI。
+
+构造、赋值和释放均通过实际 scope 入口 `+0x26c858` 及离开
+`+0x26c9d0`。正式校验器分别读取入口返回、活跃 leave 入口及已退休
+leave 返回的状态，后者不再解码 scope 字段。诊断表只发布 bucket 104
+的一次八字节槽写入，新 entry `0x136d40e0` 在三组 scope 配对之后仍保留，
+状态为 `0x4000`、owner=0。该地址是先前 realloc 后已退休的旧 clone
+payload 存储，不能继续按旧 payload 解释。global lock header 的合法
+瞬态写入被允许，其 vtable/tail、已发布 entry 的 vtable/tail 及其他
+存活区域持续保护；callback 返回后进一步保护输出 pair、结果对象、
+counter/payload、完整表和完成后的诊断状态。
+
+新增 24、8、48、4、64 字节五次 malloc 请求，只释放结果对象最初的
+八字节 payload；继承计数 malloc 597→602、free 271→272，gc/flush
+保持。service/JNI/SVC、syscall 172/173、late-JNI/Java-dispatch 账本
+不变，没有新增 provider 或导入绑定。原有字符串、42 字节来源、输出/
+cache pair、counter 和初始化 word 保持保护。新段共 6014 点，VM cursor
+从 `+0x10a324` 前进到 `+0x10a348`，停在下一次调用前。下一 descriptor
+为 `0x7004ca60`，完整 28 字节 wrapper `+0x288820` 选择 CRC helper
+`+0x258bac`，该 VM call、wrapper 与 target 均未执行，不推断 CRC 结果。
+
+复用 32 项两基址原版/Python 对照，新增四项独立 42 字节 raw/hex 场景，
+覆盖全局表已初始化但目标槽为空的路径，共 36 项；匹配 Bionic 递归锁
+实际执行，组件 allocator 效果为显式合成服务。8 项拒绝检查核对
+guest-page 回滚，外部 provider 效果不在回滚范围。原生快照不进入语义
+模型，同次运行来源字节仅用于关系断言。完整物理 stack/GP/FP/PAC ABI、
+独立 owning allocator、原生失败/throw、竞争/宿主并发、独立 Python VM、
+剩余 VM 返回、完整 signer、真实 JVM/Android 与线上接受仍未验证。见
+[拼接后 MD5 reference 返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_pair_md5_return_dynamic_20261123.json)。
+
+正式 capture 与默认离线校验均通过：6014 个观察点、36 项原版/Python
+对照、8 项组件回滚检查及 90 项损坏证据拒绝检查。独立进程通过公开
+`run()` 与 `validate()` 重新执行完整 ELF/Bionic 路径，所得 JSON 与冻结
+证据逐字段一致。全部 681 个 Python 文件编译通过；公共扫描、三种错误
+CLI 参数组合、冻结证据覆盖拒绝及拒绝前后 hash 不变、源码指纹、未发布
+输出与已退休 scope/reference 的生命周期过滤、原始输入/digest/寄存器
+省略、静态范围唯一性、LF/属性规则与空白检查均通过。44 个前序证据和
+owner 文件保持基线 hash；下一 CRC 调用和完整独立 signer 仍未验证。
+
+2026-11-23：完整重验冻结的 6014 点 MD5 reference 返回结果，并执行
+28 字节 wrapper `+0x288820 -> +0x258bac`。CRC 的实际来源是上一检查点
+保留的 32 字节十六进制 MD5 StringObject `0x136d9680`，payload 为
+`0x136df180`。观察点 12 进入 buffer CRC `+0x24b298`，244 返回
+`+0x258bc4`。guest ELF 的 `+0x96144` 表共 256 项、1024 字节，与独立
+生成的 reflected CRC32 表一致；原版返回 W0 同时满足 guest 表计算和
+同次运行输入的 `binascii.crc32` 关系。实际输入及 CRC 值不公开。
+
+wrapper 在观察点 246 的 `+0x288830` 仅写四字节到 `0x7004ca70`，
+247 在下一条指令检查写回结果。packed descriptor 的前 16 与后 28 字节
+保持，249 返回 VM continuation `+0x16aa4c`，SP 和 X19-X29 恢复。
+写回前只记录输出存储摘要，实际 store 后才检查其值。原来源、所有保留
+的 MD5/reference/诊断区域及 CRC 表持续写保护。没有新增分配、释放、JNI
+或服务效果，malloc/free/gc/flush 仍为 602/272/3/4；全部继承账本与前序
+case result 逐字段相等，没有新增 provider 或导入绑定。
+
+新段共 1206 点，VM cursor 从 `+0x10a348` 前进到 `+0x10a37c`。
+下一 descriptor `0x7004cd80` 通过完整 16 字节 tail wrapper `+0x288530`
+选择诊断 scope 入口 `+0x26c858`；该 VM call、wrapper 和 target 均未执行，
+不推断下一 scope 的结果。原始输入、identifier/seed、CRC 数值、packed
+descriptor、分配内容、padding、逐次写值和寄存器转储均不导出。
+
+32 项既有原版/Python 对照加四项独立构造的 32/42 字节场景，共 36 项，
+覆盖两个 image base、signed 非正长度、binary/NUL、跨页、alias、声明
+长度边界和变更后的 guest 表；18 项拒绝检查确认全部 guest 页保持。
+外部 provider 效果不在回滚范围，原生快照不进入语义模型。完整物理
+stack/GP/FP/PAC ABI、独立 Python VM、剩余 VM 返回、完整 signer、真实
+JVM/Android 与线上接受仍未验证。见
+[MD5 文本 CRC 返回证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_md5_crc_return_dynamic_20261123.json)。
+
+正式 capture 与默认离线验证均通过：1206 个观察点、36 项原版/Python
+对照、18 项组件回滚检查和 69 项损坏证据拒绝检查。独立进程通过公开
+`run()` 与 `validate()` 重新执行完整 ELF/Bionic 路径，所得 JSON 与冻结
+证据逐字段一致。685 个仓库 Python 文件编译通过；公共扫描、三种错误
+CLI 参数组合、冻结证据覆盖拒绝及拒绝前后 hash 不变、源码指纹、完整
+前序结果相等、未写回输出过滤、原始输入/CRC/寄存器省略、静态范围
+唯一性、LF/属性规则和空白检查均通过。46 个前序证据和 owner 文件保持
+基线 hash；下一诊断 scope 调用和完整独立 signer 仍未验证。
+
+2026-11-23：完整重验冻结的 1206 点 CRC 返回结果，执行完整 16 字节
+tail wrapper `+0x288530 -> +0x26c858`。scope 存储为 `0x7004c660`，
+输入对应保留的 MD5 对象 `0x136d9680`，复用 bucket 104 的既有 entry
+`0x136d40e0`。没有新增 table publication；完整表和 global lock 保持。
+观察点 26 完成构造字段写入后才解码 scope，保留四字节 padding；实际
+Bionic 递归锁经 39 的 PLT 和 40 的 libc 入口执行，101 返回后 entry
+由 `0x4000`/owner=0 变为 `0x4001`/owner=137。102 写回 lock result=0，
+此前 sentinel 为 -233。112 返回 VM continuation，SP 与 X19-X29 恢复，
+packed descriptor 保持。scope 和 entry 一直持锁到本检查点边界。
+
+callback 后 VM 在第 522 点 `+0x17208c` 对 MD5 counter `0x136d8300`
+执行一次四字节写入，计数从 1 减到 0；523 在 `+0x172090` 读取并核对
+实际写回，随后重新保护该计数存储。只允许这一处已观察的计数更新，
+其余存活区域持续保护。零计数后的存储仍未释放，不再将旧 pair 解码为
+活跃拥有引用。初次私有 probe 将这次续段写入报告为保护冲突；补充原生
+重跑独立读取写入前后值及下一调用参数，正式校验器据此限定写入与生命周期。
+
+本段共 1249 个观察点，VM cursor 从 `+0x10a37c` 前进到 `+0x10a3bc`。
+下一 descriptor `0x7004cc80` 经完整 12 字节 tail wrapper `+0x288610`
+选择 `+0x32a264`，参数对应该零计数存储。静态代码表明目标转向 free
+路由；该 VM call、wrapper 和 target 均未执行，没有实际 free。新增
+分配/释放为零，malloc/free/gc/flush 保持 602/272/3/4；全部继承 JNI、
+SVC 和显式服务账本保持，没有新增 provider 或导入绑定。前序 serializer
+结果逐字段等于冻结 CRC case；allocator 前缀计数由最终原生计数减去
+实际新增分配/释放事件得出，本样本增量为空。
+
+18 项原版/Python 双基址对照覆盖 cold/warm、递归/saturated、跨页、
+alias、已存在/缺失槽，以及独立构造的 bucket 104 former StringObject
+存储重用；7 项拒绝检查核对 guest-page 回滚，外部 provider 效果不在
+回滚范围。组件 allocator 为显式合成服务；原生快照不进入语义模型。
+只公开哈希、已定义字段、关系及写入位置/宽度，不公开原始 word/CRC、
+输入、identifier/seed、descriptor、分配内容、padding 或寄存器转储。
+scope leave、计数/对象清理、完整物理 stack/GP/FP/PAC ABI、独立 owning
+allocator、独立 Python VM、剩余 VM 返回、完整 signer、真实 JVM/Android
+与线上接受仍未验证。见
+[CRC 后诊断 scope 证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_diagnostic_scope_entry_dynamic_20261123.json)。
+
+正式 capture 与默认离线校验均通过：1249 个观察点、18 项原版/Python
+对照、7 项组件回滚检查和 79 项损坏证据拒绝检查。独立进程通过公开
+`run()` 与 `validate()` 重新执行完整 ELF/Bionic 路径，所得 JSON 与冻结
+证据逐字段一致，包括持续持有的 scope 和 522/523 的引用计数转换。
+686 个仓库 Python 文件编译、公共扫描、三种错误 CLI 参数组合、冻结
+证据覆盖拒绝及拒绝前后 hash 不变、源码指纹、完整前序结果相等、scope/
+counter 生命周期过滤、原始 word/CRC/寄存器省略、静态范围唯一性、LF/
+属性规则和空白检查均通过。48 个前序证据和 owner 文件保持基线 hash；
+下一计数存储释放、scope leave 和完整独立 signer 仍未验证。
+
+2026-11-23：完整重验冻结的 1249 点 held-scope 前缀，执行完整 12 字节
+tail wrapper `+0x288610 -> +0x32a264`。实际 free 参数是上一检查点已归零
+的 counter 存储 `0x136d8300`；观察点 7 到达 `+0x347fa0`，8 进入匹配
+Bionic `libc+0x1bac0`。从此入口起不再读取或解释该计数字段，snapshot
+保留地址/宽度与生命周期标记，`counter_fields={}`。139 返回 VM
+continuation `+0x16aa4c`，SP 和 X19-X29 恢复，packed descriptor 保持。
+void free 不产生 packed 结果，不比较或公开物理返回 X0。
+
+随后原版 VM 在 263 的 `+0x171268`，通过 `STR X15` 将旧 pair 的计数
+指针槽 `0x7004c568` 写为 NULL；此前槽内容与已退休 counter 地址一致。
+264 在 `+0x17126c` 读取实际写回并确认八字节全零，随后重新保护该槽。
+该读取只针对仍有效的指针存储，不解引用已释放的 counter，也不把旧
+pair 解释为活跃拥有引用。最初私有 probe 将这一处续段写入报告为保护
+冲突；补充重跑实际核对前后字节和 NULL 关系，正式校验器仅允许这一
+已确认位置/宽度/值的写入窗口。MD5 对象 `0x136d9680`、payload、scope
+与 entry 仍完整；bucket 104 保持 `0x4001`/owner=137，表及 global lock
+保持。新增分配为零、free 一次，malloc/free/gc/flush 为 602/273/3/4。
+继承 JNI、SVC 和显式服务账本不变，没有新增 provider 或导入绑定。
+
+本段共 966 点，VM cursor 从 `+0x10a3bc` 前进到 `+0x10a3e8`。下一
+descriptor `0x7004cdf8` 经完整 12 字节 wrapper `+0x2884cc` 选择 MD5
+StringObject 的 deleting destructor `+0x2484fc`；参数对应保留的对象，
+该 VM call、wrapper 和 target 均未执行。对象/payload 删除和 scope
+leave 尚未闭合。完整前序 serializer 结果与冻结 scope case 逐字段相等，
+allocator 前缀计数由最终原生计数减去新增 free 事件得出。
+
+20 项原版/Python 双基址对照覆盖 NULL/high/unaligned pointer、跨页、
+alias 及显式 free provider 写入效果；新增四项独立四字节零计数场景，
+含 packed-tail alias，比较 bookkeeping 移除与覆写字节。12 项拒绝检查
+核对 guest-page 回滚，外部 provider 效果不在回滚范围。组件 free 为
+显式合成服务，不声称独立 owning allocator 等价；原生快照不进入语义
+模型。只公开哈希、已定义字段、关系及写入位置/宽度，不导出原始输入、
+word/CRC、identifier/seed、descriptor、分配内容、padding 或寄存器
+转储。完整物理 stack/GP/FP/PAC ABI、独立 Python VM、剩余 VM 返回、
+完整 signer、真实 JVM/Android 与线上接受仍未验证。见
+[CRC 后计数存储释放证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_counter_free_return_dynamic_20261123.json)。
+
+正式 capture 与默认离线校验均通过：966 个观察点、20 项原版/Python
+对照、12 项组件回滚检查和 70 项损坏证据拒绝检查。独立进程通过公开
+`run()` 与 `validate()` 重新执行完整 ELF/Bionic 路径，所得 JSON 与冻结
+证据逐字段一致，包括 8/139 的 Bionic free 入口/返回及 263/264 的指针
+清空写回。687 个仓库 Python 文件编译、公共扫描、三种错误 CLI 参数、
+冻结覆盖拒绝及拒绝前后 hash 不变、源码指纹、完整前序结果相等、已退休
+counter 与指针槽生命周期过滤、原始输入/CRC/寄存器省略、静态范围
+唯一性、LF/属性规则及空白检查均通过。50 个前序证据和 owner 文件保持
+基线 hash；MD5 对象删除、scope leave 和完整独立 signer 仍未验证。
+
+2026-11-23：完整重验冻结的 966 点 counter-free 前缀，执行完整 12 字节
+tail wrapper `+0x2884cc -> +0x2484fc`。deleting destructor 在观察点 10
+调用 base destructor `+0x2484b8`，先释放 `0x136df180` 的 64 字节 payload，
+再释放 `0x136d9680` 的 24 字节对象。实际匹配 Bionic free 入口分别为
+21、166，返回分别为 152 的 `+0x2484e0` 和 297 的 VM continuation。
+从各自 free 入口起，payload/object 的 fields 与内容摘要均停止读取，
+后续 snapshot 对应字典为空；更早退休的 counter 字段始终不解码。
+
+对象存储仍分配时，只允许析构代码的三次已定义字段写入：17 的 vtable
+store、152 的 payload pointer clear、155 的八字节 scalar reset。153/156
+分别核对实际写回；capacity 变为 0，原 length 字段写入 signed sentinel
+-221，与 ELF `+0x6e208` 常量一致，不把该值作为可读 payload 长度使用。
+payload free 返回到指针清空之间，只读取仍分配对象的字段位，不解引用
+旧 payload 指针。166 进入对象 free 后也不再读取对象布局。297 返回时
+SP 与 X19-X29 恢复、packed descriptor 保持；void 返回 X0 不导出或比较。
+
+随后 VM 在 421 的 `+0x171268` 将旧 pair 的对象指针槽 `0x7004c560`
+置为 NULL；观察器按实际指令解码源寄存器。422 在 `+0x17126c` 核对
+实际八字节写回及整个 16 字节 pair 存储全零，随后重新保护该槽，不把
+已释放 pair 解释为活跃拥有引用。scope 与 bucket 104 entry 保持持锁
+`0x4001`/owner=137，表及 global lock 保持。新增 free 两次，无新增分配、
+GC/flush 或 SVC；malloc/free/gc/flush 为 602/275/3/4。继承 JNI 和显式
+服务账本保持，没有新增 provider 或导入绑定。完整前序 serializer 与
+冻结 counter-free case 逐字段相等；前缀计数由最终原生计数减实际新增
+事件重建，SVC proof 保留并核对实际前缀。
+
+本段共 1181 点，VM cursor 从 `+0x10a3e8` 前进到 `+0x10a41c`。
+下一 descriptor `0x7004cd70` 经完整 12 字节 wrapper `+0x288540`
+选择 scope leave `+0x26c9d0`，参数对应该 active scope。该 VM call、
+wrapper 和 target 均未执行；MD5 对象/payload 删除已闭合，scope leave
+和剩余 VM 返回尚未验证。
+
+20 项原版/Python 双基址对照覆盖 NULL/negative length、跨页、alias 和
+显式 provider mutation；新增四项独立 length=32/capacity=64 场景，覆写
+已退休 payload/object 字节并核对对象 free 前的重置状态。12 项拒绝检查
+核对 guest-page 回滚，外部 provider 效果不在回滚范围。组件 free 为
+显式合成服务，不声称独立 owning allocator 等价；原生快照不进入语义
+模型。原始输入、word/CRC、identifier/seed、descriptor、分配内容、
+padding 和寄存器转储不公开。完整物理 stack/GP/FP/PAC ABI、独立 Python
+VM、完整 signer、真实 JVM/Android 与线上接受仍未验证。见
+[CRC 后 MD5 对象删除证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_md5_delete_return_dynamic_20261123.json)。
+
+正式 capture 与默认离线校验均通过：1181 个观察点、20 项原版/Python
+对照、12 项组件回滚检查及 76 项损坏证据拒绝检查。独立进程通过公开
+`run()` 与 `validate()` 重新执行完整 ELF/Bionic 路径，所得 JSON 与冻结
+证据逐字段一致，包括 payload/object 释放顺序及 421/422 的对象指针
+清空。688 个仓库 Python 文件编译、公共扫描、三种错误 CLI 参数、冻结
+覆盖拒绝及拒绝前后 hash 不变、源码指纹、完整前序结果相等、已退休
+payload/object/counter 生命周期过滤、store 源寄存器解码与 NULL 写回、
+原始输入/CRC/寄存器省略、静态范围唯一性、LF/属性规则及空白检查均
+通过。52 个前序证据和 owner 文件保持基线 hash；scope leave、剩余 VM
+返回及完整独立 signer 仍未验证。
+
+### 2026-11-23：CRC/MD5 清理后的诊断锁释放
+
+**Sample verified**：当前请求经 `+0x288540 -> +0x26c9d0` 进入匹配 Bionic
+`pthread_mutex_unlock`。42 的观察显示 owner 137 清为零而状态仍为 `0x4001`，
+45 显示状态改为 `0x4000`；55 返回到 VM，SP、X19-X29 和 packed descriptor
+保持。从返回开始不再解码 scope 字段，释放后的 entry header 重新受写保护。
+完整 MD5-delete 前序 serializer 逐字段一致，无新增分配、释放、SVC、JNI 或
+显式服务效果。沿用既有锁模型和对照夹具，16 项双基址原版/Python 对照、
+6 项 guest-page 回滚检查及 22 项损坏证据拒绝检查通过；未增加语义模型。
+
+本段 635 个观察点将 VM cursor 从 `+0x10a41c` 推进至 `+0x10a43c`。下一处
+descriptor 使用相同的 `+0x2884cc` 包装器，但目标为基础 StringObject 析构
+`+0x2484b8`，此前 MD5 删除的目标则为 `+0x2484fc`。静态代码确认前者清理
+payload/字段后返回，后者还会尾调用 object operator delete。不能仅凭包装器
+地址推断对象所有权；下一参数的所有权及下一调用均未验证或执行。
+
+新增验证器的状态和辅助方法以独立前缀命名，经 66 个前序类检查，无意外重名；
+原有 owner 和冻结证据不改写。正式 capture、默认离线验证和完整 `--replay`
+CLI 均通过，第二次 ELF/Bionic 执行所得完整 JSON 与冻结证据逐字段相等。
+完整 VM 返回、独立 Python/Rust signer、真实 Android 和线上接受仍未验证。见
+[诊断锁释放证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_scope_leave_return_dynamic_20261123.json)。

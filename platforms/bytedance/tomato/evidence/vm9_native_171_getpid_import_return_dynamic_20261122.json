@@ -1,0 +1,467 @@
+{
+  "schema": "vm9-native-171-getpid-import-return-dynamic-20261122-v1",
+  "claims": {
+    "evidence_label": "Sample verified",
+    "actual_VM_import_read_and_descriptor_store_verified": true,
+    "only_one_ABS64_import_slot_bound": true,
+    "public_ELF_loader_changed": false,
+    "inherited_instruction_trace_and_26_returned_callbacks_preserved": true,
+    "matching_Bionic_getpid_and_syscall_172_executed": true,
+    "explicit_syscall_172_result": 919,
+    "host_PID_read": false,
+    "wrapper_W0_store_and_padding_verified": true,
+    "callback_returned": true,
+    "SP_and_X19_X29_restored": true,
+    "zero_PID_cache_preserved": true,
+    "inherited_allocator_service_JNI_and_SVC_ledgers_unchanged": true,
+    "next_VM_instruction_executed": false,
+    "getppid_executed": false,
+    "complete_dynamic_linker_verified": false,
+    "current_native_suffix_return_verified": false,
+    "complete_standalone_signer_verified": false,
+    "ordinary_Cronet_six_headers_verified": false,
+    "Android_execution": false,
+    "online_acceptance_verified": false,
+    "physical_PAC_authentication_verified": false,
+    "native_memory_used_as_python_model_input": false
+  },
+  "providers": {
+    "inherited": {
+      "inherited": {
+        "memory_imports": "inherited explicit memcpy/memmove provider; no native Bionic memcpy-body claim",
+        "java_dispatch": "inherited explicit NULL-result provider; no ART/JVM execution",
+        "OS_JNI": "inherited synthetic services, unchanged provider implementation",
+        "allocations": "matching Bionic with inherited allocator observation",
+        "maximum_instruction_observations": 400000
+      },
+      "new_providers": [],
+      "clock": "inherited explicit clock_gettime provider: status=0, seconds=1791023800, nanoseconds=500000000",
+      "unresolved_callback": "stop before BLR; no NULL replacement or invented callback",
+      "maximum_instruction_observations": 400000
+    },
+    "binding": "only the getpid ABS64 slot, after the 26 returned callbacks; metadata-derived matching-libc export",
+    "syscall_172": {
+      "result": 919,
+      "kind": "explicit synthetic getpid result; no host PID read"
+    },
+    "inherited_service_and_SVC_ledgers": "kept separate from the added syscall-172 ledger",
+    "maximum_instruction_observations": 2000
+  },
+  "input_provenance": {
+    "inherited_callback_boundary_evidence_sha256": "e2e0ab80d635bab7ff25a36e8ab59cf71b817ee33d06ab9b2bcc32ac330e3374",
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db"
+  },
+  "source_fingerprints": {
+    "getpid_import_verifier_sha256": "3a44014843ce795f5a93bf1a6b24aa8cb3dff2e41092508b160135ad8757c8d6",
+    "inherited_source_fingerprints": {
+      "callback_boundary_verifier_sha256": "5d6bcfcc5fa817681364bfe457606248fec3b9369cb6ed1a5315e2fac42da0a7",
+      "inherited_source_fingerprints": {
+        "configuration_verifier_sha256": "2959364e393b0e14b77405cadfc6f56c2c0d3a9b386747ccb42fb44b578aba10",
+        "inherited_source_fingerprints": {
+          "scope_cycles_verifier_sha256": "8f7a8a7a83cb97f7c784128aa066fdec61566495ef5b0044a6e0a443977d785a",
+          "inherited_source_fingerprints": {
+            "post_reader_verifier_sha256": "d4046fac72033b0fc81daf4cacc38f83be98b9930e057175c10a75db39c44d66",
+            "inherited_source_fingerprints": {
+              "reader_release_verifier_sha256": "81d03d513cd47f07b35b32c6dedf940dbcbe60a6969e7e091963e1936e84d040",
+              "diagnostic_cleanup_return_verifier_sha256": "7e402176400ce88b50790288129e868a27f4741f99b4af623298c8fe77c06855",
+              "inherited_source_fingerprints": {
+                "diagnostic_cleanup_return_verifier_sha256": "7e402176400ce88b50790288129e868a27f4741f99b4af623298c8fe77c06855",
+                "diagnostic_cleanup_entry_verifier_sha256": "e508a78178bc46b859b9079779142bdd7a992a87a22d44498e1430392c8c0886",
+                "inherited_source_fingerprints": {
+                  "diagnostic_cleanup_verifier_sha256": "e508a78178bc46b859b9079779142bdd7a992a87a22d44498e1430392c8c0886",
+                  "diagnostic_scope_verifier_sha256": "6753a590e6a50158ea1062318970b31f6cbbed82a37d9b05a3309300ec9b47ca",
+                  "inherited_source_fingerprints": {
+                    "diagnostic_scope_verifier_sha256": "6753a590e6a50158ea1062318970b31f6cbbed82a37d9b05a3309300ec9b47ca",
+                    "shared_reader_verifier_sha256": "b5a53c0c01f2dfc4ed59a2e8d07aa907ff417c37dcf4f22b9a3b9535b0f36f26",
+                    "inherited_source_fingerprints": {
+                      "shared_reader_verifier_sha256": "b5a53c0c01f2dfc4ed59a2e8d07aa907ff417c37dcf4f22b9a3b9535b0f36f26",
+                      "callback_resolution_verifier_sha256": "c6cf11712ae067550e0fde13f9ccff824c6777d8967f34a9e76bc4990d744741",
+                      "inherited_source_fingerprints": {
+                        "callback_resolution_verifier_sha256": "c6cf11712ae067550e0fde13f9ccff824c6777d8967f34a9e76bc4990d744741",
+                        "next_vm_call_verifier_sha256": "fc264d8a8e0e91725af47e01ff6cf548057efa79c0eea8b340d558fc568c65c5",
+                        "wrapper_return_verifier_sha256": "efac0bd4c900e33acf2bcb1ff62b6fb3dbe994807c9271c280b37e590d4ae40c",
+                        "random_callback_verifier_sha256": "f4a1fa65ebf301aee69bdbde4c01666b54ab07ad533430fbbd3e168984c93c3e",
+                        "gettimeofday_verifier_sha256": "0b9b64f0efc92300fef6bec678361b9c4ed37b04c4904600c434ad5cb9ffe627",
+                        "suffix_digest_verifier_sha256": "7c0f3b7cb9b797d3bff69f3da795a8030e8ceaaa35c21cc4f55f932fe6297f1c"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "static_binding": {
+    "relocation": {
+      "section": ".rela.dyn",
+      "symbol": "getpid",
+      "symbol_index": 20,
+      "type": 257,
+      "addend": 0,
+      "import_slot_offset": "0x3833b0",
+      "undefined": true
+    },
+    "unresolved_file_word": "0x0",
+    "libc_export_offset": "0x1fe6c",
+    "resolved_target": "0x5101fe6c",
+    "libc_getpid_code_hex": "40d03bd5010440f9201440b940000034c0035fd66b2c0114",
+    "libc_syscall_code_hex": "881580d2010000d41f0440b1009480daa87bdc54c0035fd6",
+    "wrapper_code_hex": "fe4fbfa9080040f9f30300aa00013fd6600a00b9fe4fc1a8c0035fd6",
+    "origin_instruction_bytes": {
+      "0x16f96c": "89696df8",
+      "0x16f974": "897b2ef8",
+      "0x171240": "8f7b6ef8",
+      "0x171268": "2f6a30f8"
+    }
+  },
+  "case_result": {
+    "control": {
+      "base": 304873472,
+      "property_profile": "absent",
+      "null_at": "class0"
+    },
+    "retained_prefix": {
+      "returned_callbacks_verified": 26,
+      "returned_callbacks_sha256": "6321143b6c099f79c6b8c61f8628be9b3df312218b097748b40ef4c2634b5cd2",
+      "instruction_observations": 28561,
+      "instruction_trace_sha256": "06dd9b6141cea36f73e3148df508f771a14613921ea750fd0a5c626d4c37fac6",
+      "observed_code_sha256": "926280d90ba19a515ffd4e095ba006afaa9200fe3bc5c17a8a7dd56018c31ff5",
+      "pending_descriptor_differs_only_in_resolved_target": true,
+      "original_wrapper_frame_preserved": true
+    },
+    "binding": {
+      "at_parent_observation_index": 28077,
+      "symbol": "getpid",
+      "slot_offset": "0x3833b0",
+      "before": "0x0",
+      "after": "0x5101fe6c",
+      "relocation_type": 257,
+      "addend": 0,
+      "descriptor_not_written_by_binding": true,
+      "adjacent_getppid_slot_preserved": true
+    },
+    "import_reads": [
+      {
+        "kind": "ABS64_import_read",
+        "native_pc": "0x16f96c",
+        "bytecode": "0x109628",
+        "parent_index": 28214,
+        "address": "0x126433b0",
+        "size": 8,
+        "value": "0x5101fe6c",
+        "virtual_register": 1,
+        "observed_cursor": "0x109628"
+      },
+      {
+        "kind": "virtual_register_read",
+        "native_pc": "0x171240",
+        "bytecode": "0x10962c",
+        "parent_index": 28299,
+        "address": "0x7004d370",
+        "size": 8,
+        "value": "0x5101fe6c",
+        "virtual_register": 1,
+        "observed_cursor": "0x109630"
+      }
+    ],
+    "descriptor_stores": [
+      {
+        "native_pc": "0x16f974",
+        "bytecode": "0x109628",
+        "parent_index": 28216,
+        "address": "0x7004d370",
+        "size": 8,
+        "source_register": "x9",
+        "value": "0x5101fe6c",
+        "observed_cursor": "0x109628"
+      },
+      {
+        "native_pc": "0x171268",
+        "bytecode": "0x10962c",
+        "parent_index": 28309,
+        "address": "0x7004cc50",
+        "size": 8,
+        "source_register": "x15",
+        "value": "0x5101fe6c",
+        "observed_cursor": "0x109630"
+      }
+    ],
+    "instruction_observations": 16,
+    "instruction_trace_sha256": "7727b70cffff683874994885bbb92ca15d8867e11d100ef6c9826e4e4432af23",
+    "observed_code_sha256": "927f8ef95d8ca95e080cf054c657a47183895c2f84a626e7857017ee1d0e215b",
+    "pc_path": [
+      [
+        "main",
+        "0x288648"
+      ],
+      [
+        "libc",
+        "0x1fe6c"
+      ],
+      [
+        "libc",
+        "0x1fe70"
+      ],
+      [
+        "libc",
+        "0x1fe74"
+      ],
+      [
+        "libc",
+        "0x1fe78"
+      ],
+      [
+        "libc",
+        "0x1fe80"
+      ],
+      [
+        "libc",
+        "0x6b02c"
+      ],
+      [
+        "libc",
+        "0x6b030"
+      ],
+      [
+        "libc",
+        "0x6b034"
+      ],
+      [
+        "libc",
+        "0x6b038"
+      ],
+      [
+        "libc",
+        "0x6b03c"
+      ],
+      [
+        "libc",
+        "0x6b040"
+      ],
+      [
+        "main",
+        "0x28864c"
+      ],
+      [
+        "main",
+        "0x288650"
+      ],
+      [
+        "main",
+        "0x288654"
+      ],
+      [
+        "main",
+        "0x16aa4c"
+      ]
+    ],
+    "syscall_172": [
+      {
+        "libc_svc_offset": "0x6b030",
+        "number": 172,
+        "provider": "explicit synthetic result",
+        "result": 919
+      }
+    ],
+    "callback_return": {
+      "return_offset": "0x16aa4c",
+      "returned_x0": "0x397",
+      "descriptor_address": "0x7004cc50",
+      "descriptor_before_hex": "6cfe0151000000005346415da5a5a5a5a485501200000000c8cf047000000000",
+      "descriptor_after_hex": "6cfe01510000000097030000a5a5a5a5a485501200000000c8cf047000000000",
+      "output_width": 4,
+      "descriptor_padding_preserved": true,
+      "stack_pointer_restored": true,
+      "callee_saved_registers_restored": true,
+      "thread_pointer": "0x7000a000",
+      "pthread_pointer": "0x7000a200",
+      "zero_cached_PID_preserved": true,
+      "observed_TLS_bytes_preserved": true,
+      "callback_returned": true,
+      "next_VM_instruction_executed": false
+    },
+    "allocator_counts": {
+      "malloc": 577,
+      "free": 266,
+      "gc": 3,
+      "flush": 4
+    },
+    "service_counts": {
+      "syscall_214": 1,
+      "syscall_222": 4,
+      "syscall_167": 3,
+      "syscall_226": 9,
+      "syscall_56": 5,
+      "syscall_80": 1,
+      "syscall_215": 2,
+      "syscall_63": 2,
+      "syscall_57": 4,
+      "clock": 11,
+      "virtual_pthread_create": 3,
+      "destructor_registration": 6,
+      "syscall_98": 18,
+      "property_find": 1,
+      "syscall_48": 4,
+      "syscall_79": 4,
+      "mkdir_exists": 2,
+      "syscall_169": 1
+    },
+    "inherited_JNI_calls": [
+      {
+        "slot": "0x30",
+        "result": "NULL_or_false",
+        "caller": "0x28b720",
+        "name_length": 16,
+        "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+      },
+      {
+        "slot": "0x720",
+        "result": "NULL_or_false",
+        "caller": "0x28b7a8"
+      }
+    ],
+    "inherited_libc_SVC": [
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      }
+    ],
+    "inherited_main_SVC": [
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 48,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 30,
+        "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522",
+        "mode": 4
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 79,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 29,
+        "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+        "stat_buffer_in_native_stack": true,
+        "stat_buffer_size": 128,
+        "stat_buffer_SP_offset": 88,
+        "return_pc": "0x272d68"
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 79,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 5,
+        "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+        "stat_buffer_in_native_stack": true,
+        "stat_buffer_size": 128,
+        "stat_buffer_SP_offset": 88,
+        "return_pc": "0x272d68"
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 48,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 76,
+        "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+        "mode": 4,
+        "return_pc": "0x27308c"
+      }
+    ],
+    "late_jni": [
+      {
+        "slot": "0x388",
+        "label": "GetStaticMethodID_method_fixture",
+        "caller": "0x204d84",
+        "args": [
+          "0x70007800",
+          "0x0",
+          "0x1269a014",
+          "0x1269a01c"
+        ],
+        "result": "0x70006a00",
+        "name_length": 1,
+        "name_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+        "signature_length": 3,
+        "signature_sha256": "da8c82d5d4030588e2a67b1a25ad09d678e03e02b7d22a6f7b214e880ccb0c1c",
+        "return_kind": "void",
+        "class_argument_is_null": true
+      },
+      {
+        "slot": "0x720",
+        "label": "ExceptionCheck_clear",
+        "caller": "0x204d94",
+        "args": [
+          "0x70007800"
+        ],
+        "result": "0x0"
+      }
+    ],
+    "java_dispatch": [
+      {
+        "arguments": [
+          "0x1000011",
+          "0x0",
+          "0x0",
+          "0x0",
+          "0x0"
+        ],
+        "entry_sp": "0x7004b850",
+        "caller": "0x1cf6c8"
+      }
+    ],
+    "new_allocator_events": []
+  },
+  "case_result_sha256": "ae01388cfa7485c93e8b40d7d59bedb545ea28286ec845775aa4f82d3f7416af"
+}

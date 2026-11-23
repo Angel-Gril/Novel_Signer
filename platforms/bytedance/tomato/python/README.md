@@ -1,5 +1,1627 @@
 # Tomato Python material
 
+`verify_vm9_native_171_post_crc_scope_leave_return_dynamic_20261123.py`
+continues the retained request through `+0x288540 -> +0x26c9d0` and the
+matching Bionic unlock. **Sample verified**: observations 42/45 show owner
+137 becoming zero, then recursive mutex state `0x4001 -> 0x4000`; callback
+return at 55 preserves SP, X19-X29 and the packed descriptor. Scope fields
+are omitted from return onward, and the released header is protected again.
+The full parent serializer remains equal, with no new allocations, frees,
+SVC, JNI or explicit service effects. Existing independent scope/model
+controls are reused: 16 native/Python cases and six page-rollback checks;
+22 damaged-evidence cases are rejected. No new semantic owner is introduced.
+Capture, default offline validation and the full `--replay` CLI pass; the
+second ELF/Bionic execution reproduces the complete frozen result field for field.
+
+The 635-point interval advances VM cursor `+0x10a41c -> +0x10a43c` and stops
+before the next call: wrapper `+0x2884cc`, descriptor target `+0x2484b8`.
+That target is the base StringObject destructor, whereas the earlier MD5
+deletion targeted `+0x2484fc`. Wrapper identity alone does not establish
+object ownership or authorize an object-storage free. The next argument's
+ownership, next callback execution, complete VM return, independent signer
+and online acceptance remain unverified. See the
+[scope-release evidence](../evidence/vm9_native_171_post_crc_scope_leave_return_dynamic_20261123.json).
+
+`verify_vm9_native_171_post_crc_md5_delete_return_dynamic_20261123.py`
+revalidates the frozen 966-point counter-free prefix and executes the complete
+12-byte tail wrapper `+0x2884cc -> +0x2484fc`. **Sample verified**: the deleting
+destructor calls base destructor `+0x2484b8`, frees payload `0x136df180`, then
+object `0x136d9680`. Matching Bionic free entries occur at observations 21/166;
+their returns are observed at 152/297. Payload fields/hashes are omitted from
+21 onward, and object fields/hashes from 166 onward. Retired counter fields
+are never decoded.
+
+While object storage remains allocated, the verifier permits only the three
+original destructor stores: vtable at 17, payload pointer clear at 152 and scalar
+reset at 155. Observations 153/156 check the completed resets. Capacity becomes
+zero and the former length field receives signed destructor sentinel -221,
+matching the ELF constant; it is not consumed as a readable string length.
+Callback return at 297 restores SP and X19-X29 and preserves the descriptor.
+Void return X0 is omitted, and no packed result is stored.
+
+The following VM continuation clears the old pair's object-pointer slot
+`0x7004c560` at 421, PC `+0x171268`. The source register is decoded from the actual
+instruction. Observation 422 verifies NULL and that the full 16-byte pair storage
+is zero; the pointer slot then joins write protection again. Released pair storage
+is not interpreted as an owning reference. There are two new frees and no
+allocation, GC/flush or SVC effect; allocator counts become 602/275/3/4. The scope
+remains held, with bucket 104's entry at `0x4001`/owner 137; the table and global
+lock stay unchanged. All other retained live regions stay protected, with no new
+provider or import binding.
+
+The 1181-point segment advances the VM cursor from `+0x10a3e8` to `+0x10a41c`.
+It stops before descriptor `0x7004cd70` calls scope leave `+0x26c9d0` through the
+complete 12-byte tail wrapper `+0x288540`, with the active scope as argument.
+That VM call, wrapper and target do not execute.
+
+Twenty original/Python controls cover both image bases, NULL/negative-length,
+cross-page/alias and explicit-provider mutation cases. Four independently prepared
+length-32/capacity-64 cases overwrite retired payload/object bytes and check the
+reset state before object free. Twelve refusals preserve guest pages, excluding
+external provider effects. Component free remains explicit synthetic service
+behavior; owning allocator parity and whole physical stack/GP/FP/PAC ABI are not
+claimed. Raw inputs, words, CRC values, descriptors, allocation contents, padding
+and register dumps are omitted; native snapshots never enter semantic models.
+Standalone Python VM, remaining VM return, complete signing, JVM/Android and
+online acceptance remain unverified. Use `--capture` or `--replay` with `--elf` and
+`--libc`, or omit arguments for frozen validation. See the
+[post-CRC MD5 deletion evidence](../evidence/vm9_native_171_post_crc_md5_delete_return_dynamic_20261123.json).
+
+Frozen capture and default offline validation pass with 1181 observations,
+20 original/Python controls, 12 component rollback checks and 76 damaged-evidence
+rejections. An independent fresh ELF/Bionic process executes the public `run()`
+and `validate()` functions; its JSON matches the frozen evidence field for field,
+including the payload/object free order and object-pointer clear at 421/422.
+All 688 repository Python files compile. Public scanning, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprints, full parent-result equality, retired payload/object/counter lifetime
+filtering, decoded store-source and NULL checks, raw input/CRC/register omission,
+unique static ranges, LF/attribute rules and whitespace checks pass. All 52
+earlier evidence and owner files retain their baseline hashes. Scope leave and
+the complete standalone signer remain unverified.
+
+`verify_vm9_native_171_post_crc_counter_free_return_dynamic_20261123.py`
+revalidates the complete frozen 1249-point held-scope prefix, then executes the
+full 12-byte tail wrapper `+0x288610 -> +0x32a264`. **Sample verified**: its
+argument is the prior zero-count storage `0x136d8300`. Observation 7 reaches the
+free PLT and 8 enters matching Bionic `free` at `libc+0x1bac0`. Counter fields
+are omitted from that entry onward; snapshots do not read retired counter bytes.
+Callback return at 139 restores SP and X19-X29 and preserves the descriptor.
+Void free has no packed result, and physical return X0 is omitted.
+
+The following original VM continuation clears the old pair's eight-byte counter
+pointer slot `0x7004c568` at observation 263, PC `+0x171268`. The old word matches
+the retired counter address; observation 264 at `+0x17126c` verifies the actual
+NULL writeback. That pointer cell then joins write protection again. Pair storage
+is never interpreted as an active owning reference after deallocation. The MD5
+object `0x136d9680`, its payload and the held scope/diagnostic entry stay intact.
+Bucket 104 remains held at `0x4001`/owner 137. There is exactly one new free and
+no allocation; allocator counts become 602/273/3/4. Inherited JNI/SVC and explicit
+service ledgers are unchanged, with no new provider or import binding.
+
+The 966-point segment advances the VM cursor from `+0x10a3bc` to `+0x10a3e8`.
+It stops before descriptor `0x7004cdf8` selects the MD5 object's deleting
+destructor `+0x2484fc` through the complete 12-byte wrapper `+0x2884cc`. That VM
+call, wrapper and target do not execute. Object/payload deletion and scope leave
+remain outside this checkpoint.
+
+Twenty original/Python controls cover two image bases, NULL/high/unaligned
+pointers, cross-page/alias cases and explicit free-provider writes. Four added
+cases independently prepare a four-byte zero counter, including a packed-tail
+alias, and compare provider bookkeeping and overwritten bytes. Twelve refusals
+preserve guest pages, excluding external provider effects. Component free is an
+explicit synthetic service; owning allocator parity is not claimed. Raw inputs,
+words, CRC values, descriptors, allocation contents, padding and register dumps
+are omitted, and native snapshots never enter semantic models. Whole physical
+stack/GP/FP/PAC ABI, standalone Python VM, complete signing, JVM/Android and online
+acceptance remain unverified. Use `--capture` or `--replay` with `--elf` and `--libc`,
+or omit arguments for frozen validation. See the
+[post-CRC counter free evidence](../evidence/vm9_native_171_post_crc_counter_free_return_dynamic_20261123.json).
+
+Frozen capture and default offline validation pass with 966 observations,
+20 original/Python controls, 12 component rollback checks and 70 damaged-evidence
+rejections. An independent fresh ELF/Bionic process executes the public `run()`
+and `validate()` functions; its JSON matches the frozen evidence field for field,
+including Bionic free entry/return at 8/139 and the pointer clear at 263/264.
+All 687 repository Python files compile. Public scanning, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprints, full parent-result equality, retired-counter and pointer-cell lifetime
+filtering, raw input/CRC/register omission, unique static ranges, LF/attribute rules
+and whitespace checks pass. All 50 earlier evidence and owner files retain their
+baseline hashes. MD5 object deletion, scope leave and the complete standalone
+signer remain unverified.
+
+`verify_vm9_native_171_post_crc_diagnostic_scope_entry_dynamic_20261123.py`
+revalidates the complete frozen 1206-point CRC result, then executes the full
+16-byte tail wrapper `+0x288530 -> +0x26c858`. **Sample verified**: scope storage
+`0x7004c660` guards the retained MD5 object `0x136d9680`. Bucket 104 reuses entry
+`0x136d40e0`; the table and global lock remain unchanged. The actual matching
+Bionic recursive mutex changes from unlocked `0x4000`/owner zero to held
+`0x4001`/owner 137. Scope fields are read only after their stores at observation
+26. The saved lock result changes from -233 to zero at 102; callback return at
+112 restores SP and X19-X29 and preserves the descriptor and four padding bytes.
+
+The following VM continuation writes the reference counter `0x136d8300` from
+one to zero at observation 522, PC `+0x17208c`. Observation 523 checks the stored
+value, then the counter storage joins write protection again. This is the sole
+permitted counter write; the diagnostic scope and selected entry remain held.
+Zero-count storage is still allocated, and no subsequent owned-reference fields
+are decoded. The original source/object/payload and other retained regions stay
+protected. There are no new allocations, frees, JNI/SVC or explicit provider
+effects; allocator counts remain 602/272/3/4. The full parent serializer result
+matches the frozen CRC prefix.
+
+The 1249-point segment advances the VM cursor from `+0x10a37c` to `+0x10a3bc`.
+It stops before descriptor `0x7004cc80` calls `+0x32a264` through the complete
+12-byte tail wrapper `+0x288610`. Its argument matches the zero-count counter
+storage; static code identifies a branch to the free route. That VM call,
+wrapper and target do not execute. Scope leave and counter/object cleanup remain
+outside this checkpoint.
+
+Eighteen original/Python controls cover two image bases, cold/warm paths,
+recursive and saturated locks, alias/cross-page cases, existing/missing slots
+and independently prepared former StringObject storage at bucket 104. Seven
+refusals preserve all guest pages; external provider effects are excluded from
+rollback. Component allocation is explicit synthetic service behavior. Raw
+words, CRC values, strings, descriptors, allocation contents, padding and register
+dumps are omitted, and native snapshots never enter semantic models. Whole
+physical stack/GP/FP/PAC ABI, independent owning allocator parity, standalone
+Python VM, remaining VM return, complete signing, JVM/Android and online
+acceptance remain unverified. Use `--capture` or `--replay` with `--elf` and `--libc`,
+or omit arguments for frozen validation. See the
+[post-CRC diagnostic scope evidence](../evidence/vm9_native_171_post_crc_diagnostic_scope_entry_dynamic_20261123.json).
+
+Frozen capture and default offline validation pass with 1249 observations,
+18 original/Python controls, seven component rollback checks and 79 damaged-
+evidence rejections. An independent fresh ELF/Bionic process executes the public
+`run()` and `validate()` functions; its JSON matches the frozen evidence field
+for field, including the held scope and counter transition at 522/523. All 686
+repository Python files compile. Public scanning, three invalid CLI combinations,
+frozen overwrite refusal with unchanged evidence bytes, source fingerprints,
+full parent-result equality, scope/counter lifetime filtering, raw word/CRC/register
+omission, unique static ranges, LF/attribute rules and whitespace checks pass.
+All 48 earlier evidence and owner files retain their baseline hashes. The next
+counter deletion, scope leave and complete standalone signer remain unverified.
+
+`verify_vm9_native_171_post_md5_crc_return_dynamic_20261123.py` revalidates the
+complete frozen 6014-point MD5 reference result and executes the full 28-byte
+wrapper `+0x288820 -> +0x258bac`. **Sample verified**: its receiver is the retained
+length-32 MD5 hexadecimal StringObject at `0x136d9680`, with payload `0x136df180`.
+The original buffer CRC entry `+0x24b298` is observed at 12 and returns at 244.
+The guest ELF's 256-entry, 1024-byte table matches the independently generated
+reflected CRC32 table; native W0 matches both guest-table CRC and `binascii.crc32`
+of the same-run input. Those bytes and the CRC value are omitted from evidence.
+
+The wrapper writes exactly four bytes to `0x7004ca70` at observation 246;
+observation 247 checks the completed store. The descriptor's preceding 16 and
+following 28 bytes are preserved through callback return at 249. SP and X19-X29
+are restored. Unwritten output storage is recorded only by hash; its value is
+checked after the observed store. The source, all retained MD5/reference/diagnostic
+regions and guest CRC table remain write protected. There are no new allocator,
+JNI or service effects, and the full parent case result matches field for field.
+
+The new segment has 1206 observations and advances the VM cursor from `+0x10a348`
+to `+0x10a37c`. It stops before descriptor `0x7004cd80` selects diagnostic scope
+entry `+0x26c858` through the complete 16-byte tail wrapper `+0x288530`. That VM
+call, wrapper and target do not execute.
+
+Thirty-two existing original/Python cases plus four independently prepared
+32/42-byte cases cover two image bases, signed nonpositive lengths, binary/NUL
+input, cross-page and alias cases, declared-length bounds and a mutated guest
+table. Eighteen refusals preserve all guest pages. Native snapshots never enter
+semantic models. Whole physical stack/GP/FP/PAC ABI, standalone Python VM,
+remaining VM return, complete signing, JVM/Android and online acceptance remain
+unverified. Use `--capture` or `--replay` with `--elf` and `--libc`, or omit arguments
+for frozen validation. See the
+[post-MD5 CRC return evidence](../evidence/vm9_native_171_post_md5_crc_return_dynamic_20261123.json).
+
+Frozen capture and default offline validation pass with 36 original/Python
+controls, 18 component rollback checks and 69 damaged-evidence rejections.
+An independent fresh ELF/Bionic process executes the public `run()` and
+`validate()` functions; its JSON matches the frozen evidence field for field.
+All 685 repository Python files compile. Public scanning, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprints, full parent-result equality, unwritten-output filtering, raw source/
+CRC/register omission, unique static ranges, LF/attribute rules and whitespace
+checks pass. All 46 earlier evidence and owner files retain their baseline hashes.
+The next diagnostic scope call and complete standalone signer remain unverified.
+
+`verify_vm9_native_171_post_pair_md5_return_dynamic_20261123.py` revalidates
+the frozen 1624-point clone/append segment and executes the complete 32-byte
+hidden-X8 wrapper `+0x2887d0 -> +0x25874c`. **Sample verified**: its actual
+42-byte source is the preceding concatenated StringObject. Native MD5 entry
+`+0x243c34` is observed at 74 and returns at 871; its 16-byte result matches
+independent MD5 of the same-run input. The selected hexadecimal branch produces
+a length-32, capacity-64 StringObject. Raw input, raw digest and rendered digest
+bytes are omitted; relations, lengths and hashes are retained.
+
+The temporary reference at `0x7004b8c8` starts with count one. Publication to
+output `0x7004c560` returns at observation 5175 with count two; temporary release
+returns at 5369 with the output count back to one. Released temporary storage is
+retained only by hash. The result object is `0x136d9680`, counter `0x136d8300`,
+payload `0x136df180`. Callback return at 5392 restores SP and X19-X29. The output
+pair is not decoded before publication, and no physical return-X0 parity is
+claimed. Same-run source bytes enter only relation checks, never semantic models.
+
+Constructor, assignment and release each execute a diagnostic scope through
+actual entry `+0x26c858` and leave `+0x26c9d0`. The verifier captures entry return,
+active leave entry and retired leave return separately. Bucket 104's one new
+eight-byte table publication is permitted; its entry at `0x136d40e0` remains
+allocated and unlocked after the three scope pairs. Global-lock header changes
+are permitted during the callback, while its vtable/tail and other live regions
+stay protected. Published entry vtable/tail stores are rejected. Output objects,
+counter/payload, the table and completed diagnostic state join protection after
+callback return. Retired scope fields are not decoded.
+
+The new malloc requests are 24, eight, 48, four and 64 bytes; only the initial
+eight-byte result payload is freed. The inherited counters change from malloc
+597 to 602 and free 271 to 272; gc/flush and inherited service/JNI/SVC/dispatch
+ledgers are unchanged. No provider or import binding is added. Prior strings,
+the 42-byte source, cache/output pairs, counters and initialized word remain
+protected. The 6014-point segment advances the VM cursor from `+0x10a324` to
+`+0x10a348`, stopping before the complete 28-byte wrapper `+0x288820` calls CRC
+helper `+0x258bac`. That VM call, wrapper and target do not execute.
+
+Thirty-two existing original/Python controls plus four independent 42-byte
+raw/hex cases at two image bases pass through the actual wrapper and matching
+Bionic recursive mutexes. The added cases use an initialized global table with
+an empty target slot. Component allocator effects are explicit synthetic
+services. Eight rejections verify guest-page rollback, excluding external
+provider effects. Whole physical stack/GP/FP/PAC ABI, independent owning
+allocator parity, native failure/throw paths, host concurrency, standalone
+Python VM, remaining VM return, complete signing, JVM/Android and online
+acceptance remain unverified. Use `--capture` or `--replay` with `--elf` and
+`--libc`, or omit arguments for frozen validation. See the
+[post-pair MD5 reference evidence](../evidence/vm9_native_171_post_pair_md5_return_dynamic_20261123.json).
+
+Frozen capture and default offline validation pass with 36 original/Python
+controls, eight component rollback checks and 90 damaged-evidence rejections.
+An independent fresh ELF/Bionic process executes the public `run()` and
+`validate()` functions; its JSON matches the frozen evidence field for field.
+All 681 Python files compile. Public scanning, three invalid CLI combinations,
+frozen overwrite refusal with unchanged evidence bytes, source fingerprints,
+unpublished-output and retired-scope/reference lifetime checks, raw source/
+digest/register omission, unique static ranges, LF/attribute rules and whitespace
+checks pass. All 44 earlier evidence and owner files retain their baseline hashes.
+The next CRC call and complete standalone signer remain unverified.
+
+`verify_vm9_native_171_post_formatter_pair_return_dynamic_20261123.py`
+revalidates the frozen 3156-point formatter segment and executes the complete
+28-byte hidden-X8 wrapper `+0x2887f0 -> +0x248780`. **Sample verified**: the
+first input is the 36-byte identifier and the second is the six-byte formatted
+StringObject. Clone return at observation 166 exposes a new length-36,
+capacity-37 object; append return at 629 exposes their ordered 42-byte
+concatenation with a terminating NUL and status W0=0. The callback returns to
+VM at observation 631 with SP and X19-X29 restored. Same-run source bytes are
+used only for clone/concatenation assertions and never enter semantic models.
+
+The hidden destination `0x7004d1d8` reuses the completed diagnostic scope's
+retired stack storage. Until clone return, only its address, width and storage
+hash are retained; its fields are decoded only after the new StringObject is
+constructed. Neither the former scope fields nor an unconstructed destination
+are interpreted as a live object. Both source objects/payloads and all retained
+strings, pairs, counters, initialized word and diagnostic table/locks/entries
+remain protected. The destination and its current payload join the protected
+ranges after callback return.
+
+The clone requests 37 bytes. An actual matching Bionic realloc then moves its
+payload from `0x136d40e0` to `0x136df280` with capacity 64. The verifier checks
+the realloc PLT and Bionic entry, successful return, pointer store and capacity
+store separately, without decoding the retired payload while the object's
+fields are being updated. The inherited event ledger adds only the explicit
+37-byte malloc event: malloc 596 to 597, free remains 271, and gc/flush remain
+unchanged. That ledger does not enumerate realloc's internal allocation/free
+effects; those counts do not establish independent owning-allocator parity.
+Inherited service/JNI/SVC/dispatch ledgers are unchanged, and no provider or
+import binding is added.
+
+The 1624-point segment advances the VM cursor from `+0x10a2f4` to `+0x10a324`.
+It stops before the 32-byte wrapper `+0x2887d0` calls MD5 reference helper
+`+0x25874c`. That VM call, wrapper and target do not execute. Raw source/output
+strings, identifiers/seed, packed descriptors, allocation contents, padding,
+per-write values and register dumps are omitted.
+
+Sixteen existing fresh original/Python controls plus two independently prepared
+36-plus-six-byte controls cover both image bases. They include binary/empty
+inputs, input/output aliases, synthetic allocation/growth failures and cross-page
+output. Eight rejection checks verify guest-page rollback, excluding external
+provider effects. Component allocator effects are explicit synthetic services.
+Whole physical stack/GP/FP/PAC ABI, independent owning allocator, native failure/
+throw paths, host concurrency, standalone Python VM, remaining VM return,
+complete signing, JVM/Android and online acceptance remain unverified. Use
+`--capture` or `--replay` with `--elf` and `--libc`, or omit arguments for frozen
+validation. See the
+[post-formatter pair evidence](../evidence/vm9_native_171_post_formatter_pair_return_dynamic_20261123.json).
+
+Frozen capture, 18 original/Python controls, eight component rollback checks and
+81 damaged-evidence rejections pass. Default offline validation and an
+independent fresh ELF/Bionic replay pass; replay matches the frozen JSON field
+for field, including realloc return at observation 594 and pointer/capacity
+writeback checks at 599/600. All 680 Python files compile. Public scanning, three
+invalid CLI combinations, frozen overwrite refusal with unchanged evidence
+bytes, source fingerprints, destination-lifetime and retired-scope checks, raw
+source/register omission, unique static ranges, LF/attribute rules and whitespace
+checks pass. All 37 earlier evidence and owner files retain their baseline hashes.
+The next MD5 call and complete standalone signer remain unverified.
+
+`verify_vm9_native_171_post_diagnostic_formatter_return_dynamic_20261123.py`
+revalidates the frozen 921-point diagnostic scope-leave segment, then executes
+the complete 20-byte tail wrapper `+0x28880c -> +0x248908` and matching Bionic
+`vsnprintf`. **Sample verified**: the callback returns at observation 2276 with
+SP and X19-X29 restored. The destination StringObject stays at `0x136d9660`,
+retains capacity eight and payload `0x136d82e8`, and changes from length zero to
+six with a terminating NUL. The verifier checks the same-run W2 decimal
+conversion against the destination's length and payload hash; it exports no
+actual W2 value, format bytes or rendered text. Only the supplied W2 projection
+and zero-extension are checked, without claiming full GP/FP varargs or return-X0
+ABI parity.
+
+The formatter adds three allocations (16, eight and 32 bytes), followed by their
+three releases. Original matching Bionic allocator routes remain in use; malloc
+593 to 596 and free 268 to 271 are the only ledger changes. Earlier live strings,
+payloads, cache/output pairs, reference counter, initialized word and diagnostic
+table/locks/entries retain their protected state. The target vtable is not
+written. After return, the formatted object and its complete payload capacity
+join the protected ranges. The completed diagnostic scope is not decoded again.
+Packed arguments are preserved through callback return and may be reused later.
+
+The 3156-point segment advances the VM cursor from `+0x10a2c8` to `+0x10a2f4`.
+It stops before `+0x2887f0 -> +0x248780`; the complete 28-byte next wrapper is
+fingerprinted, but that VM call, wrapper and target do not execute. No new
+provider or import binding is added. Raw identifiers/seed, packed descriptors,
+allocation contents, padding, per-write values and register dumps are omitted.
+
+Twenty fresh original/Python controls execute the actual formatter wrapper at
+two image bases, covering signed/unsigned integers, W2 truncation, percent and
+literal/empty formats, a long string, cross-page packed input and format/output
+aliasing. Component allocator effects are explicit synthetic services; matching
+Bionic printf executes. Twelve rejection checks verify guest-page rollback,
+excluding external provider effects. Native snapshots never enter semantic
+models. Independent owning-allocator parity, native failure/throw paths, whole
+physical stack/GP/FP/PAC ABI, host concurrency, standalone Python VM, remaining
+VM return, complete signing, JVM/Android and online acceptance remain unverified.
+Use `--capture` or `--replay` with `--elf` and `--libc`, or omit arguments for frozen
+validation. See the
+[post-diagnostic formatter evidence](../evidence/vm9_native_171_post_diagnostic_formatter_return_dynamic_20261123.json).
+
+Frozen capture, 20 original/Python controls, 12 component rollback checks and
+62 damaged-evidence rejections pass. Default offline validation and an
+independent fresh ELF/Bionic replay pass; replay matches the frozen JSON field
+for field, including the same-run W2 conversion assertion. All 679 Python files
+compile. Public scanning, three invalid CLI combinations, frozen overwrite
+refusal with unchanged evidence bytes, source fingerprints, retired-scope and
+raw format/variadic/register omission, unique static ranges, LF/attribute rules
+and whitespace checks pass. All 34 earlier evidence and owner files retain their
+baseline hashes. The next clone/append call and complete standalone signer
+remain unverified.
+
+`verify_vm9_native_171_post_diagnostic_scope_leave_return_dynamic_20261123.py`
+revalidates the frozen 1009-point four-byte-allocation segment, then executes
+`+0x288540 -> +0x26c9d0` and the original matching Bionic unlock body.
+**Sample verified**: owner 137 is cleared with a four-byte store, followed by a
+two-byte release of the mutex state from `0x4001` to `0x4000`. The callback
+returns at observation 55 with SP and X19-X29 restored. This closes the sampled
+scope entry/leave pair; bucket 102's entry remains allocated in the process table.
+
+The scope's four padding bytes and storage hash are preserved through callback
+return. Once its lifetime ends, its fields stop being decoded; later snapshots
+retain only the retired storage's address and hashes. Internal unlock GP
+registers are omitted. The selected entry's vtable/tail remain protected during
+unlock, and its released header joins the protected regions after return. All
+other live strings, payloads, cache/output pairs, counter, initialized four-byte
+word, diagnostic table, global lock and other entries remain protected. The new
+word stays one. No allocation/free or inherited service/JNI/SVC/dispatch ledger
+change occurs, and no provider or import binding is added.
+
+The 921-point segment advances the VM cursor from `+0x10a29c` to `+0x10a2c8`.
+It stops before wrapper `+0x28880c` calls formatter `+0x248908`, selecting the
+new heap StringObject as destination. The complete 20-byte wrapper and target
+entry are fingerprinted. The format pointer is recorded; packed W2 is retained
+by width/hash only, with its zero-extension noted. No format bytes, raw variadic
+value, identifier/seed bytes, packed descriptor or per-write values are exported.
+This next VM call, wrapper and formatter do not execute.
+
+Sixteen fresh original/Python leave controls exercise the actual wrapper at two
+image bases: zero/high-bit input, cross-page scope, ordinary release, recursive
+count, nonzero saved result, empty entry and wrong owner. Component states are
+prepared independently by Python; leave callbacks do not allocate or free.
+Six rejection checks verify guest-page rollback, excluding external observer
+effects. Native snapshots never enter semantic models. Host contention/concurrency,
+whole physical stack/return ABI, standalone Python VM continuation, remaining VM
+return, complete signing, JVM/Android/PAC and online acceptance remain unverified.
+Use `--capture` or `--replay` with `--elf` and `--libc`, or omit arguments for frozen
+validation. See the
+[post-diagnostic scope-leave evidence](../evidence/vm9_native_171_post_diagnostic_scope_leave_return_dynamic_20261123.json).
+
+Frozen capture, 16 original/Python controls, six component rollback checks and
+60 damaged-evidence rejections pass. Default offline validation and an
+independent fresh ELF/Bionic replay pass; replay matches the frozen JSON field
+for field. All 678 Python files compile. Public scanning, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprints, retired-scope field and internal-unlock register omission, unique
+static ranges, LF/attribute rules and whitespace checks pass. All 27 earlier
+evidence and owner files retain their baseline hashes. The next formatter call
+and complete standalone signer remain unverified.
+
+`verify_vm9_native_171_post_diagnostic_small_allocation_return_dynamic_20261123.py`
+revalidates the frozen 947-point diagnostic-entry segment, then executes
+`+0x288508 -> +0x32a1f0` with X64 size four. **Sample verified**: inherited
+original matching Bionic malloc returns `0x136d82f0`; the wrapper stores it at
+packed descriptor+16 (`0x7004cdb8`). The callback returns at observation 146
+with SP and X19-X29 restored and the input/descriptor tail preserved.
+
+The VM subsequently performs one four-byte store at observation 584,
+`+0x17208c: str w11, [x12, x10]`, initializing the allocation to one. The
+post-store observation at 585 exports only the initialization predicate and
+hashes; internal VM GP registers are omitted. The initialized allocation joins
+the protected regions from that point. The 1009-point segment advances the VM
+cursor from `+0x10a270` to `+0x10a29c` and stops before the scope-leave call.
+Its complete 12-byte tail wrapper `+0x288540` would pass scope `0x7004d1d8` to
+`+0x26c9d0`; this next VM call, wrapper and target do not execute.
+
+All prior live strings, payloads, output/cache pairs, counter, cache mutex,
+related globals and errno stay protected. The active scope, held entry, complete
+diagnostic table, global lock and their pointer fields are also write-protected.
+Bucket 102 remains held at `0x4001`, owner 137; its scope result stays zero and
+identifier bucket 100 remains unchanged. Only one allocation is added (malloc
+592 to 593); other allocator and inherited service/JNI/SVC/dispatch ledgers are
+unchanged. No provider or import binding is added. Before the observed W32 store,
+uninitialized allocation bytes are retained only by hash. Packed arguments and
+raw identifier/seed bytes and per-write values are omitted.
+
+Twenty existing original/Python allocation controls plus two explicit size-four
+controls cover both image bases; component malloc is an explicit synthetic
+provider. Nine existing rejections verify guest-page rollback, excluding external
+provider effects. Native snapshots never enter Python semantic models. The next
+unlock, full scope lifetime, independent owning-allocator parity, native NULL/
+new-handler/throw, standalone Python VM continuation, remaining VM return,
+complete signing, JVM/Android/PAC and online acceptance remain unverified. Use
+`--capture` or `--replay` with `--elf` and `--libc`, or omit arguments for frozen
+validation. See the
+[post-scope four-byte allocation evidence](../evidence/vm9_native_171_post_diagnostic_small_allocation_return_dynamic_20261123.json).
+
+Frozen capture, 22 original/Python controls, nine component rollback checks and
+62 damaged-evidence rejections pass. Default offline validation and an
+independent fresh ELF/Bionic replay pass; replay matches the frozen JSON field
+for field. All 677 Python files compile. Public scanning, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprints, internal-register omission, unique static ranges, LF/attribute
+rules and whitespace checks pass. All 25 earlier evidence and owner files retain
+their baseline hashes.
+
+`verify_vm9_native_171_post_identifier_diagnostic_scope_entry_dynamic_20261123.py`
+revalidates the frozen 858-point heap-string constructor segment and executes
+`+0x288530 -> +0x26c858`. **Sample verified**: string pointer `0x136d9660`
+selects diagnostic bucket 102, whose slot `0x136f8330` was empty. Original
+matching Bionic malloc allocates a 48-byte recursive-mutex object at
+`0x136d40b0`. The entry is constructed and published, the global mutex is
+released, and the selected entry is locked through the original matching Bionic
+mutex body. It remains held at state `0x4001`, owner 137, at the stop boundary.
+
+Scope `0x7004d1d8` retains its four padding bytes by hash and records lock result
+zero. The target returns at observation 390 and reaches the VM at 391 with SP
+and X19-X29 restored; its packed descriptor is preserved through callback return.
+The 947-point segment advances the VM cursor from `+0x10a250` to `+0x10a270`.
+All earlier strings, payloads, output/cache pairs, counter, cache mutex, related
+globals and errno remain protected. Identifier bucket 100 and the initialized
+diagnostic guard are also write-protected. Only bucket 102 changes in the table;
+the global lock is restored. The active scope and held entry join the protected
+regions after callback return. One allocation is added (malloc 591 to 592);
+other allocator and inherited service/JNI/SVC/dispatch ledgers are unchanged.
+
+The next descriptor at `0x7004cda8` selects `+0x288508 -> +0x32a1f0`, requests
+four bytes and would store its result at `0x7004cdb8`. Its VM call, wrapper and
+allocation do not execute. The selected diagnostic mutex is not unlocked in
+this segment. No provider or import binding is added. Public records retain
+hashes, lengths, defined fields and write locations/widths, omitting raw
+identifier/seed bytes, packed descriptors, padding and allocation contents.
+
+Fourteen fresh original/Python controls cover seven profiles at two image bases,
+including an initialized table with an empty selected slot. Component allocation
+is explicitly synthetic; matching Bionic mutex bodies execute. Seven existing
+rejections check guest-page rollback, excluding external allocator effects.
+Native snapshots never enter Python semantic models. The full scope lifetime,
+contention/concurrency, independent owning-allocator parity, standalone Python VM,
+remaining VM return, complete signing, JVM/Android/PAC and online acceptance
+remain unverified. Use `--capture` or `--replay` with `--elf` and `--libc`, or omit
+arguments for frozen validation. See the
+[post-identifier diagnostic-entry evidence](../evidence/vm9_native_171_post_identifier_diagnostic_scope_entry_dynamic_20261123.json).
+
+Frozen capture, 14 original/Python controls, seven component rollback checks and
+62 damaged-evidence rejections pass. Default offline validation and an
+independent fresh ELF/Bionic replay pass; replay matches the frozen JSON field
+for field. All 676 Python files compile. Public scanning, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprints, unique static-code ranges, LF/attribute rules and whitespace
+checks pass. All 23 earlier evidence and owner files retain their baseline hashes.
+
+`verify_vm9_native_171_post_identifier_heap_string_constructor_return_dynamic_20261123.py`
+revalidates the frozen 681-point allocation segment and runs the original
+`+0x2884cc -> +0x2481ac` default constructor on heap object `0x136d9660`.
+**Sample verified**: it loads the ELF initial descriptor, publishes vtable
+`+0x34f5f8`, capacity eight and length zero, and requests an eight-byte payload
+through the inherited original matching Bionic malloc. Payload `0x136d82e8`
+receives one NUL byte; the other seven bytes retain their pre-store hash. The
+constructor returns at observation 147 and reaches the VM at 148 with SP and
+X19-X29 restored. The packed descriptor remains unchanged through callback return.
+
+The 858-point segment advances the VM cursor from `+0x10a228` to `+0x10a250`.
+The identifier, three earlier default strings, output/cache pairs, counter,
+mutex, related globals and errno remain write-protected. The new object and its
+payload join the protected regions after callback return. Only one allocation
+is added (malloc 590 to 591); other allocator and inherited service/JNI/SVC/
+dispatch ledgers remain unchanged. No provider or import binding is added.
+
+The next 48-byte descriptor at `0x7004cd80` selects the complete 16-byte tail
+wrapper `+0x288530` and diagnostic-scope target `+0x26c858`, with X0 pointing to
+scope `0x7004d1d8` and X1 to the new string object. That VM call, wrapper and
+target do not execute. Public records contain hashes, lengths, defined fields
+and write locations/widths, omitting raw identifier, seed, packed descriptor and
+allocation contents. Uninitialized bytes are retained only by hash.
+
+Eighteen existing native layout/store-width/SP controls and eight fresh
+original/Python consumer controls use explicit synthetic component malloc.
+Twelve existing consumer-family rejection checks verify guest-page rollback;
+external provider effects remain outside rollback. Native snapshots never enter
+Python semantic models. Independent owning-allocator parity, the actual Bionic
+NULL path, standalone Python VM continuation, remaining VM return, successful
+entropy access, complete signing, JVM/Android/PAC and online acceptance remain
+unverified. Use `--capture` or `--replay` with `--elf` and `--libc`, or omit
+arguments for frozen validation. See the
+[post-identifier heap-string evidence](../evidence/vm9_native_171_post_identifier_heap_string_constructor_return_dynamic_20261123.json).
+
+Frozen capture, 18 native layout controls, eight original/Python comparisons,
+12 component rollback checks and 54 damaged-evidence rejections pass. Default
+offline validation and an independent fresh ELF/Bionic replay pass; replay
+matches the frozen JSON field for field. All 675 Python files compile. Public
+scanning, three invalid CLI combinations, frozen overwrite refusal with unchanged
+evidence bytes, source fingerprints, LF/attribute rules and whitespace checks
+pass. All 15 earlier evidence and owner files retain their baseline hashes.
+
+`verify_vm9_native_171_post_identifier_allocation_return_dynamic_20261123.py`
+revalidates the frozen 686-point VM prefix, then executes the allocation call at
+`+0x16aa48`. **Sample verified**: original wrapper `+0x288508` and operator new
+`+0x32a1f0` request 24 bytes through the inherited matching Bionic malloc at
+`libc+0x1bb08`. The returned pointer `0x136d9660` is stored at descriptor+16
+(`0x7004cdb8`). The callback returns at observation 146 with SP and X19-X29
+restored. The 681-point segment advances the VM cursor from `+0x10a208` to
+`+0x10a228`, stopping before the next VM call. Its 12-byte wrapper `+0x2884cc`
+would pass the allocation pointer to `+0x2481ac`; this next call does not execute.
+
+The identifier, prior default objects, output/cache pairs, counter, mutex,
+related globals and errno remain under continuous write protection. The
+allocation count increases from 589 to 590; all other allocator and inherited
+service/JNI/SVC/dispatch ledgers are unchanged. No provider or import binding is
+added. Public records contain hashes, defined pointers/scalars and write
+locations/widths, omitting raw identifier, seed, descriptor and allocation bytes.
+
+Twenty existing fresh original/Python allocation-wrapper controls and nine
+guest-page rollback checks remain separate from the main path's original
+Bionic execution. Component malloc is an explicit synthetic provider; external
+provider effects are outside rollback. Independent owning-allocator parity,
+native NULL/new-handler/throw, standalone Python VM continuation, remaining VM
+return, successful entropy access, complete signing, JVM/Android/PAC and online
+acceptance remain unverified. Use `--capture` or `--replay` with `--elf` and
+`--libc`, or omit arguments for frozen validation. See the
+[post-identifier allocation evidence](../evidence/vm9_native_171_post_identifier_allocation_return_dynamic_20261123.json).
+
+Frozen capture, 20 original/Python controls, nine component rollback checks and
+50 damaged-evidence rejections pass. Default offline validation and an
+independent fresh ELF/Bionic replay pass; replay matches the frozen JSON field
+for field. All 674 Python files compile. Public scanning, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprints, LF/attribute rules and whitespace checks pass. The 11 earlier
+evidence and owner files retain their baseline hashes.
+
+`verify_vm9_native_171_post_identifier_vm_boundary_dynamic_20261123.py`
+resumes the original VM at `+0x16aa4c` after revalidating the frozen 633-point
+identifier-publication segment. **Sample verified**: this 686-point continuation
+advances the VM cursor from `+0x10a1e0` to `+0x10a208` and reaches its next call
+at `+0x16aa48`. Both boundaries retain the same SP and X19-X29 digest. All live
+identifier/default-object regions remain unchanged under continuous write
+protection: output and cache still share the string/count pair, count stays two,
+the cache mutex remains unlocked, and errno remains two. Allocator and inherited
+service/JNI/SVC/late-dispatch ledgers are unchanged; no provider or binding is added.
+
+The next 48-byte packed descriptor is at `0x7004cda8`, separate from the prior
+descriptor. Wrapper `+0x288508` would load target `+0x32a1f0` and X64 size 24,
+then store the returned pointer at descriptor+16 (`0x7004cdb8`). Its complete
+28-byte wrapper and the target entry are fingerprinted. This next VM call,
+wrapper, allocation and result store do not execute. Public records retain only
+the descriptor hash and defined scalar/address fields; raw descriptor, identifier
+and seed bytes and per-write values are omitted. VM parameter writes are recorded
+as locations and widths while live output/cache/object regions stay protected.
+
+Twenty fresh original/Python allocation-wrapper controls cover ten existing
+profiles at two image bases: size zero/one/24/4097/uint64 max, high pointers,
+cross-page input/result, provider rewrites and packed aliases. Synthetic malloc
+is explicit; nine existing rejection checks verify guest-page rollback, excluding
+external provider effects. These controls execute the component independently;
+the next main-path allocation remains unexecuted. Native snapshots never enter
+Python semantic models. A standalone Python VM continuation, successful entropy
+access, remaining VM return, independent signing, native NULL/new-handler/throw,
+JVM/Android/PAC and online acceptance remain unverified. Use `--capture` or
+`--replay` with `--elf` and `--libc`, or omit arguments for frozen validation. See
+the [post-identifier VM evidence](../evidence/vm9_native_171_post_identifier_vm_boundary_dynamic_20261123.json).
+
+Frozen capture, 20 original/Python allocation controls, nine component rollback
+checks and 42 damaged-evidence rejections pass. Default offline validation and a
+fresh ELF/Bionic replay pass; replay matches the frozen JSON field for field.
+All 673 Python files compile. The public scan, three invalid CLI combinations,
+frozen overwrite refusal with unchanged evidence bytes, source fingerprint
+matching and whitespace checks pass. Earlier frozen evidence and semantic owners
+retain their baseline hashes.
+
+`verify_vm9_native_171_identifier_cache_publication_dynamic_20261123.py`
+continues `+0x25be18` after revalidating the frozen 1485-point reference/factory
+segment. **Sample verified**: original output assignment `+0x162620` publishes
+the string/count pair and increments the counter from one to two. Temporary
+release `+0x15e1a8` decrements it to one without clearing the temporary pair's
+bytes. Original cache assignment `+0x1633b0` publishes the same pair to the cache
+and increments the counter to two. Output and cache hold the same string
+`0x136d9640` and counter `0x136d82e0`; the temporary's lifetime has ended.
+
+The cache mutex is unlocked at observation 622. Getter `+0x25bd8c` returns at
+631, and wrapper `+0x2886b0` returns at 633 with SP and X19-X29 restored against
+the saved caller frame. This 633-point segment stops before VM continuation
+`+0x16aa4c`; its instruction does not execute. X0 is incidental; the object
+result is verified through the output reference. Three diagnostic lock/unlock
+cycles reuse the existing entry. No allocation/free or inherited service/JNI/
+SVC/late-dispatch ledger changes occur; no provider or import binding is added.
+The three prior default objects/payloads, descriptor, string object/payload,
+identifier globals and errno remain write-protected. Later calls reuse the
+former formatter stack window, which is recorded by hash and is no longer
+protected as a live payload.
+
+Sixteen fresh original/Python cache controls cover eight existing profiles at
+two image bases, including cold/warm caches, failed seed-open, zero seed, output
+aliases and cross-page output. Nineteen existing rejection checks verify guest
+page rollback; external provider effects remain outside it. Component file,
+allocation and thread services are explicit; native snapshots never initialize
+Python semantic models. Raw identifier/seed bytes and write values are omitted.
+Subsequent VM execution, successful entropy access, independent signing, JVM/
+Android/PAC and online acceptance remain unverified. Use `--capture` or `--replay`
+with `--elf` and `--libc`, or omit arguments for frozen validation. See the
+[identifier cache-publication evidence](../evidence/vm9_native_171_identifier_cache_publication_dynamic_20261123.json).
+
+Frozen capture, 16 original/Python controls, 19 component rollback checks and
+43 damaged-evidence rejections pass. Default offline validation and a fresh
+ELF/Bionic replay pass; replay matches the frozen JSON field for field. All 672
+Python files compile. The public scan, three invalid CLI combinations, frozen
+overwrite refusal with unchanged evidence bytes, source fingerprint matching
+and whitespace checks pass. Earlier frozen evidence and semantic owners retain
+their baseline hashes.
+
+`verify_vm9_native_171_identifier_reference_factory_return_dynamic_20261123.py`
+continues the BL at `+0x25bd3c` after revalidating the frozen 295-point string
+constructor segment. **Sample verified**: original `+0x1625a4` clears the temporary
+pair, enters the diagnostic scope, publishes the string pointer and allocates a
+four-byte counter initialized to one. Diagnostic table slot 100 was empty; an
+original 48-byte allocation creates its recursive mutex at `0x136d4080`. The
+scope locks it, then releases it to state `0x4000` with owner zero. The existing
+diagnostic guard, global lock and table stay allocated.
+
+The reference constructor returns at observation 1474. The identifier factory
+returns at 1483, restoring SP and X19-X29 against its saved frame and unchanged
+registers. Temporary reference `0x7004b8c0` owns string `0x136d9640` with counter
+`0x136d82e0` equal to one. This 1485-point segment stops before `+0x25be18` calls
+output assignment `+0x162620`; that call does not execute. The output reference
+and cache remain empty, and their mutex remains held. The three earlier default
+objects/payloads, full descriptor, string object/payload, source window, cache
+state and errno remain write-protected. Only 48-byte and four-byte malloc events
+are added; other allocator counts and inherited service/JNI/SVC/dispatch ledgers
+remain unchanged. Returned X0 is incidental and is not interpreted as the string
+or counter result. No provider or import binding is added.
+
+Eight fresh original/Python reference-constructor controls cover both image
+bases, cold/warm diagnostic locks and ordinary/NULL string pointers. They compare
+declared image pages, guest payload, scope bytes and ordered allocation/lock
+effects using explicit synthetic allocation and thread-id services. Four existing
+constructor rejection cases verify guest-page rollback; external provider effects
+remain outside it. Native snapshots never enter Python semantic models. Public
+records omit identifier/seed bytes, uninitialized pointer/counter values and write
+values. Output assignment, temporary release, cache publication, getter/VM return,
+independent signing, JVM/Android/PAC and online acceptance remain unverified.
+Use `--capture` or `--replay` with `--elf` and `--libc`, or omit arguments for
+frozen validation. See the
+[identifier reference/factory evidence](../evidence/vm9_native_171_identifier_reference_factory_return_dynamic_20261123.json).
+
+Frozen capture, eight original/Python controls, four component rollback checks
+and 45 damaged-evidence rejections pass. Default offline validation and a fresh
+ELF/Bionic replay pass; replay matches the frozen JSON field for field. All 671
+Python files compile. The public scan, three invalid CLI combinations, frozen
+overwrite refusal with unchanged evidence bytes, source fingerprint matching
+and whitespace checks pass. Earlier frozen evidence and semantic owners retain
+their baseline hashes.
+
+`verify_vm9_native_171_identifier_string_constructor_return_dynamic_20261123.py`
+continues the BL at `+0x25bd24` after revalidating the frozen 1140-point formatter
+segment. **Sample verified**: original operator new allocates a 24-byte string
+object, and original constructor `+0x248344` allocates its 37-byte payload through
+the inherited matching Bionic malloc route. Four native header stores establish
+the vtable, capacity 37, length 36 and payload pointer. The inherited host strlen
+and memcpy providers measure/copy the formatter output including NUL; original
+Bionic strlen/memcpy bodies do not execute. Raw identifier/seed bytes and write
+values are omitted from public evidence.
+
+The constructor returns at observation 293 with SP and X19-X29 restored. This
+295-point segment stops before `+0x25bd3c` calls reference constructor `+0x1625a4`.
+Its arguments select temporary reference `0x7004b8c0` and string `0x136d9640`;
+that call does not execute. The three earlier default objects/payloads, full
+descriptor, cache globals/mutex/pair, output reference, source window and errno
+remain write-protected. Only two malloc events are added (24 and 37 bytes);
+all other allocator counts and inherited service/JNI/SVC/late-dispatch ledgers
+remain unchanged. No provider or import binding is added.
+
+Fourteen fresh original/Python controls cover six existing string-constructor
+cases and successful operator new at two image bases. Synthetic allocators are
+explicit in these controls. Nine existing string-wrapper rejection checks verify
+guest-page rollback; external provider effects remain outside that rollback.
+Native snapshots never enter Python semantic models. Reference construction,
+cache publication, the surrounding identifier callback return, successful entropy
+access, full VM return, independent signing, JVM/Android/PAC and online acceptance
+remain unverified. Use `--capture` or `--replay` with `--elf` and `--libc`, or omit
+arguments for frozen validation. See the
+[identifier string-constructor evidence](../evidence/vm9_native_171_identifier_string_constructor_return_dynamic_20261123.json).
+
+Frozen capture, 14 original/Python controls, nine component rollback checks and
+42 damaged-evidence rejections pass. Default offline validation and a fresh
+ELF/Bionic replay pass; replay matches the frozen JSON field for field. All 670
+Python files compile. The public scan, three invalid CLI combinations, frozen
+overwrite refusal with unchanged evidence bytes, source fingerprint matching
+and whitespace checks pass. Earlier frozen evidence and semantic owners retain
+their baseline hashes.
+
+`verify_vm9_native_171_identifier_formatter_return_dynamic_20261122.py`
+continues the BL at `+0x25bd1c` after revalidating the frozen 381-point failed
+seed-open prefix. **Sample verified**: original formatter `+0x255d84` decodes
+its lazy template/alphabet and executes two original `+0x255ec0` state advances.
+The zero input state remains zero despite four eight-byte state stores; two
+eight-byte scratch stores also retain zero. Thirty-seven original byte stores
+produce 36 characters plus NUL. Output length, including-NUL hash and the
+untouched remainder of the 64-byte output window are checked; raw identifier
+and seed bytes are omitted from public evidence.
+
+The formatter returns at observation 1139 with SP and X19-X29 restored. Its
+incidental X0 is not interpreted as a success status. This 1140-point segment
+stops before the BL at `+0x25bd24` to `+0x32a1f0`, with X0=24; that allocation
+does not execute. The surrounding identifier callback and cache publication
+remain pending. Three earlier default objects/payloads, the full callback
+descriptor, cache objects/guards, output reference and errno are protected.
+Allocator events/counts and inherited service/JNI/SVC/late-dispatch ledgers
+remain unchanged. No provider or import binding is added.
+
+Fourteen independent original/Python formatter controls cover the six existing
+template/alphabet/seed/output cases and an explicit zero-seed case at each of
+two image bases. They compare declared guest image/payload memory and entropy
+scratch from fresh ELF inputs. Nineteen existing component rejection checks
+verify page rollback; external provider effects remain outside that rollback.
+Native snapshots never enter Python semantic models. Successful entropy access,
+the current identifier object's construction/publication, full VM return,
+independent signing, real JVM/Android/PAC and online acceptance remain unverified.
+Use `--capture` or `--replay` with `--elf` and `--libc`, or omit arguments for
+frozen validation. See the
+[identifier formatter evidence](../evidence/vm9_native_171_identifier_formatter_return_dynamic_20261122.json).
+
+Frozen capture, 14 original/Python formatter controls, 19 component rollback
+checks and 35 damaged-evidence rejections pass. Default offline validation and
+a fresh ELF/Bionic replay pass; replay matches the frozen JSON field for field.
+All 669 Python files compile. The public working-tree scan, three invalid CLI
+combinations, frozen overwrite refusal with unchanged evidence bytes, source
+fingerprint matching and whitespace checks pass. Four Rust unit tests pass.
+The scanner regression suite could not create temporary `.git` fixtures under
+the sandbox permissions; that suite remains unverified in this run.
+
+`verify_vm9_native_171_identifier_seed_open_failure_dynamic_20261122.py`
+continues the original BL at `+0x255d38` after revalidating the frozen
+1147-point seed-open prefix. **Sample verified**: the inherited fopen import
+route reaches original matching Bionic `+0x57cd8`. Its openat SVC at
+`libc+0x6a6a0` uses the same decoded pathname, AT_FDCWD, flags 0 and mode 0.
+The unchanged virtual OS rejects this non-/proc/stat path with -2. Original
+Bionic stores errno=2, clears the selected static FILE's acquired flag, and
+returns NULL at observation 303. No file or entropy provider is added.
+
+The selected FILE is `0x510e5bb8`, with its 0x68-byte extension at `0x510e54d0`.
+The 0x98-byte FILE, extension, four-byte errno store and four-byte failed-open
+flag clear are checked. The seed initializer returns W0=`0xffffffff` (-1) at
+observation 308; its caller then publishes the seed guard with two original
+one-byte writes. The 16-byte seed state remains zero and write-protected.
+The main descriptor and three earlier default strings remain protected, the
+output/cache pair remain empty, and the cache mutex remains held. Main-image
+allocator events and counts remain unchanged. The service ledger gains one
+syscall-56 count, and its libc SVC ledger gains exactly that original SVC;
+other inherited JNI/SVC/syscall-172/173 and late-dispatch ledgers are preserved.
+
+This 381-point segment stops before `+0x25bd1c`, the BL to formatter `+0x255d84`.
+fread, fclose and the formatter do not execute. fopen and seed-initializer stack
+returns are checked; the surrounding identifier callback remains in progress.
+The failed open still publishes its initialization guard in this sample.
+
+Sixteen fresh original/Python readonly FILE controls at two image bases cover
+single/repeated open, failure, fd zero/limit/overflow, binary and invalid modes. Twenty-seven
+component rejection checks preserve guest pages, mapping records and cursor;
+external provider effects are outside that rollback. These independently built
+fixtures compare declared stdio/global/TLS/guest/mapping bytes and ordered OS
+effects without feeding native snapshots to Python models. Inherited virtual
+OS/TLS/JNI and serialized guards remain explicit; successful entropy access,
+current identifier generation, full VM return, independent signing, Android/PAC
+and online acceptance remain unverified. Use `--capture` or `--replay` with
+`--elf` and `--libc`, or omit arguments for frozen validation. See the
+[seed-open failure evidence](../evidence/vm9_native_171_identifier_seed_open_failure_dynamic_20261122.json).
+
+Frozen capture, 16 original/Python FILE controls, 27 component rollback checks
+and 43 damaged-evidence rejections pass. Default offline validation and a fresh
+ELF/Bionic replay pass; replay matches the frozen JSON field for field. All 668
+Python files compile. The public scan, three invalid CLI combinations, frozen
+overwrite refusal with unchanged evidence bytes, source fingerprint matching
+and whitespace checks pass.
+
+`verify_vm9_native_171_identifier_seed_open_boundary_dynamic_20261122.py`
+continues cursor `+0x10a1e0` through `+0x2886b0 -> +0x25bd8c` after
+revalidating the frozen 734-point query-destructor prefix. **Sample verified**:
+the wrapper retains packed descriptor `0x7004cbe8` in X0 and passes output
+reference `0x7004d178` in X8. This is a cold identifier-cache path. Two original
+matching-Bionic allocations create a 48-byte normal mutex at `0x136d4020` and
+a 16-byte empty cache pair at `0x136d73a0`. The mutex reuses the previously freed
+query payload address. Both cache initialization guards are published; the
+output reference is cleared with original stores.
+
+This 1147-point segment stops before the original BL at `+0x255d38` to fopen
+PLT `+0x348460`. The decoded path and mode have lengths 12 and 2; only their
+including-NUL hashes are retained. fopen/fread/fclose do not execute. The cache
+pair and output remain empty, the cache mutex remains held, and the seed guard
+is still pending. Identifier formatting, publication, callback return, scope
+release and register restoration are not claimed for this in-progress call.
+
+The full 48-byte callback descriptor, cache globals and native write widths are
+checked. All three earlier default objects and payloads remain write-protected
+through the stop boundary. Allocator counts gain exactly two mallocs (585 total),
+with free/gc/flush unchanged; inherited service/JNI/SVC, syscall-172/173 and
+late-JNI/Java-dispatch ledgers match the parent. No provider or import binding is
+added. The stop is at the caller's BL so inherited PLT routing cannot redirect
+past the observation boundary.
+
+Forty-four fresh original/Python component controls reuse the identifier owner
+at two image bases: 32 cache cases and 12 formatter cases, with fixed explicit
+seed-file services confined to those controls. Nineteen rollback checks verify
+guest pages only; external provider effects are not rolled back. Declared image
+pages, guest payload memory and explicit outer-scope/formatter scratch are
+compared; other physical spills and PAC are excluded. Native snapshots never
+become model inputs. Serialized guards and inherited gettid/OS/JNI providers
+remain explicit. Real JVM, complete identifier generation in this prefix, later
+VM/suffix return, complete signing, Android, physical PAC and online acceptance
+remain unverified. Use `--capture` or `--replay` with `--elf` and `--libc`, or
+omit arguments for frozen validation. See the
+[identifier seed-open boundary evidence](../evidence/vm9_native_171_identifier_seed_open_boundary_dynamic_20261122.json).
+
+Frozen capture, 44 fresh original/Python controls, 19 component page-rollback
+checks and 44 damaged-evidence rejections pass. Default offline validation and
+an independent fresh ELF/Bionic replay pass; replay matches the frozen JSON
+field for field. All 667 Python files compile. The public scan, three invalid
+CLI combinations, frozen overwrite refusal with unchanged evidence bytes,
+source fingerprint matching and whitespace checks pass.
+
+`verify_vm9_native_171_post_u32_query_destructor_return_dynamic_20261122.py`
+continues cursor `+0x10a1c0` through `+0x2884cc -> +0x2484b8` after revalidating
+the complete 1190-point u32-lookup prefix. **Sample verified**: the query object
+at `0x7004d1d8` owns the same 33-byte payload at `0x136d4020` recorded before
+lookup. The original free PLT route executes once, entering matching Bionic
+free at observation 16 and returning at 147. The allocator ledger gains exactly
+one free; its count becomes 268, with malloc/gc/flush unchanged.
+
+Three original eight-byte stores restore the vtable, clear the payload pointer
+after free returns, and load the empty descriptor bits from ELF `+0x6e208`.
+Both native reads, all three stores, the full 48-byte callback descriptor,
+the query's adjacent eight bytes, SP and X19-X29 restoration are checked.
+The earlier u32 result's full 48-byte descriptor remains unchanged through the
+destructor return. All three earlier 24-byte default objects and their eight-byte
+payloads remain write-protected until the next call boundary. The destructor's
+incidental X0 value is recorded without giving it a success-status meaning.
+
+The callback returns at observation 154. This 734-point segment stops before
+cursor `+0x10a1e0`, wrapper `+0x2886b0` and target `+0x25bd8c`. The unexecuted
+wrapper statically keeps descriptor `0x7004cbe8` in X0 and loads output object
+`0x7004d178` into X8. Its complete 20 bytes and the target's first 16 bytes are
+pinned; that invocation does not execute. Only the inherited free PLT route is
+reached in the current segment. Service/JNI/SVC, syscall-172/173 and
+late-JNI/Java-dispatch ledgers stay unchanged; no provider or import binding is
+added to the prefix.
+
+Twelve fresh original-code controls reuse the established destructor owner at
+two image bases, covering normal/NULL payloads, a cross-page object, free-time
+object mutation, a custom empty descriptor and a payload/object alias. They
+compare the full declared 0xa000-byte guest payload span, descriptor/neighbors
+and saved registers with an explicit synthetic free observer. Other native
+stack and synthetic thread-pointer memory are outside that comparison. Native
+snapshots never become Python semantic-model inputs. JNI acquisition remains an
+inherited synthetic provider. Real JVM, later VM/suffix return, complete signing,
+Android, physical PAC and online acceptance remain unverified. Use `--capture` or
+`--replay` with `--elf` and `--libc`, or omit arguments for frozen validation.
+See the [post-u32 query-destructor evidence](../evidence/vm9_native_171_post_u32_query_destructor_return_dynamic_20261122.json).
+
+Frozen capture, 12 independent original-code controls, 56 damaged-evidence
+rejections, default offline validation and a fresh ELF/Bionic replay pass; replay
+matches the frozen JSON field for field. All 666 Python files compile. The public
+scan, three invalid CLI combinations, frozen overwrite refusal with unchanged
+evidence bytes, source fingerprint matching and whitespace checks pass.
+
+`verify_vm9_native_171_post_defaults_u32_lookup_return_dynamic_20261122.py`
+continues the verified source constructor at cursor `+0x10a198` through
+`+0x28874c -> +0x256a18`. **Sample verified**: receiver `0x136e0000` and query
+`0x7004d1d8` enter the configuration tree at receiver+8. Lookup returns NULL
+under an active shared reader; the original getter selects `0xa985f` without
+executing the found-value load. Reader count changes `0 -> 1 -> 0`; the existing
+read-mode flag is written as 1. Four original matching-Bionic mutex calls
+protect count updates. The lookup runs while the logical reader is active and
+the mutex is released. Only those mutex PLT routes are reached in this segment.
+
+Reader release returns at observation 513. At 523 the wrapper writes W0 to
+descriptor+24 using four bytes, preserving the next four bytes and all other
+descriptor padding. The low word already held `0xa985f`; its actual store is
+recorded separately. Scope pointer/status stores, retained scope read, mutex
+writes, SP and X19-X29 restoration are checked. The query's 24-byte body and
+33-byte payload, plus all three earlier 24-byte objects and eight-byte payloads,
+are protected from writes throughout the segment. Query neighbors, the tree's
+40-byte header, the 0x98-byte reader area and scope padding are checked at return.
+
+The callback returns at observation 526. This 1190-point segment stops before
+cursor `+0x10a1c0`, selecting query destruction `+0x2884cc -> +0x2484b8` with
+static X0=`0x7004d1d8`; that invocation does not execute. The preceding 783-point
+constructor path, native object stores, explicit host strlen/memcpy effects,
+full descriptor and three-object protection record must match first. Allocator,
+inherited service/JNI/SVC, syscall-172/173 and late-JNI/Java-dispatch ledgers stay
+unchanged. No provider, import binding or native snapshot-fed Python semantic
+model is added.
+
+Twenty-four independent original-code controls cover two image bases, NULL
+lookup/value, zero/max/high-bit W32 values, existing readers, cross-page values,
+packed output aliasing and reader-count/scope-field aliases. They verify held
+four-byte reads and output after reader release, full declared 0xa000-byte guest
+payload memory and the explicit 24-byte scope; other native stack and synthetic
+thread-pointer memory are outside that comparison. Inputs are freshly built;
+native snapshots never enter Python semantic models. JNI acquisition remains an
+inherited synthetic provider; real JVM, later VM/suffix return, complete signing,
+Android, physical PAC and online acceptance remain unverified. Use `--capture`
+or `--replay` with `--elf` and `--libc`, or omit arguments for frozen validation.
+See the [post-defaults u32 lookup evidence](../evidence/vm9_native_171_post_defaults_u32_lookup_return_dynamic_20261122.json).
+
+Frozen capture, 24 independent original-code controls, 74 damaged-evidence
+rejections, default offline validation and a fresh ELF/Bionic replay pass; replay
+matches the frozen JSON field for field. All 665 Python files compile. The public
+scan, three invalid CLI combinations, frozen overwrite refusal with an unchanged
+evidence hash, source fingerprint matching and whitespace checks pass.
+
+`verify_vm9_native_171_post_defaults_string_constructor_return_dynamic_20261122.py`
+continues the verified third default constructor at cursor `+0x10a178` through
+`+0x2885d0 -> +0x248344`. **Sample verified**: object `0x7004d1d8` receives
+source `0x126a1330` with 32 bytes before its NUL. Original matching-Bionic
+malloc(33) returns `0x136d4020`, reusing the earlier freed address. Its 33-byte
+contents still have the earlier payload digest at allocation return. The
+inherited host memcpy writes the new source including NUL; the after-write
+observer records the new matching source/payload digest. Original Bionic strlen
+and memcpy bodies do not execute; those inherited host providers remain explicit.
+
+The frozen source-constructor owner supplies the native object-store, service,
+copy-effect and return observers. Vtable, capacity 33, length 32 and pointer
+stores, object neighbors, unchanged source, SP and X19-X29 are checked. A new
+48-byte descriptor guard and return comparison cover the entire current block
+at `0x7004ccc0`. The three earlier 24-byte objects and their eight-byte payloads
+match the preceding evidence at activation, return and stop; writes overlapping
+any of their six protected ranges are rejected throughout this segment.
+
+The constructor returns at observation 157. This 783-point segment stops before
+cursor `+0x10a198`, selecting the u32 tree lookup `+0x28874c -> +0x256a18`.
+Its descriptor is `0x7004cb30`; receiver `0x136e0000` and query `0x7004d1d8`
+remain static wrapper interpretations. That invocation does not execute. The
+32-byte wrapper and 152-byte getter range are pinned separately. The preceding
+3232-point path, allocation, object writes, two-object protection record and
+next descriptor must match first. One malloc event is added; free/GC/flush,
+inherited service/JNI/SVC and explicit syscall-172/173 ledgers stay unchanged.
+No provider, import binding or native snapshot-fed Python semantic model is added.
+
+Sixteen independent original-code controls include the earlier constructor
+owner's twelve fresh cases and four three-object success/failure cases across
+two image bases. Their synthetic malloc provider is explicit; host strlen and
+memcpy remain declared. Memory comparisons cover the 0xa000-byte declared guest
+payload span, excluding native stack and synthetic thread-pointer memory. JNI
+acquisition remains an inherited synthetic provider; real JVM, later VM/suffix
+return, complete signing, Android, physical PAC and online acceptance remain
+unverified. Use `--capture` or `--replay` with `--elf` and `--libc`, or omit
+arguments for frozen validation. See the
+[post-defaults source-constructor return evidence](../evidence/vm9_native_171_post_defaults_string_constructor_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 68 damaged variants, including semantic changes with repaired
+row digests. All 664 Python files compile; public scanning, default offline mode,
+three invalid CLI combinations, frozen overwrite refusal with an unchanged hash,
+and whitespace checks pass.
+
+`verify_vm9_native_171_third_default_string_constructor_return_dynamic_20261122.py`
+continues the second default-constructor checkpoint at cursor `+0x109ef0`.
+**Sample verified**: the third `+0x2884cc -> +0x2481ac` invocation initializes
+object `0x7004d148`. Original matching-Bionic malloc(8) returns `0x136d82d8`;
+the constructor writes its vtable, descriptor `0800000000000000`, payload
+pointer and one NUL byte. The other seven allocation bytes, object neighbors,
+descriptor, SP and X19-X29 are checked at return. The allocation was already
+eight zero bytes at malloc return; the single-byte store is observed separately.
+Raw X0 retains the allocation result without independent status semantics.
+
+Both prior 24-byte objects (`0x7004d118`, `0x7004d130`) and their eight-byte
+payloads (`0x136d82c0`, `0x136d82d0`) match the preceding evidence at activation,
+return and stop. The entire new segment rejects writes overlapping any of these
+four protected ranges. The preceding 804-point second-constructor path, its
+allocation, object writes, first-object retention and next descriptor must match
+before the shared constructor observers begin the third invocation.
+
+The constructor returns at observation 148. This segment has 3232 points and
+stops before cursor `+0x10a178`, selecting source-string construction through
+`+0x2885d0 -> +0x248344`. The next descriptor is `0x7004ccc0`; X0=`0x7004d1d8`
+and X1=`0x126a1330` are static wrapper interpretations. That invocation, wrapper
+and target do not execute. Its original 16-byte wrapper and 156-byte constructor
+body are pinned separately. One malloc event is added; free/GC/flush, inherited
+service/JNI/SVC and explicit syscall-172/173 ledgers stay unchanged. No provider,
+import binding or native snapshot-fed Python semantic model is added.
+
+Twenty-six independent original-code controls include the parent's twenty-two
+fresh cases and four two-object success/failure cases across two image bases.
+The synthetic malloc provider is explicit. Memory comparisons cover the declared
+0xa000-byte guest payload span, excluding native stack and synthetic
+thread-pointer memory. JNI acquisition remains an inherited synthetic provider;
+real JVM, later VM/suffix return, complete signing, Android, physical PAC and
+online acceptance remain unverified. Use `--capture` or `--replay` with `--elf`
+and `--libc`, or omit arguments for frozen validation. See the
+[third-default-constructor return evidence](../evidence/vm9_native_171_third_default_string_constructor_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 73 damaged variants, including semantic changes with repaired
+row digests. All 663 Python files compile; public scanning, default offline mode,
+three invalid CLI combinations, frozen overwrite refusal with an unchanged hash,
+and whitespace checks pass.
+
+`verify_vm9_native_171_second_default_string_constructor_return_dynamic_20261122.py`
+continues the first default-constructor checkpoint at cursor `+0x109ecc`.
+**Sample verified**: the second `+0x2884cc -> +0x2481ac` invocation initializes
+object `0x7004d130` through the original matching-Bionic malloc(8) route, which
+returns `0x136d82d0`. The frozen parent's read/store/return observers are reused
+for this invocation. Vtable and descriptor `0800000000000000`, pointer storage,
+one-byte NUL storage, the other seven allocation bytes, object neighbors,
+descriptor, SP and X19-X29 are checked. The eight allocation bytes were already
+zero at malloc return; the one-byte store has its own instruction and write
+observation. Raw X0 retains the allocation result without separate status
+semantics.
+
+The first object's 24-byte body at `0x7004d118` and eight-byte payload at
+`0x136d82c0` match the preceding evidence at activation, return and stop.
+Writes overlapping either protected range are rejected throughout the new
+segment. The prior 804-point path, allocation event, object writes and next
+descriptor must match before the observers begin the second invocation.
+
+This segment also has 804 observation points; the constructor returns at 148.
+It stops before cursor `+0x109ef0`, selecting a third default-constructor
+invocation for object `0x7004d148`. That invocation does not execute and its X0
+argument remains static. One malloc event is added; free/GC/flush, inherited
+service/JNI/SVC and explicit syscall-172/173 ledgers stay unchanged. No provider,
+import binding or native snapshot-fed Python semantic model is added.
+
+Twenty-two independent original-code controls include the parent's eighteen
+fresh cases and four adjacent-object success/failure cases across two image
+bases. The synthetic malloc provider is explicit. Memory comparisons cover the
+declared 0xa000-byte guest payload span; native stack and synthetic thread-pointer
+memory are outside that span. JNI acquisition remains an inherited synthetic
+provider; real JVM, later VM/suffix return, complete signing, Android, physical
+PAC and online acceptance remain unverified. Use `--capture` or `--replay` with
+`--elf` and `--libc`, or omit arguments for frozen validation. See the
+[second-default-constructor return evidence](../evidence/vm9_native_171_second_default_string_constructor_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 65 damaged variants, including semantic changes with repaired
+row digests. All 662 Python files compile; public scanning, default offline mode,
+three invalid CLI combinations, frozen overwrite refusal with an unchanged hash,
+and whitespace checks pass.
+
+`verify_vm9_native_171_default_string_constructor_return_dynamic_20261122.py`
+continues the verified destructor boundary through `+0x2884cc -> +0x2481ac`.
+**Sample verified**: the original default constructor initializes object
+`0x7004d118`, stores the vtable and ELF descriptor `0800000000000000`, then
+requests 8 bytes through the inherited original matching-Bionic malloc route.
+The returned pointer is `0x136d82c0`. Original instructions store that pointer
+and write one NUL byte; the other seven allocation bytes remain unchanged.
+The store is observed even though the first byte was already zero. Object
+neighbors, the descriptor, SP and X19-X29 are checked at return. Raw X0 retains
+the allocation result without an independent success-status interpretation.
+
+The constructor returns at observation 148. This 804-point segment stops before
+the VM BLR at cursor `+0x109ecc`, selecting the same default constructor for
+object `0x7004d130`. That next invocation does not execute; its X0 argument
+remains a static interpretation. The preceding 2374-point destructor path,
+original free and exact descriptor restoration must match first. Malloc count
+increases by one; free/GC/flush, inherited service/JNI/SVC and explicit
+syscall-172/173 ledgers stay unchanged. No provider or import binding is added,
+and no native snapshot feeds a Python semantic model.
+
+Eighteen independent original-code controls cover two image bases, allocation
+failure, cross-page object/payload spans, descriptor/object/payload aliases and
+custom initial descriptors. They check the entire declared 0xa000-byte guest
+payload span, exact store widths, write order and register restoration. The
+native stack and synthetic thread-pointer area are outside that memory span.
+Failure clears only the 32-bit capacity
+field, retaining the custom descriptor's length field. Their synthetic malloc
+provider is declared separately. JNI acquisition remains an inherited synthetic
+provider; real JVM, later VM/suffix return, complete signing, Android, physical
+PAC and online acceptance remain unverified. Use `--capture` or `--replay` with
+`--elf` and `--libc`, or omit arguments for frozen validation. See the
+[default-string-constructor return evidence](../evidence/vm9_native_171_default_string_constructor_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 56 damaged variants, including semantic changes with repaired
+row digests. All 661 Python files compile; public scanning, default offline mode,
+three invalid CLI combinations, frozen overwrite refusal with an unchanged hash,
+and whitespace checks pass.
+
+`verify_vm9_native_171_string_destructor_return_dynamic_20261122.py` continues
+the verified tree-query boundary through `+0x2884cc -> +0x2484b8`.
+**Sample verified**: the StringObject still owns the previous 33-byte allocation
+at `0x136d4020`. The inherited import route enters the original matching-Bionic
+free body and records one returned free. Original instructions rewrite the
+vtable, clear the payload pointer and restore the ELF descriptor's exact eight
+bytes, `0000000023ffffff`. The D0 store preserves that opaque representation;
+no conventional zero-length interpretation is substituted. Object neighbors,
+the descriptor, SP and X19-X29 are checked at return. X0 is recorded as an
+incidental register value on this void destructor, without status semantics.
+
+The callback returns at observation 154. This 2374-point segment stops before
+the next VM BLR at cursor `+0x109ea8`, selecting default StringObject construction
+`+0x2884cc -> +0x2481ac`. That call, wrapper and target do not execute; its X0
+argument remains a static interpretation. The previous 987-point tree lookup,
+reader/mutex writes and scope release must match before continuation. Free count
+increases by one; malloc/GC/flush, inherited service/JNI/SVC and explicit
+syscall-172/173 ledgers stay unchanged. No provider or import binding is added,
+and no native snapshot feeds a Python semantic model.
+
+Twelve independent original-code controls cover two image bases, NULL payload,
+a cross-page object, free-time object mutation, a custom empty descriptor and
+payload/object aliasing. Their synthetic free observer is declared separately;
+they compare the full guest payload and register restoration. Original JNI
+acquisition, real JVM, later VM/suffix return, complete signing, Android,
+physical PAC and online acceptance remain unverified. Use `--capture` or
+`--replay` with `--elf` and `--libc`, or omit arguments for frozen validation.
+See the [string-destructor return evidence](../evidence/vm9_native_171_string_destructor_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 49 damaged variants, including semantic changes with repaired
+row digests. All 660 Python files compile; public scanning, default offline mode,
+three invalid CLI combinations, frozen overwrite refusal with an unchanged hash,
+and whitespace checks pass.
+
+`verify_vm9_native_171_tree_pointer_return_dynamic_20261122.py` continues the
+verified StringObject constructor through `+0x2887b0 -> +0x256b84`.
+**Sample verified**: receiver `0x136e0000` and query `0x7004d1d8` reach the
+original lookup under a shared reader. Reader count changes `0 -> 1 -> 0`;
+the existing read-mode flag is written as 1. Four original matching-Bionic mutex
+calls protect the count changes. The lookup returns NULL in this class0 control,
+so its found-value load does not execute. The reader scope releases before the
+wrapper writes the full X64 zero at descriptor+24. Descriptor padding, reader
+neighbors, tree header, query/payload, scope padding and SP/X19-X29 are checked.
+
+The callback returns at observation 323. This 987-point segment stops before
+the next VM BLR at cursor `+0x109e30`, selecting StringObject destruction
+`+0x2884cc -> +0x2484b8`. That call, wrapper and target do not execute; the next
+argument is interpreted statically. The preceding 771-point constructor path,
+33-byte allocation and explicit strlen/memcpy events must match first.
+No allocator/service/JNI/SVC/syscall-172/173 increment occurs in the new segment;
+its mutex calls, count/flag writes, retained scope read and X64 store have their
+own ledger. No provider/import binding or native snapshot-fed Python model is
+added. Original JNI acquisition, real JVM, later VM/suffix return, complete
+signing, Android, physical PAC and online acceptance remain unverified.
+
+Sixteen independent fresh original-code controls cover two image bases, empty
+or missing lookup, a NULL stored pointer, zero/high X64 values, existing readers,
+reader-count/value aliasing and a cross-page value. They verify found reads
+while the reader is active and output only after release, including the alias
+case's differing before/after reader counts. Use `--capture` or `--replay` with
+`--elf` and `--libc`, or omit arguments for frozen validation. See the
+[tree-pointer return evidence](../evidence/vm9_native_171_tree_pointer_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 58 damaged variants, including semantic changes with repaired
+row digests. All 659 Python files compile; public scanning, default offline mode,
+three invalid CLI combinations, frozen overwrite refusal with an unchanged hash,
+and whitespace checks pass.
+
+`verify_vm9_native_171_string_constructor_return_dynamic_20261122.py` continues
+the verified locked-getter boundary through `+0x2885d0 -> +0x248344`.
+**Sample verified**: the original tail wrapper supplies object `0x7004d1d8`
+and source `0x126a12f0`. The 32-byte source uses a 33-byte allocation from
+the original matching-Bionic malloc path, returning `0x136d4020`. Four original
+object stores establish the vtable, capacity 33, length 32 and payload pointer.
+The inherited host strlen and memcpy providers remain explicit: memcpy copies
+the trailing NUL, and its observer runs after the host write. Original Bionic
+strlen/memcpy bodies do not execute. Source and payload hashes, the neighboring
+eight object bytes, descriptor, SP and X19-X29 are checked at return.
+
+The constructor returns at observation 157; this 771-point segment stops before
+the VM BLR at cursor `+0x109e08`, selecting tree getter
+`+0x2887b0 -> +0x256b84`. That call, wrapper and target do not execute; the
+receiver/query arguments remain static interpretations. The prior 1804-point
+locked-getter receipt, mutex stores, held read and descriptor must match first.
+One new malloc event requests 33 bytes; free/GC/flush counts and inherited
+service/JNI/SVC/syscall-172/173 ledgers stay unchanged. No provider or import
+binding is added, and no native memory snapshot feeds a Python semantic model.
+
+Twelve independent original-code controls cover two image bases, empty/NULL
+sources, allocation failure, a cross-page object and an embedded NUL, comparing
+the full payload memory and register restoration. These controls declare their
+synthetic allocator separately. JNI acquisition remains an inherited synthetic
+provider; its original body, real JVM, later VM/suffix return, complete signing,
+Android and online acceptance remain unverified. Use `--capture` or `--replay`
+with `--elf` and `--libc`, or omit arguments for frozen validation. See the
+[string-constructor return evidence](../evidence/vm9_native_171_string_constructor_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 53 damaged variants with repaired row digests for semantic
+mutations. All 658 Python files compile; public scanning, default offline mode,
+three invalid CLI combinations, frozen overwrite refusal with an unchanged hash,
+and whitespace checks pass.
+
+`verify_vm9_native_171_locked_pointer_return_dynamic_20261122.py` continues the
+verified JNI-provider boundary through native `+0x288794 -> +0x282b84`.
+**Sample verified**: receiver `0x136f3000` retains the mutex owner from +0x98,
+locks owner+8 through the original matching-Bionic body, and reads the full X64
+at receiver+0x40 while the mutex is held. The original `+0x15f778` destructor
+reads the saved scope owner and unlocks through Bionic. Two original 16-bit
+atomic stores change the mutex `0 -> 1 -> 0`; all 16 observed mutex bytes are
+restored. The native wrapper writes eight bytes at descriptor+16, preserves
+other descriptor bytes, and restores SP/X19-X29 before its VM return.
+
+This class0 control returns zero at observation 88. Its 1804-point segment stops
+before the next VM BLR at cursor `+0x109de8`, selecting the string constructor
+`+0x2885d0 -> +0x248344`. That call, wrapper and target do not execute; their
+arguments remain a static interpretation. The preceding 1887-point JNI-provider
+path, original code, reads and provider event must match before continuation.
+The new receipt retains the observation path, original-code hashes, mutex/body
+entries, held read, retained-owner read and descriptor store. Allocation,
+inherited service/JNI/SVC and explicit syscall-172/173 ledgers stay unchanged;
+the two mutex calls/stores are recorded separately. No provider, import binding
+or native snapshot-fed Python semantic model is added.
+
+Eight independent fresh original-code controls cover two image bases, a high
+64-bit value, value/mutex aliasing, and a receiver-owner field changed by the
+mutex itself. They verify the held read, saved-owner unlock, full result,
+padding and register restoration. JNI acquisition remains an inherited synthetic
+provider; its original body, real JVM, later VM/suffix return and complete
+signing remain unverified. Use `--capture` or `--replay` with `--elf` and `--libc`,
+or omit arguments for frozen validation. See the
+[locked-pointer return evidence](../evidence/vm9_native_171_locked_pointer_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 54 damaged variants, including semantic changes with repaired
+row digests. All 657 Python files compile; public scanning, three invalid CLI
+combinations, frozen overwrite refusal with an unchanged hash, and whitespace
+checks pass.
+
+`verify_vm9_native_171_jni_provider_return_dynamic_20261122.py` continues the
+verified thread-pointer boundary through the original VM BLR and three-instruction
+`+0x288788` tail wrapper. **Sample verified**: its two descriptor reads load
+target `+0x26edc4` and output pair `0x7004d1d8`; the actual target-entry X0,
+unchanged SP/X19-X29 and return to `+0x16aa4c` are checked. Acquisition uses the
+inherited synthetic provider in `verify_vm9_signer_objects.native`: it writes
+only the first eight pair bytes with environment `0x70007800`, returns X0=0 and
+redirects to LR. The original acquisition body and a real ART/JVM do not execute.
+The pair's second word retains `0xffffff2300000000`; this is inherited data,
+not a verified TLS owner. The descriptor remains unchanged at return.
+
+The 1887-point segment stops before the next `+0x16aa48` VM BLR at cursor
+`+0x109c44`, selecting `+0x288794 -> +0x282b84`. That call, wrapper and target
+do not execute; the next X0 is only a static descriptor interpretation.
+The complete observation path and observed code reconstruct the trace digest;
+target entry and the final unexecuted BLR are observations, not executed native
+acquisition instructions. Allocator, service, inherited JNI/SVC and explicit
+syscall-172/173 ledgers stay unchanged. The acquisition-provider event is
+recorded separately. No provider or import binding is added, and no native
+snapshot is supplied to a Python semantic model. Eight independent original
+wrapper/provider controls cover two image bases, cross-page pairs and zero/nonzero
+environment values, checking the entire payload memory and preserved pair tail.
+This is one synthetic class0 continuation, with native acquisition, later
+VM/suffix return and complete signing still open. Use `--capture` or `--replay`
+with `--elf` and `--libc`, or omit arguments for frozen validation. See the
+[JNI provider-return evidence](../evidence/vm9_native_171_jni_provider_return_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Frozen
+validation rejects 48 damaged variants with repaired row digests for semantic
+mutations. All 656 Python files compile; public scanning, three invalid CLI
+combinations, frozen overwrite refusal with an unchanged evidence hash, and
+whitespace checks pass.
+
+`verify_vm9_native_171_thread_pointer_before_jni_dynamic_20261122.py` continues
+the verified getppid return through the native `+0x28876c -> +0x204f58` thread
+pointer callback. **Sample verified**: the cold cache at `+0x3da090` changes from
+zero to the inherited synthetic TPIDR_EL0 value `0x7000a000`. The original MRS and
+eight-byte store at `+0x205020` execute, and the following eight cache bytes stay
+unchanged. The wrapper stores the full X64 result at descriptor+8, preserves the
+other descriptor bytes, restores SP/X19-X29 and returns. Two original helper
+calls at `+0x20513c` advance LR by 12 and 20 bytes; the skipped bogus stack
+instructions do not execute. The getppid callback records, instruction/code
+receipt, import provenance and allocation prefix must match before continuation.
+
+This segment has 2269 instruction observations. Its callback cursor is
+`+0x109b60`; the next call cursor is `+0x109bbc`. Execution stops before the
+`+0x16aa48` VM BLR selecting wrapper `+0x288788` and JNI environment acquisition
+target `+0x26edc4`. The descriptor, wrapper code and mapped output pair are bound;
+the target argument is described statically. That VM call, its wrapper, target
+body and JNI provider do not execute. Allocator, service, JNI, SVC and explicit
+syscall-172/173 ledgers stay unchanged. No new provider, import binding or native
+snapshot-fed Python model is introduced. Frozen capture rejects 46 damaged
+variants, including repaired row digests for semantic mutations. This remains
+one synthetic class0 control; JNI acquisition, later VM/suffix return, complete
+signing, ordinary Cronet six headers, Android, physical PAC and online acceptance
+remain unverified. Use `--elf`, `--libc`, `--replay`, or omit arguments for frozen
+validation. See the
+[thread-pointer/JNI-boundary evidence](../evidence/vm9_native_171_thread_pointer_before_jni_dynamic_20261122.json).
+
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. All 655
+Python files compile; public scanning, three invalid CLI combinations, frozen
+evidence overwrite refusal and whitespace checks pass.
+
+`verify_vm9_native_171_getppid_import_return_dynamic_20261122.py` continues
+the returned getpid control through twelve further callbacks and a returned
+getppid callback. **Sample verified**: the getpid receipt's instruction path,
+trace/code digests, import bindings, descriptor provenance, syscall 172 and
+return fields match before continuation. The new segment completes two shared
+reader pairs and four diagnostic entry/exit pairs. All thirteen calls bind
+wrapper bytes, descriptor arguments, output/padding and exact call/return
+indices, and restore SP/X19-X29. Reader count is zero at the final boundary;
+the other bytes in each observed shared-reader object are preserved.
+
+ELF `.rela.dyn` symbol 59 identifies the getppid ABS64 slot `+0x3833b8`, with
+zero addend, resolved to matching Bionic `+0x6a36c`. The existing getpid binding
+is preserved. The original VM reads this slot at `+0x109b2c`, stores virtual
+register 1, then writes the descriptor at logical bytecode `+0x109b30` with
+the observed cursor at `+0x109b34`. Two actual reads and two actual stores bind
+that source chain; the binding does not write the descriptor. getppid executes
+libc syscall 173 with an explicit synthetic parent PID `17`. The wrapper
+replaces the earlier test PID `919` in its four-byte result field and preserves
+the adjacent padding. No host process is queried and the public loader is
+unchanged. The 13291-observation segment stops before `+0x16aa4c` resumes.
+
+One 48-byte malloc is added, with no free. Inherited service/JNI/SVC ledgers
+stay unchanged; the inherited syscall 172 and the added syscall 173 each have
+their own explicit records. Frozen capture rejects 143 damaged variants.
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly. Three
+invalid CLI combinations and frozen-evidence overwrite attempts are rejected;
+654 Python files compile, and the public scan and whitespace checks pass.
+This remains one synthetic class0 control. No native snapshot supplies a Python
+model. Later VM work, suffix return,
+complete signing, ordinary Cronet six headers, Android, physical PAC and online
+acceptance remain unverified. Use `--elf`, `--libc`, `--replay`, or omit arguments
+for frozen validation. See the
+[getppid import and return evidence](../evidence/vm9_native_171_getppid_import_return_dynamic_20261122.json).
+
+`verify_vm9_native_171_getpid_import_return_dynamic_20261122.py` resolves the
+preceding NULL callback's import provenance and returns through the original
+wrapper. **Sample verified**: `.rela.dyn` symbol 20 identifies the eight-byte
+`getpid` ABS64 relocation at `+0x3833b0`, with zero addend, resolved to matching
+Bionic `+0x1fe6c`. After the prior 26 callbacks return, only this import slot is
+bound. The adjacent getppid slot stays zero; the public loader is unchanged.
+The original VM reads the import at bytecode `+0x109628`, stores virtual register
+1, then transfers that value into the descriptor at `+0x10962c`. For the latter
+operation the observed cursor has advanced to `+0x109630`. The two reads and two
+stores bind their code bytes, addresses, register values and observation indices.
+The original VM builds the descriptor; the binding never writes it directly.
+
+All 26 earlier callback records and the full 28561-observation instruction/code
+prefix match the old receipt through its indirect-call boundary. The pending
+descriptor differs only in its resolved function word. The native getpid cold
+path reads a zero cached PID, executes libc syscall 172 and receives the explicit
+synthetic result `919`. The original wrapper stores exactly W0 at descriptor+8,
+preserves the padding from +12 onward, restores SP/X19-X29 and returns to
+`+0x16aa4c`. The 16-point continuation includes that unexecuted final VM boundary.
+Observed TLS bytes and the zero PID cache remain unchanged. Inherited allocator,
+service, JNI and SVC ledgers match the prior receipt; the added syscall 172 is
+recorded separately, so this is one additional libc SVC. No host PID is read and
+no native memory seeds a Python model. Frozen capture rejects 52 damaged variants,
+including semantic mutations with repaired row digests. Independent fresh
+ELF/Bionic replay matches the frozen JSON exactly. Three invalid CLI combinations
+and attempts to overwrite frozen evidence are rejected; 653 Python files compile,
+and the public scan and whitespace checks pass. Suffix return, getppid,
+complete dynamic linking, standalone signing, ordinary Cronet six headers, Android,
+physical PAC and online acceptance remain unverified. Use `--elf`, `--libc`,
+`--replay`, or omit arguments for frozen validation. See the
+[getpid import and return evidence](../evidence/vm9_native_171_getpid_import_return_dynamic_20261122.json).
+
+`verify_vm9_native_171_post_configuration_callback_boundary_dynamic_20261122.py`
+continues the configuration boundary through 26 further returned callbacks,
+then stops before `blr x8` at `+0x288648`. **Sample verified**: descriptors,
+seven wrapper code ranges, target arguments, result stores and padding, return
+indices, SP and X19-X29 restoration are checked. Two shared-reader pairs change
+the count `0 -> 1 -> 0` while preserving the other receiver bytes. The original
+time helpers convert the inherited clock provider's timespec through
+microseconds and milliseconds to `1791023800` seconds. The added segment has
+28561 instruction observations, including its unexecuted final BLR; VM call
+cursors span `+0x108bdc..+0x10963c`. It adds five mallocs, five frees and one
+explicit clock call; JNI, Java dispatch and libc/main-image SVC ledgers stay
+unchanged. No provider is added and no native memory seeds a Python model.
+Frozen capture rejects 254 damaged variants, including repaired row digests
+for semantic-field mutations. Three invalid CLI combinations and attempts to
+overwrite frozen evidence are rejected.
+Independent fresh ELF/Bionic replay matches the frozen JSON exactly; 652
+Python files compile, and the public scan and whitespace checks pass.
+
+At the final `+0x28863c` wrapper, the descriptor's first word and X8 are zero.
+The saved caller frame, unchanged descriptor and first three executed wrapper
+instructions are checked before the fourth instruction, the indirect call.
+The callback body, result store at `+0x28864c` and callback return do not execute.
+This is the current synthetic class0 control's unresolved input boundary; it
+does not establish a NULL callback or crash in the real Android app. Recovering
+the callback slot's construction/publication provenance is the next dependency.
+The earlier independent second-VM fixture reached the same bytecode cursor and
+bound getpid/getppid through ELF ABS64 metadata (see
+[section 6.185](../REQUEST_JNI_STARTUP_WORKERS.md#6185-second-vm-process-id-callbacks2026-10-15-asiashanghai)).
+That is a lead for checking this execution's descriptor source; this record
+does not infer its target from the independent fixture.
+Suffix return, standalone signing, ordinary Cronet six headers, Android and
+online acceptance remain unverified. Use `--elf`, `--libc`, `--replay`, or omit
+arguments for frozen validation. See the
+[callback-boundary evidence](../evidence/vm9_native_171_post_configuration_callback_boundary_dynamic_20261122.json).
+
+`verify_vm9_native_171_post_scope_configuration_dynamic_20261122.py` continues
+the verified scope-cycle boundary through 32 further VM callbacks. **Sample
+verified**: guard acquisition/release, formatting, five copies, StringObject
+construction/destruction and configuration reads return in the original VM's
+observed order. Ten wrapper code ranges, target arguments, descriptor result
+stores and adjacent padding are bound. SP and X19-X29 restore on every return;
+reader count is zero at each callback boundary. VM call cursors advance from
+`+0x10769c` to `+0x108bb8`, with 45352 instruction observations including the
+final unexecuted `+0x16aa4c` boundary. Allocator events add 12 mallocs and seven
+frees; the only explicit service delta is one destructor registration.
+One Java-dispatch entry uses the inherited explicit NULL-result provider;
+early/late JNI and libc/main-image SVC ledgers stay unchanged. The five copies
+are 16/16/16/48/192 bytes and preserve their source bytes. They use the existing
+memcpy provider, so this record does not claim native Bionic memcpy-body or
+ART/JVM execution. No new provider or native-snapshot-fed Python model is added.
+The verifier rejects 350 damaged evidence variants and three invalid CLI
+combinations. Independent fresh ELF/Bionic replay matches the frozen JSON
+exactly. This remains a single synthetic class0 control; complete heap or
+business equivalence, suffix return, standalone signing, ordinary Cronet six
+headers, Android and online acceptance remain unverified. Use `--elf`, `--libc`,
+`--replay`, or no arguments for frozen validation. See the
+[configuration continuation evidence](../evidence/vm9_native_171_post_scope_configuration_dynamic_20261122.json).
+
+`verify_vm9_native_171_post_reader_scope_cycles_dynamic_20261122.py` continues
+the eight-callback boundary below. **Sample verified**: the pending scope exits,
+seven further scope entry/exit pairs complete, and one `+0x2633a4` getter returns.
+Its X0 is zero while its 16-byte output contains two nonzero words; this does
+not establish the business meaning or construction provenance of that result.
+All 16 callbacks restore SP and X19-X29. The observed scope uses the original
+`+0x288530/+0x288540` wrappers; each selected mutex moves `0x4000/0 -> 0x4001/137`
+on entry and back on exit. Scope padding, all other selected-entry bytes and
+the 2048-byte diagnostic table are checked. VM call cursors span
+`+0x1070a4..+0x10766c`; the prior eight calls, trace/code digests and allocation
+prefix must match their frozen record before continuation. This stage adds
+18689 instruction observations, including its final unexecuted return boundary,
+and no allocator, explicit service, JNI, Java-dispatch or SVC events. It rejects
+207 damaged variants and three invalid CLI combinations. Independent fresh
+ELF/Bionic replay matches the frozen JSON exactly. At the final
+`+0x16aa4c` stop, the observed scope is closed. Later VM work, suffix return,
+complete signing, ordinary Cronet six headers, Android and online acceptance
+remain unverified; one synthetic class0 control is covered. No native snapshot
+is supplied to a Python model. Use `--elf`, `--libc`, `--replay`, or omit arguments
+for frozen validation. See the
+[scope-cycle evidence](../evidence/vm9_native_171_post_reader_scope_cycles_dynamic_20261122.json).
+
+`verify_vm9_native_171_post_reader_callbacks_dynamic_20261122.py` continues
+the accepted shared-reader release on the same Unicorn CPU. **Sample verified**:
+eight callbacks return in order: `+0x32a444`, `+0x26c858`, `+0x26c9d0`,
+`+0x32a4fc`, `+0x257804`, `+0x257880`, `+0x248344`, `+0x26c858`.
+The repeated reader pair moves its count from 0 to 1 and back to 0; the getter
+returns are zero. Six original wrapper code ranges, descriptor words, target
+argument registers, result stores and adjacent descriptor bytes are checked.
+Each callback restores SP and X19-X29. The continuation records 8566 instruction
+observations, including its final unexecuted VM return boundary; code/trace
+digests and call/return indices are frozen. Two native allocations of 48 and
+1 bytes are added; frees, explicit services, early/late JNI, Java dispatch,
+libc SVC and main-image SVC ledgers do not increase. It rejects 113 damaged
+variants and three invalid capture/replay CLI combinations. Fresh ELF/Bionic
+replay matches the complete frozen JSON exactly. The record stops
+before `+0x16aa4c` after the eighth callback; that last diagnostic scope still
+needs cleanup. It covers one synthetic class0 control and supplies no native
+snapshot to a Python model. Suffix return, complete standalone signing,
+ordinary Cronet six headers, Android and online acceptance remain unverified.
+See the [post-reader callback evidence](../evidence/vm9_native_171_post_reader_callbacks_dynamic_20261122.json).
+Omit arguments for frozen validation, or run:
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_native_171_post_reader_callbacks_dynamic_20261122.py --elf <matching-private-so> --libc <matching-private-libc> --replay
+```
+
+`verify_vm9_native_171_diagnostic_scope_entry_dynamic_20261121.py` continues
+the accepted shared-reader return through the diagnostic callback at
+`+0x288530 -> +0x26c858`. **Sample verified**: the mapped 24-byte descriptor
+binds target, object and input word `0x136d9140`; all 61 observed target
+instructions return with X0 zero to `+0x16aa4c`. The 24-byte object changes
+from `...40906d13` to `...40916d13`, with before/after SHA-256 values frozen.
+The malloc count increases by one; explicit service, JNI, libc-SVC and
+main-image-SVC ledgers stay unchanged. Execution stops before the resumed VM
+instruction. Sixteen damaged variants are rejected. This does not establish
+the following cleanup, current suffix return, complete signer, ordinary Cronet
+headers, Android execution or online acceptance. Run with `--elf`, `--libc`,
+`--replay` for fresh execution; without arguments it validates frozen evidence.
+See the [diagnostic-entry evidence](../evidence/vm9_native_171_diagnostic_scope_entry_dynamic_20261121.json).
+
+`verify_vm9_native_171_diagnostic_cleanup_entry_dynamic_20261121.py` resumes
+after the diagnostic callback returns to `+0x16aa4c`. **Sample verified**:
+1168 VM instruction observations reach `blr x8` at `+0x16aa48`, target wrapper
+`+0x288540`, and its three-instruction descriptor path to `+0x26c9d0`. The
+descriptor's first word identifies the cleanup target and its second word
+identifies the same scope object updated by the preceding callback. Execution
+stops at the cleanup target entry before its body; the object hash and all
+allocator, service, JNI and SVC ledgers remain unchanged across this continuation.
+Eighteen damaged variants are rejected. Cleanup execution, later VM work,
+current suffix return and complete signing remain unverified. Use `--elf`,
+`--libc`, `--replay` for fresh execution; see the
+[cleanup-entry evidence](../evidence/vm9_native_171_diagnostic_cleanup_entry_dynamic_20261121.json).
+
+`verify_vm9_native_171_diagnostic_cleanup_return_dynamic_20261121.py` executes
+the original `+0x26c9d0` cleanup body and stops before resumed VM instruction
+`+0x16aa4c`. **Sample verified**: the selected table entry reaches the original
+pthread unlock path at `+0x347f10`; its mutex changes from state `0x4001`/owner
+`137` to `0x4000`/owner `0`. The 24-byte scope object remains unchanged, X0
+returns zero, and allocator, explicit service, JNI and SVC ledgers do not change.
+Sixteen damaged variants are rejected. Later VM instructions, suffix return and
+complete signing remain unverified. Use `--elf`, `--libc`, `--replay`; see the
+[cleanup-return evidence](../evidence/vm9_native_171_diagnostic_cleanup_return_dynamic_20261121.json).
+
+`verify_vm9_native_171_shared_reader_release_dynamic_20261121.py` continues
+that cleanup return through `+0x2885e0` to shared-reader release `+0x32a4fc`.
+**Sample verified**: the descriptor selects the same receiver used by the
+earlier acquire callback. Its reader count at `+0x88` changes from 1 to 0;
+all other bytes in the observed `0x90`-byte object stay unchanged, and the full
+object matches its bytes before acquisition. Original lock/unlock helpers
+execute; the mutex, stack pointer and X19-X29 are restored before returning
+to `+0x16aa4c`, where observation stops before the caller instruction.
+Allocator, explicit service, JNI and SVC ledgers remain unchanged. This is
+native execution evidence with no native snapshot supplied to a Python model.
+It rejects 27 damaged evidence variants; fresh replay matches the frozen record.
+Writer/signal/wait paths, physical PAC authentication, later VM work, suffix
+return and complete signing remain unverified. Use `--elf`, `--libc`, `--replay`
+for fresh execution, or no arguments for frozen validation. See the
+[reader-release evidence](../evidence/vm9_native_171_shared_reader_release_dynamic_20261121.json).
+
+`verify_vm9_native_171_shared_reader_return_dynamic_20261121.py` executes the
+resolved `+0x32a444` callback on the same Unicorn CPU. **Sample verified**:
+the uncontended path calls the original lock/unlock helpers, increments the
+receiver's u32 reader count at `+0x88` from 0 to 1, and preserves every other
+byte in the observed `0x90`-byte object. The native canary save, restored stack
+and X19-X29, original `ret`, and return to `+0x16aa4c` are checked; execution
+stops before that resumed caller instruction. Allocator, service, JNI and SVC
+ledgers match the prior resolution boundary. This adds no provider or Python
+model seeded with native memory. The existing semantic reader owner remains
+`vm9_objects.acquire_uncontended_shared_reader`; this verifier observes native
+execution rather than adding a second model. It rejects 23 damaged variants;
+a fresh native replay matches the captured result exactly.
+Waiting/writer branches, physical PAC authentication, subsequent VM execution,
+current suffix return, complete signing, Android and online acceptance remain
+unverified. See the [reader-return evidence](../evidence/vm9_native_171_shared_reader_return_dynamic_20261121.json).
+Run with `--elf <matching-private-so> --libc <matching-private-libc> --replay`
+for a complete native rerun, or no arguments for frozen-evidence validation.
+
+`verify_vm9_native_171_next_vm_indirect_call_dynamic_20261121.py` resumes the
+VM after the random wrapper returns to `+0x16aa4c`. **Sample verified**:
+857 instruction observations lead to the next `blr x8` at `+0x16aa48`, whose
+target is `+0x2885e0`; this record stops before the call. It rejects six
+damaged variants. See the [next-call evidence](../evidence/vm9_native_171_next_vm_indirect_call_dynamic_20261121.json).
+
+`verify_vm9_native_171_resolve_next_vm_callback_dynamic_20261121.py` executes
+that three-instruction trampoline. **Sample verified**: the descriptor's
+first word becomes the `br x1` target `+0x32a444`, and its second word becomes
+the callback argument. This record stops before that tail branch and rejects
+eight damaged variants; a fresh `--replay` matches the frozen result exactly.
+It establishes callback resolution, with no callback-target execution in this
+record. See the [resolution evidence](../evidence/vm9_native_171_resolve_next_vm_callback_dynamic_20261121.json).
+Both verifiers accept `--elf <matching-private-so> --libc <matching-private-libc>
+--replay`; omit these arguments for frozen-evidence validation. They retain the
+explicit inherited OS/JNI providers and establish no current suffix return,
+ordinary Cronet six headers, standalone signer, Android or online result.
+
 `verify_vm9_native_171_random_callback_dynamic_20261121.py` continues the
 accepted gettimeofday dynamic prefix through its warm indirect random getter.
 The pinned ELF target is `+0x26cc8c`; the matching Bionic `rand` PLT is called

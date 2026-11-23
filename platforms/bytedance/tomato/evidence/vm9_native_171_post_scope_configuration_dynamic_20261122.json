@@ -1,0 +1,2149 @@
+{
+  "schema": "vm9-native-171-post-scope-configuration-dynamic-20261122-v1",
+  "claims": {
+    "evidence_label": "Sample verified",
+    "returned_callbacks": 32,
+    "wrapper_descriptors_arguments_and_output_padding_verified": true,
+    "callback_SP_and_saved_registers_restored": true,
+    "copied_byte_ranges_verified": 5,
+    "all_callback_targets_executed_as_native_code": false,
+    "native_Bionic_memcpy_body_verified": false,
+    "real_JVM_execution_verified": false,
+    "java_dispatch_uses_existing_NULL_result_provider": true,
+    "allocator_malloc_delta": 12,
+    "allocator_free_delta": 7,
+    "destructor_registration_delta": 1,
+    "JNI_and_SVC_ledgers_unchanged": true,
+    "next_vm_instruction_executed": false,
+    "current_native_suffix_return_verified": false,
+    "complete_standalone_signer_verified": false,
+    "ordinary_Cronet_six_headers_verified": false,
+    "online_acceptance_verified": false,
+    "Android_execution": false,
+    "native_memory_used_as_python_model_input": false,
+    "physical_PAC_authentication_verified": false
+  },
+  "providers": {
+    "memory_imports": "inherited explicit memcpy/memmove provider; no native Bionic memcpy-body claim",
+    "java_dispatch": "inherited explicit NULL-result provider; no ART/JVM execution",
+    "OS_JNI": "inherited synthetic services, unchanged provider implementation",
+    "allocations": "matching Bionic with inherited allocator observation",
+    "maximum_instruction_observations": 400000
+  },
+  "input_provenance": {
+    "inherited_scope_cycles_evidence_sha256": "f9ec5ac1e1c3608fa50f860afc3be34e74842ed3020d72462de302e8d05bcaee",
+    "Metasec_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "Bionic_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db"
+  },
+  "source_fingerprints": {
+    "configuration_verifier_sha256": "2959364e393b0e14b77405cadfc6f56c2c0d3a9b386747ccb42fb44b578aba10",
+    "inherited_source_fingerprints": {
+      "scope_cycles_verifier_sha256": "8f7a8a7a83cb97f7c784128aa066fdec61566495ef5b0044a6e0a443977d785a",
+      "inherited_source_fingerprints": {
+        "post_reader_verifier_sha256": "d4046fac72033b0fc81daf4cacc38f83be98b9930e057175c10a75db39c44d66",
+        "inherited_source_fingerprints": {
+          "reader_release_verifier_sha256": "81d03d513cd47f07b35b32c6dedf940dbcbe60a6969e7e091963e1936e84d040",
+          "diagnostic_cleanup_return_verifier_sha256": "7e402176400ce88b50790288129e868a27f4741f99b4af623298c8fe77c06855",
+          "inherited_source_fingerprints": {
+            "diagnostic_cleanup_return_verifier_sha256": "7e402176400ce88b50790288129e868a27f4741f99b4af623298c8fe77c06855",
+            "diagnostic_cleanup_entry_verifier_sha256": "e508a78178bc46b859b9079779142bdd7a992a87a22d44498e1430392c8c0886",
+            "inherited_source_fingerprints": {
+              "diagnostic_cleanup_verifier_sha256": "e508a78178bc46b859b9079779142bdd7a992a87a22d44498e1430392c8c0886",
+              "diagnostic_scope_verifier_sha256": "6753a590e6a50158ea1062318970b31f6cbbed82a37d9b05a3309300ec9b47ca",
+              "inherited_source_fingerprints": {
+                "diagnostic_scope_verifier_sha256": "6753a590e6a50158ea1062318970b31f6cbbed82a37d9b05a3309300ec9b47ca",
+                "shared_reader_verifier_sha256": "b5a53c0c01f2dfc4ed59a2e8d07aa907ff417c37dcf4f22b9a3b9535b0f36f26",
+                "inherited_source_fingerprints": {
+                  "shared_reader_verifier_sha256": "b5a53c0c01f2dfc4ed59a2e8d07aa907ff417c37dcf4f22b9a3b9535b0f36f26",
+                  "callback_resolution_verifier_sha256": "c6cf11712ae067550e0fde13f9ccff824c6777d8967f34a9e76bc4990d744741",
+                  "inherited_source_fingerprints": {
+                    "callback_resolution_verifier_sha256": "c6cf11712ae067550e0fde13f9ccff824c6777d8967f34a9e76bc4990d744741",
+                    "next_vm_call_verifier_sha256": "fc264d8a8e0e91725af47e01ff6cf548057efa79c0eea8b340d558fc568c65c5",
+                    "wrapper_return_verifier_sha256": "efac0bd4c900e33acf2bcb1ff62b6fb3dbe994807c9271c280b37e590d4ae40c",
+                    "random_callback_verifier_sha256": "f4a1fa65ebf301aee69bdbde4c01666b54ab07ad533430fbbd3e168984c93c3e",
+                    "gettimeofday_verifier_sha256": "0b9b64f0efc92300fef6bec678361b9c4ed37b04c4904600c434ad5cb9ffe627",
+                    "suffix_digest_verifier_sha256": "7c0f3b7cb9b797d3bff69f3da795a8030e8ceaaa35c21cc4f55f932fe6297f1c"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "case_result": {
+    "control": {
+      "base": 304873472,
+      "property_profile": "absent",
+      "null_at": "class0"
+    },
+    "retained_prefix": {
+      "callbacks_verified": 16,
+      "instruction_observations": 18689,
+      "instruction_trace_sha256": "04e7df6e8790054920f0fe88114b44ed57c80c1aafc8bb86b443cf3cb54b790b",
+      "observed_code_sha256": "70f730bc104335356edf9295ca223263a2c2281d8dcf2eab2c2ca08b315ee1aa",
+      "allocator_events_sha256": "24954d6de037a5d94d034553742ced9f29232dee398574ebd61f5f499c1a1b90",
+      "observed_scope_closed": true
+    },
+    "instruction_observations": 45352,
+    "instruction_trace_sha256": "7a0d7225c0103f47c9ce178ceb4ca14995c84af7855c80fd61d753a3e74545c3",
+    "observed_code_sha256": "acf331482dd6289d9ed01aa0a3fc3391e8c14f2d017954a0aab3c87e891bd3c1",
+    "first_pc_offsets": [
+      "0x16aa4c",
+      "0x16aa50",
+      "0x16aa54",
+      "0x16aa58",
+      "0x16aa5c",
+      "0x16aa60",
+      "0x16aa64",
+      "0x16aa68",
+      "0x16aa6c",
+      "0x16aa70",
+      "0x16aa74",
+      "0x16aa78",
+      "0x16aa7c",
+      "0x16aa80",
+      "0x16aa84",
+      "0x16a9ac"
+    ],
+    "tail_pc_offsets": [
+      "0x1654d8",
+      "0x1654dc",
+      "0x256a84",
+      "0x256a88",
+      "0x256a8c",
+      "0x256a90",
+      "0x256a94",
+      "0x256a98",
+      "0x256a9c",
+      "0x256aa0",
+      "0x256aa4",
+      "0x256aa8",
+      "0x288760",
+      "0x288764",
+      "0x288768",
+      "0x16aa4c"
+    ],
+    "callbacks": [
+      {
+        "ordinal": 0,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2886b0",
+        "target_offset": "0x1cf55c",
+        "VM_cursor_offset": "0x10769c",
+        "call_observation_index": 898,
+        "descriptor_address": "0x7004cbe8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "5cf548120000000018d0047000000000c402fe0c000000000300000000000000",
+        "descriptor_first32_sha256": "e08d334293b81e1defa1759ec0fbc4ba5a768e779ddcff79b8d892437121e4c9",
+        "descriptor_words": [
+          "0x1248f55c",
+          "0x7004d018",
+          "0xcfe02c4",
+          "0x3"
+        ],
+        "wrapper_path": [
+          "0x2886b0",
+          "0x2886b4",
+          "0x2886b8",
+          "0x2886bc",
+          "0x2886c0"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 2765,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004cbe8",
+          "x8": "0x7004d018"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x2886bc",
+        "return_observation_index": 3666,
+        "returned_x0": "0x0",
+        "reader_count": 0,
+        "descriptor_after_hex": "5cf548120000000018d0047000000000c402fe0c000000000300000000000000",
+        "descriptor_after_sha256": "e08d334293b81e1defa1759ec0fbc4ba5a768e779ddcff79b8d892437121e4c9",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 1,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884ec",
+        "target_offset": "0x32d3a0",
+        "VM_cursor_offset": "0x107b24",
+        "call_observation_index": 6060,
+        "descriptor_address": "0x7004cdc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "a0d35e1200000000e01c69120000000090d4047000000000607f601200000000",
+        "descriptor_first32_sha256": "941115d58a0507632c0a4429fb7f0523f65e4bb5ad731f545cc1e03e92ee47ac",
+        "descriptor_words": [
+          "0x125ed3a0",
+          "0x12691ce0",
+          "0x7004d490",
+          "0x12607f60"
+        ],
+        "wrapper_path": [
+          "0x2884ec",
+          "0x2884f0",
+          "0x2884f4",
+          "0x2884f8",
+          "0x2884fc",
+          "0x288500",
+          "0x288504"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 91,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x12691ce0"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x2884fc",
+        "return_observation_index": 6155,
+        "returned_x0": "0x1",
+        "reader_count": 0,
+        "descriptor_after_hex": "a0d35e1200000000e01c6912000000000100000000000000607f601200000000",
+        "descriptor_after_sha256": "265799549963ae754ffd62ec6ba4e8cf93d863a0da1dcda6187e4d70812eb821",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 2,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884b8",
+        "target_offset": "0x167e54",
+        "VM_cursor_offset": "0x107b94",
+        "call_observation_index": 8018,
+        "descriptor_address": "0x7004ce08",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "547e42120000000060ff3b120000000020146a1200000000ac033c1200000000",
+        "descriptor_first32_sha256": "837bdfa79975dc71c0a59c83e93ee49c9d087ac5f8d86891787bf607f333f7a4",
+        "descriptor_words": [
+          "0x12427e54",
+          "0x123bff60",
+          "0x126a1420",
+          "0x123c03ac"
+        ],
+        "wrapper_path": [
+          "0x2884b8",
+          "0x2884bc",
+          "0x2884c0",
+          "0x2884c4",
+          "0x2884c8"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 70,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x123bff60",
+          "x1": "0x126a1420",
+          "x2": "0x123c03ac"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 8093,
+        "returned_x0": "0x123bff60",
+        "reader_count": 0,
+        "descriptor_after_hex": "547e42120000000060ff3b120000000020146a1200000000ac033c1200000000",
+        "descriptor_after_sha256": "837bdfa79975dc71c0a59c83e93ee49c9d087ac5f8d86891787bf607f333f7a4",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 3,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2886fc",
+        "target_offset": "0x256330",
+        "VM_cursor_offset": "0x107d54",
+        "call_observation_index": 10146,
+        "descriptor_address": "0x7004cba0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "306351120000000078816d130000000080cc047000000000d8ba015100000000",
+        "descriptor_first32_sha256": "1ae30382e7d4c683dfdd690787d1ce7be72dd937beb5a9ff9ea282bad4d40c10",
+        "descriptor_words": [
+          "0x12516330",
+          "0x136d8178",
+          "0x7004cc80",
+          "0x5101bad8"
+        ],
+        "wrapper_path": [
+          "0x2886fc",
+          "0x288700",
+          "0x288704",
+          "0x288708",
+          "0x28870c",
+          "0x288710",
+          "0x288714"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 16,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136d8178"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x28870c",
+        "return_observation_index": 10166,
+        "returned_x0": "0x1269e4d4",
+        "reader_count": 0,
+        "descriptor_after_hex": "306351120000000078816d1300000000d4e4691200000000d8ba015100000000",
+        "descriptor_after_sha256": "4606eafa92b9fbb47982c88ae8103e1c8a3a7aa12b558e76224476a0802a5d5d",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 4,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884b8",
+        "target_offset": "0x167e54",
+        "VM_cursor_offset": "0x107d9c",
+        "call_observation_index": 11387,
+        "descriptor_address": "0x7004ce08",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "547e42120000000034fd3b120000000088116a1200000000f0053c1200000000",
+        "descriptor_first32_sha256": "b5af82635c22f776a82e0600cf37cda5f2fe6a15429a414d6400f494f5cc0a9d",
+        "descriptor_words": [
+          "0x12427e54",
+          "0x123bfd34",
+          "0x126a1188",
+          "0x123c05f0"
+        ],
+        "wrapper_path": [
+          "0x2884b8",
+          "0x2884bc",
+          "0x2884c0",
+          "0x2884c4",
+          "0x2884c8"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 62,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x123bfd34",
+          "x1": "0x126a1188",
+          "x2": "0x123c05f0"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 11454,
+        "returned_x0": "0x123bfd34",
+        "reader_count": 0,
+        "descriptor_after_hex": "547e42120000000034fd3b120000000088116a1200000000f0053c1200000000",
+        "descriptor_after_sha256": "b5af82635c22f776a82e0600cf37cda5f2fe6a15429a414d6400f494f5cc0a9d",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 5,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x288718",
+        "target_offset": "0x2781f4",
+        "VM_cursor_offset": "0x107de4",
+        "call_observation_index": 12873,
+        "descriptor_address": "0x7004cb60",
+        "descriptor_observed_size": 64,
+        "descriptor_before_hex": "f481531200000000981c691200000000400000000000000020146a1200000000c6f3321200000000d4e469120000000088116a12000000007100000000000000",
+        "descriptor_first32_sha256": "817945ce235a8e68477051d70424029882a77d8b8d376314800741f46b8433de",
+        "descriptor_words": [
+          "0x125381f4",
+          "0x12691c98",
+          "0x40",
+          "0x126a1420",
+          "0x1232f3c6",
+          "0x1269e4d4",
+          "0x126a1188",
+          "0x71"
+        ],
+        "wrapper_path": [
+          "0x288718",
+          "0x28871c",
+          "0x288720",
+          "0x288724",
+          "0x288728",
+          "0x28872c",
+          "0x288730",
+          "0x288734",
+          "0x288738",
+          "0x28873c"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 1007,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x12691c98",
+          "x1": "0x40",
+          "x2": "0x126a1420",
+          "x3": "0x1232f3c6",
+          "x4": "0x1269e4d4",
+          "x5": "0x126a1188"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288734",
+        "return_observation_index": 13887,
+        "returned_x0": "0x14",
+        "reader_count": 0,
+        "descriptor_after_hex": "f481531200000000981c691200000000400000000000000020146a1200000000c6f3321200000000d4e469120000000088116a12000000001400000000000000",
+        "descriptor_after_sha256": "bd94d8c8c2d154f18c5f445c09fb74ad3b343aa6224ca178460fd1ef4f80862b",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 6,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28854c",
+        "target_offset": "0x32d4f8",
+        "VM_cursor_offset": "0x107e18",
+        "call_observation_index": 14800,
+        "descriptor_address": "0x7004cd60",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "f8d45e1200000000e01c691200000000d0c9521200000000d8d1047000000000",
+        "descriptor_first32_sha256": "780264b175924bbc1f18fe056bffe3d157b13eb6d5b3f251277cf524966e49c9",
+        "descriptor_words": [
+          "0x125ed4f8",
+          "0x12691ce0",
+          "0x1252c9d0",
+          "0x7004d1d8"
+        ],
+        "wrapper_path": [
+          "0x28854c",
+          "0x288550",
+          "0x288554"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 69,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x12691ce0"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 14872,
+        "returned_x0": "0x0",
+        "reader_count": 0,
+        "descriptor_after_hex": "f8d45e1200000000e01c691200000000d0c9521200000000d8d1047000000000",
+        "descriptor_after_sha256": "780264b175924bbc1f18fe056bffe3d157b13eb6d5b3f251277cf524966e49c9",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 7,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884d8",
+        "target_offset": "0x347f60",
+        "VM_cursor_offset": "0x107e90",
+        "call_observation_index": 16944,
+        "descriptor_address": "0x7004cdd8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "607f60120000000008cf047000000000d8d10470000000001000000000000000",
+        "descriptor_first32_sha256": "6f72731715f4c60030999094aa7235295f92c1b86b0906e7754a70324046801e",
+        "descriptor_words": [
+          "0x12607f60",
+          "0x7004cf08",
+          "0x7004d1d8",
+          "0x10"
+        ],
+        "wrapper_path": [
+          "0x2884d8",
+          "0x2884dc",
+          "0x2884e0",
+          "0x2884e4",
+          "0x2884e8"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 2,
+        "target_execution_kind": "inherited_memcpy_provider",
+        "copy": {
+          "destination": "0x7004cf08",
+          "source": "0x7004d1d8",
+          "length": 16,
+          "source_before_sha256": "fcb0bd6b7f908624421c34b699ae3bafe0155d40da093300dc7b6b4b79aaaca5",
+          "destination_before_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+          "source_after_sha256": "fcb0bd6b7f908624421c34b699ae3bafe0155d40da093300dc7b6b4b79aaaca5",
+          "destination_after_sha256": "fcb0bd6b7f908624421c34b699ae3bafe0155d40da093300dc7b6b4b79aaaca5",
+          "copied_bytes_match": true,
+          "source_bytes_preserved": true
+        },
+        "target_arguments": {
+          "x0": "0x7004cf08",
+          "x1": "0x7004d1d8",
+          "x2": "0x10"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 16951,
+        "returned_x0": "0x7004cf08",
+        "reader_count": 0,
+        "descriptor_after_hex": "607f60120000000008cf047000000000d8d10470000000001000000000000000",
+        "descriptor_after_sha256": "6f72731715f4c60030999094aa7235295f92c1b86b0906e7754a70324046801e",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 8,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884d8",
+        "target_offset": "0x347f60",
+        "VM_cursor_offset": "0x107ed4",
+        "call_observation_index": 18272,
+        "descriptor_address": "0x7004cdd8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "607f60120000000028cf047000000000d8d10470000000001000000000000000",
+        "descriptor_first32_sha256": "89ac9f641a731c323f379b22bf03bccefe25c9eb9b3047006136e61a4cddf195",
+        "descriptor_words": [
+          "0x12607f60",
+          "0x7004cf28",
+          "0x7004d1d8",
+          "0x10"
+        ],
+        "wrapper_path": [
+          "0x2884d8",
+          "0x2884dc",
+          "0x2884e0",
+          "0x2884e4",
+          "0x2884e8"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 2,
+        "target_execution_kind": "inherited_memcpy_provider",
+        "copy": {
+          "destination": "0x7004cf28",
+          "source": "0x7004d1d8",
+          "length": 16,
+          "source_before_sha256": "916f1084b0e04bbd0f098b7d99c69bbec6f24fadd5468960da75b5c4712fa1de",
+          "destination_before_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+          "source_after_sha256": "916f1084b0e04bbd0f098b7d99c69bbec6f24fadd5468960da75b5c4712fa1de",
+          "destination_after_sha256": "916f1084b0e04bbd0f098b7d99c69bbec6f24fadd5468960da75b5c4712fa1de",
+          "copied_bytes_match": true,
+          "source_bytes_preserved": true
+        },
+        "target_arguments": {
+          "x0": "0x7004cf28",
+          "x1": "0x7004d1d8",
+          "x2": "0x10"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 18279,
+        "returned_x0": "0x7004cf28",
+        "reader_count": 0,
+        "descriptor_after_hex": "607f60120000000028cf047000000000d8d10470000000001000000000000000",
+        "descriptor_after_sha256": "89ac9f641a731c323f379b22bf03bccefe25c9eb9b3047006136e61a4cddf195",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 9,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884d8",
+        "target_offset": "0x347f60",
+        "VM_cursor_offset": "0x107f0c",
+        "call_observation_index": 19364,
+        "descriptor_address": "0x7004cdd8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "607f60120000000038cf047000000000d8d10470000000001000000000000000",
+        "descriptor_first32_sha256": "e30be8f93b1584dca4fd21e998ffb1309c543eecd79feb88fb32c40e9ba76f34",
+        "descriptor_words": [
+          "0x12607f60",
+          "0x7004cf38",
+          "0x7004d1d8",
+          "0x10"
+        ],
+        "wrapper_path": [
+          "0x2884d8",
+          "0x2884dc",
+          "0x2884e0",
+          "0x2884e4",
+          "0x2884e8"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 2,
+        "target_execution_kind": "inherited_memcpy_provider",
+        "copy": {
+          "destination": "0x7004cf38",
+          "source": "0x7004d1d8",
+          "length": 16,
+          "source_before_sha256": "2822422401c957ea97ba76b6169f5bf0d4ca3b47fea02caf76539b7677ea82d6",
+          "destination_before_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+          "source_after_sha256": "2822422401c957ea97ba76b6169f5bf0d4ca3b47fea02caf76539b7677ea82d6",
+          "destination_after_sha256": "2822422401c957ea97ba76b6169f5bf0d4ca3b47fea02caf76539b7677ea82d6",
+          "copied_bytes_match": true,
+          "source_bytes_preserved": true
+        },
+        "target_arguments": {
+          "x0": "0x7004cf38",
+          "x1": "0x7004d1d8",
+          "x2": "0x10"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 19371,
+        "returned_x0": "0x7004cf38",
+        "reader_count": 0,
+        "descriptor_after_hex": "607f60120000000038cf047000000000d8d10470000000001000000000000000",
+        "descriptor_after_sha256": "e30be8f93b1584dca4fd21e998ffb1309c543eecd79feb88fb32c40e9ba76f34",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 10,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884d8",
+        "target_offset": "0x347f60",
+        "VM_cursor_offset": "0x107f40",
+        "call_observation_index": 20356,
+        "descriptor_address": "0x7004cdd8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "607f60120000000028d004700000000030ea6112000000003000000000000000",
+        "descriptor_first32_sha256": "22985fb4be1fb8d952d7e621f3c96867f42cf6e3f4929252a1528c555e907dfb",
+        "descriptor_words": [
+          "0x12607f60",
+          "0x7004d028",
+          "0x1261ea30",
+          "0x30"
+        ],
+        "wrapper_path": [
+          "0x2884d8",
+          "0x2884dc",
+          "0x2884e0",
+          "0x2884e4",
+          "0x2884e8"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 2,
+        "target_execution_kind": "inherited_memcpy_provider",
+        "copy": {
+          "destination": "0x7004d028",
+          "source": "0x1261ea30",
+          "length": 48,
+          "source_before_sha256": "be80faa9619183e50ef8d8d20796e6ac2fe29ca3f1223cc0ae5fd7a2666e796d",
+          "destination_before_sha256": "f23708169baf50a0a65cf6ba77221037acc6b64004efeb65818dcc43ec056e61",
+          "source_after_sha256": "be80faa9619183e50ef8d8d20796e6ac2fe29ca3f1223cc0ae5fd7a2666e796d",
+          "destination_after_sha256": "be80faa9619183e50ef8d8d20796e6ac2fe29ca3f1223cc0ae5fd7a2666e796d",
+          "copied_bytes_match": true,
+          "source_bytes_preserved": true
+        },
+        "target_arguments": {
+          "x0": "0x7004d028",
+          "x1": "0x1261ea30",
+          "x2": "0x30"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 20363,
+        "returned_x0": "0x7004d028",
+        "reader_count": 0,
+        "descriptor_after_hex": "607f60120000000028d004700000000030ea6112000000003000000000000000",
+        "descriptor_after_sha256": "22985fb4be1fb8d952d7e621f3c96867f42cf6e3f4929252a1528c555e907dfb",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 11,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2885d0",
+        "target_offset": "0x248344",
+        "VM_cursor_offset": "0x1080bc",
+        "call_observation_index": 21479,
+        "descriptor_address": "0x7004ccc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "4483501200000000d8d1047000000000d0116a12000000008c04541200000000",
+        "descriptor_first32_sha256": "14eb13f806bba8d0b046125852abee6fdc619d670c805b9bd33de86adba14aa5",
+        "descriptor_words": [
+          "0x12508344",
+          "0x7004d1d8",
+          "0x126a11d0",
+          "0x1254048c"
+        ],
+        "wrapper_path": [
+          "0x2885d0",
+          "0x2885d4",
+          "0x2885d8",
+          "0x2885dc"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 587,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8",
+          "x1": "0x126a11d0"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 22070,
+        "returned_x0": "0x136d3fc0",
+        "reader_count": 0,
+        "descriptor_after_hex": "4483501200000000d8d1047000000000d0116a12000000008c04541200000000",
+        "descriptor_after_sha256": "14eb13f806bba8d0b046125852abee6fdc619d670c805b9bd33de86adba14aa5",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 12,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28874c",
+        "target_offset": "0x256a18",
+        "VM_cursor_offset": "0x1080e0",
+        "call_observation_index": 22738,
+        "descriptor_address": "0x7004cb30",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "186a51120000000000006e1300000000d8d10470000000002000000002000000",
+        "descriptor_first32_sha256": "22ac9a4d7fb7f41d42f8aa30482a1528bc1b9d4788a7027d839d5300190fa867",
+        "descriptor_words": [
+          "0x12516a18",
+          "0x136e0000",
+          "0x7004d1d8",
+          "0x200000020"
+        ],
+        "wrapper_path": [
+          "0x28874c",
+          "0x288750",
+          "0x288754",
+          "0x288758",
+          "0x28875c",
+          "0x288760",
+          "0x288764",
+          "0x288768"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 1104,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136e0000",
+          "x1": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288760",
+        "return_observation_index": 23847,
+        "returned_x0": "0x1",
+        "reader_count": 0,
+        "descriptor_after_hex": "186a51120000000000006e1300000000d8d10470000000000100000002000000",
+        "descriptor_after_sha256": "4d165efa4a986efdda9a4be129240ca3d8ad2346b9b272b7b5fc263c185b4a7e",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 13,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884cc",
+        "target_offset": "0x2484b8",
+        "VM_cursor_offset": "0x108104",
+        "call_observation_index": 24520,
+        "descriptor_address": "0x7004cdf8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_first32_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_words": [
+          "0x125084b8",
+          "0x7004d1d8",
+          "0x12427e54",
+          "0x123bfd34"
+        ],
+        "wrapper_path": [
+          "0x2884cc",
+          "0x2884d0",
+          "0x2884d4"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 150,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 24673,
+        "returned_x0": "0x136c2680",
+        "reader_count": 0,
+        "descriptor_after_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_after_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 14,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2885d0",
+        "target_offset": "0x248344",
+        "VM_cursor_offset": "0x10828c",
+        "call_observation_index": 25877,
+        "descriptor_address": "0x7004ccc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "4483501200000000d8d104700000000000126a12000000008c04541200000000",
+        "descriptor_first32_sha256": "56e47b38cd225cf6efe008c75d1235c8a87a913a120aff3d61b86a9db771f8af",
+        "descriptor_words": [
+          "0x12508344",
+          "0x7004d1d8",
+          "0x126a1200",
+          "0x1254048c"
+        ],
+        "wrapper_path": [
+          "0x2885d0",
+          "0x2885d4",
+          "0x2885d8",
+          "0x2885dc"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 152,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8",
+          "x1": "0x126a1200"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 26033,
+        "returned_x0": "0x136d3fc0",
+        "reader_count": 0,
+        "descriptor_after_hex": "4483501200000000d8d104700000000000126a12000000008c04541200000000",
+        "descriptor_after_sha256": "56e47b38cd225cf6efe008c75d1235c8a87a913a120aff3d61b86a9db771f8af",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 15,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28874c",
+        "target_offset": "0x256a18",
+        "VM_cursor_offset": "0x1082ac",
+        "call_observation_index": 26647,
+        "descriptor_address": "0x7004cb30",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "186a51120000000000006e1300000000d8d10470000000000100000002000000",
+        "descriptor_first32_sha256": "4d165efa4a986efdda9a4be129240ca3d8ad2346b9b272b7b5fc263c185b4a7e",
+        "descriptor_words": [
+          "0x12516a18",
+          "0x136e0000",
+          "0x7004d1d8",
+          "0x200000001"
+        ],
+        "wrapper_path": [
+          "0x28874c",
+          "0x288750",
+          "0x288754",
+          "0x288758",
+          "0x28875c",
+          "0x288760",
+          "0x288764",
+          "0x288768"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 520,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136e0000",
+          "x1": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288760",
+        "return_observation_index": 27172,
+        "returned_x0": "0xa985f",
+        "reader_count": 0,
+        "descriptor_after_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_after_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 16,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884cc",
+        "target_offset": "0x2484b8",
+        "VM_cursor_offset": "0x1082d0",
+        "call_observation_index": 27845,
+        "descriptor_address": "0x7004cdf8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_first32_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_words": [
+          "0x125084b8",
+          "0x7004d1d8",
+          "0x12427e54",
+          "0x123bfd34"
+        ],
+        "wrapper_path": [
+          "0x2884cc",
+          "0x2884d0",
+          "0x2884d4"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 150,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 27998,
+        "returned_x0": "0x136c2680",
+        "reader_count": 0,
+        "descriptor_after_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_after_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 17,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2885d0",
+        "target_offset": "0x248344",
+        "VM_cursor_offset": "0x108454",
+        "call_observation_index": 29114,
+        "descriptor_address": "0x7004ccc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "4483501200000000d8d104700000000030126a12000000008c04541200000000",
+        "descriptor_first32_sha256": "f066d71af7ae0f06d8be954dbd955b65d166664ef4f84a25189b2525f08c6d21",
+        "descriptor_words": [
+          "0x12508344",
+          "0x7004d1d8",
+          "0x126a1230",
+          "0x1254048c"
+        ],
+        "wrapper_path": [
+          "0x2885d0",
+          "0x2885d4",
+          "0x2885d8",
+          "0x2885dc"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 152,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8",
+          "x1": "0x126a1230"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 29270,
+        "returned_x0": "0x136d3fc0",
+        "reader_count": 0,
+        "descriptor_after_hex": "4483501200000000d8d104700000000030126a12000000008c04541200000000",
+        "descriptor_after_sha256": "f066d71af7ae0f06d8be954dbd955b65d166664ef4f84a25189b2525f08c6d21",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 18,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28874c",
+        "target_offset": "0x256a18",
+        "VM_cursor_offset": "0x108474",
+        "call_observation_index": 29884,
+        "descriptor_address": "0x7004cb30",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_first32_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_words": [
+          "0x12516a18",
+          "0x136e0000",
+          "0x7004d1d8",
+          "0x2000a985f"
+        ],
+        "wrapper_path": [
+          "0x28874c",
+          "0x288750",
+          "0x288754",
+          "0x288758",
+          "0x28875c",
+          "0x288760",
+          "0x288764",
+          "0x288768"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 520,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136e0000",
+          "x1": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288760",
+        "return_observation_index": 30409,
+        "returned_x0": "0xa985f",
+        "reader_count": 0,
+        "descriptor_after_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_after_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 19,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884cc",
+        "target_offset": "0x2484b8",
+        "VM_cursor_offset": "0x108498",
+        "call_observation_index": 31082,
+        "descriptor_address": "0x7004cdf8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_first32_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_words": [
+          "0x125084b8",
+          "0x7004d1d8",
+          "0x12427e54",
+          "0x123bfd34"
+        ],
+        "wrapper_path": [
+          "0x2884cc",
+          "0x2884d0",
+          "0x2884d4"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 150,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 31235,
+        "returned_x0": "0x136c2680",
+        "reader_count": 0,
+        "descriptor_after_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_after_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 20,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2885d0",
+        "target_offset": "0x248344",
+        "VM_cursor_offset": "0x108624",
+        "call_observation_index": 32447,
+        "descriptor_address": "0x7004ccc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "4483501200000000d8d104700000000060126a12000000008c04541200000000",
+        "descriptor_first32_sha256": "acce50922458a2ccc8d8166e9911920a65ae875283f6555f045f36db8ef304f1",
+        "descriptor_words": [
+          "0x12508344",
+          "0x7004d1d8",
+          "0x126a1260",
+          "0x1254048c"
+        ],
+        "wrapper_path": [
+          "0x2885d0",
+          "0x2885d4",
+          "0x2885d8",
+          "0x2885dc"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 152,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8",
+          "x1": "0x126a1260"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 32603,
+        "returned_x0": "0x136d3fc0",
+        "reader_count": 0,
+        "descriptor_after_hex": "4483501200000000d8d104700000000060126a12000000008c04541200000000",
+        "descriptor_after_sha256": "acce50922458a2ccc8d8166e9911920a65ae875283f6555f045f36db8ef304f1",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 21,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28874c",
+        "target_offset": "0x256a18",
+        "VM_cursor_offset": "0x108644",
+        "call_observation_index": 33217,
+        "descriptor_address": "0x7004cb30",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_first32_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_words": [
+          "0x12516a18",
+          "0x136e0000",
+          "0x7004d1d8",
+          "0x2000a985f"
+        ],
+        "wrapper_path": [
+          "0x28874c",
+          "0x288750",
+          "0x288754",
+          "0x288758",
+          "0x28875c",
+          "0x288760",
+          "0x288764",
+          "0x288768"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 538,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136e0000",
+          "x1": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288760",
+        "return_observation_index": 33760,
+        "returned_x0": "0xa985f",
+        "reader_count": 0,
+        "descriptor_after_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_after_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 22,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884cc",
+        "target_offset": "0x2484b8",
+        "VM_cursor_offset": "0x108668",
+        "call_observation_index": 34433,
+        "descriptor_address": "0x7004cdf8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_first32_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_words": [
+          "0x125084b8",
+          "0x7004d1d8",
+          "0x12427e54",
+          "0x123bfd34"
+        ],
+        "wrapper_path": [
+          "0x2884cc",
+          "0x2884d0",
+          "0x2884d4"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 150,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 34586,
+        "returned_x0": "0x136c2680",
+        "reader_count": 0,
+        "descriptor_after_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_after_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 23,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2885d0",
+        "target_offset": "0x248344",
+        "VM_cursor_offset": "0x1087ec",
+        "call_observation_index": 35648,
+        "descriptor_address": "0x7004ccc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "4483501200000000d8d104700000000090126a12000000008c04541200000000",
+        "descriptor_first32_sha256": "41e3c423bfac7ca84712ef2c81038065c157fdea8e41fc0f092d8a781212fc12",
+        "descriptor_words": [
+          "0x12508344",
+          "0x7004d1d8",
+          "0x126a1290",
+          "0x1254048c"
+        ],
+        "wrapper_path": [
+          "0x2885d0",
+          "0x2885d4",
+          "0x2885d8",
+          "0x2885dc"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 152,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8",
+          "x1": "0x126a1290"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 35804,
+        "returned_x0": "0x136d3fc0",
+        "reader_count": 0,
+        "descriptor_after_hex": "4483501200000000d8d104700000000090126a12000000008c04541200000000",
+        "descriptor_after_sha256": "41e3c423bfac7ca84712ef2c81038065c157fdea8e41fc0f092d8a781212fc12",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 24,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28874c",
+        "target_offset": "0x256a18",
+        "VM_cursor_offset": "0x10880c",
+        "call_observation_index": 36418,
+        "descriptor_address": "0x7004cb30",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_first32_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_words": [
+          "0x12516a18",
+          "0x136e0000",
+          "0x7004d1d8",
+          "0x2000a985f"
+        ],
+        "wrapper_path": [
+          "0x28874c",
+          "0x288750",
+          "0x288754",
+          "0x288758",
+          "0x28875c",
+          "0x288760",
+          "0x288764",
+          "0x288768"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 520,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136e0000",
+          "x1": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288760",
+        "return_observation_index": 36943,
+        "returned_x0": "0xa985f",
+        "reader_count": 0,
+        "descriptor_after_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_after_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 25,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884cc",
+        "target_offset": "0x2484b8",
+        "VM_cursor_offset": "0x108830",
+        "call_observation_index": 37616,
+        "descriptor_address": "0x7004cdf8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_first32_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_words": [
+          "0x125084b8",
+          "0x7004d1d8",
+          "0x12427e54",
+          "0x123bfd34"
+        ],
+        "wrapper_path": [
+          "0x2884cc",
+          "0x2884d0",
+          "0x2884d4"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 150,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 37769,
+        "returned_x0": "0x136c2680",
+        "reader_count": 0,
+        "descriptor_after_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_after_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 26,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884d8",
+        "target_offset": "0x347f60",
+        "VM_cursor_offset": "0x10885c",
+        "call_observation_index": 38612,
+        "descriptor_address": "0x7004cdd8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "607f60120000000058d004700000000060ea611200000000c000000000000000",
+        "descriptor_first32_sha256": "9d2b117bbc52476996fda990e3b8104dca4cc9b05320a556eea5f6abe0dda740",
+        "descriptor_words": [
+          "0x12607f60",
+          "0x7004d058",
+          "0x1261ea60",
+          "0xc0"
+        ],
+        "wrapper_path": [
+          "0x2884d8",
+          "0x2884dc",
+          "0x2884e0",
+          "0x2884e4",
+          "0x2884e8"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 2,
+        "target_execution_kind": "inherited_memcpy_provider",
+        "copy": {
+          "destination": "0x7004d058",
+          "source": "0x1261ea60",
+          "length": 192,
+          "source_before_sha256": "cd50e9f17944d36fb4b41e46e0be0ce8e650651bb5ae291b068c000e16daaa67",
+          "destination_before_sha256": "fd5f7c2b76bfa611e66913fbe4d646b04cf4a76d6ecb826e80f771469e046e76",
+          "source_after_sha256": "cd50e9f17944d36fb4b41e46e0be0ce8e650651bb5ae291b068c000e16daaa67",
+          "destination_after_sha256": "cd50e9f17944d36fb4b41e46e0be0ce8e650651bb5ae291b068c000e16daaa67",
+          "copied_bytes_match": true,
+          "source_bytes_preserved": true
+        },
+        "target_arguments": {
+          "x0": "0x7004d058",
+          "x1": "0x1261ea60",
+          "x2": "0xc0"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 38619,
+        "returned_x0": "0x7004d058",
+        "reader_count": 0,
+        "descriptor_after_hex": "607f60120000000058d004700000000060ea611200000000c000000000000000",
+        "descriptor_after_sha256": "9d2b117bbc52476996fda990e3b8104dca4cc9b05320a556eea5f6abe0dda740",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 27,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2885d0",
+        "target_offset": "0x248344",
+        "VM_cursor_offset": "0x1089d8",
+        "call_observation_index": 39681,
+        "descriptor_address": "0x7004ccc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "4483501200000000d8d1047000000000a0106a12000000008c04541200000000",
+        "descriptor_first32_sha256": "80a79022c20433eb065bb63195570f5dd62f25a47f50a79a05ed8af7147a0bc2",
+        "descriptor_words": [
+          "0x12508344",
+          "0x7004d1d8",
+          "0x126a10a0",
+          "0x1254048c"
+        ],
+        "wrapper_path": [
+          "0x2885d0",
+          "0x2885d4",
+          "0x2885d8",
+          "0x2885dc"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 152,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8",
+          "x1": "0x126a10a0"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 39837,
+        "returned_x0": "0x136d3fc0",
+        "reader_count": 0,
+        "descriptor_after_hex": "4483501200000000d8d1047000000000a0106a12000000008c04541200000000",
+        "descriptor_after_sha256": "80a79022c20433eb065bb63195570f5dd62f25a47f50a79a05ed8af7147a0bc2",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 28,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28874c",
+        "target_offset": "0x256a18",
+        "VM_cursor_offset": "0x1089f8",
+        "call_observation_index": 40451,
+        "descriptor_address": "0x7004cb30",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "186a51120000000000006e1300000000d8d10470000000005f980a0002000000",
+        "descriptor_first32_sha256": "38eea81128b98ef8616867a3b290f82f7cdef15052673ac8f5d5b4ba99313084",
+        "descriptor_words": [
+          "0x12516a18",
+          "0x136e0000",
+          "0x7004d1d8",
+          "0x2000a985f"
+        ],
+        "wrapper_path": [
+          "0x28874c",
+          "0x288750",
+          "0x288754",
+          "0x288758",
+          "0x28875c",
+          "0x288760",
+          "0x288764",
+          "0x288768"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 1122,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136e0000",
+          "x1": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288760",
+        "return_observation_index": 41578,
+        "returned_x0": "0x0",
+        "reader_count": 0,
+        "descriptor_after_hex": "186a51120000000000006e1300000000d8d10470000000000000000002000000",
+        "descriptor_after_sha256": "e328fb2871f0f1241aea1c9d3c6769955eae5f5160f144e8d2a1bec569f30d77",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 29,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2884cc",
+        "target_offset": "0x2484b8",
+        "VM_cursor_offset": "0x108a1c",
+        "call_observation_index": 42258,
+        "descriptor_address": "0x7004cdf8",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_first32_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_words": [
+          "0x125084b8",
+          "0x7004d1d8",
+          "0x12427e54",
+          "0x123bfd34"
+        ],
+        "wrapper_path": [
+          "0x2884cc",
+          "0x2884d0",
+          "0x2884d4"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 150,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 42411,
+        "returned_x0": "0x136c2680",
+        "reader_count": 0,
+        "descriptor_after_hex": "b884501200000000d8d1047000000000547e42120000000034fd3b1200000000",
+        "descriptor_after_sha256": "01ab59204811b97d85fc7d181c287ed428611569ae6c748701694518db32744c",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 30,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x2885d0",
+        "target_offset": "0x248344",
+        "VM_cursor_offset": "0x108b98",
+        "call_observation_index": 43473,
+        "descriptor_address": "0x7004ccc0",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "4483501200000000d8d1047000000000d0106a12000000008c04541200000000",
+        "descriptor_first32_sha256": "dd1daa012b87c57976d5283d4c09f2c312a9a0c0c630f78e647ad57a94fabc04",
+        "descriptor_words": [
+          "0x12508344",
+          "0x7004d1d8",
+          "0x126a10d0",
+          "0x1254048c"
+        ],
+        "wrapper_path": [
+          "0x2885d0",
+          "0x2885d4",
+          "0x2885d8",
+          "0x2885dc"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 152,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x7004d1d8",
+          "x1": "0x126a10d0"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x16aa4c",
+        "return_observation_index": 43629,
+        "returned_x0": "0x136d3fc0",
+        "reader_count": 0,
+        "descriptor_after_hex": "4483501200000000d8d1047000000000d0106a12000000008c04541200000000",
+        "descriptor_after_sha256": "dd1daa012b87c57976d5283d4c09f2c312a9a0c0c630f78e647ad57a94fabc04",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      },
+      {
+        "ordinal": 31,
+        "callsite_offset": "0x16aa48",
+        "call_instruction_bytes": "00013fd6",
+        "wrapper_offset": "0x28874c",
+        "target_offset": "0x256a18",
+        "VM_cursor_offset": "0x108bb8",
+        "call_observation_index": 44243,
+        "descriptor_address": "0x7004cb30",
+        "descriptor_observed_size": 32,
+        "descriptor_before_hex": "186a51120000000000006e1300000000d8d10470000000000000000002000000",
+        "descriptor_first32_sha256": "e328fb2871f0f1241aea1c9d3c6769955eae5f5160f144e8d2a1bec569f30d77",
+        "descriptor_words": [
+          "0x12516a18",
+          "0x136e0000",
+          "0x7004d1d8",
+          "0x200000000"
+        ],
+        "wrapper_path": [
+          "0x28874c",
+          "0x288750",
+          "0x288754",
+          "0x288758",
+          "0x28875c",
+          "0x288760",
+          "0x288764",
+          "0x288768"
+        ],
+        "wrapper_code_verified": true,
+        "target_entered": true,
+        "target_observations": 1104,
+        "target_execution_kind": "native_instructions",
+        "target_arguments": {
+          "x0": "0x136e0000",
+          "x1": "0x7004d1d8"
+        },
+        "argument_binding_verified": true,
+        "target_return_offset": "0x288760",
+        "return_observation_index": 45352,
+        "returned_x0": "0x0",
+        "reader_count": 0,
+        "descriptor_after_hex": "186a51120000000000006e1300000000d8d10470000000000000000002000000",
+        "descriptor_after_sha256": "e328fb2871f0f1241aea1c9d3c6769955eae5f5160f144e8d2a1bec569f30d77",
+        "descriptor_output_and_padding_verified": true,
+        "return_offset": "0x16aa4c",
+        "stack_pointer_restored": true,
+        "callee_saved_registers_restored": true,
+        "callback_returned": true
+      }
+    ],
+    "allocator_counts_before": {
+      "malloc": 560,
+      "free": 254,
+      "gc": 3,
+      "flush": 4
+    },
+    "allocator_counts_after": {
+      "malloc": 572,
+      "free": 261,
+      "gc": 3,
+      "flush": 4
+    },
+    "allocator_delta": {
+      "flush": 0,
+      "free": 7,
+      "gc": 0,
+      "malloc": 12
+    },
+    "new_allocator_events": [
+      [
+        "alloc",
+        4,
+        325944000,
+        "0x32a210"
+      ],
+      [
+        "alloc",
+        24,
+        325948960,
+        "0x32a210"
+      ],
+      [
+        "alloc",
+        8,
+        325943976,
+        "0x2481dc"
+      ],
+      [
+        "alloc",
+        48,
+        325926800,
+        "0x32a210"
+      ],
+      [
+        "alloc",
+        4,
+        325944008,
+        "0x32a210"
+      ],
+      [
+        "free",
+        325944000
+      ],
+      [
+        "alloc",
+        33,
+        325926848,
+        "0x248388"
+      ],
+      [
+        "free",
+        325926848
+      ],
+      [
+        "alloc",
+        33,
+        325926848,
+        "0x248388"
+      ],
+      [
+        "free",
+        325926848
+      ],
+      [
+        "alloc",
+        33,
+        325926848,
+        "0x248388"
+      ],
+      [
+        "free",
+        325926848
+      ],
+      [
+        "alloc",
+        33,
+        325926848,
+        "0x248388"
+      ],
+      [
+        "free",
+        325926848
+      ],
+      [
+        "alloc",
+        33,
+        325926848,
+        "0x248388"
+      ],
+      [
+        "free",
+        325926848
+      ],
+      [
+        "alloc",
+        33,
+        325926848,
+        "0x248388"
+      ],
+      [
+        "free",
+        325926848
+      ],
+      [
+        "alloc",
+        33,
+        325926848,
+        "0x248388"
+      ]
+    ],
+    "new_allocator_events_sha256": "19825454a97c5ed3a8bec48ee838661c86ac474bc60c9b48be20c4a978feea2b",
+    "service_counts_before": {
+      "syscall_214": 1,
+      "syscall_222": 4,
+      "syscall_167": 3,
+      "syscall_226": 9,
+      "syscall_56": 5,
+      "syscall_80": 1,
+      "syscall_215": 2,
+      "syscall_63": 2,
+      "syscall_57": 4,
+      "clock": 10,
+      "virtual_pthread_create": 3,
+      "destructor_registration": 5,
+      "syscall_98": 18,
+      "property_find": 1,
+      "syscall_48": 4,
+      "syscall_79": 4,
+      "mkdir_exists": 2,
+      "syscall_169": 1
+    },
+    "service_counts_after": {
+      "syscall_214": 1,
+      "syscall_222": 4,
+      "syscall_167": 3,
+      "syscall_226": 9,
+      "syscall_56": 5,
+      "syscall_80": 1,
+      "syscall_215": 2,
+      "syscall_63": 2,
+      "syscall_57": 4,
+      "clock": 10,
+      "virtual_pthread_create": 3,
+      "destructor_registration": 6,
+      "syscall_98": 18,
+      "property_find": 1,
+      "syscall_48": 4,
+      "syscall_79": 4,
+      "mkdir_exists": 2,
+      "syscall_169": 1
+    },
+    "service_delta": {
+      "clock": 0,
+      "destructor_registration": 1,
+      "mkdir_exists": 0,
+      "property_find": 0,
+      "syscall_167": 0,
+      "syscall_169": 0,
+      "syscall_214": 0,
+      "syscall_215": 0,
+      "syscall_222": 0,
+      "syscall_226": 0,
+      "syscall_48": 0,
+      "syscall_56": 0,
+      "syscall_57": 0,
+      "syscall_63": 0,
+      "syscall_79": 0,
+      "syscall_80": 0,
+      "syscall_98": 0,
+      "virtual_pthread_create": 0
+    },
+    "jni_calls_before": [
+      {
+        "slot": "0x30",
+        "result": "NULL_or_false",
+        "caller": "0x28b720",
+        "name_length": 16,
+        "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+      },
+      {
+        "slot": "0x720",
+        "result": "NULL_or_false",
+        "caller": "0x28b7a8"
+      }
+    ],
+    "jni_calls_after": [
+      {
+        "slot": "0x30",
+        "result": "NULL_or_false",
+        "caller": "0x28b720",
+        "name_length": 16,
+        "name_sha256": "674974bfb306a63dffbadadb01e512fed1a7b123b621e95b0ab7eb1df382b953"
+      },
+      {
+        "slot": "0x720",
+        "result": "NULL_or_false",
+        "caller": "0x28b7a8"
+      }
+    ],
+    "libc_svc_before": [
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      }
+    ],
+    "libc_svc_after": [
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x1bf1c",
+        "number": 98
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      },
+      {
+        "libc_pc": "0x6a550",
+        "number": 226
+      }
+    ],
+    "main_svc_before": [
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 48,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 30,
+        "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522",
+        "mode": 4
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 79,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 29,
+        "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+        "stat_buffer_in_native_stack": true,
+        "stat_buffer_size": 128,
+        "stat_buffer_SP_offset": 88,
+        "return_pc": "0x272d68"
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 79,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 5,
+        "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+        "stat_buffer_in_native_stack": true,
+        "stat_buffer_size": 128,
+        "stat_buffer_SP_offset": 88,
+        "return_pc": "0x272d68"
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 48,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 76,
+        "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+        "mode": 4,
+        "return_pc": "0x27308c"
+      }
+    ],
+    "main_svc_after": [
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 48,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 30,
+        "pathname_sha256": "65b853a9305efa071073838f3717c76cb024434ea62b2fa43839d220bc58a522",
+        "mode": 4
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 79,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 29,
+        "pathname_sha256": "d939e7f74a175391b0c9842e9b124f06fce6f1f3492172d33e85aa223c25ad0d",
+        "stat_buffer_in_native_stack": true,
+        "stat_buffer_size": 128,
+        "stat_buffer_SP_offset": 88,
+        "return_pc": "0x272d68"
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 79,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 5,
+        "pathname_sha256": "bd47413b5c03dfc6e4b5b8143fe205eae10ecaf0c28b426be98d74cff48c7453",
+        "stat_buffer_in_native_stack": true,
+        "stat_buffer_size": 128,
+        "stat_buffer_SP_offset": 88,
+        "return_pc": "0x272d68"
+      },
+      {
+        "native_pc": "0x271dbc",
+        "bytecode": "0xfca40",
+        "number": 48,
+        "dirfd_u32": 4294967196,
+        "flags": 0,
+        "pathname_length": 76,
+        "pathname_sha256": "8779738fdeb7040b32e1a49384bb7c459ea7d249005cd732e07bd2953f5a95c5",
+        "mode": 4,
+        "return_pc": "0x27308c"
+      }
+    ],
+    "late_jni_calls_before": [
+      {
+        "slot": "0x388",
+        "label": "GetStaticMethodID_method_fixture",
+        "caller": "0x204d84",
+        "args": [
+          "0x70007800",
+          "0x0",
+          "0x1269a014",
+          "0x1269a01c"
+        ],
+        "result": "0x70006a00",
+        "name_length": 1,
+        "name_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+        "signature_length": 3,
+        "signature_sha256": "da8c82d5d4030588e2a67b1a25ad09d678e03e02b7d22a6f7b214e880ccb0c1c",
+        "return_kind": "void",
+        "class_argument_is_null": true
+      },
+      {
+        "slot": "0x720",
+        "label": "ExceptionCheck_clear",
+        "caller": "0x204d94",
+        "args": [
+          "0x70007800"
+        ],
+        "result": "0x0"
+      }
+    ],
+    "late_jni_calls_after": [
+      {
+        "slot": "0x388",
+        "label": "GetStaticMethodID_method_fixture",
+        "caller": "0x204d84",
+        "args": [
+          "0x70007800",
+          "0x0",
+          "0x1269a014",
+          "0x1269a01c"
+        ],
+        "result": "0x70006a00",
+        "name_length": 1,
+        "name_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+        "signature_length": 3,
+        "signature_sha256": "da8c82d5d4030588e2a67b1a25ad09d678e03e02b7d22a6f7b214e880ccb0c1c",
+        "return_kind": "void",
+        "class_argument_is_null": true
+      },
+      {
+        "slot": "0x720",
+        "label": "ExceptionCheck_clear",
+        "caller": "0x204d94",
+        "args": [
+          "0x70007800"
+        ],
+        "result": "0x0"
+      }
+    ],
+    "java_dispatch_before": [],
+    "java_dispatch_after": [
+      {
+        "arguments": [
+          "0x1000011",
+          "0x0",
+          "0x0",
+          "0x0",
+          "0x0"
+        ],
+        "entry_sp": "0x7004b850",
+        "caller": "0x1cf6c8"
+      }
+    ],
+    "stop_boundary": {
+      "kind": "thirty_second_configuration_callback_return_before_vm_resume",
+      "stop_before": "0x16aa4c",
+      "next_vm_instruction_executed": false
+    }
+  }
+}
