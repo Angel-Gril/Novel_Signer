@@ -1,0 +1,441 @@
+{
+  "schema": "vm9-native-171-post-crc-constructors-dynamic-20261124-v1",
+  "claims": {
+    "evidence_label": "Sample verified",
+    "complete_CRC_eighth_parent_case_equal": true,
+    "original_tail_wrappers_default_constructors_and_malloc_executed": true,
+    "exact_header_pointer_and_single_NUL_writes_verified": true,
+    "object_neighbors_descriptor_and_payload_tail_preserved": true,
+    "new_eight_byte_allocations_live": true,
+    "eight_JSON_nodes_keys_CRC_storage_and_prior_constructed_strings_preserved": true,
+    "source_values_or_hashes_exported": false,
+    "allocation_contents_exported": false,
+    "key_contents_or_hashes_exported": false,
+    "native_snapshot_used_as_VM_model_input": false,
+    "real_ART_JVM_execution": false,
+    "Android_execution": false,
+    "complete_physical_ABI_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_acceptance_verified": false
+  },
+  "providers": {
+    "parent_evidence_sha256": "49363bc0fe172d6c86de07ff23c8bc894edbca7b7b1de2bd39dbecbfc9daedfe",
+    "maximum_new_callbacks": 4,
+    "maximum_new_observations": 80000,
+    "admitted_callback": [
+      "0x2884cc",
+      "0x2481ac"
+    ],
+    "new_providers": [],
+    "new_import_bindings": [],
+    "allocation": "inherited import routing to original matching Bionic malloc body",
+    "new_SVC_and_JNI_policy": "stop before execution",
+    "unknown_callback_policy": "stop before VM call",
+    "inherited_original_JNI_acquisition_body_executed": false,
+    "inherited_JNI_provider": "controlled eight-byte env write; original body bypassed",
+    "component_allocators": "declared synthetic success/failure services only; native snapshots never used as model input",
+    "inherited_component_controls_rerun": false
+  },
+  "source_fingerprints": {
+    "verifier_sha256": "046ce65968bfb3fd5d102c2ccbe173628118cf7ddfd7d9cb06c72827f9b0863f",
+    "parent_verifier_sha256": "0bba7469b3c20ad809ffb546c516c75f06550ffa3f35a864ab33e68d38709dd7",
+    "parent_chain_sha256": "658559878d43d67387db0451d84fd044a2713c611b767ac6d4c1c8063ef69cfc",
+    "consumer_fixture_sha256": "5b6393e25c3ef44462e20b8c407cf9809e90f342598a0f25a616032e66905579",
+    "callback_model_sha256": "bd33bedb2dbc60b7a2cc83185aefe14bfea6b4cd4a1263750b1e96eee90abd03",
+    "object_model_sha256": "660be7210a6979909e1d4ac177403fecba66085d30bcd2bf17e936f8e8b8d88e",
+    "native_oracle_sha256": "8683d68cb3c451ba03a7ee9d09b1432e356fe3639b08de8c966cba5d864f0b9f"
+  },
+  "parent_evidence_sha256": "49363bc0fe172d6c86de07ff23c8bc894edbca7b7b1de2bd39dbecbfc9daedfe",
+  "case_result": {
+    "complete_CRC_eighth_parent_case_equal": true,
+    "parent_case_sha256": "55e3fd7509ab2895eb74542febe1b03bf9f3173921a90ffb72c8c0367e6762f7",
+    "constructed_strings": [
+      {
+        "object_address": "0x7004c470",
+        "descriptor_address": "0x7004cdf8",
+        "initial_descriptor_from_ELF_verified": true,
+        "known_pointer_relations": [],
+        "initialized": true,
+        "source_values_or_hashes_exported": false,
+        "actual_X0_and_tail_wrapper_LR_equal": true,
+        "initial_capacity": 8,
+        "initial_length": 0,
+        "payload_address": "0x136d8340",
+        "allocation_size": 8,
+        "original_malloc_PLT_and_body_entered": true,
+        "new_allocation_in_current_call": true,
+        "returned_X0_equals_payload": true,
+        "exact_header_pointer_and_one_byte_NUL_writes_verified": true,
+        "payload_remaining_seven_bytes_preserved": true,
+        "object_neighbor_eight_bytes_preserved": true,
+        "descriptor_all_48_bytes_preserved": true,
+        "prior_JSON_CRC_and_constructed_strings_preserved": true,
+        "return_index": 583
+      }
+    ],
+    "instruction_observations": 1151,
+    "instruction_trace_sha256": "5e4103fb7f8d4b23dee4fa4594954f232687a4b38f8105abfa76b0ad047d2885",
+    "observed_code_sha256": "7199d252d2bc59d936cf016a5c2120f7b3e6c27bb7938fb06aa886395babce0b",
+    "callbacks": [
+      {
+        "index": 1,
+        "descriptor_address": "0x7004cdf8",
+        "descriptor_width": 48,
+        "wrapper_offset": "0x2884cc",
+        "target_offset": "0x2481ac",
+        "VM_cursor_offset": "0x10a9e0",
+        "SP": "0x7004b930",
+        "callee_saved_sha256": "1dfcf39e697485c9789eaf1f5667782d682043ac2a66bc54fafb8587c49e2af9",
+        "VM_call_executed": true,
+        "wrapper_entered": true,
+        "target_entered": true,
+        "returned": true,
+        "return_index": 583,
+        "caller_SP_and_callee_saved_restored": true
+      },
+      {
+        "index": 1151,
+        "descriptor_address": "0x7004c9f0",
+        "descriptor_width": 48,
+        "wrapper_offset": "0x288898",
+        "target_offset": "0x2850a8",
+        "VM_cursor_offset": "0x10aa00",
+        "SP": "0x7004b930",
+        "callee_saved_sha256": "1dfcf39e697485c9789eaf1f5667782d682043ac2a66bc54fafb8587c49e2af9",
+        "VM_call_executed": false,
+        "wrapper_entered": false,
+        "target_entered": false,
+        "returned": false
+      }
+    ],
+    "completed_callbacks": 1,
+    "stop_reason": "uncovered_VM_callback_before_execution",
+    "new_allocator_events": [
+      [
+        "alloc",
+        8,
+        325944128,
+        "0x2481dc"
+      ]
+    ],
+    "allocator_aux_events": [],
+    "native_write_observations": 119,
+    "actual_allocator_counts": {
+      "malloc": 625,
+      "free": 278,
+      "gc": 3,
+      "flush": 4
+    },
+    "explicit_service_counts": {
+      "syscall_214": 1,
+      "syscall_222": 4,
+      "syscall_167": 3,
+      "syscall_226": 9,
+      "syscall_56": 6,
+      "syscall_80": 1,
+      "syscall_215": 2,
+      "syscall_63": 2,
+      "syscall_57": 4,
+      "clock": 11,
+      "virtual_pthread_create": 3,
+      "destructor_registration": 6,
+      "syscall_98": 18,
+      "property_find": 1,
+      "syscall_48": 4,
+      "syscall_79": 4,
+      "mkdir_exists": 2,
+      "syscall_169": 1
+    },
+    "new_providers": [],
+    "new_SVCs": [],
+    "new_JNI_effects": [],
+    "source_values_or_hashes_exported": false,
+    "allocation_contents_exported": false,
+    "key_contents_or_hashes_exported": false,
+    "native_snapshot_used_as_VM_model_input": false,
+    "complete_standalone_signer_verified": false,
+    "online_acceptance_verified": false
+  },
+  "case_result_sha256": "fc59939efe85687e80ff1ab70f9dc82127cd59567bbc0f4d3d6ea86599070cca",
+  "component_controls": {
+    "default_constructor": [
+      {
+        "image_base": "0x122c0000",
+        "case": "normal",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "allocation_failure",
+        "allocation_succeeded": false,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_page_object",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "object_packed_alias",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "custom_initial_descriptor",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "custom_descriptor_failure",
+        "allocation_succeeded": false,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "payload_object_alias",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "payload_packed_alias",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_page_payload",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "normal",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "allocation_failure",
+        "allocation_succeeded": false,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_page_object",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "object_packed_alias",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "custom_initial_descriptor",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "custom_descriptor_failure",
+        "allocation_succeeded": false,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "payload_object_alias",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "payload_packed_alias",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_page_payload",
+        "allocation_succeeded": true,
+        "original_tail_wrapper_and_constructor_returned": true,
+        "full_declared_guest_bytes_and_padding_equal": true,
+        "allocation_request_and_return_equal": true,
+        "exact_store_addresses_and_widths_verified": true,
+        "SP_and_callee_saved_restored": true,
+        "synthetic_component_allocator": true,
+        "native_snapshot_input": false,
+        "complete_physical_ABI_verified": false
+      }
+    ],
+    "constructor_guards": [
+      {
+        "case": "wrong_target",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "wrong_wrapper",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_packed",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_object",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "missing_empty_descriptor",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "allocator_late_failure",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "unmapped_allocation",
+        "rejected": true,
+        "all_pages_unchanged": true
+      },
+      {
+        "case": "invalid_allocation",
+        "rejected": true,
+        "all_pages_unchanged": true
+      }
+    ]
+  },
+  "inherited_controls_sha256": "c5d0204556ae301f592a5d55c4d329ff7fbcf62ffe7955699bcc8b5924a02b24"
+}

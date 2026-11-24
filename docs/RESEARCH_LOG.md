@@ -3178,3 +3178,49 @@ malloc/free/gc/flush 为 624/278/3/4。3016 停于下一次 VM call 前，cursor
 中 1536 个字节保持，基线内仅追加日志和新文件属性规则。75 个祖先类状态名检查与
 新增源码语法检查通过。本轮未额外执行完整 `--replay` CLI、Rust 测试或扫描器单测；
 已知临时 Git 创建权限限制下的扫描器单测未重试、不记为通过。
+
+
+### 2026-11-24：八个 JSON 节点之后的原始默认字符串构造
+
+**Sample verified**：从 CRC／第八字段检查点的原停止入口继续，完成一次原始
+`+0x2884cc -> +0x2481ac` 默认 StringObject 构造，共 1151 个新观察点；完整
+CRC／第八字段 case 在减去本次分配后逐字段相等，前序未执行的 callback 边界保持。
+新窗口只执行明确允许的默认构造，遇到其他 callback 在 VM call 前停止。
+
+入口 cursor `+0x10a9e0`，descriptor `0x7004cdf8`，实际 X0 为
+`0x7004c470`，tail wrapper 的 LR 指向 VM resume。原始构造读取 ELF
+`+0x6e168` 初始描述符并写 vtable／capacity=8／length=0；随后实际进入 malloc PLT
+和匹配 Bionic malloc body，请求八字节。新分配 payload `0x136d8340` 属于当前调用
+内的存活分配。观察点 583 返回，X0 等于 payload 地址，不把此指针解释为额外状态码。
+
+原始函数按顺序写对象 vtable 八字节、初始描述符八字节、payload 指针八字节及
+payload 首字节 NUL。逐写入位置及宽度核对通过，payload 后七字节保持，object
+后邻八字节和 descriptor 全 48 字节保持，SP 与 X19-X29 恢复。CRC 输入对象、已消费
+payload、查找表、八个 JSON 节点及 owned key 在整个窗口写保护并于停止时逐字节
+保持；构造后的字符串对象和八字节 payload 也加入保留集合。对象地址仅作为本次
+写入目的地解释，不因旧地址或相似布局推断更早生命周期相同。
+
+新增八字节分配一次，无新增 free、GC/flush、SVC、JNI 效果或 provider；
+malloc/free/gc/flush 为 625/278/3/4。1151 停于下一 callback 之前，cursor
+`+0x10aa00`、descriptor `0x7004c9f0`、wrapper/target
+`+0x288898 -> +0x2850a8`（TLS 整数读取入口）。该 VM call、wrapper、target
+均未执行，当前 TLS 对象来源、读取值及后续字符串填充仍待核对。
+
+18 项双基址 native/model 对照覆盖正常／分配失败、跨页对象／payload、对象与 packed
+别名、payload 与对象／packed 别名及不同 ELF 初始描述符。八项拒绝／页面回滚和
+一个合成正例／18 类观察器损坏拒绝通过；组件分配器均为声明的合成服务，原生主路径
+仍执行匹配的 Bionic malloc。新增状态经 76 个祖先类检查无重名，既有模型与冻结证据
+未改写，前序组件仅以内容摘要引用，不计为本轮新增执行。
+
+结论限于声明受控样本；原始 JNI 获取函数体仍由受控八字节 env 写入服务替代。真实
+ART/JVM/Android、完整物理 ABI、并发语义、完整独立 signer 和线上接受均未验证。
+公开输出不含输入、字段名、分配内容、源值或其摘要，也不含 GP/FP 寄存器转储。
+见 [CRC 后默认字符串构造证据](../platforms/bytedance/tomato/evidence/vm9_native_171_post_crc_constructors_dynamic_20261124.json)。
+
+规范 `--capture --compare-case`、默认离线校验和最终完整性检查通过；公开 case 与
+独立原生探针逐字段相等，完整 CRC／第八 case 保持，18 项新增组件和八项拒绝结果
+与独立报告一致。22 项损坏证据拒绝、四种错误 CLI、冻结覆盖拒绝和拒绝前后 hash
+保持检查通过；公开观察器一个合成正例及 18 类损坏拒绝通过。1540 个 tracked 基线
+文件中 1538 个字节保持，基线内仅追加日志和新文件属性规则。76 个祖先类状态名与
+新增源码语法检查通过。本轮未额外执行完整 `--replay` CLI、Rust 测试或扫描器单测；
+已知临时 Git 创建权限限制下的扫描器单测未重试、不记为通过。
