@@ -3180,6 +3180,51 @@ malloc/free/gc/flush 为 624/278/3/4。3016 停于下一次 VM call 前，cursor
 已知临时 Git 创建权限限制下的扫描器单测未重试、不记为通过。
 
 
+### 2026-11-25：九个全局数值与 warm TLS 拼接为 libc++ 数值字符串
+
+**Sample verified**：从第九个 JSON 字符串节点后的原停止入口继续，执行原始
+`+0x2888f4 -> +0x28794c` 数值字符串包装器；新增 4549 个观察点，3014 返回 VM，
+完整九节点 JSON case 在减去本次分配器增量后逐字段相等。入口 cursor `+0x10aabc`、
+descriptor `0x7004c970`，包装器仅向原函数传入 output descriptor 和 receiver；
+wrapper LR 返回 `+0x288904`，不把 CPU X0 误解为对象返回值。
+
+这是独立的 24 字节 libc++ 字符串布局，不复用 Medusa StringObject。原始路径先做
+reserve(128)，分配 144 字节、usable capacity=143，并建立空 long descriptor/NUL。
+随后按顺序在 `+0x2879a0` 读取 `+0x3d1988..+0x3d19a8` 的九个 `u32` 全局字，
+每个经 `+0x32baa4` 转成无符号十进制临时字符串；第十个输入来自既有 warm TLS
+getter（控制块 `+0x382920`、index=5、匹配 libc `pthread_getspecific`）。
+十个临时字符串均以实际 NUL 终止内容核对，九个全局部分和最后 TLS 部分各自追加
+到同一缓冲区，中间使用 `|`；未公开数值、字符串内容或摘要。
+
+本样本最终拼接长度=37，独立无符号十进制 join 逐字节相等。第一次缓冲区保持
+long 表示；之后 `+0x287a08` 触发 reserve(0) 收缩，旧 144 字节分配释放，新分配
+48 字节（usable=47）成为最终 payload。最终 descriptor、payload NUL、packed 24
+字节、相邻八字节、九个 JSON 节点／owned key、CRC/TLS/格式化源及 SP/X19-X29 均
+保持；清理阶段 19 次临时字符串析构调用的返回路径已观察。
+
+本轮实际新增 alloc 144、48 和 free 一次；无新增 allocator GC/flush、SVC、JNI
+效果、provider 或导入绑定，malloc/free/gc/flush 为 635/284/4/4，显式服务计数
+保持。原始匹配 Bionic malloc/free、warm emutls/TLS body 均执行；输出内容不作为
+VM 模型输入。下一 callback 尚未执行，当前结论仅覆盖声明受控样本。
+
+本轮重跑相关既有数值字符串组件 30 项双基址原生/model 对照和 34 项拒绝／页面
+回滚检查；覆盖短长边界、全位值、高位值、跨页、provider 变动和源变动。新增观察器
+七项描述符正例、两项描述符拒绝、两项读取正例和九类读写损坏拒绝通过；新增状态经
+80 个祖先类检查无重名，核心模型、祖先验证器与冻结证据未改写。
+
+公开输出不含输入、字段名、数值、分配内容、格式内容或其摘要，也不含 GP/FP 转储。
+原始 JNI 获取函数体仍由受控八字节 env 写入服务替代；真实 ART/JVM/Android、完整
+物理 ABI、并发语义、完整独立 signer 和线上接受均未验证。见 [数值字符串证据]
+(../platforms/bytedance/tomato/evidence/vm9_native_171_post_json_numeric_string_dynamic_20261125.json)。
+
+规范 `--capture --compare-case`、默认离线校验和最终完整性检查通过；公开 case 与
+独立探针逐字段相等，30 项组件和 34 项拒绝结果一致。24 项损坏证据、四种错误 CLI、
+冻结覆盖拒绝及拒绝前后 hash 保持检查通过。1548 个 tracked 基线文件中 1547 个
+字节保持，基线内仅追加日志和新属性规则；80 个祖先类状态名与源码语法检查通过。
+本轮未额外执行完整 `--replay` CLI、Rust 测试或扫描器单测；已知临时 Git 创建权限
+限制下的扫描器单测未重试、不记为通过。
+
+
 ### 2026-11-24：八个 JSON 节点之后的原始默认字符串构造
 
 **Sample verified**：从 CRC／第八字段检查点的原停止入口继续，完成一次原始
