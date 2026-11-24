@@ -3045,6 +3045,36 @@ malloc/free/gc/flush 为 618/278/3/4。2845 停在 cursor `+0x10a7d0` 的下一�
 
 完整独立 Python/Rust signer、真实 ART/JVM/Android、完整物理 ABI、并发语义与线上接受仍未验证。
 
+### 2026-11-24：延续 VM 标量进入第六个 JSON 数值节点
+
+**Sample verified**：从已验证的原子字段和第五节点检查点继续，三个数值 callback 均返回，
+新增 4225 个指令观察点；第五节点之后的 VM 标量经原生转换写入第六节点，完整环境前序
+case 逐字段一致。接收字段在 VM 源区域 `+0x17079c` 的观察点 2064 被读取，零扩展后经
+`+0x1707ac UCVTF D0,D0` 转成精确 binary64，并在 `+0x1707f8` 写回。callback 参数
+在 cursor `+0x10a7d0` 的观察点 2845 与转换结果相符；第六节点 `0x136df380` 在追加前
+已有五个子节点，完成观察点为 3238。节点 double、
+int32 饱和值、owned key 和一字节成功写回相符；已有节点及 owned key 只发生尾部链
+接更新，root/wrapper/counter 保持。新节点和 key 必须是本次调用新分配并仍存活。
+
+当前公开证据只证明这个 VM source word 到第六节点的关系，不把它误称为新的 getter；
+其更早的业务来源和含义仍未知。下一次数值追加在观察点 4225、cursor `+0x10a808`
+停住，descriptor `0x7004ca20`，wrapper/target `+0x288854 -> +0x261350` 均未执行。
+
+新增分配为 64/4/64/3 字节，无新增 free、GC/flush、SVC、JNI 效果或 provider；
+malloc/free/gc/flush 为 620/278/3/4。12 项 getter、16 项无符号转换和 8 项五节点
+追加对照，以及 14/6 项拒绝／回滚检查沿用前一公开检查点；本轮另有八项两基址五节点
+追加对照，使用 zero、one、signbit、u32max 声明输入。完整 signer、Android、物理 ABI、
+并发 acquire/release 语义和线上接受仍未验证。JNI 获取函数体仍由已声明的受控服务替代。
+
+规范 `--capture --compare-case` 和默认离线校验通过，公开 case 与私有原生重放逐字段
+相同，42 项前序组件、20 项前序拒绝检查和八项新增五节点追加结果一致；14 项损坏证据
+拒绝、四种错误 CLI 参数及冻结覆盖拒绝检查通过，拒绝覆盖前后源码和证据 hash 不变。
+1534 个 tracked 基线文件中 1532 个字节保持，基线内仅追加研究日志和新文件属性规则。
+73 个祖先类状态检查中新增 `_jan_next_` 状态无冲突；新增源码语法检查通过。本检查点
+未额外执行完整 `--replay` CLI、Rust 测试或扫描器单测；扫描器单测仍受已确认的临时 Git
+创建权限限制，不记为通过。
+见 [第六数值节点证据](../platforms/bytedance/tomato/evidence/vm9_native_171_sixth_numeric_field_dynamic_20261124.json)。
+
 规范 `--capture --compare-case` 及默认离线校验通过，公开 case 与独立原生探针逐字段
 一致，42 项组件对照和 20 项拒绝结果也与独立报告一致。22 项损坏证据拒绝、公开版
 八个合成正例及 21 项损坏检查、四种错误 CLI 参数与冻结覆盖拒绝检查通过；拒绝覆盖
