@@ -137,3 +137,5 @@ platforms/bytedance/tomato/python/verify_vm9_native_171_sixth_numeric_field_dyna
 platforms/bytedance/tomato/evidence/vm9_native_171_sixth_numeric_field_dynamic_20261124.json -text
 platforms/bytedance/tomato/python/verify_vm9_native_171_seventh_numeric_field_dynamic_20261124.py text eol=lf
 platforms/bytedance/tomato/evidence/vm9_native_171_seventh_numeric_field_dynamic_20261124.json -text
+platforms/bytedance/tomato/python/verify_vm9_native_171_crc_eighth_numeric_dynamic_20261124.py text eol=lf
+platforms/bytedance/tomato/evidence/vm9_native_171_crc_eighth_numeric_dynamic_20261124.json -text

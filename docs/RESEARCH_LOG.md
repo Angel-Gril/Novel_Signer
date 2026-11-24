@@ -3124,3 +3124,57 @@ case 逐字段相等，八项新增组件结果与独立报告一致。20 项损
 通过。1536 个 tracked 基线文件中 1534 个字节保持，仅日志及新文件属性规则变更。
 本轮未额外运行完整 `--replay` CLI、Rust 测试或扫描器单元测试；已知临时 Git 创建
 权限限制下的扫描器单测未重试、不记为通过。
+
+
+### 2026-11-24：原生 CRC 返回经有符号转换进入第八数值节点
+
+**Sample verified**：在第七字段检查点的停止入口继续原始
+`+0x288820 -> +0x258bac -> +0x24b298` CRC 路径，再完成一次数值追加；新增
+3016 个观察点、两个 callback 返回。第七字段完整 case 逐字段相等，原有 958／
+`+0x10a828` 未执行边界保持；本轮实际执行记录在独立 `_c8_` 状态。
+
+CRC receiver 为 `0x136d9640`，与前序 `_idctor_object`、`_idref_string` 和
+`_pair_first` 地址相同；StringObject 头检查通过，payload `0x136d4050` 属于同址
+37 字节存活分配。原生 core 的 X0 和 W1 等于当前 payload 地址和 36 字节长度，
+在 `+0x24b2b0` 观察到恰好 36 次、逐地址递增的单字节读取。guest `+0x96144`
+的 1024 字节查找表与独立生成的标准 reflected CRC32 表相同；本次 native 返回、
+guest-table 计算和 binascii 的关系仅在内存中比较，不导出输入内容、CRC 或其摘要。
+
+CRC 内对源对象、已消费 payload、查找表及七个 JSON 节点／owned key 的写入均拒绝；
+277 返回时逐字节保持，allocator ledger 保持。wrapper 在 `+0x288830` 只写
+packed +16 的四字节结果，实际 unsigned X0 与写回一致；其余 44 个 descriptor 字节、
+SP 和 X19-X29 保持。保留的是本次对象及当前存活分配关系，不据旧地址推断其他
+分配代次或业务语义相同。
+
+901 在 `+0x1707d8` 核对 VM 转换源等于 CRC 写回四字节，随后核对加载上半部清零、
+`SSHLL` 的 signed int32 扩展、`+0x1707e0 SCVTF D0,D0` 的精确 binary64 和
+`+0x1707f8` 写回。1220 在 cursor `+0x10a85c` 调用
+`+0x288854 -> +0x261350`，实际 X0/X1/D0 与 packed 参数及转换值相符；2000 返回，
+第八节点 `0x136df400` 的 double、signed int32 字段、owned key 及一字节成功写回
+相符。旧首节点 prev 和旧尾节点 next 只追加新节点，其余七个节点与字段名、
+root/wrapper/counter 保持；新节点与 key 必须是调用内新分配并仍存活。
+
+新增分配 64/3 字节各一次，无新增 free、GC/flush、SVC、JNI 效果或 provider；
+malloc/free/gc/flush 为 624/278/3/4。3016 停于下一次 VM call 前，cursor
+`+0x10a9e0`、descriptor `0x7004cdf8`、wrapper/target `+0x2884cc -> +0x2481ac`。
+该字符串构造入口的 VM call、wrapper 和 target 均未执行；不把跳过的其他静态分支
+或更晚的字段作为本次执行覆盖。
+
+独立组件对照包含 32 项 CRC、20 项 signed int32 转换和八项七子节点追加，共 60 项
+原生／模型对照；CRC 的 18 项拒绝及页面回滚、六项不支持浮点操作拒绝通过。CRC
+覆盖二进制 NUL、负长度、跨页、别名和变化的 guest 表；有符号转换覆盖极值、-1 与
+高位干扰输入。另有四个转换、四个第八节点追加合成正例，以及五类转换和 16 类追加
+损坏拒绝。新状态经 75 个祖先类检查无意外重名，前序冻结组件仅引用，不重复计为新增。
+
+结论限于声明受控样本：原始 JNI 获取函数体仍由前序受控八字节 env 写入服务替代；
+真实 ART/JVM/Android、完整物理 ABI、并发 acquire/release、完整独立 signer 和线上
+接受仍未验证。输入字符串的业务含义不据指针关系扩大解释。
+见 [CRC 与第八数值节点证据](../platforms/bytedance/tomato/evidence/vm9_native_171_crc_eighth_numeric_dynamic_20261124.json)。
+
+规范 `--capture --compare-case`、默认离线校验和最终完整性检查通过；公开 case 与
+独立原生探针逐字段相等，完整第七 case 保持，60 项新增组件和 24 项拒绝结果与独立
+报告一致。26 项损坏证据拒绝、四种错误 CLI、冻结覆盖拒绝和拒绝前后 hash 保持
+检查通过；公开版八个合成正例及 21 项观察器损坏检查通过。1538 个 tracked 基线文件
+中 1536 个字节保持，基线内仅追加日志和新文件属性规则。75 个祖先类状态名检查与
+新增源码语法检查通过。本轮未额外执行完整 `--replay` CLI、Rust 测试或扫描器单测；
+已知临时 Git 创建权限限制下的扫描器单测未重试、不记为通过。
